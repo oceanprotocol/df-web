@@ -4,14 +4,36 @@
 	font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
 		Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	--font-mono: 'Fira Mono', monospace;
-	--pure-white: #ffffff;
-	--primary-color: #b9c6d2;
-	--secondary-color: #d0dde9;
-	--tertiary-color: #edf0f8;
-	--accent-color: #ff3e00;
-	--heading-color: rgba(0, 0, 0, 0.7);
+
+	--color-primary: #ff4092;
+	--color-secondary: #8b98a9;
+
+	--brand-white: #ffffff;
+	--brand-black: #141414;
+	--brand-pink: #ff4092;
+
+	--brand-grey-darker: #201f1f;
+	--brand-grey-dark: #303030;
+	--brand-grey: #41474e;
+	--brand-grey-light: #8b98a9;
+	--brand-grey-lighter: #e2e2e2;
+	--brand-grey-dimmed: #f7f7f7;
+
+	--brand-alert-green: #5fb359;
+	--brand-alert-red: #d80606;
+
+	--font-size-root: 15px;
+	--font-size-base: 1rem;
+	--font-size-large: 1.2rem;
+	--font-size-small: 0.85rem;
+	--font-size-h1: 3rem;
+	--font-size-h2: 2.5rem;
+	--font-size-h3: 1.7rem;
+
+	--spacer: 2rem;
+	--border-radius: 0.2rem;
+
 	--text-color: #444444;
-	--background-without-opacity: rgba(255, 255, 255, 0.7);
 	--column-width: 42rem;
 	--column-margin-top: 4rem;
 }
@@ -19,12 +41,12 @@
 body {
 	min-height: 100vh;
 	margin: 0;
-	background-color: var(--primary-color);
+	background-color: var(--color-primary);
 	background: linear-gradient(
 		180deg,
-		var(--primary-color) 0%,
-		var(--secondary-color) 10.45%,
-		var(--tertiary-color) 41.35%
+		var(--brand-pink) 0%,
+		var(--color-primary) 0.45%,
+		var(--brand-white) 40.35%
 	);
 }
 
