@@ -1,6 +1,9 @@
 <script>
 	import Header from "../src/components/header/Header.svelte";
+	import ClaimPortal from "./components/claim/ClaimPortal.svelte";
+	import PoolsPortal from "./components/pools/PoolsPortal.svelte";
 	import { connectWallet, userAddress, connectWalletFromLocalStorage } from "./stores/web3";
+	import { Router, Route } from "svelte-navigator";
 
 	if ($userAddress === "") {
     if(localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER')){
@@ -11,12 +14,17 @@
   }
 </script>
 
-<Header/>
-
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
+<Router>
+	<Header/>
+	<main>
+		<Route path="/">
+			<ClaimPortal/>
+		</Route>
+		<Route path="/pools">
+			<PoolsPortal/>
+		</Route>
+	</main>
+</Router>
 
 <style>
 	main {

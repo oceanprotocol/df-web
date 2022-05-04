@@ -1,5 +1,6 @@
 <script>
 	import WalletConnect from './WalletConnect.svelte';
+	import { Link } from "svelte-navigator";
 </script>
 
 <header>
@@ -10,9 +11,11 @@
 	</div>
 	<nav>
 		<ul>
-			<li class:active={window.location.href === '/'}><a sveltekit:prefetch href="/">Home</a></li>
-			<li class:active={window.location.href === '/about'}>
-				<a sveltekit:prefetch href="/about">About</a>
+			<li class:active={window.location.href === '/'}>
+				<Link to="/" class="link">CLAIM PORTAL</Link>
+			</li>
+			<li class:active={window.location.href === '/pools'}>
+				<Link to="/pools" class="link">POOL EXPLORER</Link>
 			</li>
 		</ul>
 	</nav>
@@ -63,10 +66,13 @@
 
 	li {
 		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		height: 100%;
 	}
 
-	nav a {
+	.link {
 		display: flex;
 		height: 100%;
 		align-items: center;
@@ -80,7 +86,7 @@
 		transition: color 0.2s linear;
 	}
 
-	a:hover {
+	.link:hover {
 		color: var(--accent-color);
 	}
 </style>
