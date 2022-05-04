@@ -1,22 +1,24 @@
-<script lang="ts">
-	import { page } from '$app/stores';
-	import logo from './logo-ocean-svg.svg';
+<script>
+	import WalletConnect from './WalletConnect.svelte';
 </script>
 
 <header>
 	<div class="logo">
 		<a href="https://kit.svelte.dev">
-			<img src={logo} alt="SvelteKit" />
+			<img src={'/logo-ocean-svg.svg'} alt="SvelteKit" />
 		</a>
 	</div>
 	<nav>
 		<ul>
-			<li class:active={$page.url.pathname === '/'}><a sveltekit:prefetch href="/">Home</a></li>
-			<li class:active={$page.url.pathname === '/about'}>
+			<li class:active={window.location.href === '/'}><a sveltekit:prefetch href="/">Home</a></li>
+			<li class:active={window.location.href === '/about'}>
 				<a sveltekit:prefetch href="/about">About</a>
 			</li>
 		</ul>
 	</nav>
+	<div>
+		<WalletConnect />
+	</div>
 </header>
 
 <style>
