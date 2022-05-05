@@ -1,5 +1,6 @@
 <script>
   import WalletConnect from "./WalletConnect.svelte";
+  import NetworkSelection from "./NetworkSelection.svelte";
   import { Link } from "svelte-navigator";
 </script>
 
@@ -19,7 +20,8 @@
       </li>
     </ul>
   </nav>
-  <div>
+  <div class="headerActions">
+    <NetworkSelection />
     <WalletConnect />
   </div>
 </header>
@@ -32,6 +34,10 @@
     max-width: 1024px;
     height: 80px;
     margin: auto;
+  }
+
+  .headerActions {
+    display: flex;
   }
 
   .logo a {

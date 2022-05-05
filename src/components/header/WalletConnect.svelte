@@ -17,7 +17,7 @@
           $userAddress.length - 6
         )}
       </span>
-      <Tooltip ref={component} icon={ChevronDown}>
+      <Tooltip ref={component} icon={ChevronDown} align="end">
         <div class="tooltipContent">
           <Button onclick={() => disconnect()} text={`Disconnect`} textOnly />
         </div>
@@ -42,5 +42,9 @@
   .tooltipContent {
     position: absolute;
     z-index: 100;
+    top: 40px;
+    border: 1px solid var(--brand-grey-lighter);
+    padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
+    width: 80px;
   }
 </style>

@@ -6,6 +6,7 @@ export let networkProvider = writable("");
 export let networkSigner = writable("");
 export let nodeProvider = writable("");
 export let web3 = writable("");
+export let selectedNetworks = writable([1]);
 
 const Web3 = window.Web3;
 const Web3Modal = window.Web3Modal.default;

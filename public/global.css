@@ -45,3 +45,7 @@ body {
 h1:focus-visible {
   outline: none;
 }
+
+.bx--tooltip {
+  margin: 0 !important;
+}
