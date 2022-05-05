@@ -1,92 +1,99 @@
 <script>
-	import WalletConnect from './WalletConnect.svelte';
-	import { Link } from "svelte-navigator";
+  import WalletConnect from "./WalletConnect.svelte";
+  import { Link } from "svelte-navigator";
 </script>
 
 <header>
-	<div class="logo">
-		<a href="https://kit.svelte.dev">
-			<img src={'/logo-ocean-svg.svg'} alt="SvelteKit" />
-		</a>
-	</div>
-	<nav>
-		<ul>
-			<li class:active={window.location.href === '/'}>
-				<Link to="/" class="link">CLAIM PORTAL</Link>
-			</li>
-			<li class:active={window.location.href === '/pools'}>
-				<Link to="/pools" class="link">POOL EXPLORER</Link>
-			</li>
-		</ul>
-	</nav>
-	<div>
-		<WalletConnect />
-	</div>
+  <div class="logo">
+    <a href="https://kit.svelte.dev">
+      <img src={"/logo-ocean-svg.svg"} alt="SvelteKit" />
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li class:active={window.location.href === "/"}>
+        <Link to="/" class="link">CLAIM PORTAL</Link>
+      </li>
+      <li class:active={window.location.href === "/pools"}>
+        <Link to="/pools" class="link">POOL EXPLORER</Link>
+      </li>
+    </ul>
+  </nav>
+  <div>
+    <WalletConnect />
+  </div>
 </header>
 
 <style>
-	header {
-		display: flex;
-		justify-content: space-between;
-		max-width: 1024px;
-		margin: auto;
-	}
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1024px;
+    height: 80px;
+    margin: auto;
+  }
 
-	.logo a {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-	}
+  .logo a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
 
-	.logo img {
-		width: 3em;
-		height: 3em;
-		object-fit: contain;
-	}
+  .logo img {
+    width: 4em;
+    height: 4em;
+    object-fit: contain;
+  }
 
-	nav {
-		display: flex;
-		justify-content: center;
-	}
+  nav {
+    display: flex;
+    justify-content: center;
+  }
 
-	ul {
-		position: relative;
-		padding: 0;
-		margin: 0;
-		height: 4em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		list-style: none;
-		background: var(--background);
-		background-size: contain;
-	}
+  ul {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    height: 4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    background: var(--background);
+    background-size: contain;
+  }
 
-	li {
-		position: relative;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100%;
-	}
+  li {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
 
-	.link {
-		display: flex;
-		height: 100%;
-		align-items: center;
-		padding: 0 1em;
-		color: var(--heading-color);
-		font-weight: 700;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		text-decoration: none;
-		transition: color 0.2s linear;
-	}
+  li > :global(a) {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    padding: 0 1em;
+    color: var(--brand-grey-lighter);
+    font-weight: 700;
+    text-decoration: none;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    transition: color 0.2s linear;
+  }
 
-	.link:hover {
-		color: var(--accent-color);
-	}
+  li > :global(a):hover {
+    color: var(--accent-color);
+  }
+
+  .active {
+    color: var(--accent-color);
+  }
 </style>

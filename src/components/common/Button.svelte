@@ -6,12 +6,12 @@
 	export let secondary;
 	export let loading;
 	export let disabled;
+	export let textOnly
 </script>
 
 <button
 	on:click={onclick}
-	class="button {secondary && 'buttonSecondary'} {disabled &&
-		'disabled'} hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+	class="button {secondary && 'buttonSecondary'} {disabled && 'disabled'} {textOnly && 'textOnly'}"
 	disabled={disabled === true}
 	type="button"
 >
@@ -44,5 +44,10 @@
 		border-radius: var(--border-radius);
 		border: 1px solid var(--brand-grey-lighter);
 		box-shadow: 0 6px 15px 0 rgb(0 0 0 / 5%);
+	}
+	.textOnly{
+		background-color: transparent;
+		border: 0;
+		padding: 0;
 	}
 </style>
