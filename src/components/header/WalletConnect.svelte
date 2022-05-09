@@ -30,11 +30,14 @@
   .container {
     border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
+    background-color: var(--background-content);
   }
   .walletAddress {
     color: var(--brand-black);
     font-size: var(--font-size-small);
     font-weight: bold;
+    display: inline-flex;
+    align-items: center;
   }
   .walletContainer {
     display: flex;
@@ -45,6 +48,14 @@
     top: 40px;
     border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
-    width: 80px;
+    border: 1px solid var(--brand-grey-lighter);
+    padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
+    background-color: var(--brand-white);
+    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
+    width: 180px;
+  }
+  :global(div [class*="tooltip__trigger"]) {
+    display: flex !important;
+    align-items: center !important;
   }
 </style>

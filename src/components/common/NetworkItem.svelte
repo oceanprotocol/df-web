@@ -25,6 +25,7 @@
 <style>
   .container {
     display: flex;
+    align-items: center;
     margin-bottom: calc(var(--spacer) / 4);
   }
   input {
