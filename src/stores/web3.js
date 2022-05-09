@@ -34,7 +34,6 @@ export const setValuesAfterConnection = async (instance) => {
   networkProvider.set(provider);
   networkSigner.set(signer);
   const signerAddress = await signer.getAddress();
-  console.log(instance)
   userAddress.set(signerAddress);
   web3.set(new Web3(instance));
 };

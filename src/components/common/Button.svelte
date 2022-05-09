@@ -3,10 +3,10 @@
 
   export let onclick;
   export let text;
-  export let secondary;
-  export let loading;
-  export let disabled;
-  export let textOnly;
+  export let secondary = false;
+  export let loading = false;
+  export let disabled = false;
+  export let textOnly = false;
 </script>
 
 <button
