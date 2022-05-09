@@ -5,20 +5,27 @@
   let networksData = networksDataArray.default;
 
   export let chainId;
-  export let checked;
-  export let onCheck;
+  export let checked = undefined;
+  export let onCheck = undefined;
+  export let fontSize = "small";
 </script>
 
-<div class="container">
-  <input
-    type="checkbox"
-    value={chainId}
-    {checked}
-    on:change={(event) =>
-      onCheck(event.target.checked, parseInt(event.target.value))}
-  />
-  <span class="networkName">
-    {getNetworkDataById(networksData, chainId).name}
+<div class={`container ${checked === undefined && "margin0"}`}>
+  {#if checked !== undefined && onCheck !== undefined}
+    <input
+      type="checkbox"
+      value={chainId}
+      {checked}
+      on:change={(event) =>
+        onCheck(event.target.checked, parseInt(event.target.value))}
+    />
+  {/if}
+  <span
+    class={`networkName ${fontSize === "large" && "large"} ${
+      fontSize === "normal" && "normal"
+    }`}
+  >
+    {getNetworkDataById(networksData, parseInt(chainId))?.name}
   </span>
 </div>
 
@@ -33,5 +40,14 @@
   }
   .networkName {
     font-size: var(--font-size-small);
+  }
+  .large {
+    font-size: var(--font-size-large);
+  }
+  .normal {
+    font-size: var(--font-size-normal);
+  }
+  .margin0 {
+    margin: 0;
   }
 </style>

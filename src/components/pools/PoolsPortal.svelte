@@ -4,31 +4,31 @@
   const pools = [
     {
       farm: "NEO DF",
-      network: "ETH",
+      network: "1",
       apr: "60%",
       "Total Staked": "$14,333,232.002",
     },
     {
       farm: "NEO DF",
-      network: "ETH",
+      network: "1",
       apr: "60%",
       "Total Staked": "$14,333,232.002",
     },
     {
       farm: "NEO DF",
-      network: "ETH",
+      network: "3",
       apr: "60%",
       "Total Staked": "$14,333,232.002",
     },
     {
       farm: "NEO DF",
-      network: "ETH",
+      network: "3",
       apr: "60%",
       "Total Staked": "$14,333,232.002",
     },
     {
       farm: "NEO DF",
-      network: "ETH",
+      network: "1",
       apr: "60%",
       "Total Staked": "$14,333,232.002",
     },

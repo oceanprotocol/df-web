@@ -51,7 +51,7 @@
     margin: 0 auto;
   }
 
-  @media only screen and (max-width: 300px) {
+  @media only screen and (max-width: 660px) {
     main {
       max-width: 100%;
     }

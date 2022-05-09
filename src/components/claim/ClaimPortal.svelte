@@ -2,11 +2,11 @@
   import Pool from "../common/Pool.svelte";
 
   const pools = [
-    { farm: "NEO DF", network: "ETH", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "ETH", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "ETH", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "ETH", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "ETH", token: "PSD", earned: "$5.0" },
+    { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
+    { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
+    { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
+    { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
+    { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
   ];
 
   function claimRewards() {

@@ -1,5 +1,6 @@
 <script>
   import Button from "../common/Button.svelte";
+  import NetworkItem from "../common/NetworkItem.svelte";
 
   export let pool;
   export let button;
@@ -10,7 +11,11 @@
     <div class="row">
       <span class="title">{title}</span>
       <span class="value">
-        {value}
+        {#if title === "network"}
+          <NetworkItem chainId={value} fontSize="normal" />
+        {:else}
+          {value}
+        {/if}
       </span>
     </div>
   {/each}
@@ -27,9 +32,11 @@
     padding: calc(var(--spacer) / 4) 0;
     border-bottom: 2px solid var(--brand-grey-dimmed);
     width: 100%;
+    overflow-y: scroll;
   }
   .row {
     display: flex;
+    margin: 0 4%;
     flex-direction: column;
     align-items: flex-start;
   }
