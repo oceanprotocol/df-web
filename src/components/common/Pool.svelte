@@ -20,7 +20,7 @@
     </div>
   {/each}
   <div class="row">
-    <Button text={button.text} onclick={() => button.onClick()} />
+    <Button text={button.text} onclick={() => button.onClick(pool.network)} />
   </div>
 </div>
 

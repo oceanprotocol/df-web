@@ -1,5 +1,6 @@
 <script>
   import Pool from "../common/Pool.svelte";
+  import { switchWalletNetwork } from "../../stores/web3";
 
   const pools = [
     { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
@@ -9,8 +10,9 @@
     { farm: "NEO DF", network: "137", token: "PSD", earned: "$5.0" },
   ];
 
-  function claimRewards() {
+  function claimRewards(chainId) {
     console.log("claim");
+    switchWalletNetwork(chainId);
   }
 </script>
 

@@ -1,10 +1,10 @@
 import { writable } from "svelte/store";
 import { ethers } from "ethers";
+import * as networksDataArray from "../networks-metadata.json";
 
 export let userAddress = writable("");
 export let networkProvider = writable("");
 export let networkSigner = writable("");
-export let nodeProvider = writable("");
 export let web3 = writable("");
 export let selectedNetworks = writable([1]);
 
@@ -31,7 +31,6 @@ const web3Modal = new Web3Modal({
 export const setValuesAfterConnection = async (instance) => {
   const provider = new ethers.providers.Web3Provider(instance);
   const signer = provider.getSigner();
-  networkProvider.set(provider);
   networkSigner.set(signer);
   const signerAddress = await signer.getAddress();
   userAddress.set(signerAddress);
@@ -96,10 +95,71 @@ export const disconnect = async () => {
     await web3.currentProvider.close();
   }
   userAddress.set(undefined);
-  networkProvider.set(undefined);
   networkSigner.set(undefined);
   localStorage.removeItem("walletconnect");
   localStorage.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
   window.location.href = "/";
 };
+
+export const switchWalletNetwork = async(chainId) => {
+  let networksList = networksDataArray.default;
+  const networkNode = await networksList.find(
+    (data) => data.chainId === parseInt(chainId)
+  )
+  addCustomNetwork(networkNode)
+}
+
+
+export async function addCustomNetwork(
+  network
+) {
+  // Always add explorer URL from ocean.js first, as it's null sometimes
+  // in network data
+  const blockExplorerUrls = [
+    network.explorers && network.explorers[0].url
+  ]
+
+  const newNetworkData = {
+    chainId: `0x${network.chainId.toString(16)}`,
+    chainName: network.name,
+    nativeCurrency: network.nativeCurrency,
+    rpcUrls: network.rpc,
+    blockExplorerUrls
+  }
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: newNetworkData.chainId }]
+    })
+  } catch (switchError) {
+    if (switchError.code === 4902) {
+      await window.ethereum.request(
+        {
+          method: 'wallet_addEthereumChain',
+          params: [newNetworkData]
+        },
+        (err, added) => {
+          if (err || 'error' in added) {
+            console.error(
+              `Couldn't add ${network.name} (0x${
+                network.chainId
+              }) network to MetaMask, error: ${err || added.error}`
+            )
+          } else {
+            console.log(
+              `Added ${network.name} (0x${network.chainId}) network to MetaMask`
+            )
+          }
+        }
+      )
+    } else {
+      console.error(
+        `Couldn't add ${network.name} (0x${network.chainId}) network to MetaMask, error: ${switchError}`
+      )
+    }
+  }
+  console.log(
+    `Added ${network.name} (0x${network.chainId}) network to MetaMask`
+  )
+}
 
