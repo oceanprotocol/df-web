@@ -12,6 +12,22 @@ const Web3 = window.Web3;
 const Web3Modal = window.Web3Modal.default;
 const WalletConnectProvider = window.WalletConnectProvider.default;
 
+require("dotenv").config();
+const networks = [
+  {
+    address: OCEAN_ERC20_0x,
+    provider: process.env.ETH_RPC_URL || "https://cloudflare-eth.com/",
+  },
+  {
+    address: OCEAN_Polygon_0x,
+    provider: process.env.POLYGON_RPC_URL || `https://polygon-rpc.com`,
+  },
+  {
+    address: OCEAN_BSC_0x,
+    provider: process.env.BSC_RPC_URL || `https://bsc-dataseed.binance.org/`,
+  },
+];
+
 const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
@@ -41,7 +57,7 @@ export const setValuesAfterConnection = async (instance) => {
 
 export const connectWalletFromLocalStorage = async () => {
   const localStorageProvider = JSON.parse(
-    localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")
+      localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")
   );
   if (!localStorageProvider) return;
   const instance = await web3Modal.connectTo(localStorageProvider);
@@ -62,8 +78,8 @@ export const connectWalletFromLocalStorage = async () => {
 };
 
 export const signMessage = async (msg, signer) => {
-    const signedMessage = await signer.signMessage(msg);
-    return signedMessage;
+  const signedMessage = await signer.signMessage(msg);
+  return signedMessage;
 };
 
 export const connectWallet = async () => {
