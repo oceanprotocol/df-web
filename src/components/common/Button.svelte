@@ -31,7 +31,7 @@
     padding: calc(var(--spacer) / 8);
     color: var(--brand-white);
     text-transform: uppercase;
-    border-radius: 2px;
+    border-radius: var(--border-radius);
     border: 0;
     display: flex;
     align-items: center;
@@ -53,6 +53,7 @@
   }
   .textOnly {
     background-color: transparent;
+    color: var(--brand-black);
     border: 0;
     padding: 0;
   }

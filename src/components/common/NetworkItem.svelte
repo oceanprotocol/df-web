@@ -1,5 +1,6 @@
 <script>
   import * as networksDataArray from "../../networks-metadata.json";
+  import NetworkIcon from "../common/NetworkIcon.svelte";
   import { getNetworkDataById } from "../../utils/web3";
 
   let networksData = networksDataArray.default;
@@ -8,6 +9,11 @@
   export let checked = undefined;
   export let onCheck = undefined;
   export let fontSize = "small";
+  export let minimal = false;
+
+  const name = minimal
+    ? getNetworkDataById(networksData, parseInt(chainId))?.chain
+    : getNetworkDataById(networksData, parseInt(chainId))?.name;
 </script>
 
 <div class={`container ${checked === undefined && "margin0"}`}>
@@ -20,13 +26,16 @@
         onCheck(event.target.checked, parseInt(event.target.value))}
     />
   {/if}
-  <span
-    class={`networkName ${fontSize === "large" && "large"} ${
-      fontSize === "normal" && "normal"
-    }`}
-  >
-    {getNetworkDataById(networksData, parseInt(chainId))?.name}
-  </span>
+  <div class="networkDetails">
+    <NetworkIcon {name} {minimal} />
+    <span
+      class={`networkName ${fontSize === "large" && "large"} ${
+        fontSize === "normal" && "normal"
+      }`}
+    >
+      {name}
+    </span>
+  </div>
 </div>
 
 <style>
@@ -46,6 +55,11 @@
   }
   .normal {
     font-size: var(--font-size-normal);
+  }
+  .networkDetails {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .margin0 {
     margin: 0;
