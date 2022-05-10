@@ -12,10 +12,10 @@
   </div>
   <nav>
     <ul>
-      <li class:active={window.location.href === "/"}>
+      <li class:active={window.location.pathname === "/"}>
         <Link to="/" class="link">CLAIM PORTAL</Link>
       </li>
-      <li class:active={window.location.href === "/pools"}>
+      <li class:active={window.location.pathname === "/pools"}>
         <Link to="/pools" class="link">POOL EXPLORER</Link>
       </li>
     </ul>
@@ -28,10 +28,10 @@
 
 <style>
   header {
+    overflow-y: scroll;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1024px;
     height: 80px;
     margin: auto;
   }
@@ -99,7 +99,7 @@
     color: var(--accent-color);
   }
 
-  .active {
-    color: var(--accent-color);
+  .active > :global(a) {
+    color: var(--brand-black);
   }
 </style>

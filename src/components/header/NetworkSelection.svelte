@@ -14,6 +14,10 @@
       selectedNetworks.update(() => [...$selectedNetworks, value]);
     }
   }
+
+  $: if ($selectedNetworks) {
+    localStorage.setItem("selectedNetworks", JSON.stringify($selectedNetworks));
+  }
 </script>
 
 <div class="container">
@@ -38,12 +42,16 @@
     display: flex;
     align-items: center;
     margin-right: calc(var(--spacer) / 3);
+    background-color: var(--background-content);
   }
   .tooltipContainer {
-    position: absolute;
-    top: 40px;
+    position: fixed;
     border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
+    background-color: var(--brand-white);
+    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
+    transform: translate3d(0, -0.05rem, 0);
+    border-radius: var(--border-radius);
     width: 180px;
   }
   .text {
