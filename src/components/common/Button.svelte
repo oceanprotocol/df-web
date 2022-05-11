@@ -30,6 +30,7 @@
     font-size: var(--font-size-small);
     padding: calc(var(--spacer) / 8);
     color: var(--brand-white);
+    font-weight: bold;
     text-transform: uppercase;
     border-radius: var(--border-radius);
     border: 0;

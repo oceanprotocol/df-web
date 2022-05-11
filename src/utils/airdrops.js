@@ -1,23 +1,26 @@
 import {supportedChainIds, getNetworkByChainId} from "../app.config";
 import {ethers} from 'ethers';
+import * as rinkebyAbi from './rinkebyAbi'
 export const airdrops = {
     3: {
         airdropAddress: "0x789ddD01e0362A350e3401b510B759041d7D2c70",
         tokens: [
             "0xe6239d757c064c237dF31e08EbdD582f0608aCE0",
             "0x8127479a825EA352B542F41ea513Ff207e363421"
-        ]
+        ],
+        abi: rinkebyAbi.defaul
     },
     4: {
         airdropAddress: "0x9C862055A084E802F3Bc6Cf38862C3B9eb1e8879",
         tokens: [
             "0xe6239d757c064c237dF31e08EbdD582f0608aCE0",
             "0x8127479a825EA352B542F41ea513Ff207e363421"
-        ]
+        ],
+        abi: rinkebyAbi.default
     },
 };
 
-export const abi = [
+export const abis = [
     "function claimable(address _to, address tokenAddress) public view returns (uint256)",
     "function claim(address[] calldata tokenAddresses) external returns (bool)"
 ]

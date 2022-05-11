@@ -23,10 +23,12 @@
   {#if buttons}
     <div class="row directionRow placeRowEnd">
       {#each buttons as button}
-        <Button
-          text={button.text}
-          onclick={() => button.onClick(rowObject.network)}
-        />
+        <div class="buttonContainer">
+          <Button
+            text={button.text}
+            onclick={() => button.onClick(rowObject.network)}
+          />
+        </div>
       {/each}
     </div>
   {/if}
@@ -78,5 +80,13 @@
   .large {
     padding: calc(var(--spacer) / 3) 8%;
     border-bottom: 2px solid var(--brand-grey-lighter);
+  }
+
+  .buttonContainer {
+    margin-right: 20px;
+  }
+
+  .buttonContainer:last-child {
+    margin: 0;
   }
 </style>
