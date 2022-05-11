@@ -1,0 +1,6 @@
+url, totalStaked, totalDCV, poolDID, poolAddress, datatokenDID, datatokenAddress
+https://market.oceanprotocol.com/asset/did:op:0xdataAssetDID5, 50000.00, 1000.00, did:op:0xdataLiqPoolDID5, 0xdataLiqPoolDID5, did:op:0xdataAssetDID5, 0xdataAssetDID5
+https://market.oceanprotocol.com/asset/did:op:0xdataAssetDID6, 40000.00, 800.00, did:op:0xdataLiqPoolDID6, 0xdataLiqPoolDID6, did:op:0xdataAssetDID6, 0xdataAssetDID6
+https://market.oceanprotocol.com/asset/did:op:0xdataAssetDID7, 30000.00, 700.00, did:op:0xdataLiqPoolDID7, 0xdataLiqPoolDID7, did:op:0xdataAssetDID7, 0xdataAssetDID7
+https://market.oceanprotocol.com/asset/did:op:0xdataAssetDID8, 20000.00, 500.00, did:op:0xdataLiqPoolDID8, 0xdataLiqPoolDID8, did:op:0xdataAssetDID8, 0xdataAssetDID8
+https://market.oceanprotocol.com/asset/did:op:0xdataAssetDID9, 10000.00, 350.00, did:op:0xdataLiqPoolDID9, 0xdataLiqPoolDID9, did:op:0xdataAssetDID9, 0xdataAssetDID9
