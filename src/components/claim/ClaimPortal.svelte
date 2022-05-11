@@ -1,22 +1,12 @@
 <script>
-  import Pool from "../common/Pool.svelte";
+  import NetworkRewards from "./NetworkRewards.svelte";
   import { switchWalletNetwork } from "../../stores/web3";
-
-  import AirdropListWithActions from "./AirdropListWithActions.svelte";
   import { web3, userAddress, selectedNetworks } from "../../stores/web3.js";
   import {
     airdrops,
     getAllBalances,
     getBalanceFromAirdrop,
   } from "../../utils/airdrops";
-
-  const pools = [
-    { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "56", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "137", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "137", token: "PSD", earned: "$5.0" },
-  ];
 
   let airdropBalances = [];
 
@@ -56,23 +46,10 @@
 <div class="container">
   <h1>Claim Portal</h1>
   <div class="pools">
-    {#each pools as pool}
-      <Pool {pool} button={{ text: "Claim", onClick: claimRewards }} />
+    {#each $selectedNetworks as chainId}
+      <NetworkRewards {chainId} />
     {/each}
   </div>
-
-  {#if airdrops}
-    <AirdropListWithActions
-      {airdrops}
-      balances={airdropBalances}
-      actions={[
-        {
-          text: "Claim",
-          onClick: onFarmClaimClick,
-        },
-      ]}
-    />
-  {/if}
 </div>
 
 <style>
@@ -85,10 +62,6 @@
 
   .pools {
     width: 100%;
-    background-color: var(--brand-white);
-    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
-    transform: translate3d(0, -0.05rem, 0);
-    border-radius: var(--border-radius);
   }
 
   h1 {

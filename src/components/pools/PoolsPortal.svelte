@@ -1,5 +1,5 @@
 <script>
-  import Pool from "../common/Pool.svelte";
+  import Row from "../common/Row.svelte";
 
   const pools = [
     {
@@ -43,7 +43,7 @@
   <h1>Pool explorer</h1>
   <div class="pools">
     {#each pools as pool}
-      <Pool {pool} button={{ text: "View", onClick: viewPool }} />
+      <Row {pool} button={{ text: "View", onClick: viewPool }} />
     {/each}
   </div>
 </div>

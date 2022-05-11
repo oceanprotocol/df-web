@@ -27,7 +27,7 @@
 
 <style>
   img {
-    height: 1rem;
+    height: 0.8rem;
   }
   .imageContainer {
     display: flex;
