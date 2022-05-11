@@ -12,8 +12,7 @@ const Web3 = window.Web3;
 const Web3Modal = window.Web3Modal.default;
 const WalletConnectProvider = window.WalletConnectProvider.default;
 
-require("dotenv").config();
-const networks = [
+/*const networks = [
   {
     address: OCEAN_ERC20_0x,
     provider: process.env.ETH_RPC_URL || "https://cloudflare-eth.com/",
@@ -26,7 +25,7 @@ const networks = [
     address: OCEAN_BSC_0x,
     provider: process.env.BSC_RPC_URL || `https://bsc-dataseed.binance.org/`,
   },
-];
+];*/
 
 const providerOptions = {
   walletconnect: {

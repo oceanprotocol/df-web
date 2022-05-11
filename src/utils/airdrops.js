@@ -1,7 +1,5 @@
 import {supportedChainIds, getNetworkByChainId} from "../app.config";
-const ethers = require("ethers");
-require("dotenv").config();
-
+import {ethers} from 'ethers';
 export const airdrops = {
     3: {
         airdropAddress: "0x789ddD01e0362A350e3401b510B759041d7D2c70",

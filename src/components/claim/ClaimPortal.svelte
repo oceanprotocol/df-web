@@ -4,7 +4,11 @@
 
   import AirdropListWithActions from "./AirdropListWithActions.svelte";
   import { web3, userAddress, selectedNetworks } from "../../stores/web3.js";
-  import { airdrops , claimABI, getAllBalances, getBalanceFromAirdrop} from "../../utils/airdrops"
+  import {
+    airdrops,
+    getAllBalances,
+    getBalanceFromAirdrop,
+  } from "../../utils/airdrops";
 
   const pools = [
     { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
@@ -17,33 +21,36 @@
   let airdropBalances = [];
 
   async function loadClaimables() {
-    airdropBalances = await getAllBalances(userAddress, selectedNetworks)
+    airdropBalances = await getAllBalances(userAddress, selectedNetworks);
   }
 
   const onFarmClaimClick = async (balance) => {
     try {
       const airdrop = airdrops[balance[0]];
 
-      const contract = new web3.eth.Contract(claimABI, airdrop.airdropAddress)
-      await contract.methods.claim().send({ from: userAddress })
+      const contract = new web3.eth.Contract(claimABI, airdrop.airdropAddress);
+      await contract.methods.claim().send({ from: userAddress });
 
-      balance[1] = await getBalanceFromAirdrop(userAddress, airdrop.airdropAddress)
-      if( balance[1] <= 0 ) {
-        console.log("Success claiming airdrop")
+      balance[1] = await getBalanceFromAirdrop(
+        userAddress,
+        airdrop.airdropAddress
+      );
+      if (balance[1] <= 0) {
+        console.log("Success claiming airdrop");
       } else {
-        console.log("Error claiming airdrop")
+        console.log("Error claiming airdrop");
       }
     } catch (error) {
-      console.log("error :", error)
+      console.log("error :", error);
     }
-  }
+  };
 
   function claimRewards(chainId) {
     console.log("claim");
     switchWalletNetwork(chainId);
   }
 
-  loadClaimables()
+  loadClaimables();
 </script>
 
 <div class="container">
@@ -56,14 +63,15 @@
 
   {#if airdrops}
     <AirdropListWithActions
-            airdrops={airdrops}
-            balances={airdropBalances}
-            actions={[
-          {
-            "text": "Claim",
-            "onClick": onFarmClaimClick
-          }
-    ]}/>
+      {airdrops}
+      balances={airdropBalances}
+      actions={[
+        {
+          text: "Claim",
+          onClick: onFarmClaimClick,
+        },
+      ]}
+    />
   {/if}
 </div>
 
