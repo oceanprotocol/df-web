@@ -11,7 +11,14 @@
   let claimables = [];
 
   async function loadClaimables() {
-    claimables = await getAllClaimables(userAddress, selectedNetworks);
+    console.log("Selected networks: ", $selectedNetworks);
+    claimables = await getAllClaimables(userAddress, $selectedNetworks);
+
+    if( claimables && Object.entries(claimables).length === 0 ) {
+      console.log("No claimables");
+    } else {
+      console.log("Number claimable contracts: ", Object.entries(claimables).length);
+    }
   }
 
   async function claimRewards(chainId) {
@@ -51,7 +58,16 @@
     }
   }
 
-  loadClaimables();
+  $: if ($userAddress) {
+    loadClaimables();
+  }
+
+  selectedNetworks.subscribe(value => {
+    if ($userAddress) {
+      loadClaimables();
+    }
+  });
+
 </script>
 
 <div class="container">

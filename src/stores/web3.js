@@ -1,12 +1,13 @@
 import { writable } from "svelte/store";
 import { ethers } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
+import {initChainIds} from "../app.config";
 
 export let userAddress = writable("");
 export let web3Provider = writable("");
 export let networkSigner = writable("");
 export let web3 = writable("");
-export let selectedNetworks = writable([1]);
+export let selectedNetworks = writable(initChainIds);
 
 const Web3 = window.Web3;
 const Web3Modal = window.Web3Modal.default;
@@ -48,7 +49,7 @@ export const setValuesAfterConnection = async (instance) => {
   const signer = provider.getSigner();
   networkSigner.set(signer);
   const signerAddress = await signer.getAddress();
-  console.log(signerAddress)
+  console.log("Signer Address: ", signerAddress)
   userAddress.set(signerAddress);
   web3Provider.set(provider)
   web3.set(new Web3(instance));
@@ -125,7 +126,6 @@ export const switchWalletNetwork = async(chainId) => {
   )
   addCustomNetwork(networkNode)
 }
-
 
 export async function addCustomNetwork(
   network

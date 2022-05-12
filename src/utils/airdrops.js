@@ -41,11 +41,14 @@ export const airdrops = {
 };
 
 export const getClaimablesFromAirdrop = async (chainId, airdrop, address) => {
-    if (!chainid || !airdrop || !address) return null;
+    if (!chainId || !airdrop || !address) return null;
     let claimables = [];
     try {
-        const network = getNetworkByChainId(chainId);
+        const network = await getNetworkByChainId(chainId);
         if( network !== undefined ) {
+            // TODO - Improve provider/initialization inside of stores/web3.js
+            // TODO - Get or initial provider as required to make this work
+            console.log("Network: ", network)
             const provider = new ethers.providers.JsonRpcProvider(network.provider);
             // TODO - Initialize contracts only once
             // TODO - Pass in signer to be able to R+W
@@ -55,7 +58,7 @@ export const getClaimablesFromAirdrop = async (chainId, airdrop, address) => {
                 claimables.push(reward > 0 ? ethers.utils.formatEther(reward) : 0)
         }
     } catch (err) {
-        console.error(err, network, networks);
+        console.error(err);
     }
 
     return claimables;
@@ -64,20 +67,22 @@ export const getClaimablesFromAirdrop = async (chainId, airdrop, address) => {
 export const getAllClaimables = async (address, selectedChains) => {
     if (!address) return [];
     const claimables = {};
+    const filteredChains = supportedChainIds.filter(x => selectedChains.indexOf(x) >= 0)
 
-    const filteredChains = supportedChainIds.filter(x => x in selectedChains)
-    for (chainId of filteredChains) {
-        if( airdrops[chainId] ) {
-            const airdrop = airdrops[chainId];
-            for (token of airdrop.tokens) {
-                const airdropClaimables = await getClaimablesFromAirdrop(chainId, airdrop.airdropAddress, address, token);
-                if (!claimables[chainId])
-                    claimables[chainId] = {};
+    filteredChains.map(async function(chainId) {
+        const airdrop = airdrops[chainId];
+        console.log("airdrop: ", airdrop)
 
-                claimables[chainId] = airdropClaimables;
-            }
+        for (const token in airdrop.tokens) {
+            const airdropClaimables = await getClaimablesFromAirdrop(chainId, airdrop.airdropAddress, address);
+
+            console.log("Airdrop claimables: ", airdropClaimables)
+            if (!claimables[chainId])
+                claimables[chainId] = {};
+
+            claimables[chainId] = airdropClaimables;
         }
-    }
+    })
 
     return claimables;
 }
