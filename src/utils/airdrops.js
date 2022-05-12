@@ -9,11 +9,11 @@ export const airdrops = {
             "0x0d92cadB0A0BC3693e985FB15E47BcF4d1Dc3792"
         ],
         tokensData:{
-            0xe6239d757c064c237dF31e08EbdD582f0608aCE0: {
+            "0xe6239d757c064c237dF31e08EbdD582f0608aCE0": {
                 symbol: 'OCEAN',
                 rewards: 0
             },
-            0x01be23585060835e02b77ef475b0cc51aa1e0709: {
+            "0x0d92cadB0A0BC3693e985FB15E47BcF4d1Dc3792": {
                 symbol: 'PSDN',
                 rewards: 0
             }
