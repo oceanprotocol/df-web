@@ -4,28 +4,44 @@
   import { web3, userAddress, selectedNetworks } from "../../stores/web3.js";
   import {
     airdrops,
-    getAllBalances,
-    getBalanceFromAirdrop,
+    getAllClaimables,
+    getClaimablesFromAirdrop,
   } from "../../utils/airdrops";
 
-  let airdropBalances = [];
+  let claimables = [];
 
   async function loadClaimables() {
-    airdropBalances = await getAllBalances(userAddress, selectedNetworks);
+    claimables = await getAllClaimables(userAddress, selectedNetworks);
   }
 
-  const onFarmClaimClick = async (balance) => {
+  async function claimRewards(chainId) {
+    console.log("claim");
+    switchWalletNetwork(chainId);
+
     try {
-      const airdrop = airdrops[balance[0]];
+      const airdrop = airdrops[chainId];
+      const airdropClaimables = claimables[chainId]
+      let positiveClaimables = []
 
-      const contract = new web3.eth.Contract(claimABI, airdrop.airdropAddress);
-      await contract.methods.claim().send({ from: userAddress });
+      // TODO - Make sure that claim is only done on non-zero tokens
+      for (let i = 1; i < airdropClaimables.length; i++) {
+        if( airdropClaimables[i] > 0 )
+          positiveClaimables.push(airdrop.tokens[i])
+      }
 
-      balance[1] = await getBalanceFromAirdrop(
-        userAddress,
-        airdrop.airdropAddress
-      );
-      if (balance[1] <= 0) {
+      const contract = new web3.eth.Contract(airdrops[chainId].abi, airdrops[chainId].airdropAddress)
+      const results = await contract.methods.claim(positiveClaimables).send({ from: userAddress })
+
+      const remainingClaimables = await getClaimablesFromAirdrop(chainId, airdrops[chainId].airdropAddress, userAddress);
+      let success = true;
+      for( const claimable of remainingClaimables ) {
+        if( claimable > 0 ) {
+          success = false;
+          break;
+        }
+      }
+
+      if (success === true) {
         console.log("Success claiming airdrop");
       } else {
         console.log("Error claiming airdrop");
@@ -33,11 +49,6 @@
     } catch (error) {
       console.log("error :", error);
     }
-  };
-
-  function claimRewards(chainId) {
-    console.log("claim");
-    switchWalletNetwork(chainId);
   }
 
   loadClaimables();

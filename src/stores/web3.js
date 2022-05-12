@@ -35,6 +35,13 @@ const providerOptions = {
       infuraId: "4b9c931a4f26483aaf53db3ed884549e",
     },
   },
+  metamask: {
+    package: WalletConnectProvider,
+    options: {
+      // Mikko's test key - don't copy as your mileage may vary
+      infuraId: "4b9c931a4f26483aaf53db3ed884549F",
+    },
+  }
 };
 
 const web3Modal = new Web3Modal({

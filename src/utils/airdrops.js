@@ -1,12 +1,12 @@
 import {supportedChainIds, getNetworkByChainId} from "../app.config";
 import {ethers} from 'ethers';
-import * as rinkebyAbi from './rinkebyAbi'
+import * as airdropABI from './airdropABI'
 export const airdrops = {
     3: {
-        airdropAddress: "0x789ddD01e0362A350e3401b510B759041d7D2c70",
+        airdropAddress: "0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16",
         tokens: [
             "0xe6239d757c064c237dF31e08EbdD582f0608aCE0",
-            "0x01be23585060835e02b77ef475b0cc51aa1e0709"
+            "0x0d92cadB0A0BC3693e985FB15E47BcF4d1Dc3792"
         ],
         tokensData:{
             0xe6239d757c064c237dF31e08EbdD582f0608aCE0: {
@@ -14,73 +14,70 @@ export const airdrops = {
                 rewards: 0
             },
             0x01be23585060835e02b77ef475b0cc51aa1e0709: {
-                symbol: 'PHSD',
+                symbol: 'PSDN',
                 rewards: 0
             }
         },
-        abi: rinkebyAbi.default
+        abi: airdropABI.default
     },
     4: {
-        airdropAddress: "0x70a5ACD28d534B7390e34E16f7c2c6192B7eb5B1",
+        airdropAddress: "0x4751774A124D02f1611dFe17f4d697dDdF932Fd5",
         tokens: [
             "0xe6239d757c064c237dF31e08EbdD582f0608aCE0",
-            "0x01be23585060835e02b77ef475b0cc51aa1e0709"
+            "0xc6913d3eCed79021a39E6955015313B22B72b76E"
         ],
         tokensData:{
             "0xe6239d757c064c237dF31e08EbdD582f0608aCE0": {
                 symbol: 'OCEAN',
                 rewards: 0
             },
-            "0x01be23585060835e02b77ef475b0cc51aa1e0709": {
-                symbol: 'PHSD',
+            "0xc6913d3eCed79021a39E6955015313B22B72b76E": {
+                symbol: 'PSDN',
                 rewards: 0
             }
         },
-        abi: rinkebyAbi.default
+        abi: airdropABI.default
     },
 };
 
-export const abis = [
-    "function claimable(address _to, address tokenAddress) public view returns (uint256)",
-    "function claim(address[] calldata tokenAddresses) external returns (bool)"
-]
-
-export const getBalanceFromAirdrop = async (chainId, airdropAddress, tokenAddress, address) => {
-    if (!chainId || !airdropAddress || !tokenAddress || !address) return null;
-    let balance = null;
+export const getClaimablesFromAirdrop = async (chainId, airdrop, address) => {
+    if (!chainid || !airdrop || !address) return null;
+    let claimables = [];
     try {
         const network = getNetworkByChainId(chainId);
         if( network !== undefined ) {
             const provider = new ethers.providers.JsonRpcProvider(network.provider);
             // TODO - Initialize contracts only once
             // TODO - Pass in signer to be able to R+W
-            const contract = new ethers.Contract(airdropAddress, abi, provider);
-            balance = contract.claimable(address, tokenAddress)
-            balance = balance > 0 ? ethers.utils.formatEther(balance) : 0
+            const contract = new ethers.Contract(airdrop.airdropAddress, airdrop.abi, provider);
+            const claimableRewards = await contract.claimables(address, airdrop.tokens)
+            for(reward of claimableRewards)
+                claimables.push(reward > 0 ? ethers.utils.formatEther(reward) : 0)
         }
     } catch (err) {
         console.error(err, network, networks);
     }
 
-    return balance;
+    return claimables;
 }
 
-export const getAllBalances = async (address) => {
+export const getAllClaimables = async (address, selectedChains) => {
     if (!address) return [];
-    const balances = {};
+    const claimables = {};
 
-    for (chainId of supportedChainIds) {
+    const filteredChains = supportedChainIds.filter(x => x in selectedChains)
+    for (chainId of filteredChains) {
         if( airdrops[chainId] ) {
             const airdrop = airdrops[chainId];
             for (token of airdrop.tokens) {
-                const balance = await getBalanceFromAirdrop(chainId, airdrop.airdropAddress, address, token);
-                if (!balances[chainId])
-                    balances[chainId] = {};
+                const airdropClaimables = await getClaimablesFromAirdrop(chainId, airdrop.airdropAddress, address, token);
+                if (!claimables[chainId])
+                    claimables[chainId] = {};
 
-                balances[chainId][token] = balance;
+                claimables[chainId] = airdropClaimables;
             }
         }
     }
 
-    return balances;
+    return claimables;
 }

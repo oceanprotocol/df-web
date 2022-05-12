@@ -23,7 +23,7 @@
       provider
     );
     console.log($web3Provider.getSigner());
-    /*const tokenContract = new ethers.Contract(
+      /*const tokenContract = new ethers.Contract(
       "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
       tokenAbi.default,
       $web3Provider.getSigner()
