@@ -1,12 +1,13 @@
 <script>
-  import NetworkItem from "../common/NetworkItem.svelte";
   import { switchWalletNetwork } from "../../stores/web3";
   import Row from "../common/Row.svelte";
 
   export let chainId;
+  export let totalRewards;
+
   let rowinfo = {
     network: chainId,
-    rewards: "$200",
+    rewards: totalRewards,
   };
 
   let buttons = [
@@ -19,6 +20,13 @@
       onClick: switchWalletNetwork,
     },
   ];
+
+  $: if (totalRewards) {
+    rowinfo = {
+      network: chainId,
+      rewards: totalRewards,
+    };
+  }
 </script>
 
 <Row rowObject={rowinfo} {buttons} size="large" />

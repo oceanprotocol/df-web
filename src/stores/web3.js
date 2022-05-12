@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
 
 export let userAddress = writable("");
-export let networkProvider = writable("");
+export let web3Provider = writable("");
 export let networkSigner = writable("");
 export let web3 = writable("");
 export let selectedNetworks = writable([1]);
@@ -48,7 +48,9 @@ export const setValuesAfterConnection = async (instance) => {
   const signer = provider.getSigner();
   networkSigner.set(signer);
   const signerAddress = await signer.getAddress();
+  console.log(signerAddress)
   userAddress.set(signerAddress);
+  web3Provider.set(provider)
   web3.set(new Web3(instance));
 };
 

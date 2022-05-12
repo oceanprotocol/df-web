@@ -6,16 +6,36 @@ export const airdrops = {
         airdropAddress: "0x789ddD01e0362A350e3401b510B759041d7D2c70",
         tokens: [
             "0xe6239d757c064c237dF31e08EbdD582f0608aCE0",
-            "0x8127479a825EA352B542F41ea513Ff207e363421"
+            "0x01be23585060835e02b77ef475b0cc51aa1e0709"
         ],
-        abi: rinkebyAbi.defaul
+        tokensData:{
+            0xe6239d757c064c237dF31e08EbdD582f0608aCE0: {
+                symbol: 'OCEAN',
+                rewards: 0
+            },
+            0x01be23585060835e02b77ef475b0cc51aa1e0709: {
+                symbol: 'PHSD',
+                rewards: 0
+            }
+        },
+        abi: rinkebyAbi.default
     },
     4: {
-        airdropAddress: "0x9C862055A084E802F3Bc6Cf38862C3B9eb1e8879",
+        airdropAddress: "0x70a5ACD28d534B7390e34E16f7c2c6192B7eb5B1",
         tokens: [
             "0xe6239d757c064c237dF31e08EbdD582f0608aCE0",
-            "0x8127479a825EA352B542F41ea513Ff207e363421"
+            "0x01be23585060835e02b77ef475b0cc51aa1e0709"
         ],
+        tokensData:{
+            "0xe6239d757c064c237dF31e08EbdD582f0608aCE0": {
+                symbol: 'OCEAN',
+                rewards: 0
+            },
+            "0x01be23585060835e02b77ef475b0cc51aa1e0709": {
+                symbol: 'PHSD',
+                rewards: 0
+            }
+        },
         abi: rinkebyAbi.default
     },
 };
