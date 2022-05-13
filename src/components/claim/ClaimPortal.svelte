@@ -84,7 +84,7 @@
           chainId={chainId}
           airdropData={airdrops[chainId]}
           rewards={claimables[chainId].rewards}
-          totalRewards={0}
+          totalRewards={claimables[chainId].totalRewards}
         />
       {/each}
     </div>
