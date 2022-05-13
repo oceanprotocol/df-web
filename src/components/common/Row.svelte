@@ -27,6 +27,7 @@
           <Button
             text={button.text}
             onclick={() => button.onClick(rowObject.network)}
+            disabled={button.disabled}
           />
         </div>
       {/each}

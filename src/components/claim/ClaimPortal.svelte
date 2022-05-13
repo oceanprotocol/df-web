@@ -14,10 +14,13 @@
     console.log("Selected networks: ", $selectedNetworks);
     claimables = await getAllClaimables(userAddress, $selectedNetworks);
 
-    if( claimables && Object.entries(claimables).length === 0 ) {
+    if (claimables && Object.entries(claimables).length === 0) {
       console.log("No claimables");
     } else {
-      console.log("Number claimable contracts: ", Object.entries(claimables).length);
+      console.log(
+        "Number claimable contracts: ",
+        Object.entries(claimables).length
+      );
     }
   }
 
@@ -27,22 +30,31 @@
 
     try {
       const airdrop = airdrops[chainId];
-      const airdropClaimables = claimables[chainId]
-      let positiveClaimables = []
+      const airdropClaimables = claimables[chainId];
+      let positiveClaimables = [];
 
       // TODO - Make sure that claim is only done on non-zero tokens
       for (let i = 1; i < airdropClaimables.length; i++) {
-        if( airdropClaimables[i] > 0 )
-          positiveClaimables.push(airdrop.tokens[i])
+        if (airdropClaimables[i] > 0)
+          positiveClaimables.push(airdrop.tokens[i]);
       }
 
-      const contract = new web3.eth.Contract(airdrops[chainId].abi, airdrops[chainId].airdropAddress)
-      const results = await contract.methods.claim(positiveClaimables).send({ from: userAddress })
+      const contract = new web3.eth.Contract(
+        airdrops[chainId].abi,
+        airdrops[chainId].airdropAddress
+      );
+      const results = await contract.methods
+        .claim(positiveClaimables)
+        .send({ from: userAddress });
 
-      const remainingClaimables = await getClaimablesFromAirdrop(chainId, airdrops[chainId].airdropAddress, userAddress);
+      const remainingClaimables = await getClaimablesFromAirdrop(
+        chainId,
+        airdrops[chainId].airdropAddress,
+        userAddress
+      );
       let success = true;
-      for( const claimable of remainingClaimables ) {
-        if( claimable > 0 ) {
+      for (const claimable of remainingClaimables) {
+        if (claimable > 0) {
           success = false;
           break;
         }
@@ -62,21 +74,24 @@
     loadClaimables();
   }
 
-  selectedNetworks.subscribe(value => {
+  selectedNetworks.subscribe((value) => {
     if ($userAddress) {
       loadClaimables();
     }
   });
-
 </script>
 
 <div class="container">
   <h1>Claim Portal</h1>
-  <div class="pools">
-    {#each $selectedNetworks as chainId}
-      <NetworkRewards {chainId} />
-    {/each}
-  </div>
+  {#if $userAddress}
+    <div class="pools">
+      {#each $selectedNetworks as chainId}
+        <NetworkRewards {chainId} />
+      {/each}
+    </div>
+  {:else}
+    <div>Loading</div>
+  {/if}
 </div>
 
 <style>

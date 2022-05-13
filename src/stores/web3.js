@@ -6,6 +6,7 @@ import {initChainIds} from "../app.config";
 export let userAddress = writable("");
 export let web3Provider = writable("");
 export let networkSigner = writable("");
+export let connectedChainId = writable("");
 export let web3 = writable("");
 export let selectedNetworks = writable(initChainIds);
 
@@ -50,6 +51,9 @@ export const setValuesAfterConnection = async (instance) => {
   networkSigner.set(signer);
   const signerAddress = await signer.getAddress();
   console.log("Signer Address: ", signerAddress)
+  const chainId= (await provider.getNetwork()).chainId;
+  console.log(chainId)
+  connectedChainId.set(chainId)
   userAddress.set(signerAddress);
   web3Provider.set(provider)
   web3.set(new Web3(instance));
