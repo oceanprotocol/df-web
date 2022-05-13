@@ -1,5 +1,6 @@
 const chainIdRPCs = {
-  4 : "https://rinkeby.infura.io/v3/05d2b0098cf44eb789387708af2527a1"
+    3 : "https://ropsten.infura.io/v3/05d2b0098cf44eb789387708af2527a1",
+    4 : "https://rinkeby.infura.io/v3/05d2b0098cf44eb789387708af2527a1"
 }
 
 export function getNetworkDataById(

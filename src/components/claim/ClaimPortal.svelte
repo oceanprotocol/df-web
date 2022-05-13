@@ -8,20 +8,14 @@
     getClaimablesFromAirdrop,
   } from "../../utils/airdrops";
 
-  let claimables = [];
+  let loading = true;
+  let claimables;
 
   async function loadClaimables() {
+    loading = true;
     console.log("Selected networks: ", $selectedNetworks);
-    claimables = await getAllClaimables(userAddress, $selectedNetworks);
-
-    if (claimables && Object.entries(claimables).length === 0) {
-      console.log("No claimables");
-    } else {
-      console.log(
-        "Number claimable contracts: ",
-        Object.entries(claimables).length
-      );
-    }
+    claimables = await getAllClaimables($userAddress, $selectedNetworks);
+    loading = false;
   }
 
   async function claimRewards(chainId) {
@@ -83,10 +77,15 @@
 
 <div class="container">
   <h1>Claim Portal</h1>
-  {#if $userAddress}
+  {#if $userAddress && loading === false}
     <div class="pools">
       {#each $selectedNetworks as chainId}
-        <NetworkRewards {chainId} />
+        <NetworkRewards
+          chainId={chainId}
+          airdropData={airdrops[chainId]}
+          rewards={claimables[chainId].rewards}
+          totalRewards={0}
+        />
       {/each}
     </div>
   {:else}

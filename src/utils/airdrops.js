@@ -1,4 +1,5 @@
-import {supportedChainIds, getNetworkByChainId} from "../app.config";
+import {supportedChainIds} from "../app.config";
+import {getRpcUrlByChainId} from "./web3";
 import {ethers} from 'ethers';
 import * as airdropABI from './airdropABI'
 export const airdrops = {
@@ -40,49 +41,48 @@ export const airdrops = {
     },
 };
 
-export const getClaimablesFromAirdrop = async (chainId, airdrop, address) => {
-    if (!chainId || !airdrop || !address) return null;
-    let claimables = [];
+export const getClaimablesFromAirdrop = async (chainId, airdropInfo, address) => {
+    if (!chainId || !airdropInfo || !address) return null;
+    let rewards = [];
     try {
-        const network = await getNetworkByChainId(chainId);
-        if( network !== undefined ) {
-            // TODO - Improve provider/initialization inside of stores/web3.js
-            // TODO - Get or initial provider as required to make this work
-            console.log("Network: ", network)
-            const provider = new ethers.providers.JsonRpcProvider(network.provider);
-            // TODO - Initialize contracts only once
-            // TODO - Pass in signer to be able to R+W
-            const contract = new ethers.Contract(airdrop.airdropAddress, airdrop.abi, provider);
-            const claimableRewards = await contract.claimables(address, airdrop.tokens)
-            for(reward of claimableRewards)
-                claimables.push(reward > 0 ? ethers.utils.formatEther(reward) : 0)
+        const rpcURL = getRpcUrlByChainId(chainId);
+        if( rpcURL ) {
+            const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+            const contract = new ethers.Contract(airdropInfo.airdropAddress, airdropInfo.abi, provider);
+            const claimableRewards = await contract.claimables(address, airdropInfo.tokens)
+
+            for (let i = 0; i < claimableRewards.length; i++) {
+                const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
+                rewards.push(rewardInEthers > 0.0 ? rewardInEthers : 0.0)
+            }
         }
     } catch (err) {
         console.error(err);
     }
 
-    return claimables;
+    return rewards;
 }
 
 export const getAllClaimables = async (address, selectedChains) => {
     if (!address) return [];
-    const claimables = {};
-    const filteredChains = supportedChainIds.filter(x => selectedChains.indexOf(x) >= 0)
+    let claimables = {};
+    const filteredChains = supportedChainIds.filter(x => selectedChains.indexOf(x) >= 0);
 
-    filteredChains.map(async function(chainId) {
-        const airdrop = airdrops[chainId];
-        console.log("airdrop: ", airdrop)
+    await Promise.all(filteredChains.map(async function(chainId) {
+        const airdropInfo = airdrops[chainId];
+        for (const token in airdropInfo.tokens) {
+            const airdropClaimables = await getClaimablesFromAirdrop(chainId, airdropInfo, address);
 
-        for (const token in airdrop.tokens) {
-            const airdropClaimables = await getClaimablesFromAirdrop(chainId, airdrop.airdropAddress, address);
+            const myDict = {
+                rewards: airdropClaimables,
+                totalRewards: airdropClaimables.filter(x => x > 0).length
+            };
+            claimables[chainId] = myDict
 
-            console.log("Airdrop claimables: ", airdropClaimables)
-            if (!claimables[chainId])
-                claimables[chainId] = {};
-
-            claimables[chainId] = airdropClaimables;
+            const stringJSON = JSON.stringify(myDict);
+            console.log("myDict JSON is: ", stringJSON);
         }
-    })
+    }));
 
     return claimables;
 }

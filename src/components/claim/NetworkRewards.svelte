@@ -4,13 +4,13 @@
   import { airdrops } from "../../utils/airdrops";
 
   export let chainId;
-
-  const airdropData = airdrops[chainId];
-  let totalRewards = 0;
+  export let airdropData;
+  export let rewards;
+  export let totalRewards = 0;
 </script>
 
 <div class="networkRewardsContainer">
-  <ClaimRewards {chainId} {totalRewards} />
+  <ClaimRewards chainId={chainId} totalRewards={totalRewards} />
   {#if airdropData}
     {#each airdropData.tokens as token}
       <Row rowObject={airdropData.tokensData[token]} />
