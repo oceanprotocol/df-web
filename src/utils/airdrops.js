@@ -73,14 +73,10 @@ export const getAllClaimables = async (address, selectedChains) => {
         for (const token in airdropInfo.tokens) {
             const airdropClaimables = await getClaimablesFromAirdrop(chainId, airdropInfo, address);
 
-            const myDict = {
+            claimables[chainId] = {
                 rewards: airdropClaimables,
                 totalRewards: airdropClaimables.filter(x => x > 0).length
             };
-            claimables[chainId] = myDict
-
-            const stringJSON = JSON.stringify(myDict);
-            console.log("myDict JSON is: ", stringJSON);
         }
     }));
 
