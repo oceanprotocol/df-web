@@ -19,6 +19,7 @@ export const airdrops = {
                 rewards: 0
             }
         },
+        totalRewards: 0,
         abi: airdropABI.default
     },
     4: {
@@ -37,11 +38,12 @@ export const airdrops = {
                 rewards: 0
             }
         },
+        totalRewards: 0,
         abi: airdropABI.default
     },
 };
 
-export const getClaimablesFromAirdrop = async (chainId, airdropInfo, address) => {
+export const updateClaimablesFromAirdrop = async (chainId, airdropInfo, address) => {
     if (!chainId || !airdropInfo || !address) return null;
     let rewards = [];
     try {
@@ -51,19 +53,21 @@ export const getClaimablesFromAirdrop = async (chainId, airdropInfo, address) =>
             const contract = new ethers.Contract(airdropInfo.airdropAddress, airdropInfo.abi, provider);
             const claimableRewards = await contract.claimables(address, airdropInfo.tokens)
 
+            let totalRewards = 0;
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
-                rewards.push(rewardInEthers > 0.0 ? rewardInEthers : 0.0)
+                airdropInfo.tokensData[airdropInfo.tokens[i]].rewards = rewardInEthers > 0.0 ? rewardInEthers : 0.0
+                totalRewards += rewardInEthers > 0.0 ? 1 : 0
             }
+
+            airdropInfo.totalRewards = totalRewards
         }
     } catch (err) {
         console.error(err);
     }
-
-    return rewards;
 }
 
-export const getAllClaimables = async (address, selectedChains) => {
+export const updateAllClaimables = async (address, selectedChains) => {
     if (!address) return [];
     let claimables = {};
     const filteredChains = supportedChainIds.filter(x => selectedChains.indexOf(x) >= 0);
@@ -71,14 +75,7 @@ export const getAllClaimables = async (address, selectedChains) => {
     await Promise.all(filteredChains.map(async function(chainId) {
         const airdropInfo = airdrops[chainId];
         for (const token in airdropInfo.tokens) {
-            const airdropClaimables = await getClaimablesFromAirdrop(chainId, airdropInfo, address);
-
-            claimables[chainId] = {
-                rewards: airdropClaimables,
-                totalRewards: airdropClaimables.filter(x => x > 0).length
-            };
+            await updateClaimablesFromAirdrop(chainId, airdropInfo, address);
         }
     }));
-
-    return claimables;
 }

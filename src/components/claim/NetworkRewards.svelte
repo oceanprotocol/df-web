@@ -1,16 +1,13 @@
 <script>
   import Row from "../common/Row.svelte";
   import ClaimRewards from "./ClaimRewards.svelte";
-  import { airdrops } from "../../utils/airdrops";
 
   export let chainId;
   export let airdropData;
-  export let rewards;
-  export let totalRewards = 0;
 </script>
 
 <div class="networkRewardsContainer">
-  <ClaimRewards chainId={chainId} totalRewards={totalRewards} />
+  <ClaimRewards chainId={chainId} totalRewards={airdropData.totalRewards} />
   {#if airdropData}
     {#each airdropData.tokens as token}
       <Row rowObject={airdropData.tokensData[token]} />

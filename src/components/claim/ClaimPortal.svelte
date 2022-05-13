@@ -4,17 +4,14 @@
   import { web3, userAddress, selectedNetworks } from "../../stores/web3.js";
   import {
     airdrops,
-    getAllClaimables,
-    getClaimablesFromAirdrop,
+    updateAllClaimables
   } from "../../utils/airdrops";
 
   let loading = true;
-  let claimables;
 
   async function loadClaimables() {
     loading = true;
-    console.log("Selected networks: ", $selectedNetworks);
-    claimables = await getAllClaimables($userAddress, $selectedNetworks);
+    await updateAllClaimables($userAddress, $selectedNetworks);
     loading = false;
   }
 
@@ -83,8 +80,6 @@
         <NetworkRewards
           chainId={chainId}
           airdropData={airdrops[chainId]}
-          rewards={claimables[chainId].rewards}
-          totalRewards={claimables[chainId].totalRewards}
         />
       {/each}
     </div>
