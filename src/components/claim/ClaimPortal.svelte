@@ -9,7 +9,7 @@
   async function loadClaimables() {
     loading = true;
     let newAirdrops = await updateAllClaimables(
-      "0xf25B7b8dC2B264Be6c3410e2CAE339c041B854C2",
+      $userAddress,
       $selectedNetworks
     );
     airdrops.update(() => newAirdrops);
