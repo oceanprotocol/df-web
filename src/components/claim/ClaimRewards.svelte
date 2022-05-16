@@ -4,8 +4,10 @@
     connectedChainId,
     userAddress,
     networkSigner,
+    selectedNetworks,
   } from "../../stores/web3";
-  import { claimRewards } from "../../utils/airdrops";
+  import { claimRewards, updateAllClaimables } from "../../utils/airdrops";
+  import { airdrops } from "../../stores/airdrops";
   import Row from "../common/Row.svelte";
 
   export let chainId;
@@ -17,9 +19,22 @@
     rewards: totalRewards,
   };
 
-  console.log(claimables);
-
   let buttons = [];
+
+  async function claim() {
+    await claimRewards(
+      $userAddress,
+      $connectedChainId,
+      claimables.tokens,
+      claimables.tokensData,
+      $networkSigner
+    );
+    let newAirdrops = await updateAllClaimables(
+      $userAddress,
+      $selectedNetworks
+    );
+    airdrops.update(() => newAirdrops);
+  }
 
   $: if (totalRewards) {
     rowinfo = {
@@ -37,15 +52,8 @@
       },
       {
         text: "Claim",
-        onClick: () =>
-          claimRewards(
-            $userAddress,
-            $connectedChainId,
-            claimables.tokens,
-            claimables.tokensData,
-            $networkSigner
-          ),
-        disabled: chainId !== $connectedChainId || totalRewards === 0,
+        onClick: () => claim(),
+        disabled: chainId !== $connectedChainId || totalRewards !== 0,
       },
     ];
   }

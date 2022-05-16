@@ -1,17 +1,18 @@
 <script>
   import NetworkRewards from "./NetworkRewards.svelte";
-  import { switchWalletNetwork } from "../../stores/web3";
-  import { web3, userAddress, selectedNetworks } from "../../stores/web3.js";
-  import { airdrops, updateAllClaimables } from "../../utils/airdrops";
+  import { userAddress, selectedNetworks } from "../../stores/web3.js";
+  import { updateAllClaimables } from "../../utils/airdrops";
+  import { airdrops } from "../../stores/airdrops";
 
   let loading = true;
 
   async function loadClaimables() {
     loading = true;
-    await updateAllClaimables(
+    let newAirdrops = await updateAllClaimables(
       "0xf25B7b8dC2B264Be6c3410e2CAE339c041B854C2",
       $selectedNetworks
     );
+    airdrops.update(() => newAirdrops);
     loading = false;
   }
 
@@ -28,10 +29,10 @@
 
 <div class="container">
   <h1>Claim Portal</h1>
-  {#if $userAddress && loading === false}
+  {#if $userAddress && loading === false && $airdrops}
     <div class="pools">
       {#each $selectedNetworks as chainId}
-        <NetworkRewards {chainId} airdropData={airdrops[chainId]} />
+        <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
       {/each}
     </div>
   {:else}

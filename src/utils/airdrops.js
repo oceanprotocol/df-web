@@ -68,8 +68,7 @@ export const updateClaimablesFromAirdrop = async (chainId, airdropInfo, address)
 }
 
 export const updateAllClaimables = async (address, selectedChains) => {
-    if (!address) return [];
-    let claimables = {};
+    if (!address) return []
     const filteredChains = supportedChainIds.filter(x => selectedChains.indexOf(x) >= 0);
 
     await Promise.all(filteredChains.map(async function(chainId) {
@@ -78,6 +77,8 @@ export const updateAllClaimables = async (address, selectedChains) => {
             await updateClaimablesFromAirdrop(chainId, airdropInfo, address);
         }
     }));
+
+    return airdrops
 }
 
 export async function claimRewards(userAddress, chainId, tokens, tokensData, signer) {
@@ -88,38 +89,17 @@ export async function claimRewards(userAddress, chainId, tokens, tokensData, sig
       let positiveClaimables = [];
 
       // TODO - Make sure that claim is only done on non-zero tokens
-      console.log(tokensData)
       for (let i = 1; i < tokenAddresses.length; i++) {
         if (tokensData[tokenAddresses[i]].rewards > 0)
           positiveClaimables.push(tokenAddresses[i]);
       }
-      const rpcURL = getRpcUrlByChainId(chainId);
-      const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-      console.log()
+
       const contract = new ethers.Contract(
         airdrops[chainId].airdropAddress,
         airdrops[chainId].abi,
         signer
       );
-      const results = await contract.claimMultiple(userAddress, positiveClaimables)
-      const remainingClaimables = await getClaimablesFromAirdrop(
-        chainId,
-        airdrops[chainId].airdropAddress,
-        userAddress
-      );
-      let success = true;
-      for (const claimable of remainingClaimables) {
-        if (claimable > 0) {
-          success = false;
-          break;
-        }
-      }
-
-      if (success === true) {
-        console.log("Success claiming airdrop");
-      } else {
-        console.log("Error claiming airdrop");
-      }
+     await contract.claimMultiple(userAddress, positiveClaimables)
     } catch (error) {
       console.log("error :", error);
     }
