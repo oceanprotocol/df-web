@@ -45,7 +45,7 @@
             claimables.tokensData,
             $networkSigner
           ),
-        disabled: chainId !== $connectedChainId,
+        disabled: chainId !== $connectedChainId || totalRewards === 0,
       },
     ];
   }
