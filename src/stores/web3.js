@@ -70,10 +70,12 @@ export const connectWalletFromLocalStorage = async () => {
   /*instance.on("accountsChanged", (accounts) => {});
 
   // Subscribe to chainId change
-  instance.on("chainChanged", (chainId) => {});
+  instance.on("chainChanged", (chainId) => {});*/
 
   // Subscribe to networkId change
-  instance.on("networkChanged", (networkId) => {});*/
+  instance.on("networkChanged", (networkId) => {
+    connectedChainId.set(parseInt(networkId))
+  });
 
   // Subscribe to networkId change
   instance.on("disconnect", disconnect);
@@ -100,10 +102,12 @@ export const connectWallet = async () => {
   /*instance.on("accountsChanged", (accounts) => {});
 
   // Subscribe to chainId change
-  instance.on("chainChanged", (chainId) => {});
+  instance.on("chainChanged", (chainId) => {});*/
 
   // Subscribe to networkId change
-  instance.on("networkChanged", (networkId) => {});*/
+  instance.on("networkChanged", (networkId) => {
+    connectedChainId.set(parseInt(networkId))
+  });
 
   // Subscribe to networkId change
   instance.on("disconnect", disconnect);

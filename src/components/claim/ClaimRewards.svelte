@@ -1,5 +1,6 @@
 <script>
   import { switchWalletNetwork, connectedChainId } from "../../stores/web3";
+  import { claimRewards } from "../../utils/airdrops";
   import Row from "../common/Row.svelte";
 
   export let chainId;
@@ -12,24 +13,28 @@
 
   console.log(chainId, $connectedChainId);
 
-  let buttons = [
-    {
-      text: "Switch network",
-      onClick: switchWalletNetwork,
-      disabled: chainId === $connectedChainId,
-    },
-    {
-      text: "Claim",
-      onClick: switchWalletNetwork,
-      disabled: chainId !== $connectedChainId,
-    },
-  ];
+  let buttons = [];
 
   $: if (totalRewards) {
     rowinfo = {
       network: chainId,
       rewards: totalRewards,
     };
+  }
+
+  $: if ($connectedChainId) {
+    buttons = [
+      {
+        text: "Switch network",
+        onClick: switchWalletNetwork,
+        disabled: chainId === $connectedChainId,
+      },
+      {
+        text: "Claim",
+        onClick: claimRewards,
+        disabled: chainId !== $connectedChainId,
+      },
+    ];
   }
 </script>
 

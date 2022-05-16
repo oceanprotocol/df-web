@@ -2,63 +2,17 @@
   import NetworkRewards from "./NetworkRewards.svelte";
   import { switchWalletNetwork } from "../../stores/web3";
   import { web3, userAddress, selectedNetworks } from "../../stores/web3.js";
-  import {
-    airdrops,
-    updateAllClaimables
-  } from "../../utils/airdrops";
+  import { airdrops, updateAllClaimables } from "../../utils/airdrops";
 
   let loading = true;
 
   async function loadClaimables() {
     loading = true;
-    await updateAllClaimables($userAddress, $selectedNetworks);
+    await updateAllClaimables(
+      "0xf25B7b8dC2B264Be6c3410e2CAE339c041B854C2",
+      $selectedNetworks
+    );
     loading = false;
-  }
-
-  async function claimRewards(chainId) {
-    console.log("claim");
-    switchWalletNetwork(chainId);
-
-    try {
-      const airdrop = airdrops[chainId];
-      const airdropClaimables = claimables[chainId];
-      let positiveClaimables = [];
-
-      // TODO - Make sure that claim is only done on non-zero tokens
-      for (let i = 1; i < airdropClaimables.length; i++) {
-        if (airdropClaimables[i] > 0)
-          positiveClaimables.push(airdrop.tokens[i]);
-      }
-
-      const contract = new web3.eth.Contract(
-        airdrops[chainId].abi,
-        airdrops[chainId].airdropAddress
-      );
-      const results = await contract.methods
-        .claim(positiveClaimables)
-        .send({ from: userAddress });
-
-      const remainingClaimables = await getClaimablesFromAirdrop(
-        chainId,
-        airdrops[chainId].airdropAddress,
-        userAddress
-      );
-      let success = true;
-      for (const claimable of remainingClaimables) {
-        if (claimable > 0) {
-          success = false;
-          break;
-        }
-      }
-
-      if (success === true) {
-        console.log("Success claiming airdrop");
-      } else {
-        console.log("Error claiming airdrop");
-      }
-    } catch (error) {
-      console.log("error :", error);
-    }
   }
 
   $: if ($userAddress) {
@@ -77,10 +31,7 @@
   {#if $userAddress && loading === false}
     <div class="pools">
       {#each $selectedNetworks as chainId}
-        <NetworkRewards
-          chainId={chainId}
-          airdropData={airdrops[chainId]}
-        />
+        <NetworkRewards {chainId} airdropData={airdrops[chainId]} />
       {/each}
     </div>
   {:else}

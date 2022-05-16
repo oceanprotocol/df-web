@@ -79,3 +79,49 @@ export const updateAllClaimables = async (address, selectedChains) => {
         }
     }));
 }
+
+export async function claimRewards(chainId) {
+    console.log("claim");
+    switchWalletNetwork(chainId);
+
+    try {
+      const airdrop = airdrops[chainId];
+      const airdropClaimables = claimables[chainId];
+      let positiveClaimables = [];
+
+      // TODO - Make sure that claim is only done on non-zero tokens
+      for (let i = 1; i < airdropClaimables.length; i++) {
+        if (airdropClaimables[i] > 0)
+          positiveClaimables.push(airdrop.tokens[i]);
+      }
+
+      const contract = new web3.eth.Contract(
+        airdrops[chainId].abi,
+        airdrops[chainId].airdropAddress
+      );
+      const results = await contract.methods
+        .claim(positiveClaimables)
+        .send({ from: userAddress });
+
+      const remainingClaimables = await getClaimablesFromAirdrop(
+        chainId,
+        airdrops[chainId].airdropAddress,
+        userAddress
+      );
+      let success = true;
+      for (const claimable of remainingClaimables) {
+        if (claimable > 0) {
+          success = false;
+          break;
+        }
+      }
+
+      if (success === true) {
+        console.log("Success claiming airdrop");
+      } else {
+        console.log("Error claiming airdrop");
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  }
