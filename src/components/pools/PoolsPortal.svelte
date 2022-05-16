@@ -1,70 +1,60 @@
 <script>
   import Row from "../common/Row.svelte";
+  import * as poolInfoChain3 from "../../utils/metadata/pools/poolinfo-chain3.csv";
+  import * as poolInfoChain4 from "../../utils/metadata/pools/poolinfo-chain4.csv";
+
+  export const poolInfo = {
+    3: poolInfoChain3,
+    4: poolInfoChain4,
+  }
+
+  const pools = [];
+
+  function getRow(poolInfo) {
+    return {
+      url: poolInfo.url,
+      rowData: {
+        network: poolInfo.chainID,
+        datatoken: poolInfo.DT_symbol,
+        token: poolInfo.basetoken,
+        tvl: parseFloat(poolInfo.stake_amt),
+        volume: parseFloat(poolInfo.vol_amt)
+      }
+    }
+  }
 
   // TODO - Perhaps we should use the token-symbol vs. farm
   // TODO - Fix row styling - See "Ethereum Mainnet" vs. "Ropsten".
-  const pools = [
-    {
-      network: "1",
-      farm: "NEO DF",
-      did: "7Bce67697eD2858d0683c631DdE7Af823b7eea38",
-      apr: "60%",
-      tvl: "$14,333,232.002"
-    },
-    {
-      network: "1",
-      farm: "NEO DF",
-      did: "7Bce67697eD2858d0683c631DdE7Af823b7eea38",
-      apr: "60%",
-      tvl: "$14,333,232.002"
-    },
-    {
-      network: "3",
-      farm: "NEO DF",
-      did: "7Bce67697eD2858d0683c631DdE7Af823b7eea38",
-      apr: "60%",
-      tvl: "$14,333,232.002"
-    },
-    {
-      network: "3",
-      farm: "NEO DF",
-      did: "7Bce67697eD2858d0683c631DdE7Af823b7eea38",
-      apr: "60%",
-      tvl: "$14,333,232.002"
-    },
-    {
-      network: "1",
-      farm: "NEO DF",
-      did: "7Bce67697eD2858d0683c631DdE7Af823b7eea38",
-      apr: "60%",
-      tvl: "$14,333,232.002"
-    }
-  ];
+  function initPools() {
+    for (const poolsByChain of Object.values(poolInfo)) {
+      poolInfo.totalPools = Object.entries(poolsByChain.default).length;
+      poolInfo.totalTVL = Object.values(poolsByChain.default).reduce((total, pool) => total + parseFloat(pool.stake_amt));
 
-  function viewPool(poolDID) {
-    window.open("https://market.oceanprotocol.com/asset/did:op:" + poolDID, "_blank");
-  }
-
-  function getRow(pool) {
-    return {
-      network: pool.network,
-      farm: pool.farm,
-      apr: pool.apr,
-      tvl: pool.tvl
+      poolsByChain.default.forEach(poolInfo => {
+        pools.push(getRow(poolInfo));
+      });
     }
   }
+
+  function viewPool(url) {
+    window.open(url, "_blank");
+  }
+
+  initPools();
 
 </script>
 
 <div class="container">
   <h1>Pool Explorer</h1>
   <div class="pools">
-    {#each pools as pool}
-      <Row
-        rowObject={getRow(pool)}
-        clickData={pool.did}
-        buttons={[{ text: "View", onClick: viewPool }]} />
-    {/each}
+    {#if pools}
+      {#each pools as pool}
+        <Row
+          rowObject={pool.rowData}
+          clickData={pool.url}
+          buttons={[{ text: "View", onClick: viewPool }]} />
+      {/each}
+    {/if}
   </div>
 </div>
 
