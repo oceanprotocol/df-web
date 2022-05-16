@@ -16,7 +16,7 @@
       rowData: {
         network: poolInfo.chainID,
         datatoken: poolInfo.DT_symbol,
-        token: poolInfo.basetoken,
+        basetoken: poolInfo.basetoken,
         tvl: parseFloat(poolInfo.stake_amt),
         volume: parseFloat(poolInfo.vol_amt)
       }
