@@ -7,7 +7,11 @@
 </script>
 
 <div class="networkRewardsContainer">
-  <ClaimRewards chainId={chainId} totalRewards={airdropData.totalRewards} />
+  <ClaimRewards
+    {chainId}
+    totalRewards={airdropData.totalRewards}
+    claimables={airdropData}
+  />
   {#if airdropData}
     {#each airdropData.tokens as token}
       <Row rowObject={airdropData.tokensData[token]} />

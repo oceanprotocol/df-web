@@ -80,29 +80,28 @@ export const updateAllClaimables = async (address, selectedChains) => {
     }));
 }
 
-export async function claimRewards(chainId) {
+export async function claimRewards(userAddress, chainId, tokens, tokensData, signer) {
     console.log("claim");
-    switchWalletNetwork(chainId);
 
     try {
-      const airdrop = airdrops[chainId];
-      const airdropClaimables = claimables[chainId];
+      const tokenAddresses = tokens;
       let positiveClaimables = [];
 
       // TODO - Make sure that claim is only done on non-zero tokens
-      for (let i = 1; i < airdropClaimables.length; i++) {
-        if (airdropClaimables[i] > 0)
-          positiveClaimables.push(airdrop.tokens[i]);
+      console.log(tokensData)
+      for (let i = 1; i < tokenAddresses.length; i++) {
+        if (tokensData[tokenAddresses[i]].rewards > 0)
+          positiveClaimables.push(tokenAddresses[i]);
       }
-
-      const contract = new web3.eth.Contract(
+      const rpcURL = getRpcUrlByChainId(chainId);
+      const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+      console.log()
+      const contract = new ethers.Contract(
+        airdrops[chainId].airdropAddress,
         airdrops[chainId].abi,
-        airdrops[chainId].airdropAddress
+        signer
       );
-      const results = await contract.methods
-        .claim(positiveClaimables)
-        .send({ from: userAddress });
-
+      const results = await contract.claimMultiple(userAddress, positiveClaimables)
       const remainingClaimables = await getClaimablesFromAirdrop(
         chainId,
         airdrops[chainId].airdropAddress,

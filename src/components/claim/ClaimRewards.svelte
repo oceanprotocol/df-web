@@ -1,17 +1,23 @@
 <script>
-  import { switchWalletNetwork, connectedChainId } from "../../stores/web3";
+  import {
+    switchWalletNetwork,
+    connectedChainId,
+    userAddress,
+    networkSigner,
+  } from "../../stores/web3";
   import { claimRewards } from "../../utils/airdrops";
   import Row from "../common/Row.svelte";
 
   export let chainId;
   export let totalRewards;
+  export let claimables;
 
   let rowinfo = {
     network: chainId,
     rewards: totalRewards,
   };
 
-  console.log(chainId, $connectedChainId);
+  console.log(claimables);
 
   let buttons = [];
 
@@ -26,12 +32,19 @@
     buttons = [
       {
         text: "Switch network",
-        onClick: switchWalletNetwork,
+        onClick: () => switchWalletNetwork,
         disabled: chainId === $connectedChainId,
       },
       {
         text: "Claim",
-        onClick: claimRewards,
+        onClick: () =>
+          claimRewards(
+            $userAddress,
+            $connectedChainId,
+            claimables.tokens,
+            claimables.tokensData,
+            $networkSigner
+          ),
         disabled: chainId !== $connectedChainId,
       },
     ];
