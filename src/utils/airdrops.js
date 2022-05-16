@@ -81,7 +81,7 @@ export const updateAllClaimables = async (address, selectedChains) => {
     return airdrops
 }
 
-export async function claimRewards(userAddress, chainId, tokens, tokensData, signer) {
+export async function claimRewards(userAddress, chainId, tokens, tokensData, signer, provider) {
     console.log("claim");
 
     try {
@@ -99,7 +99,10 @@ export async function claimRewards(userAddress, chainId, tokens, tokensData, sig
         airdrops[chainId].abi,
         signer
       );
-     await contract.claimMultiple(userAddress, positiveClaimables)
+     const resp = await contract.claimMultiple(userAddress, positiveClaimables)
+     await resp.wait()
+     console.log('txReceipt here')
+
     } catch (error) {
       console.log("error :", error);
     }

@@ -5,6 +5,7 @@
     userAddress,
     networkSigner,
     selectedNetworks,
+    web3Provider,
   } from "../../stores/web3";
   import { claimRewards, updateAllClaimables } from "../../utils/airdrops";
   import { airdrops } from "../../stores/airdrops";
@@ -27,7 +28,8 @@
       $connectedChainId,
       claimables.tokens,
       claimables.tokensData,
-      $networkSigner
+      $networkSigner,
+      $web3Provider
     );
     let newAirdrops = await updateAllClaimables(
       $userAddress,
