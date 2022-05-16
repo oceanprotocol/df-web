@@ -3,6 +3,7 @@
   import NetworkItem from "../common/NetworkItem.svelte";
 
   export let rowObject;
+  export let clickData;
   export let buttons;
   export let size = "normal";
 </script>
@@ -10,7 +11,11 @@
 <div class={`container ${size === "large" && "large"}`}>
   {#each Object.entries(rowObject) as [title, value]}
     <div class="row">
-      <span class="title">{title}</span>
+      {#if title === "tvl"}
+        <span class="title">total staked</span>
+      {:else}
+        <span class="title">{title}</span>
+      {/if}
       <span class="value">
         {#if title === "network"}
           <NetworkItem chainId={value} fontSize="normal" />
@@ -26,7 +31,9 @@
         <div class="buttonContainer">
           <Button
             text={button.text}
-            onclick={() => button.onClick(rowObject.network)}
+            onclick={() =>
+              clickData ? button.onClick(clickData) : button.onClick(rowObject)
+            }
             disabled={button.disabled}
           />
         </div>
@@ -42,7 +49,7 @@
     align-items: center;
     padding: calc(var(--spacer) / 4) 8%;
     border-bottom: 2px solid var(--brand-grey-dimmed);
-    overflow-y: scroll;
+    overflow-y: hidden;
   }
   .row {
     display: flex;

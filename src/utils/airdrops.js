@@ -12,11 +12,11 @@ export const airdrops = {
         tokensData:{
             "0x400a17C7644fEF90EC5e85C59BA2034A6D4B1366": {
                 symbol: 'OCEAN',
-                rewards: 0
+                amount: 0
             },
             "0x0d92cadB0A0BC3693e985FB15E47BcF4d1Dc3792": {
                 symbol: 'PSDN',
-                rewards: 0
+                amount: 0
             }
         },
         totalRewards: 0,
@@ -31,11 +31,11 @@ export const airdrops = {
         tokensData:{
             "0xe6239d757c064c237dF31e08EbdD582f0608aCE0": {
                 symbol: 'OCEAN',
-                rewards: 0
+                amount: 0
             },
             "0xc6913d3eCed79021a39E6955015313B22B72b76E": {
                 symbol: 'PSDN',
-                rewards: 0
+                amount: 0
             }
         },
         totalRewards: 0,
@@ -56,7 +56,7 @@ export const updateClaimablesFromAirdrop = async (chainId, airdropInfo, address)
             let totalRewards = 0;
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
-                airdropInfo.tokensData[airdropInfo.tokens[i]].rewards = rewardInEthers > 0.0 ? rewardInEthers : 0.0
+                airdropInfo.tokensData[airdropInfo.tokens[i]].amount = rewardInEthers > 0.0 ? rewardInEthers : 0.0
                 totalRewards += rewardInEthers > 0.0 ? 1 : 0
             }
 
@@ -90,8 +90,8 @@ export async function claimRewards(userAddress, chainId, tokens, tokensData, sig
 
       // TODO - Make sure that claim is only done on non-zero tokens
       for (let i = 0; i < tokenAddresses.length; i++) {
-          console.log(tokensData[tokenAddresses[i]].rewards,tokenAddresses[i])
-        if (parseInt(tokensData[tokenAddresses[i]].rewards) > 0)
+          console.log(tokensData[tokenAddresses[i]].amount,tokenAddresses[i])
+        if (parseInt(tokensData[tokenAddresses[i]].amount) > 0)
           positiveClaimables.push(tokenAddresses[i]);
       }
 

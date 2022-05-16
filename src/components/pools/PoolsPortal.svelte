@@ -1,49 +1,69 @@
 <script>
   import Row from "../common/Row.svelte";
 
+  // TODO - Perhaps we should use the token-symbol vs. farm
+  // TODO - Fix row styling - See "Ethereum Mainnet" vs. "Ropsten".
   const pools = [
     {
-      farm: "NEO DF",
       network: "1",
+      farm: "NEO DF",
+      did: "7Bce67697eD2858d0683c631DdE7Af823b7eea38",
       apr: "60%",
-      "Total Staked": "$14,333,232.002",
+      tvl: "$14,333,232.002"
     },
     {
-      farm: "NEO DF",
       network: "1",
+      farm: "NEO DF",
+      did: "7Bce67697eD2858d0683c631DdE7Af823b7eea38",
       apr: "60%",
-      "Total Staked": "$14,333,232.002",
+      tvl: "$14,333,232.002"
     },
     {
-      farm: "NEO DF",
       network: "3",
+      farm: "NEO DF",
+      did: "7Bce67697eD2858d0683c631DdE7Af823b7eea38",
       apr: "60%",
-      "Total Staked": "$14,333,232.002",
+      tvl: "$14,333,232.002"
     },
     {
-      farm: "NEO DF",
       network: "3",
+      farm: "NEO DF",
+      did: "7Bce67697eD2858d0683c631DdE7Af823b7eea38",
       apr: "60%",
-      "Total Staked": "$14,333,232.002",
+      tvl: "$14,333,232.002"
     },
     {
-      farm: "NEO DF",
       network: "1",
+      farm: "NEO DF",
+      did: "7Bce67697eD2858d0683c631DdE7Af823b7eea38",
       apr: "60%",
-      "Total Staked": "$14,333,232.002",
-    },
+      tvl: "$14,333,232.002"
+    }
   ];
 
-  function viewPool() {
-    console.log("view pool");
+  function viewPool(poolDID) {
+    window.open("https://market.oceanprotocol.com/asset/did:op:" + poolDID, "_blank");
   }
+
+  function getRow(pool) {
+    return {
+      network: pool.network,
+      farm: pool.farm,
+      apr: pool.apr,
+      tvl: pool.tvl
+    }
+  }
+
 </script>
 
 <div class="container">
-  <h1>Pool explorer</h1>
+  <h1>Pool Explorer</h1>
   <div class="pools">
     {#each pools as pool}
-      <Row {pool} button={{ text: "View", onClick: viewPool }} />
+      <Row
+        rowObject={getRow(pool)}
+        clickData={pool.did}
+        buttons={[{ text: "View", onClick: viewPool }]} />
     {/each}
   </div>
 </div>
