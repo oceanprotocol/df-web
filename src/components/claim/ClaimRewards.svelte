@@ -15,6 +15,7 @@
   export let totalRewards;
   export let claimables;
 
+  let loading = false;
   let rowinfo = {
     network: chainId,
     rewards: totalRewards,
@@ -23,6 +24,7 @@
   let buttons = [];
 
   async function claim() {
+    loading = true;
     await claimRewards(
       $userAddress,
       $connectedChainId,
@@ -36,6 +38,7 @@
       $selectedNetworks
     );
     airdrops.update(() => newAirdrops);
+    loading = false;
   }
 
   $: if (totalRewards) {
@@ -53,9 +56,10 @@
         disabled: chainId === $connectedChainId,
       },
       {
-        text: "Claim",
+        text: loading ? "lOADING.." : "Claim",
         onClick: () => claim(),
-        disabled: chainId !== $connectedChainId || totalRewards !== 0,
+        disabled:
+          chainId !== $connectedChainId || totalRewards !== 0 || loading,
       },
     ];
   }
