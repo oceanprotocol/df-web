@@ -85,27 +85,28 @@ export async function claimRewards(userAddress, chainId, tokens, tokensData, sig
     console.log("claim");
 
     try {
-      const tokenAddresses = tokens;
-      let positiveClaimables = [];
+        const tokenAddresses = tokens;
+        let positiveClaimables = [];
 
-      // TODO - Make sure that claim is only done on non-zero tokens
-      for (let i = 0; i < tokenAddresses.length; i++) {
-          console.log(tokensData[tokenAddresses[i]].amount,tokenAddresses[i])
+        // TODO - Make sure that claim is only done on non-zero tokens
+        for (let i = 0; i < tokenAddresses.length; i++) {
+            console.log(tokensData[tokenAddresses[i]].amount,tokenAddresses[i])
         if (parseInt(tokensData[tokenAddresses[i]].amount) > 0)
-          positiveClaimables.push(tokenAddresses[i]);
-      }
+            positiveClaimables.push(tokenAddresses[i]);
+        }
 
-      const contract = new ethers.Contract(
-        airdrops[chainId].airdropAddress,
-        airdrops[chainId].abi,
-        signer
-      );
-      console.log(positiveClaimables, tokensData)
-     const resp = await contract.claimMultiple(userAddress, positiveClaimables)
-     await resp.wait()
-     console.log('txReceipt here')
-
+        const contract = new ethers.Contract(
+            airdrops[chainId].airdropAddress,
+            airdrops[chainId].abi,
+            signer
+        );
+        console.log(positiveClaimables, tokensData)
+        const resp = await contract.claimMultiple(userAddress, positiveClaimables)
+        await resp.wait()
+        console.log("Success claiming rewards, txReceipt here")
+        return true
     } catch (error) {
-      console.log("error :", error);
+      console.log("Error claiming rewards :", error);
+      return false
     }
   }
