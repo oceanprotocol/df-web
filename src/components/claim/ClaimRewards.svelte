@@ -52,14 +52,14 @@
     buttons = [
       {
         text: "Switch network",
-        onClick: () => switchWalletNetwork,
+        onClick: switchWalletNetwork,
         disabled: chainId === $connectedChainId,
       },
       {
         text: loading ? "lOADING.." : "Claim",
         onClick: () => claim(),
         disabled:
-          chainId !== $connectedChainId || totalRewards !== 0 || loading,
+          chainId !== $connectedChainId || totalRewards === 0 || loading,
       },
     ];
   }

@@ -6,11 +6,11 @@ export const airdrops = {
     3: {
         airdropAddress: "0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16",
         tokens: [
-            "0xe6239d757c064c237dF31e08EbdD582f0608aCE0",
+            "0x400a17C7644fEF90EC5e85C59BA2034A6D4B1366",
             "0x0d92cadB0A0BC3693e985FB15E47BcF4d1Dc3792"
         ],
         tokensData:{
-            "0xe6239d757c064c237dF31e08EbdD582f0608aCE0": {
+            "0x400a17C7644fEF90EC5e85C59BA2034A6D4B1366": {
                 symbol: 'OCEAN',
                 rewards: 0
             },
@@ -81,7 +81,7 @@ export const updateAllClaimables = async (address, selectedChains) => {
     return airdrops
 }
 
-export async function claimRewards(userAddress, chainId, tokens, tokensData, signer, provider) {
+export async function claimRewards(userAddress, chainId, tokens, tokensData, signer) {
     console.log("claim");
 
     try {
@@ -89,8 +89,9 @@ export async function claimRewards(userAddress, chainId, tokens, tokensData, sig
       let positiveClaimables = [];
 
       // TODO - Make sure that claim is only done on non-zero tokens
-      for (let i = 1; i < tokenAddresses.length; i++) {
-        if (tokensData[tokenAddresses[i]].rewards > 0)
+      for (let i = 0; i < tokenAddresses.length; i++) {
+          console.log(tokensData[tokenAddresses[i]].rewards,tokenAddresses[i])
+        if (parseInt(tokensData[tokenAddresses[i]].rewards) > 0)
           positiveClaimables.push(tokenAddresses[i]);
       }
 
@@ -99,6 +100,7 @@ export async function claimRewards(userAddress, chainId, tokens, tokensData, sig
         airdrops[chainId].abi,
         signer
       );
+      console.log(positiveClaimables, tokensData)
      const resp = await contract.claimMultiple(userAddress, positiveClaimables)
      await resp.wait()
      console.log('txReceipt here')
