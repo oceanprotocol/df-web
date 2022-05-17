@@ -50,9 +50,7 @@ export const setValuesAfterConnection = async (instance) => {
   const signer = provider.getSigner();
   networkSigner.set(signer);
   const signerAddress = await signer.getAddress();
-  console.log("Signer Address: ", signerAddress)
   const chainId= (await provider.getNetwork()).chainId;
-  console.log(chainId)
   connectedChainId.set(chainId)
   userAddress.set(signerAddress);
   web3Provider.set(provider)
