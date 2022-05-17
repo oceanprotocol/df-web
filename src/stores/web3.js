@@ -14,21 +14,6 @@ const Web3 = window.Web3;
 const Web3Modal = window.Web3Modal.default;
 const WalletConnectProvider = window.WalletConnectProvider.default;
 
-/*const networks = [
-  {
-    address: OCEAN_ERC20_0x,
-    provider: process.env.ETH_RPC_URL || "https://cloudflare-eth.com/",
-  },
-  {
-    address: OCEAN_Polygon_0x,
-    provider: process.env.POLYGON_RPC_URL || `https://polygon-rpc.com`,
-  },
-  {
-    address: OCEAN_BSC_0x,
-    provider: process.env.BSC_RPC_URL || `https://bsc-dataseed.binance.org/`,
-  },
-];*/
-
 const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
@@ -48,11 +33,9 @@ const web3Modal = new Web3Modal({
 export const setValuesAfterConnection = async (instance) => {
   const provider = new ethers.providers.Web3Provider(instance);
   const signer = provider.getSigner();
-  networkSigner.set(signer);
   const signerAddress = await signer.getAddress();
   console.log("Signer Address: ", signerAddress)
   const chainId= (await provider.getNetwork()).chainId;
-  console.log(chainId)
   connectedChainId.set(chainId)
   userAddress.set(signerAddress);
   web3Provider.set(provider)
@@ -70,7 +53,9 @@ export const connectWalletFromLocalStorage = async () => {
   /*instance.on("accountsChanged", (accounts) => {});
 
   // Subscribe to chainId change
-  instance.on("chainChanged", (chainId) => {});*/
+  instance.on("chainChanged", (chainId) => {
+    //connectedChainId.set(parseInt(chainId))
+  });*/
 
   // Subscribe to networkId change
   instance.on("networkChanged", (networkId) => {

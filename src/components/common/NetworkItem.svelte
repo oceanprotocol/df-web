@@ -11,9 +11,13 @@
   export let fontSize = "small";
   export let minimal = false;
 
-  const name = minimal
-    ? getNetworkDataById(networksData, parseInt(chainId))?.chain
-    : getNetworkDataById(networksData, parseInt(chainId))?.name;
+  let name = undefined;
+
+  $: if (chainId) {
+    name = minimal
+      ? getNetworkDataById(networksData, parseInt(chainId))?.chain
+      : getNetworkDataById(networksData, parseInt(chainId))?.name;
+  }
 </script>
 
 <div class={`container ${checked === undefined && "margin0"}`}>
