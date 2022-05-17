@@ -1,3 +1,8 @@
+const chainIdRPCs = {
+    3 : "https://ropsten.infura.io/v3/05d2b0098cf44eb789387708af2527a1",
+    4 : "https://rinkeby.infura.io/v3/05d2b0098cf44eb789387708af2527a1"
+}
+
 export function getNetworkDataById(
     data,
     networkId
@@ -7,4 +12,8 @@ export function getNetworkDataById(
       (chain) => chain.chainId === networkId
     )
     return networkData[0]
+}
+
+export function getRpcUrlByChainId(chainId){
+  return chainIdRPCs[chainId]
 }

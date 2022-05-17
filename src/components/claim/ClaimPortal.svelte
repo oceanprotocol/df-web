@@ -1,28 +1,43 @@
 <script>
-  import Pool from "../common/Pool.svelte";
-  import { switchWalletNetwork } from "../../stores/web3";
+  import NetworkRewards from "./NetworkRewards.svelte";
+  import { userAddress, selectedNetworks } from "../../stores/web3.js";
+  import { updateAllClaimables } from "../../utils/airdrops";
+  import { airdrops } from "../../stores/airdrops";
 
-  const pools = [
-    { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "56", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "137", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "1", token: "PSD", earned: "$5.0" },
-    { farm: "NEO DF", network: "137", token: "PSD", earned: "$5.0" },
-  ];
+  let loading = true;
 
-  function claimRewards(chainId) {
-    console.log("claim");
-    switchWalletNetwork(chainId);
+  async function loadClaimables() {
+    loading = true;
+    let newAirdrops = await updateAllClaimables(
+      $userAddress,
+      $selectedNetworks
+    );
+    airdrops.update(() => newAirdrops);
+    loading = false;
   }
+
+  $: if ($userAddress) {
+    loadClaimables();
+  }
+
+  selectedNetworks.subscribe((value) => {
+    if ($userAddress) {
+      loadClaimables();
+    }
+  });
 </script>
 
 <div class="container">
   <h1>Claim Portal</h1>
-  <div class="pools">
-    {#each pools as pool}
-      <Pool {pool} button={{ text: "Claim", onClick: claimRewards }} />
-    {/each}
-  </div>
+  {#if $userAddress && loading === false && $airdrops}
+    <div class="pools">
+      {#each $selectedNetworks as chainId}
+        <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
+      {/each}
+    </div>
+  {:else}
+    <div>Loading</div>
+  {/if}
 </div>
 
 <style>
@@ -35,10 +50,6 @@
 
   .pools {
     width: 100%;
-    background-color: var(--brand-white);
-    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
-    transform: translate3d(0, -0.05rem, 0);
-    border-radius: var(--border-radius);
   }
 
   h1 {

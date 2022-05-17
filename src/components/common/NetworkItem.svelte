@@ -64,4 +64,7 @@
   .margin0 {
     margin: 0;
   }
+  .container:only-child {
+    margin: 0;
+  }
 </style>
