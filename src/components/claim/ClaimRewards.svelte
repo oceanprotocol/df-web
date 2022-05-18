@@ -37,10 +37,10 @@
 
     if (result === true) {
       Swal.fire(
-          "Success!",
-          `You've claimed your Data Farming rewards!`,
-          "success"
-      )
+        "Success!",
+        `You've claimed your Data Farming rewards!`,
+        "success"
+      );
     } else {
       Swal.fire("Error!", "Failed to claim Data Farming rewards!", "error");
     }
@@ -64,7 +64,7 @@
     buttons = [
       {
         text: "Switch network",
-        onClick: switchWalletNetwork,
+        onClick: () => switchWalletNetwork(chainId),
         disabled: chainId === $connectedChainId,
       },
       {
