@@ -37,8 +37,8 @@
   {#if $selectedNetworks.length === 0}
     <MainMessage
       title="No network selected"
-      message="Select one or more networks from the 'Selected networks' dropdown in
-    order to get rewards from those networks"
+      message={`Select one or more networks from the **Selected networks** dropdown in
+    order to get rewards from those networks.`}
     />
   {/if}
 </div>
