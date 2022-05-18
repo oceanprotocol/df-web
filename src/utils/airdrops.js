@@ -91,17 +91,20 @@ export async function claimRewards(userAddress, chainId, tokens, tokensData, sig
                 positiveClaimables.push(tokenAddresses[i]);
         }
 
-        const contract = new ethers.Contract(
-            airdrops[chainId].airdropAddress,
-            airdrops[chainId].abi,
-            signer
-        );
-        const resp = await contract.claimMultiple(userAddress, positiveClaimables)
-        await resp.wait()
-        console.log("Success claiming rewards, txReceipt here")
-        return true
+        if( positiveClaimables.length > 0 ) {
+            const contract = new ethers.Contract(
+                airdrops[chainId].airdropAddress,
+                airdrops[chainId].abi,
+                signer
+            );
+            const resp = await contract.claimMultiple(userAddress, positiveClaimables);
+            await resp.wait();
+            console.log("Success claiming rewards, txReceipt here");
+            return positiveClaimables.length;
+        }
+        return 0;
     } catch (error) {
       console.log("Error claiming rewards :", error);
-      return false
+      return false;
     }
   }

@@ -17,15 +17,11 @@
   export let claimables;
 
   let loading = false;
-  let rowinfo = {
-    network: chainId,
-    rewards: totalRewards,
-  };
-
   let buttons = [];
 
   async function claim() {
     loading = true;
+
     const result = await claimRewards(
       $userAddress,
       $connectedChainId,
@@ -35,29 +31,23 @@
       $web3Provider
     );
 
-    if (result === true) {
+    if (result > 0) {
       Swal.fire(
         "Success!",
         `You've claimed your Data Farming rewards!`,
         "success"
-      );
-    } else {
+      ).then(async (result) => {
+          let newAirdrops = await updateAllClaimables(
+              $userAddress,
+              $selectedNetworks
+          );
+          airdrops.update(() => newAirdrops);
+      })
+    } else if(result === false) {
       Swal.fire("Error!", "Failed to claim Data Farming rewards!", "error");
     }
 
-    let newAirdrops = await updateAllClaimables(
-      $userAddress,
-      $selectedNetworks
-    );
-    airdrops.update(() => newAirdrops);
     loading = false;
-  }
-
-  $: if (totalRewards) {
-    rowinfo = {
-      network: chainId,
-      rewards: totalRewards,
-    };
   }
 
   $: if ($connectedChainId) {
@@ -77,7 +67,7 @@
   }
 </script>
 
-<Row rowObject={rowinfo} {buttons} size="large" />
+<Row rowObject={{network: chainId, rewards: totalRewards}} {buttons} size="large" />
 
 <style>
 </style>
