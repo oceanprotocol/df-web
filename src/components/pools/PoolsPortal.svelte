@@ -6,7 +6,7 @@
   export const poolInfo = {
     3: poolInfoChain3,
     4: poolInfoChain4,
-  }
+  };
 
   const pools = [];
 
@@ -18,9 +18,9 @@
         datatoken: poolInfo.DT_symbol,
         basetoken: poolInfo.basetoken,
         tvl: parseFloat(poolInfo.stake_amt),
-        volume: parseFloat(poolInfo.vol_amt)
-      }
-    }
+        volume: parseFloat(poolInfo.vol_amt),
+      },
+    };
   }
 
   // TODO - Perhaps we should use the token-symbol vs. farm
@@ -28,9 +28,11 @@
   function initPools() {
     for (const poolsByChain of Object.values(poolInfo)) {
       poolInfo.totalPools = Object.entries(poolsByChain.default).length;
-      poolInfo.totalTVL = Object.values(poolsByChain.default).reduce((total, pool) => total + parseFloat(pool.stake_amt));
+      poolInfo.totalTVL = Object.values(poolsByChain.default).reduce(
+        (total, pool) => total + parseFloat(pool.stake_amt)
+      );
 
-      poolsByChain.default.forEach(poolInfo => {
+      poolsByChain.default.forEach((poolInfo) => {
         pools.push(getRow(poolInfo));
       });
     }
@@ -41,7 +43,6 @@
   }
 
   initPools();
-
 </script>
 
 <div class="container">
@@ -52,7 +53,8 @@
         <Row
           rowObject={pool.rowData}
           clickData={pool.url}
-          buttons={[{ text: "View", onClick: viewPool }]} />
+          buttons={[{ text: "View", onClick: viewPool }]}
+        />
       {/each}
     {/if}
   </div>

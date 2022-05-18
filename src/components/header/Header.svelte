@@ -87,7 +87,7 @@
     height: 100%;
     align-items: center;
     padding: 0 1em;
-    color: var(--brand-grey-lighter);
+    color: var(--brand-grey-light);
     font-weight: 700;
     text-decoration: none;
     font-size: var(--font-size-small);

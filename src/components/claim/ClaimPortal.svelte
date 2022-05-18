@@ -1,5 +1,6 @@
 <script>
   import NetworkRewards from "./NetworkRewards.svelte";
+  import MainMessage from "../common/MainMessage.svelte";
   import { userAddress, selectedNetworks } from "../../stores/web3.js";
   import { updateAllClaimables } from "../../utils/airdrops";
   import { supportedChainIds } from "../../app.config";
@@ -30,8 +31,21 @@
         <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
       {/each}
     </div>
-  {:else}
+  {:else if $selectedNetworks.lenght > 0}
     <div>Loading</div>
+  {/if}
+  {#if !$userAddress}
+    <MainMessage
+      title="No wallet connected"
+      message={`No wallet is connected to this page. Connect your wallet to see rewards.`}
+    />
+  {/if}
+  {#if $selectedNetworks.length === 0 && $userAddress}
+    <MainMessage
+      title="No network selected"
+      message={`Select one or more networks from the **Selected networks** dropdown in
+    order to see rewards from those networks.`}
+    />
   {/if}
 </div>
 
