@@ -34,7 +34,6 @@ export const setValuesAfterConnection = async (instance) => {
   const provider = new ethers.providers.Web3Provider(instance);
   const signer = provider.getSigner();
   const signerAddress = await signer.getAddress();
-  console.log("Signer Address: ", signerAddress)
   const chainId= (await provider.getNetwork()).chainId;
   connectedChainId.set(chainId)
   userAddress.set(signerAddress);

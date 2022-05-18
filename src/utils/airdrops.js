@@ -52,7 +52,6 @@ export const updateClaimablesFromAirdrop = async (chainId, airdropInfo, address)
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
             const contract = new ethers.Contract(airdropInfo.airdropAddress, airdropInfo.abi, provider);
             const claimableRewards = await contract.claimables(address, airdropInfo.tokens)
-
             let totalRewards = 0;
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
@@ -82,17 +81,14 @@ export const updateAllClaimables = async (address, selectedChains) => {
 }
 
 export async function claimRewards(userAddress, chainId, tokens, tokensData, signer) {
-    console.log("claim");
-
     try {
         const tokenAddresses = tokens;
         let positiveClaimables = [];
 
         // TODO - Make sure that claim is only done on non-zero tokens
         for (let i = 0; i < tokenAddresses.length; i++) {
-            console.log(tokensData[tokenAddresses[i]].amount,tokenAddresses[i])
-        if (parseInt(tokensData[tokenAddresses[i]].amount) > 0)
-            positiveClaimables.push(tokenAddresses[i]);
+            if (Number(tokensData[tokenAddresses[i]].amount) > 0)
+                positiveClaimables.push(tokenAddresses[i]);
         }
 
         const contract = new ethers.Contract(
@@ -100,7 +96,6 @@ export async function claimRewards(userAddress, chainId, tokens, tokensData, sig
             airdrops[chainId].abi,
             signer
         );
-        console.log(positiveClaimables, tokensData)
         const resp = await contract.claimMultiple(userAddress, positiveClaimables)
         await resp.wait()
         console.log("Success claiming rewards, txReceipt here")
