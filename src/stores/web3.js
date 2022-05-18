@@ -33,6 +33,7 @@ const web3Modal = new Web3Modal({
 export const setValuesAfterConnection = async (instance) => {
   const provider = new ethers.providers.Web3Provider(instance);
   const signer = provider.getSigner();
+  networkSigner.set(signer);
   const signerAddress = await signer.getAddress();
   const chainId= (await provider.getNetwork()).chainId;
   connectedChainId.set(chainId)
