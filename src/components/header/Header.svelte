@@ -1,7 +1,9 @@
 <script>
   import WalletConnect from "./WalletConnect.svelte";
   import NetworkSelection from "./NetworkSelection.svelte";
-  import { Link } from "svelte-navigator";
+  import { Link, useLocation } from "svelte-navigator";
+
+  const location = useLocation();
 </script>
 
 <header>
@@ -12,10 +14,10 @@
   </div>
   <nav>
     <ul>
-      <li class:active={window.location.pathname === "/"}>
+      <li class:active={$location.pathname === "/"}>
         <Link to="/" class="link">CLAIM PORTAL</Link>
       </li>
-      <li class:active={window.location.pathname === "/pools"}>
+      <li class:active={$location.pathname === "/pools"}>
         <Link to="/pools" class="link">POOL EXPLORER</Link>
       </li>
     </ul>
