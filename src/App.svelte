@@ -2,12 +2,16 @@
   import Header from "../src/components/header/Header.svelte";
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
   import PoolsPortal from "./components/pools/PoolsPortal.svelte";
+  import AdminPortal from "./components/admin/AdminPortal.svelte";
   import {
     connectWallet,
     userAddress,
     connectWalletFromLocalStorage,
     selectedNetworks,
   } from "./stores/web3";
+  import {
+    initValues,
+  } from "./stores/airdrops";
   import { Router, Route } from "svelte-navigator";
   import { supportedChainIds } from "./app.config";
 
@@ -29,6 +33,9 @@
   } else {
     selectedNetworks.update(() => supportedChainIds);
   }
+
+  initValues();
+
 </script>
 
 <Router>
@@ -39,6 +46,9 @@
     </Route>
     <Route path="/pools">
       <PoolsPortal />
+    </Route>
+    <Route path="/admin">
+      <AdminPortal />
     </Route>
   </main>
 </Router>

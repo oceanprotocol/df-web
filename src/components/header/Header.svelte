@@ -20,6 +20,9 @@
       <li class:active={$location.pathname === "/pools"}>
         <Link to="/pools" class="link">POOL EXPLORER</Link>
       </li>
+      <li class:active={$location.pathname === "/admin"}>
+        <Link to="/admin" class="link">ADMIN</Link>
+      </li>
     </ul>
   </nav>
   <div class="headerActions">

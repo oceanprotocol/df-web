@@ -43,15 +43,15 @@ export const airdrops = {
     },
 };
 
-export const updateClaimablesFromAirdrop = async (chainId, airdropInfo, address) => {
-    if (!chainId || !airdropInfo || !address) return null;
+export const updateClaimablesFromAirdrop = async (chainId, airdropInfo, userAddress) => {
+    if (!chainId || !airdropInfo || !userAddress) return null;
     let rewards = [];
     try {
         const rpcURL = getRpcUrlByChainId(chainId);
         if( rpcURL ) {
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
             const contract = new ethers.Contract(airdropInfo.airdropAddress, airdropInfo.abi, provider);
-            const claimableRewards = await contract.claimables(address, airdropInfo.tokens)
+            const claimableRewards = await contract.claimables(userAddress, airdropInfo.tokens)
             let totalRewards = 0;
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
@@ -66,14 +66,14 @@ export const updateClaimablesFromAirdrop = async (chainId, airdropInfo, address)
     }
 }
 
-export const updateAllClaimables = async (address, selectedChains) => {
-    if (!address) return []
+export const updateAllClaimables = async (userAddress, selectedChains) => {
+    if (!userAddress) return []
     const filteredChains = supportedChainIds.filter(x => selectedChains.indexOf(x) >= 0);
 
     await Promise.all(filteredChains.map(async function(chainId) {
         const airdropInfo = airdrops[chainId];
         for (const token in airdropInfo.tokens) {
-            await updateClaimablesFromAirdrop(chainId, airdropInfo, address);
+            await updateClaimablesFromAirdrop(chainId, airdropInfo, userAddress);
         }
     }));
 
@@ -108,3 +108,25 @@ export async function claimRewards(userAddress, chainId, tokens, tokensData, sig
       return false;
     }
   }
+
+export async function allocateRewards(airdropInfo, toAddresses, values, tokenAddress, signer) {
+    try {
+        const contract = new ethers.Contract(
+            airdropInfo.airdropAddress,
+            airdropInfo.abi,
+            signer
+        );
+
+        const resp = await contract.allocate(
+            toAddresses,
+            values,
+            tokenAddress
+        )
+        await resp.wait();
+
+        return true;
+    } catch (error) {
+        console.log("Error allocating rewards :", error);
+        return false;
+    }
+}
