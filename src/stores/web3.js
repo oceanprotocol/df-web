@@ -1,12 +1,14 @@
 import { writable } from "svelte/store";
 import { ethers } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
+import {initChainIds} from "../app.config";
 
 export let userAddress = writable("");
-export let networkProvider = writable("");
+export let web3Provider = writable("");
 export let networkSigner = writable("");
+export let connectedChainId = writable("");
 export let web3 = writable("");
-export let selectedNetworks = writable([1]);
+export let selectedNetworks = writable(initChainIds);
 
 const Web3 = window.Web3;
 const Web3Modal = window.Web3Modal.default;
@@ -19,7 +21,7 @@ const providerOptions = {
       // Mikko's test key - don't copy as your mileage may vary
       infuraId: "4b9c931a4f26483aaf53db3ed884549e",
     },
-  },
+  }
 };
 
 const web3Modal = new Web3Modal({
@@ -31,15 +33,17 @@ const web3Modal = new Web3Modal({
 export const setValuesAfterConnection = async (instance) => {
   const provider = new ethers.providers.Web3Provider(instance);
   const signer = provider.getSigner();
-  networkSigner.set(signer);
   const signerAddress = await signer.getAddress();
+  const chainId= (await provider.getNetwork()).chainId;
+  connectedChainId.set(chainId)
   userAddress.set(signerAddress);
+  web3Provider.set(provider)
   web3.set(new Web3(instance));
 };
 
 export const connectWalletFromLocalStorage = async () => {
   const localStorageProvider = JSON.parse(
-    localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")
+      localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")
   );
   if (!localStorageProvider) return;
   const instance = await web3Modal.connectTo(localStorageProvider);
@@ -48,10 +52,14 @@ export const connectWalletFromLocalStorage = async () => {
   /*instance.on("accountsChanged", (accounts) => {});
 
   // Subscribe to chainId change
-  instance.on("chainChanged", (chainId) => {});
+  instance.on("chainChanged", (chainId) => {
+    //connectedChainId.set(parseInt(chainId))
+  });*/
 
   // Subscribe to networkId change
-  instance.on("networkChanged", (networkId) => {});*/
+  instance.on("networkChanged", (networkId) => {
+    connectedChainId.set(parseInt(networkId))
+  });
 
   // Subscribe to networkId change
   instance.on("disconnect", disconnect);
@@ -60,8 +68,8 @@ export const connectWalletFromLocalStorage = async () => {
 };
 
 export const signMessage = async (msg, signer) => {
-    const signedMessage = await signer.signMessage(msg);
-    return signedMessage;
+  const signedMessage = await signer.signMessage(msg);
+  return signedMessage;
 };
 
 export const connectWallet = async () => {
@@ -78,10 +86,12 @@ export const connectWallet = async () => {
   /*instance.on("accountsChanged", (accounts) => {});
 
   // Subscribe to chainId change
-  instance.on("chainChanged", (chainId) => {});
+  instance.on("chainChanged", (chainId) => {});*/
 
   // Subscribe to networkId change
-  instance.on("networkChanged", (networkId) => {});*/
+  instance.on("networkChanged", (networkId) => {
+    connectedChainId.set(parseInt(networkId))
+  });
 
   // Subscribe to networkId change
   instance.on("disconnect", disconnect);
@@ -108,7 +118,6 @@ export const switchWalletNetwork = async(chainId) => {
   )
   addCustomNetwork(networkNode)
 }
-
 
 export async function addCustomNetwork(
   network

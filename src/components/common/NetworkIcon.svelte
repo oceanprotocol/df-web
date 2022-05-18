@@ -8,17 +8,21 @@
   export let name;
   export let minimal = false;
 
-  const IconMapped = name.includes("ETH")
-    ? EthIcon
-    : name.includes(minimal ? "Polygon" : "Polygon")
-    ? PolygonIcon
-    : name.includes(minimal ? "Moon" : "Moon")
-    ? MoonbeamIcon
-    : name.includes(minimal ? "BSC" : "Binance")
-    ? BscIcon
-    : name.includes(minimal ? "Energy Web" : "Energy Web")
-    ? EnergywebIcon
-    : EthIcon; // ETH icon as fallback
+  let IconMapped = undefined;
+
+  $: if (name) {
+    IconMapped = name.includes("ETH")
+      ? EthIcon
+      : name.includes(minimal ? "Polygon" : "Polygon")
+      ? PolygonIcon
+      : name.includes(minimal ? "Moon" : "Moon")
+      ? MoonbeamIcon
+      : name.includes(minimal ? "BSC" : "Binance")
+      ? BscIcon
+      : name.includes(minimal ? "Energy Web" : "Energy Web")
+      ? EnergywebIcon
+      : EthIcon; // ETH icon as fallback
+  }
 </script>
 
 <div class="imageContainer">
@@ -27,7 +31,7 @@
 
 <style>
   img {
-    height: 1rem;
+    height: 0.8rem;
   }
   .imageContainer {
     display: flex;
