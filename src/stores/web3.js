@@ -60,6 +60,8 @@ export const connectWalletFromLocalStorage = async () => {
   // Subscribe to networkId change
   instance.on("networkChanged", (networkId) => {
     connectedChainId.set(parseInt(networkId))
+    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    networkSigner.set(signer)
   });
 
   // Subscribe to networkId change
