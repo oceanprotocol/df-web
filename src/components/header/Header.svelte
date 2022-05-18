@@ -3,6 +3,7 @@
   import NetworkSelection from "./NetworkSelection.svelte";
   import { Link, useLocation } from "svelte-navigator";
 
+  const aboutURL= "https://docs.google.com/document/d/1BVwgZ_reNC25pcYc64Yllcz3tEw43JbwYhS8bQ6IIlg/edit";
   const location = useLocation();
 </script>
 
@@ -19,6 +20,9 @@
       </li>
       <li class:active={$location.pathname === "/pools"}>
         <Link to="/pools" class="link">POOL EXPLORER</Link>
+      </li>
+      <li class:active={true}>
+        <a href={aboutURL} target="_blank" class="link">ABOUT</a>
       </li>
     </ul>
   </nav>
