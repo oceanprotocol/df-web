@@ -25,7 +25,6 @@
     const result = await claimRewards(
       $userAddress,
       $connectedChainId,
-      claimables.tokens,
       claimables.tokensData,
       $networkSigner,
       $web3Provider
