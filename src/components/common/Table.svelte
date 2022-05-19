@@ -1,6 +1,5 @@
 <script>
   import {
-    InlineNotification,
     DataTable,
     DataTableSkeleton,
     Pagination,
@@ -9,10 +8,10 @@
     ToolbarSearch,
     ToolbarMenu,
     ToolbarMenuItem,
-    Link,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
   import Button from "./Button.svelte";
+  import NetworkItem from "./NetworkItem.svelte";
 
   export let colData = undefined;
   export let rowData = undefined;
@@ -45,6 +44,8 @@
           }}
           disabled={false}
         />
+      {:else if cell.key === "network"}
+        <NetworkItem chainId={cell.value} />
       {:else}{cell.value}{/if}
     </svelte:fragment>
   </DataTable>
@@ -64,6 +65,7 @@
   :global(td) {
     background: var(--brand-white) !important;
     border-bottom: 1px solid var(--brand-grey-dimmed) !important;
+    font-size: var(--font-size-small) !important;
     border-top: 0 !important;
   }
   :global(th) {
