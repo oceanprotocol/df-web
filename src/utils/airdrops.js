@@ -5,10 +5,6 @@ import * as airdropABI from './airdropABI'
 export const airdrops = {
     3: {
         airdropAddress: "0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16",
-        tokens: [
-            "0x400a17C7644fEF90EC5e85C59BA2034A6D4B1366",
-            "0x0d92cadB0A0BC3693e985FB15E47BcF4d1Dc3792"
-        ],
         tokensData:{
             "0x400a17C7644fEF90EC5e85C59BA2034A6D4B1366": {
                 symbol: 'OCEAN',
@@ -24,10 +20,6 @@ export const airdrops = {
     },
     4: {
         airdropAddress: "0x4751774A124D02f1611dFe17f4d697dDdF932Fd5",
-        tokens: [
-            "0xe6239d757c064c237dF31e08EbdD582f0608aCE0",
-            "0xc6913d3eCed79021a39E6955015313B22B72b76E"
-        ],
         tokensData:{
             "0xe6239d757c064c237dF31e08EbdD582f0608aCE0": {
                 symbol: 'OCEAN',
@@ -51,11 +43,12 @@ export const updateClaimablesFromAirdrop = async (chainId, airdropInfo, address)
         if( rpcURL ) {
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
             const contract = new ethers.Contract(airdropInfo.airdropAddress, airdropInfo.abi, provider);
-            const claimableRewards = await contract.claimables(address, airdropInfo.tokens)
+            const tokens = Object.keys(airdropInfo.tokensData)
+            const claimableRewards = await contract.claimables(address, tokens)
             let totalRewards = 0;
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
-                airdropInfo.tokensData[airdropInfo.tokens[i]].amount = rewardInEthers > 0.0 ? rewardInEthers : 0.0
+                airdropInfo.tokensData[tokens[i]].amount = rewardInEthers > 0.0 ? rewardInEthers : 0.0
                 totalRewards += rewardInEthers > 0.0 ? 1 : 0
             }
 
@@ -72,17 +65,20 @@ export const updateAllClaimables = async (address, selectedChains) => {
 
     await Promise.all(filteredChains.map(async function(chainId) {
         const airdropInfo = airdrops[chainId];
-        for (const token in airdropInfo.tokens) {
+
+        if( airdropInfo ) {
             await updateClaimablesFromAirdrop(chainId, airdropInfo, address);
+        } else {
+            console.log("Airdrop configuration is not proprely initialized. Please check .supportedChainIds and app configuration.")
         }
     }));
 
     return airdrops
 }
 
-export async function claimRewards(userAddress, chainId, tokens, tokensData, signer) {
+export async function claimRewards(userAddress, chainId, tokensData, signer) {
     try {
-        const tokenAddresses = tokens;
+        const tokenAddresses = Object.keys(tokensData);
         let positiveClaimables = [];
 
         // TODO - Make sure that claim is only done on non-zero tokens
@@ -91,17 +87,20 @@ export async function claimRewards(userAddress, chainId, tokens, tokensData, sig
                 positiveClaimables.push(tokenAddresses[i]);
         }
 
-        const contract = new ethers.Contract(
-            airdrops[chainId].airdropAddress,
-            airdrops[chainId].abi,
-            signer
-        );
-        const resp = await contract.claimMultiple(userAddress, positiveClaimables)
-        await resp.wait()
-        console.log("Success claiming rewards, txReceipt here")
-        return true
+        if( positiveClaimables.length > 0 ) {
+            const contract = new ethers.Contract(
+                airdrops[chainId].airdropAddress,
+                airdrops[chainId].abi,
+                signer
+            );
+            const resp = await contract.claimMultiple(userAddress, positiveClaimables);
+            await resp.wait();
+            console.log("Success claiming rewards, txReceipt here");
+            return positiveClaimables.length;
+        }
+        return 0;
     } catch (error) {
       console.log("Error claiming rewards :", error);
-      return false
+      return false;
     }
   }

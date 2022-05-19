@@ -33,6 +33,8 @@
 
 <style>
   .container {
+    display: flex;
+    align-items: center;
     border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
     background-color: var(--background-content);

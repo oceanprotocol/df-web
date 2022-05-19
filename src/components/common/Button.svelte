@@ -21,7 +21,7 @@
       <Circle size="20" color="#FFFFFF" unit="px" cl />
     </div>
   {/if}
-  {text}
+  <span>{text}</span>
 </button>
 
 <style>
@@ -57,5 +57,9 @@
     color: var(--brand-black);
     border: 0;
     padding: 0;
+  }
+  span {
+    display: box;
+    line-height: 100%;
   }
 </style>

@@ -4,6 +4,11 @@
 
   export let chainId;
   export let airdropData;
+
+  function getTokens() {
+    return Object.keys(airdropData.tokensData);
+  }
+
 </script>
 
 <div class="networkRewardsContainer">
@@ -13,7 +18,7 @@
     claimables={airdropData}
   />
   {#if airdropData}
-    {#each airdropData.tokens as token}
+    {#each getTokens() as token}
       <Row rowObject={airdropData.tokensData[token]} />
     {/each}
   {/if}
