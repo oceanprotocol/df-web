@@ -1,7 +1,6 @@
 <script>
   import Row from "../common/Row.svelte";
   import Table from "../common/Table.svelte";
-  import Table2 from "../common/Table2.svelte";
   import * as poolInfoChain3 from "../../utils/metadata/pools/poolinfo-chain3.csv";
   import * as poolInfoChain4 from "../../utils/metadata/pools/poolinfo-chain4.csv";
 
@@ -43,53 +42,13 @@
   }
 
   initPools();
-
-  /*<div class="pools">
-    {#if pools}
-      {#each pools as pool}
-        <Row
-          rowObject={pool.rowData}
-          clickData={pool.url}
-          buttons={[{ text: "View", onClick: viewPool }]}
-        />
-      {/each}
-    {/if}
-  </div>
-  <div class="pools">
-    <Table
-      colData={[
-        ["Text", { heading: "Network", data: {} }],
-        ["Text", { heading: "Datatoken", data: {} }],
-        ["Text", { heading: "Basetoken", data: {} }],
-        ["Text", { heading: "TVL", data: {} }],
-        ["Text", { heading: "Volume", data: {} }],
-      ]}
-      rowData={[
-        [
-          { value: "String", editable: false },
-          { value: "String", editable: false },
-          { value: "String", editable: false },
-          { value: "String", editable: false },
-          { value: "String", editable: false },
-        ],
-        [
-          { value: "The value", editable: false },
-          { value: "The value", editable: false },
-          { value: "The value", editable: false },
-          { value: "The value", editable: false },
-          { value: "The value", editable: false },
-        ],
-      ]}
-    />
-  </div>
-  */
 </script>
 
 <div class="container">
   <h1>Pool Explorer</h1>
   {#if pools}
     <div class="pools">
-      <Table2
+      <Table
         colData={[
           { key: "network", value: "Network" },
           { key: "datatoken", value: "Datatoken" },

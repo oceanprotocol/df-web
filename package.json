@@ -27,7 +27,6 @@
     "ethers": "^5.6.5",
     "sirv-cli": "^2.0.0",
     "svelte-loading-spinners": "^0.1.7",
-    "svelte-navigator": "^3.1.5",
-    "svelte-tailwind-table": "^0.10.0"
+    "svelte-navigator": "^3.1.5"
   }
 }
