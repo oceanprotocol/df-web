@@ -17,9 +17,7 @@
   export let colData = undefined;
   export let rowData = undefined;
 
-  let pagination = { pageSize: 4, page: 1 };
-
-  console.log(rowData);
+  let pagination = { pageSize: 6, page: 1 };
 </script>
 
 {#if colData && rowData}
@@ -42,7 +40,7 @@
   <Pagination
     bind:pageSize={pagination.pageSize}
     bind:page={pagination.page}
-    totalItems={6}
+    totalItems={rowData.length}
     pageSizeInputDisabled
   />
 {/if}
