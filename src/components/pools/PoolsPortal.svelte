@@ -19,6 +19,7 @@
       basetoken: poolInfo.basetoken,
       tvl: parseFloat(poolInfo.stake_amt),
       volume: parseFloat(poolInfo.vol_amt),
+      action: poolInfo.url,
     };
   }
 
@@ -35,10 +36,6 @@
         pools.push(getRow(poolInfo));
       });
     }
-  }
-
-  function viewPool(url) {
-    window.open(url, "_blank");
   }
 
   initPools();
@@ -59,6 +56,7 @@
             value: "Volume",
             display: (volume) => "$ " + volume,
           },
+          { key: "action", value: "Action" },
         ]}
         rowData={pools}
       />

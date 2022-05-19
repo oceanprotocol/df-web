@@ -9,10 +9,10 @@
     ToolbarSearch,
     ToolbarMenu,
     ToolbarMenuItem,
-    Button,
     Link,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
+  import Button from "./Button.svelte";
 
   export let colData = undefined;
   export let rowData = undefined;
@@ -36,6 +36,17 @@
         <ToolbarSearch persistent shouldFilterRows />
       </ToolbarContent>
     </Toolbar>
+    <svelte:fragment slot="cell" let:cell>
+      {#if cell.key === "action"}
+        <Button
+          text="view"
+          onclick={() => {
+            window.open(cell.value, "_blank");
+          }}
+          disabled={false}
+        />
+      {:else}{cell.value}{/if}
+    </svelte:fragment>
   </DataTable>
   <Pagination
     bind:pageSize={pagination.pageSize}
