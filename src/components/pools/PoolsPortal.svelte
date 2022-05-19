@@ -118,6 +118,14 @@
     margin: calc(var(--spacer) * 2) 0;
   }
 
+  .pools {
+    width: 100%;
+    background-color: var(--brand-white);
+    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
+    transform: translate3d(0, -0.05rem, 0);
+    border-radius: var(--border-radius);
+  }
+
   @media (min-width: 640px) {
     main {
       max-width: none;
