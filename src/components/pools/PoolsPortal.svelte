@@ -53,10 +53,11 @@
           { key: "network", value: "Network" },
           { key: "datatoken", value: "Datatoken" },
           { key: "basetoken", value: "Basetoken" },
-          { key: "tvl", value: "TVL", display: (cost) => cost + " €" },
+          { key: "tvl", value: "TVL", display: (cost) => "$ " + cost },
           {
             key: "volume",
             value: "Volume",
+            display: (volume) => "$ " + volume,
           },
         ]}
         rowData={pools}

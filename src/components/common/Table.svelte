@@ -32,7 +32,13 @@
     page={pagination.page}
     rows={rowData}
     class="customTable"
-  />
+  >
+    <Toolbar size="sm">
+      <ToolbarContent>
+        <ToolbarSearch persistent shouldFilterRows />
+      </ToolbarContent>
+    </Toolbar>
+  </DataTable>
   <Pagination
     bind:pageSize={pagination.pageSize}
     bind:page={pagination.page}
