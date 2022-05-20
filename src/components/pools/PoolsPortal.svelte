@@ -1,5 +1,4 @@
 <script>
-  import Row from "../common/Row.svelte";
   import Table from "../common/Table.svelte";
   import * as networksDataArray from "../../networks-metadata.json";
   import { getNetworkDataById } from "../../utils/web3";
