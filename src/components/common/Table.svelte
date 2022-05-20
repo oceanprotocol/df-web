@@ -15,6 +15,8 @@
 
   export let colData = undefined;
   export let rowData = undefined;
+  export let title = undefined;
+  export let description = undefined;
 
   let pagination = { pageSize: 6, page: 1 };
 </script>
@@ -22,8 +24,8 @@
 {#if colData && rowData}
   <DataTable
     sortable
-    title="Load balancers"
-    description="Your organization's active load balancers."
+    {title}
+    {description}
     headers={colData}
     pageSize={pagination.pageSize}
     page={pagination.page}

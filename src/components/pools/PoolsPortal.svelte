@@ -11,9 +11,9 @@
 
   const pools = [];
 
-  function getRow(poolInfo) {
+  function getRow(poolInfo, key) {
     return {
-      id: parseFloat(poolInfo.vol_amt),
+      id: key,
       network: poolInfo.chainID,
       datatoken: poolInfo.DT_symbol,
       basetoken: poolInfo.basetoken,
@@ -32,8 +32,8 @@
         (total, pool) => total + parseFloat(pool.stake_amt)
       );
 
-      poolsByChain.default.forEach((poolInfo) => {
-        pools.push(getRow(poolInfo));
+      poolsByChain.default.forEach((poolInfo, key) => {
+        pools.push(getRow(poolInfo, key));
       });
     }
   }
@@ -59,6 +59,7 @@
           { key: "action", value: "Action" },
         ]}
         rowData={pools}
+        description="Explore all the pools that are eligible for staking, and stake your Ocean token to get rewards."
       />
     </div>
   {/if}
