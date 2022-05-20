@@ -1,7 +1,7 @@
 <script>
-  import Row from "../common/Row.svelte";
   import * as poolInfoChain3 from "../../utils/metadata/pools/poolinfo-chain3.csv";
   import * as poolInfoChain4 from "../../utils/metadata/pools/poolinfo-chain4.csv";
+  import PoolRow from "./PoolRow.svelte";
 
   export const poolInfo = {
     3: poolInfoChain3,
@@ -38,21 +38,21 @@
     }
   }
 
-  function viewPool(url) {
-    window.open(url, "_blank");
+  function viewPool(pool) {
+    window.open(pool.url, "_blank");
   }
 
   initPools();
 </script>
 
 <div class="container">
-  <h1>Pool Explorer</h1>
   <div class="pools">
     {#if pools}
       {#each pools as pool}
-        <Row
+        <PoolRow
+          pool={pool}
           rowObject={pool.rowData}
-          clickData={pool.url}
+          clickData={pool}
           buttons={[{ text: "View", onClick: viewPool }]}
         />
       {/each}

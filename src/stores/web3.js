@@ -2,8 +2,14 @@ import { writable } from "svelte/store";
 import { ethers } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
 import {initChainIds} from "../app.config";
+import {getRpcUrlByChainId} from "../utils/web3";
+import * as BPoolABI from "../utils/BPoolABI";
+import * as TokenABI from "../utils/tokenABI";
+import * as airdropABI from "../utils/airdropABI";
 
 export let userAddress = writable("");
+export let userBalances = writable("");
+export let poolContracts = writable("");
 export let web3Provider = writable("");
 export let networkSigner = writable("");
 export let connectedChainId = writable("");
@@ -175,3 +181,46 @@ export async function addCustomNetwork(
   )
 }
 
+export async function getRPCProvider(chainId)
+{
+  const curProvider = $providers[chainId];
+  if(curProvider === undefined) {
+    const rpcURL = getRpcUrlByChainId(chainId);
+    if (rpcURL) {
+      $providers[chainId] = new ethers.providers.JsonRpcProvider(rpcURL);
+      return $providers[chainId]
+    }
+  }
+  return curProvider;
+}
+
+export async function getPoolContract(chainId, address) {
+  const provider = getRPCProvider(chainId);
+  const chainIdContracts = $poolContracts[chainId];
+  if( chainIdContracts === undefined ) {
+    $poolContracts[chainId] = {};
+  }
+
+  const poolContract = $poolContracts[chainId][address];
+  if( poolContract === undefined ) {
+    $poolContracts[chainId][address] = new ethers.Contract(address, BPoolABI.default, provider);
+    return $poolContracts[chainId][address];
+  }
+  return poolContract;
+}
+
+export async function getTokenContract(chainId, address) {
+  const provider = getRPCProvider(chainId);
+  const tokenContracts = $tokenContracts[chainId];
+  if( tokenContracts === undefined ) {
+    $tokenContracts[chainId] = {};
+  }
+
+  const tokenContract = $tokenContracts[chainId][address];
+  if( tokenContract === undefined ) {
+    $tokenContracts[chainId][address] = new ethers.Contract(address, TokenABI.default, provider);
+    return $tokenContracts[chainId][address];
+  }
+
+  return tokenContract;
+}
