@@ -21,7 +21,7 @@
       <li class:active={$location.pathname === "/pools"}>
         <Link to="/pools" class="link">POOL EXPLORER</Link>
       </li>
-      <li class:active={true}>
+      <li class:active={false}>
         <a href={aboutURL} target="_blank" class="link">ABOUT</a>
       </li>
     </ul>
