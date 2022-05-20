@@ -1,6 +1,8 @@
 <script>
   import Row from "../common/Row.svelte";
   import Table from "../common/Table.svelte";
+  import * as networksDataArray from "../../networks-metadata.json";
+  import { getNetworkDataById } from "../../utils/web3";
   import * as poolInfoChain3 from "../../utils/metadata/pools/poolinfo-chain3.csv";
   import * as poolInfoChain4 from "../../utils/metadata/pools/poolinfo-chain4.csv";
 
@@ -9,12 +11,14 @@
     4: poolInfoChain4,
   };
 
+  const networksData = networksDataArray.default;
   const pools = [];
 
   function getRow(poolInfo, key) {
     return {
       id: key + poolInfo.chainID,
-      network: poolInfo.chainID,
+      network: getNetworkDataById(networksData, parseInt(poolInfo.chainID))
+        ?.name,
       datatoken: poolInfo.DT_symbol,
       basetoken: poolInfo.basetoken,
       tvl: parseFloat(poolInfo.stake_amt),

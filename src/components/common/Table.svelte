@@ -11,10 +11,6 @@
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
   import Button from "./Button.svelte";
-  import * as networksDataArray from "../../networks-metadata.json";
-  import { getNetworkDataById } from "../../utils/web3";
-
-  let networksData = networksDataArray.default;
 
   export let colData = undefined;
   export let rowData = undefined;
@@ -49,8 +45,6 @@
           }}
           disabled={false}
         />
-      {:else if cell.key === "network"}
-        {getNetworkDataById(networksData, parseInt(cell.value))?.name}
       {:else}{cell.value}{/if}
     </svelte:fragment>
   </DataTable>
