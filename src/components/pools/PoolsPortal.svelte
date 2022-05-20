@@ -13,7 +13,7 @@
 
   function getRow(poolInfo, key) {
     return {
-      id: key,
+      id: key + poolInfo.chainID,
       network: poolInfo.chainID,
       datatoken: poolInfo.DT_symbol,
       basetoken: poolInfo.basetoken,
