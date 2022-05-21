@@ -3,5 +3,5 @@ WORKDIR /dfweb
 COPY . .
 RUN npm install
 RUN npm run build
-EXPOSE 3005
+EXPOSE 4005
 CMD ["npm", "start"]
