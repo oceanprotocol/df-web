@@ -1,0 +1,7 @@
+version: "3"
+services:
+  node:
+    restart: always
+    build: .
+    ports:
+      - 4005:4005
