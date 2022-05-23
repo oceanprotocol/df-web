@@ -3,7 +3,8 @@
   import NetworkSelection from "./NetworkSelection.svelte";
   import { Link, useLocation } from "svelte-navigator";
 
-  const aboutURL= "https://docs.google.com/document/d/1BVwgZ_reNC25pcYc64Yllcz3tEw43JbwYhS8bQ6IIlg/edit";
+  const aboutURL =
+    "https://docs.google.com/document/d/1BVwgZ_reNC25pcYc64Yllcz3tEw43JbwYhS8bQ6IIlg/edit";
   const location = useLocation();
 </script>
 
@@ -34,7 +35,6 @@
 
 <style>
   header {
-    overflow-y: scroll;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -107,5 +107,9 @@
 
   .active > :global(a) {
     color: var(--brand-black);
+  }
+
+  :global(div [class*="tooltip"]) {
+    background-color: transparent;
   }
 </style>

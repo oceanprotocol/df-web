@@ -23,9 +23,7 @@
         )}
       </span>
       <Tooltip icon={ChevronDown} align="end">
-        <div class="tooltipContent">
-          <Button onclick={() => disconnect()} text={`Disconnect`} textOnly />
-        </div>
+        <Button onclick={() => disconnect()} text={`Disconnect`} textOnly />
       </Tooltip>
     </div>
   {/if}
@@ -51,20 +49,5 @@
     display: flex;
     font-weight: bold;
     color: var(--brand-grey-light);
-  }
-  .tooltipContent {
-    position: fixed;
-    color: var(--brand-grey-light);
-    border: 1px solid var(--brand-grey-lighter);
-    padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
-    border: 1px solid var(--brand-grey-lighter);
-    padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
-    background-color: var(--brand-white);
-    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
-    width: 180px;
-  }
-  :global(div [class*="tooltip__trigger"]) {
-    display: flex !important;
-    align-items: center !important;
   }
 </style>
