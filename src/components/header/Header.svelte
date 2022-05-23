@@ -3,15 +3,16 @@
   import NetworkSelection from "./NetworkSelection.svelte";
   import { Link, useLocation } from "svelte-navigator";
 
-  const aboutURL= "https://docs.google.com/document/d/1BVwgZ_reNC25pcYc64Yllcz3tEw43JbwYhS8bQ6IIlg/edit";
+  const aboutURL =
+    "https://docs.google.com/document/d/1BVwgZ_reNC25pcYc64Yllcz3tEw43JbwYhS8bQ6IIlg/edit";
   const location = useLocation();
 </script>
 
 <header>
   <div class="logo">
-    <a href="https://kit.svelte.dev">
+    <Link to="/" class="link">
       <img src={"/logo-ocean-svg.svg"} alt="SvelteKit" />
-    </a>
+    </Link>
   </div>
   <nav>
     <ul>
