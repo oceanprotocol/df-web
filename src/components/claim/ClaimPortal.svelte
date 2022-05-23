@@ -31,7 +31,7 @@
         <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
       {/each}
     </div>
-  {:else if $selectedNetworks.length > 0}
+  {:else if $selectedNetworks.length > 0 && $userAddress}
     <div>Loading</div>
   {/if}
   {#if !$userAddress}
