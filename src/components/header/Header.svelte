@@ -35,12 +35,13 @@
 
 <style>
   header {
-    overflow-y: scroll;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     height: 80px;
     margin: auto;
+    margin-top: calc(var(--spacer) / 4);
   }
 
   .headerActions {
@@ -108,5 +109,12 @@
 
   .active > :global(a) {
     color: var(--brand-black);
+  }
+
+  @media (min-width: 640px) {
+    header {
+      flex-direction: row;
+      margin: 0;
+    }
   }
 </style>
