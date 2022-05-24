@@ -3,8 +3,8 @@
   import NetworkItem from "../common/NetworkItem.svelte";
 
   export let rowObject;
-  export let clickData;
-  export let buttons;
+  export let clickData = undefined;
+  export let buttons = undefined;
   export let size = "normal";
 </script>
 
@@ -32,8 +32,7 @@
           <Button
             text={button.text}
             onclick={() =>
-              clickData ? button.onClick(clickData) : button.onClick(rowObject)
-            }
+              clickData ? button.onClick(clickData) : button.onClick(rowObject)}
             disabled={button.disabled}
           />
         </div>
