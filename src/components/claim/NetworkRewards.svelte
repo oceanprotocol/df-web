@@ -8,7 +8,6 @@
   function getTokens() {
     return Object.keys(airdropData.tokensData);
   }
-
 </script>
 
 <div class="networkRewardsContainer">
