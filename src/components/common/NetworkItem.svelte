@@ -53,6 +53,7 @@
   }
   .networkName {
     font-size: var(--font-size-small);
+    color: var(--brand-black);
   }
   .large {
     font-size: var(--font-size-large);
@@ -69,6 +70,9 @@
     margin: 0;
   }
   .container:only-child {
+    margin: 0;
+  }
+  .container:last-child {
     margin: 0;
   }
 </style>

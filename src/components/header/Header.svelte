@@ -111,6 +111,10 @@
     color: var(--brand-black);
   }
 
+  :global(div [class*="tooltip"]) {
+    background-color: transparent;
+  }
+
   @media (min-width: 640px) {
     header {
       flex-direction: row;
