@@ -51,15 +51,11 @@ export const connectWalletFromLocalStorage = async () => {
 
   // Subscribe to accounts change
   /*instance.on("accountsChanged", (accounts) => {});
+  */
 
   // Subscribe to chainId change
   instance.on("chainChanged", (chainId) => {
-    //connectedChainId.set(parseInt(chainId))
-  });*/
-
-  // Subscribe to networkId change
-  instance.on("networkChanged", (networkId) => {
-    connectedChainId.set(parseInt(networkId))
+    connectedChainId.set(Number(chainId))
     const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
     networkSigner.set(signer)
   });
