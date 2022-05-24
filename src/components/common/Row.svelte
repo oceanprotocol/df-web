@@ -38,6 +38,8 @@
         </div>
       {/each}
     </div>
+  {:else}
+    <div class="row directionRow placeRowEnd" />
   {/if}
 </div>
 
@@ -49,12 +51,15 @@
     padding: calc(var(--spacer) / 4) 8%;
     border-bottom: 2px solid var(--brand-grey-dimmed);
     overflow-y: hidden;
+    min-width: 450px;
+    overflow-y: scroll;
   }
   .row {
     display: flex;
     flex: 1;
     flex-direction: column;
     align-items: flex-start;
+    min-width: 100px;
   }
   .title {
     font-size: var(--font-size-mini);
