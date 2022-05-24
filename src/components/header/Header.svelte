@@ -113,6 +113,7 @@
 
   :global(div [class*="tooltip"]) {
     background-color: transparent;
+  }
 
   @media (min-width: 640px) {
     header {
