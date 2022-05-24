@@ -39,6 +39,10 @@
         </div>
       {/each}
     </div>
+  {:else}
+  <div class="row directionRow placeRowEnd">
+    
+  </div>
   {/if}
 </div>
 
