@@ -1,51 +1,50 @@
 <script>
+  import { Tooltip } from "carbon-components-svelte";
+  import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
+
   export let options = undefined;
   export let title = undefined;
   export let onCheck = undefined;
+
+  let showOptions = true;
 </script>
 
-<div class={`container`}>
-  <span>{title}</span>
-  {#if options}
-    {#each Object.entries(options) as [value, checked]}
-      <input
-        type="checkbox"
-        {value}
-        {checked}
-        on:change={(event) => onCheck(value, event.target.checked)}
-      />
-      <span>{value}</span>
-    {/each}
-  {/if}
-</div>
+{#if options}
+  <div class={`container`}>
+    <span class="title">{title}</span>
+    {#if showOptions}
+      <Tooltip icon={ChevronDown} align="end">
+        <div class="optionsContainer">
+          {#each Object.entries(options) as [value, checked]}
+            <input
+              type="checkbox"
+              {value}
+              {checked}
+              on:change={(event) => onCheck(value, event.target.checked)}
+            />
+            <span>{value}</span>
+          {/each}
+        </div>
+      </Tooltip>
+    {/if}
+  </div>
+{/if}
 
 <style>
   .container {
-    display: flex;
-    align-items: center;
-    margin-bottom: calc(var(--spacer) / 4);
   }
-  input {
-    margin-right: calc(var(--spacer) / 8);
+  .optionsContainer {
+    position: fixed;
+    border: 1px solid var(--brand-grey-lighter);
+    padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
+    background-color: var(--brand-white);
+    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
+    transform: translate3d(0, -0.05rem, 0);
+    border-radius: var(--border-radius);
+    width: 180px;
   }
-  .networkName {
+  .title {
+    color: var(--brand-black);
     font-size: var(--font-size-small);
-  }
-  .large {
-    font-size: var(--font-size-large);
-  }
-  .normal {
-    font-size: var(--font-size-normal);
-  }
-  .networkDetails {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .margin0 {
-    margin: 0;
-  }
-  .container:only-child {
-    margin: 0;
   }
 </style>
