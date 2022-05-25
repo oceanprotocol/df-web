@@ -17,23 +17,32 @@
   export let rowData = undefined;
   export let title = undefined;
   export let description = undefined;
+  export let notHidableColumns = [];
 
-  let columns = [];
+  let columns = {};
 
   colData.forEach((col) => {
     columns[col.value] = true;
-    console.log(col);
   });
-  console.log(Object.keys(colData));
+
+  notHidableColumns.forEach((column) => {
+    delete columns[column];
+  });
+
+  function switchArrayItemsPosition(array, first, second) {
+    var intermadiate = array[first];
+    array[first] = array[second];
+    array[second] = intermadiate;
+  }
 
   function onCheck(key, value) {
     columns[key] = value;
     if (value) {
       colData = [...colData, { key: key.toLowerCase(), value: key }];
+      switchArrayItemsPosition(colData, colData.length - 1, colData.length - 2);
     } else {
       colData = colData.filter((col) => col.value !== key);
     }
-    console.log(colData);
   }
 
   let pagination = { pageSize: 6, page: 1 };

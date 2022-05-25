@@ -61,6 +61,7 @@
           },
           { key: "action", value: "Action" },
         ]}
+        notHidableColumns={["Network", "Action"]}
         rowData={pools}
         description="Explore all the pools that are eligible for staking, and stake your Ocean token to get rewards."
       />
