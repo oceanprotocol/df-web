@@ -1,13 +1,10 @@
 <script>
   import {
     DataTable,
-    DataTableSkeleton,
     Pagination,
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
-    ToolbarMenu,
-    ToolbarMenuItem,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
   import Button from "./Button.svelte";
@@ -21,18 +18,35 @@
 
   let columns = {};
 
-  colData.forEach((col) => {
-    columns[col.value] = true;
-  });
-
-  notHidableColumns.forEach((column) => {
-    delete columns[column];
-  });
+  loadVisibleColumns();
 
   function switchArrayItemsPosition(array, first, second) {
     var intermadiate = array[first];
     array[first] = array[second];
     array[second] = intermadiate;
+  }
+
+  function getColumnsFromLocalStorage() {
+    columns = JSON.parse(localStorage.getItem("poolsDisplayedColumns"));
+    colData.forEach((col) => {
+      if (!columns[col.value] && notHidableColumns.indexOf(col.value) === -1) {
+        colData = colData.filter((colD) => colD.key !== col.key);
+      }
+    });
+  }
+
+  function loadVisibleColumns() {
+    if (localStorage.getItem("poolsDisplayedColumns")) {
+      getColumnsFromLocalStorage();
+    } else {
+      colData.forEach((col) => {
+        columns[col.value] = true;
+      });
+
+      notHidableColumns.forEach((column) => {
+        delete columns[column];
+      });
+    }
   }
 
   function onCheck(key, value) {
@@ -43,6 +57,7 @@
     } else {
       colData = colData.filter((col) => col.value !== key);
     }
+    localStorage.setItem("poolsDisplayedColumns", JSON.stringify(columns));
   }
 
   let pagination = { pageSize: 6, page: 1 };
