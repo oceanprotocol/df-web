@@ -112,7 +112,8 @@
   }
 
   :global(div [class*="tooltip"]) {
-    background-color: transparent;
+    background-color: var(--brand-white);
+    z-index: 100;
   }
 
   @media (min-width: 640px) {
