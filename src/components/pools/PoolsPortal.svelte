@@ -11,13 +11,30 @@
   };
 
   const networksData = networksDataArray.default;
-  const pools = [];
+  let pools = undefined;
+
+  getPools();
+
+  async function getPools() {
+    const query = {};
+    const res = await fetch(`http://test-df-sql.oceandao.org/pools`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+      }),
+    });
+    let data = await res.json();
+    console.log(data);
+    return data;
+  }
 
   function getRow(poolInfo, key) {
     return {
       id: key + poolInfo.chainID,
-      network: getNetworkDataById(networksData, parseInt(poolInfo.chainID))
-        ?.name,
+      network: getNetworkDataById(networksData, poolInfo.chainId)?.name,
       datatoken: poolInfo.DT_symbol,
       basetoken: poolInfo.basetoken,
       tvl: parseFloat(poolInfo.stake_amt),
@@ -28,17 +45,18 @@
 
   // TODO - Perhaps we should use the token-symbol vs. farm
   // TODO - Fix row styling - See "Ethereum Mainnet" vs. "Ropsten".
-  function initPools() {
-    for (const poolsByChain of Object.values(poolInfo)) {
-      poolInfo.totalPools = Object.entries(poolsByChain.default).length;
-      poolInfo.totalTVL = Object.values(poolsByChain.default).reduce(
-        (total, pool) => total + parseFloat(pool.stake_amt)
-      );
+  async function initPools() {
+    const allPools = await getPools();
+    poolInfo.totalPools = allPools.length;
+    poolInfo.totalTVL = allPools.reduce(
+      (total, pool) => total + parseFloat(pool.stake_amt)
+    );
 
-      poolsByChain.default.forEach((poolInfo, key) => {
-        pools.push(getRow(poolInfo, key));
-      });
-    }
+    pools = [];
+    allPools.forEach((poolInfo, key) => {
+      pools.push(getRow(poolInfo, key));
+    });
+    console.log(pools);
   }
 
   initPools();

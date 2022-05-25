@@ -17,6 +17,7 @@
   export let title = undefined;
   export let description = undefined;
 
+  console.log(rowData);
   let pagination = { pageSize: 6, page: 1 };
 </script>
 
