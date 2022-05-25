@@ -11,16 +11,36 @@
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
   import Button from "./Button.svelte";
+  import ChecklistDropdown from "./ChecklistDropdown.svelte";
 
   export let colData = undefined;
   export let rowData = undefined;
   export let title = undefined;
   export let description = undefined;
 
+  let columns = [];
+
+  colData.forEach((col) => {
+    columns[col.value] = true;
+    console.log(col);
+  });
+  console.log(Object.keys(colData));
+
+  function onCheck(key, value) {
+    columns[key] = value;
+    if (value) {
+      colData = [...colData, { key: key.toLowerCase(), value: key }];
+    } else {
+      colData = colData.filter((col) => col.value !== key);
+    }
+    console.log(colData);
+  }
+
   let pagination = { pageSize: 6, page: 1 };
 </script>
 
 {#if colData && rowData}
+  <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
   <DataTable
     sortable
     {title}
@@ -57,8 +77,9 @@
 {/if}
 
 <style>
-  .customTable {
+  :global(.customTable) {
     width: 100%;
+    overflow: scroll !important;
     background-color: var(--brand-white) !important;
   }
   :global(td) {
