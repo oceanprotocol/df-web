@@ -49,7 +49,6 @@
 </script>
 
 {#if colData && rowData}
-  <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
   <DataTable
     sortable
     {title}
@@ -60,6 +59,9 @@
     rows={rowData}
     class="customTable"
   >
+    <div class="tableActionsContainer">
+      <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
+    </div>
     <Toolbar size="sm">
       <ToolbarContent>
         <ToolbarSearch persistent shouldFilterRows />
@@ -86,6 +88,11 @@
 {/if}
 
 <style>
+  :global(.tableActionsContainer) {
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+
   :global(.customTable) {
     width: 100%;
     overflow: scroll !important;
@@ -121,5 +128,8 @@
   }
   :global(div [class*="pagination__button"]) {
     border-left: 1px solid var(--brand-grey-dimmed) !important;
+  }
+  :global([class*="table-toolbar"]) {
+    z-index: 0 !important;
   }
 </style>

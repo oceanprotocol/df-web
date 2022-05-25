@@ -16,13 +16,15 @@
       <Tooltip icon={ChevronDown} align="end">
         <div class="optionsContainer">
           {#each Object.entries(options) as [value, checked]}
-            <input
-              type="checkbox"
-              {value}
-              {checked}
-              on:change={(event) => onCheck(value, event.target.checked)}
-            />
-            <span>{value}</span>
+            <div class="option">
+              <input
+                type="checkbox"
+                {value}
+                {checked}
+                on:change={(event) => onCheck(value, event.target.checked)}
+              />
+              <span class="value">{value}</span>
+            </div>
           {/each}
         </div>
       </Tooltip>
@@ -32,19 +34,43 @@
 
 <style>
   .container {
+    display: flex;
+    width: auto;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: calc(var(--spacer) / 6);
+    padding: 0 calc(var(--spacer) / 8);
   }
   .optionsContainer {
-    position: fixed;
-    border: 1px solid var(--brand-grey-lighter);
-    padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
     background-color: var(--brand-white);
-    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
-    transform: translate3d(0, -0.05rem, 0);
-    border-radius: var(--border-radius);
-    width: 180px;
+    width: 140px;
+  }
+  .option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: calc(var(--spacer) / 6);
   }
   .title {
     color: var(--brand-black);
     font-size: var(--font-size-small);
+    font-weight: bold;
+  }
+  input {
+    margin-right: calc(var(--spacer) / 6);
+  }
+  .value {
+    font-size: var(--font-size-small);
+    color: var(--brand-black);
+  }
+  .option:last-child {
+    margin: 0;
+  }
+  .option:only-child {
+    margin: 0;
   }
 </style>
