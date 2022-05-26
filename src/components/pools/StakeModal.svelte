@@ -77,12 +77,13 @@
             <Button text="X" onclick={() => close()}/>
         </div>
         <div>
-            <p>Pool/User info...</p>
             {#if pool}
                 <p>DataToken Symbol: {pool.DT_symbol}</p>
                 <p>Basetoken: {pool.basetoken}</p>
                 <p>TVL: {pool.tvl}</p>
                 <p>Volume: {pool.volume}</p>
+            {:else}
+                <p>Loading...</p>
             {/if}
         </div>
 
