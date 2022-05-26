@@ -15,17 +15,22 @@
 
   async function getPools() {
     const query = {};
-    const res = await fetch(`http://test-df-sql.oceandao.org/pools`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query,
-      }),
-    });
+    let res;
+    try {
+      res = await fetch(`http://test-df-sql.oceandao.org/pool`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
     let data = await res.json();
-    console.log(data);
     return data;
   }
 
@@ -44,13 +49,14 @@
   // TODO - Perhaps we should use the token-symbol vs. farm
   // TODO - Fix row styling - See "Ethereum Mainnet" vs. "Ropsten".
   async function initPools() {
+    pools = [];
     const allPools = await getPools();
+    if (allPools.length === 0) return;
     poolInfo.totalPools = allPools.length;
     poolInfo.totalTVL = allPools.reduce(
       (total, pool) => total + parseFloat(pool.stake_amt)
     );
 
-    pools = [];
     allPools.forEach((poolInfo, key) => {
       pools.push(getRow(poolInfo, key));
     });
