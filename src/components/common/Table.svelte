@@ -110,7 +110,6 @@
 
   :global(.customTable) {
     width: 100%;
-    overflow: scroll !important;
     background-color: var(--brand-white) !important;
   }
   :global(td) {
@@ -146,5 +145,9 @@
   }
   :global([class*="table-toolbar"]) {
     z-index: 0 !important;
+  }
+  :global(.bx--data-table) {
+    overflow: scroll;
+    display: inline-block;
   }
 </style>

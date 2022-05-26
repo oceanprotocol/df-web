@@ -39,9 +39,13 @@
       id: key + poolInfo.chainID,
       network: getNetworkDataById(networksData, poolInfo.chainId)?.name,
       datatoken: poolInfo.DT_symbol,
+      datatokenAddress: poolInfo.DT_addr,
       basetoken: poolInfo.basetoken,
+      basetokenAddress: poolInfo.basetoken_addr,
       tvl: parseFloat(poolInfo.stake_amt).toFixed(3),
       volume: parseFloat(poolInfo.vol_amt).toFixed(3),
+      nftAddress: poolInfo.nft_addr,
+      poolAddress: poolInfo.pool_addr,
       action: poolInfo.url,
     };
   }
@@ -77,13 +81,17 @@
         colData={[
           { key: "network", value: "Network" },
           { key: "datatoken", value: "Datatoken" },
+          { key: "datatokenAddress", value: "Datatoken Address" },
           { key: "basetoken", value: "Basetoken" },
+          { key: "basetokenAddress", value: "Basetoken Address" },
           { key: "tvl", value: "TVL", display: (cost) => "$ " + cost },
           {
             key: "volume",
             value: "Volume",
             display: (volume) => "$ " + volume,
           },
+          { key: "nftAddress", value: "NFT Address" },
+          { key: "poolAddress", value: "Pool Address" },
           { key: "action", value: "Action" },
         ]}
         notHidableColumns={["Network", "Action"]}
