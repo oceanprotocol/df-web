@@ -35,8 +35,8 @@
       network: getNetworkDataById(networksData, poolInfo.chainId)?.name,
       datatoken: poolInfo.DT_symbol,
       basetoken: poolInfo.basetoken,
-      tvl: parseFloat(poolInfo.stake_amt),
-      volume: parseFloat(poolInfo.vol_amt),
+      tvl: parseFloat(poolInfo.stake_amt).toFixed(3),
+      volume: parseFloat(poolInfo.vol_amt).toFixed(3),
       action: poolInfo.url,
     };
   }
