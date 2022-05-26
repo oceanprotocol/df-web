@@ -1,13 +1,10 @@
 <script>
   import {
     DataTable,
-    DataTableSkeleton,
     Pagination,
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
-    ToolbarMenu,
-    ToolbarMenuItem,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
   import Button from "./Button.svelte";
@@ -17,7 +14,6 @@
   export let title = undefined;
   export let description = undefined;
 
-  console.log(rowData);
   let pagination = { pageSize: 6, page: 1 };
 </script>
 

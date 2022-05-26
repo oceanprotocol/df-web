@@ -13,8 +13,6 @@
   const networksData = networksDataArray.default;
   let pools = undefined;
 
-  getPools();
-
   async function getPools() {
     const query = {};
     const res = await fetch(`http://test-df-sql.oceandao.org/pools`, {
@@ -56,10 +54,11 @@
     allPools.forEach((poolInfo, key) => {
       pools.push(getRow(poolInfo, key));
     });
-    console.log(pools);
   }
 
-  initPools();
+  $: if (!pools) {
+    initPools();
+  }
 </script>
 
 <div class="container">
