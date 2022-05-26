@@ -32,6 +32,6 @@ async function dispenseAllRewards() {
     await dispense('./dfpy_docker dispense /app/data/rewards/ 3 0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16 0x0d92cadB0A0BC3693e985FB15E47BcF4d1Dc3792 >> out.log');
 }
 
-croner.Cron('* */12 * * *', () => {
+croner.Cron('0 */12 * * *', () => {
     dispenseAllRewards();
 })
