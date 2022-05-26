@@ -2,10 +2,6 @@ import { writable } from "svelte/store";
 import { ethers } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
 import {initChainIds} from "../app.config";
-import {getRpcUrlByChainId} from "../utils/web3";
-import * as BPoolABI from "../utils/abis/BPoolABI";
-import * as TokenABI from "../utils/tokenABI";
-import * as airdropABI from "../utils/abis/airdropABI";
 
 export let userAddress = writable("");
 export let userBalances = writable("");
