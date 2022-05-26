@@ -61,7 +61,7 @@ h1:focus-visible {
 
 .bx--tooltip {
   margin: 0 !important;
-  background-color: transparent;
+  background-color: var(--brand-white);
   top: 35px !important;
   display: flex;
   flex-direction: column;

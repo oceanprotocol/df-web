@@ -8,11 +8,57 @@
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
   import Button from "./Button.svelte";
+  import ChecklistDropdown from "./ChecklistDropdown.svelte";
 
   export let colData = undefined;
   export let rowData = undefined;
   export let title = undefined;
   export let description = undefined;
+  export let notHidableColumns = [];
+
+  let columns = {};
+
+  loadVisibleColumns();
+
+  function switchArrayItemsPosition(array, first, second) {
+    var intermadiate = array[first];
+    array[first] = array[second];
+    array[second] = intermadiate;
+  }
+
+  function getColumnsFromLocalStorage() {
+    columns = JSON.parse(localStorage.getItem("poolsDisplayedColumns"));
+    colData.forEach((col) => {
+      if (!columns[col.value] && notHidableColumns.indexOf(col.value) === -1) {
+        colData = colData.filter((colD) => colD.key !== col.key);
+      }
+    });
+  }
+
+  function loadVisibleColumns() {
+    if (localStorage.getItem("poolsDisplayedColumns")) {
+      getColumnsFromLocalStorage();
+    } else {
+      colData.forEach((col) => {
+        columns[col.value] = true;
+      });
+
+      notHidableColumns.forEach((column) => {
+        delete columns[column];
+      });
+    }
+  }
+
+  function onCheck(key, value) {
+    columns[key] = value;
+    if (value) {
+      colData = [...colData, { key: key.toLowerCase(), value: key }];
+      switchArrayItemsPosition(colData, colData.length - 1, colData.length - 2);
+    } else {
+      colData = colData.filter((col) => col.value !== key);
+    }
+    localStorage.setItem("poolsDisplayedColumns", JSON.stringify(columns));
+  }
 
   let pagination = { pageSize: 6, page: 1 };
 </script>
@@ -28,6 +74,9 @@
     rows={rowData}
     class="customTable"
   >
+    <div class="tableActionsContainer">
+      <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
+    </div>
     <Toolbar size="sm">
       <ToolbarContent>
         <ToolbarSearch persistent shouldFilterRows />
@@ -54,8 +103,14 @@
 {/if}
 
 <style>
-  .customTable {
+  :global(.tableActionsContainer) {
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+
+  :global(.customTable) {
     width: 100%;
+    overflow: scroll !important;
     background-color: var(--brand-white) !important;
   }
   :global(td) {
@@ -88,5 +143,8 @@
   }
   :global(div [class*="pagination__button"]) {
     border-left: 1px solid var(--brand-grey-dimmed) !important;
+  }
+  :global([class*="table-toolbar"]) {
+    z-index: 0 !important;
   }
 </style>

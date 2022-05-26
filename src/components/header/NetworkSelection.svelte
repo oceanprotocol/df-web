@@ -23,15 +23,13 @@
 <div class="container">
   <span class="text"> Selected networks </span>
   <Tooltip icon={ChevronDown} align="end">
-    <div class="tooltipContainer">
-      {#each supportedChainIds as chainId}
-        <NetworkItem
-          {chainId}
-          checked={$selectedNetworks.includes(chainId)}
-          {onCheck}
-        />
-      {/each}
-    </div>
+    {#each supportedChainIds as chainId}
+      <NetworkItem
+        {chainId}
+        checked={$selectedNetworks.includes(chainId)}
+        {onCheck}
+      />
+    {/each}
   </Tooltip>
 </div>
 
