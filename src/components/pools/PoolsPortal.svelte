@@ -11,37 +11,62 @@
   };
 
   const networksData = networksDataArray.default;
-  const pools = [];
+  let pools = undefined;
+
+  async function getPools() {
+    const query = {};
+    let res;
+    try {
+      res = await fetch(`http://test-df-sql.oceandao.org/pools`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+    let data = await res.json();
+    return data;
+  }
 
   function getRow(poolInfo, key) {
     return {
       id: key + poolInfo.chainID,
-      network: getNetworkDataById(networksData, parseInt(poolInfo.chainID))
-        ?.name,
+      network: getNetworkDataById(networksData, poolInfo.chainId)?.name,
       datatoken: poolInfo.DT_symbol,
       basetoken: poolInfo.basetoken,
-      tvl: parseFloat(poolInfo.stake_amt),
-      volume: parseFloat(poolInfo.vol_amt),
+      tvl: parseFloat(poolInfo.stake_amt).toFixed(3),
+      volume: parseFloat(poolInfo.vol_amt).toFixed(3),
       action: poolInfo.url,
     };
   }
 
   // TODO - Perhaps we should use the token-symbol vs. farm
   // TODO - Fix row styling - See "Ethereum Mainnet" vs. "Ropsten".
-  function initPools() {
-    for (const poolsByChain of Object.values(poolInfo)) {
-      poolInfo.totalPools = Object.entries(poolsByChain.default).length;
-      poolInfo.totalTVL = Object.values(poolsByChain.default).reduce(
-        (total, pool) => total + parseFloat(pool.stake_amt)
-      );
-
-      poolsByChain.default.forEach((poolInfo, key) => {
-        pools.push(getRow(poolInfo, key));
-      });
+  async function initPools() {
+    const allPools = await getPools();
+    if (allPools.length === 0) {
+      pools = [];
+      return;
     }
+    poolInfo.totalPools = allPools.length;
+    poolInfo.totalTVL = allPools.reduce(
+      (total, pool) => total + parseFloat(pool.stake_amt)
+    );
+    pools = [];
+    allPools.forEach((poolInfo, key) => {
+      pools.push(getRow(poolInfo, key));
+    });
   }
 
-  initPools();
+  $: if (!pools) {
+    initPools();
+  }
 </script>
 
 <div class="container">
