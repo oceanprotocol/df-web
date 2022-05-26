@@ -39,13 +39,13 @@
       id: key + poolInfo.chainID,
       network: getNetworkDataById(networksData, poolInfo.chainId)?.name,
       datatoken: poolInfo.DT_symbol,
-      datatokenAddress: poolInfo.DT_addr,
+      "datatoken address": poolInfo.DT_addr,
       basetoken: poolInfo.basetoken,
-      basetokenAddress: poolInfo.basetoken_addr,
+      "basetoken address": poolInfo.basetoken_addr,
       tvl: parseFloat(poolInfo.stake_amt).toFixed(3),
       volume: parseFloat(poolInfo.vol_amt).toFixed(3),
-      nftAddress: poolInfo.nft_addr,
-      poolAddress: poolInfo.pool_addr,
+      "nft address": poolInfo.nft_addr,
+      "pool address": poolInfo.pool_addr,
       action: poolInfo.url,
     };
   }
@@ -81,17 +81,17 @@
         colData={[
           { key: "network", value: "Network" },
           { key: "datatoken", value: "Datatoken" },
-          { key: "datatokenAddress", value: "Datatoken Address" },
+          { key: "datatoken address", value: "Datatoken Address" },
           { key: "basetoken", value: "Basetoken" },
-          { key: "basetokenAddress", value: "Basetoken Address" },
+          { key: "basetoken address", value: "Basetoken Address" },
           { key: "tvl", value: "TVL", display: (cost) => "$ " + cost },
           {
             key: "volume",
             value: "Volume",
             display: (volume) => "$ " + volume,
           },
-          { key: "nftAddress", value: "NFT Address" },
-          { key: "poolAddress", value: "Pool Address" },
+          { key: "nft address", value: "NFT Address" },
+          { key: "pool address", value: "Pool Address" },
           { key: "action", value: "Action" },
         ]}
         notHidableColumns={["Network", "Action"]}
@@ -99,6 +99,8 @@
         description="Explore all the pools that are eligible for staking, and stake your Ocean token to get rewards."
       />
     </div>
+  {:else}
+    <span class="loading">Loading...</span>
   {/if}
 </div>
 
@@ -120,6 +122,11 @@
     box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
     transform: translate3d(0, -0.05rem, 0);
     border-radius: var(--border-radius);
+  }
+
+  .loading {
+    font-size: var(--font-size-normal);
+    color: var(--brand-grey-light);
   }
 
   @media (min-width: 640px) {

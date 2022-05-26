@@ -2,8 +2,8 @@ html,
 body {
   position: relative;
   overflow: hidden;
+  overflow-y: scroll;
   width: 100vw;
-  height: 100vh;
 }
 
 body {

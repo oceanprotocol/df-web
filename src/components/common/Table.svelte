@@ -109,7 +109,7 @@
   }
 
   :global(.customTable) {
-    width: 100%;
+    max-width: 100%;
     background-color: var(--brand-white) !important;
   }
   :global(td) {
