@@ -1,9 +1,7 @@
-import {getRpcUrlByChainId} from "./web3";
-import {ethers} from 'ethers';
-import * as BPoolABI from './BPoolABI'
+import {getPoolContract} from "../stores/pools";
 
 export const getCurrentTokens = async (chainId, poolInfo) => {
-    if (!chainId || !airdropInfo) return null;
+    if (!chainId || !poolInfo) return null;
     try {
         const contract = getPoolContract(chainId, poolInfo.pool_adr);
         if( contract ) {
@@ -18,7 +16,7 @@ export const getCurrentTokens = async (chainId, poolInfo) => {
 }
 
 export const getFinalTokens = async (chainId, poolInfo) => {
-    if (!chainId || !airdropInfo) return null;
+    if (!chainId || !poolInfo) return null;
     try {
         const contract = getPoolContract(chainId, poolInfo.pool_adr);
         if( contract ) {
@@ -33,7 +31,7 @@ export const getFinalTokens = async (chainId, poolInfo) => {
 }
 
 export const calcPoolOutSingleIn = async (chainId, poolInfo, amountIn) => {
-    if (!chainId || !airdropInfo) return null;
+    if (!chainId || !poolInfo) return null;
     try {
         const contract = getPoolContract(chainId, poolInfo.pool_adr);
         if( contract ) {

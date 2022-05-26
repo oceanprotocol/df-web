@@ -1,7 +1,7 @@
 import {supportedChainIds} from "../app.config";
 import {getRpcUrlByChainId} from "./web3";
 import {ethers} from 'ethers';
-import * as airdropABI from './airdropABI'
+import * as airdropABI from './abis/airdropABI'
 export const airdrops = {
     3: {
         airdropAddress: "0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16",
