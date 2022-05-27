@@ -1,7 +1,8 @@
 <script>
   import Button from "../common/Button.svelte";
   import {connectWallet, connectWalletFromLocalStorage, userAddress} from "../../stores/web3";
-  import {balanceOf} from "../../stores/tokens";
+  import {userBalances, balanceOf} from "../../stores/tokens";
+  import {ethers} from "ethers";
 
   export let pool;
   let isOpen;
@@ -16,8 +17,8 @@
       }
     } else {
       isOpen = true;
-      tokenBalance = 1;
-      // tokenBalance = await balanceOf(pool.chainID, pool.basetokenAddress, $userAddress);
+      const balanceInWei = await balanceOf($userBalances, pool.chainID, pool.basetokenAddress, $userAddress);
+      tokenBalance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10))
     }
   }
 

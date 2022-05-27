@@ -93,7 +93,7 @@ export const updateAllClaimables = async (airdropData, selectedNetworks, userAdd
     airdrops.set(airdropData);
 }
 
-export async function claimRewards(userAddress, chainId, tokensData, signer) {
+export async function claimRewards(airdropData, chainId, tokensData, userAddress, signer) {
     try {
         const tokenAddresses = Object.keys(tokensData);
         let positiveClaimables = [];
@@ -106,8 +106,8 @@ export async function claimRewards(userAddress, chainId, tokensData, signer) {
 
         if( positiveClaimables.length > 0 ) {
             const contract = new ethers.Contract(
-                airdrops[chainId].airdropAddress,
-                airdrops[chainId].abi,
+                airdropData[chainId].airdropAddress,
+                airdropData[chainId].abi,
                 signer
             );
             const resp = await contract.claimMultiple(userAddress, positiveClaimables);

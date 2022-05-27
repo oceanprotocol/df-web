@@ -22,11 +22,11 @@
     loading = true;
 
     const result = await claimRewards(
-      $userAddress,
+      $airdrops,
       $connectedChainId,
       claimables.tokensData,
-      $networkSigner,
-      $web3Provider
+      $userAddress,
+      $networkSigner
     );
 
     if (result > 0) {
@@ -37,8 +37,8 @@
       ).then(async (result) => {
           await updateAllClaimables(
               $airdrops,
-              $userAddress,
-              $selectedNetworks
+              $selectedNetworks,
+              $userAddress
           );
       })
     } else if(result === false) {

@@ -6,7 +6,6 @@
   export let airdropData;
 
   function getTokens() {
-    console.log("Airdrop data: ", airdropData.tokensData);
     return Object.keys(airdropData.tokensData);
   }
 
