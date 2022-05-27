@@ -1,14 +1,26 @@
 <script>
   import Button from "../common/Button.svelte";
+  import {connectWallet, connectWalletFromLocalStorage, userAddress} from "../../stores/web3";
+  import {balanceOf} from "../../stores/tokens";
 
+  export let pool;
   let isOpen;
-  let pool;
+  let tokenBalance;
 
-  function open() {
-    console.log("Open StakeModal!");
-    console.log("Pooldata is:", pool);
-    isOpen = true;
+  async function open() {
+    if ($userAddress === "") {
+      if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
+          connectWalletFromLocalStorage();
+      } else {
+          connectWallet();
+      }
+    } else {
+      isOpen = true;
+      tokenBalance = 1;
+      // tokenBalance = await balanceOf(pool.chainID, pool.basetokenAddress, $userAddress);
+    }
   }
+
   function close() {
     isOpen = false;
   }
@@ -20,8 +32,7 @@
     }
   }
 
-  // TODO - Is there any pooldata (BPools) that we need to be queries to calculate stake params?
-  function loadPoolData() {
+  function connect() {
 
   }
 
@@ -49,7 +60,7 @@
   div.content-wrapper {
     position: absolute;
     width: 20vw;
-    height: 20vh;
+    height: 30vh;
     border-radius: 0.3rem;
     background-color: white;
     border: 4px solid var(--brand-grey-dimmed);
@@ -77,11 +88,12 @@
             <Button text="X" onclick={() => close()}/>
         </div>
         <div>
-            {#if pool}
-                <p>DataToken Symbol: {pool.DT_symbol}</p>
-                <p>Basetoken: {pool.basetoken}</p>
-                <p>TVL: {pool.tvl}</p>
-                <p>Volume: {pool.volume}</p>
+            {#if pool && tokenBalance}
+                <p>DataToken Symbol: {pool.rowData.datatoken}</p>
+                <p>Basetoken: {pool.rowData.basetoken}</p>
+                <p>TVL: {pool.rowData.tvl}</p>
+                <p>Volume: {pool.rowData.volume}</p>
+                <p>Your token balance: {tokenBalance}</p>
             {:else}
                 <p>Loading...</p>
             {/if}

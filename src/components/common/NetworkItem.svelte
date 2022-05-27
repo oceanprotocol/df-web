@@ -1,7 +1,7 @@
 <script>
   import * as networksDataArray from "../../networks-metadata.json";
   import NetworkIcon from "../common/NetworkIcon.svelte";
-  import { getNetworkDataById } from "../../utils/web3";
+  import { getNetworkDataById } from "../../stores/web3";
 
   let networksData = networksDataArray.default;
 

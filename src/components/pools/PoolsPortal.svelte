@@ -1,58 +1,20 @@
 <script>
-  import * as poolInfoChain3 from "../../utils/metadata/pools/poolinfo-chain3.csv";
-  import * as poolInfoChain4 from "../../utils/metadata/pools/poolinfo-chain4.csv";
   import PoolRow from "./PoolRow.svelte";
-
-  export const poolInfo = {
-    3: poolInfoChain3,
-    4: poolInfoChain4,
-  };
-
-  const pools = [];
-
-  function getRow(poolInfo) {
-    return {
-      url: poolInfo.url,
-      rowData: {
-        network: poolInfo.chainID,
-        datatoken: poolInfo.DT_symbol,
-        basetoken: poolInfo.basetoken,
-        tvl: parseFloat(poolInfo.stake_amt),
-        volume: parseFloat(poolInfo.vol_amt),
-      },
-    };
-  }
-
-  // TODO - Perhaps we should use the token-symbol vs. farm
-  // TODO - Fix row styling - See "Ethereum Mainnet" vs. "Ropsten".
-  function initPools() {
-    for (const poolsByChain of Object.values(poolInfo)) {
-      poolInfo.totalPools = Object.entries(poolsByChain.default).length;
-      poolInfo.totalTVL = Object.values(poolsByChain.default).reduce(
-        (total, pool) => total + parseFloat(pool.stake_amt)
-      );
-
-      poolsByChain.default.forEach((poolInfo) => {
-        pools.push(getRow(poolInfo));
-      });
-    }
-  }
+  import {pools} from "../../stores/pools";
 
   function viewPool(pool) {
     window.open(pool.url, "_blank");
   }
 
-  initPools();
 </script>
 
 <div class="container">
   <div class="pools">
-    {#if pools}
-      {#each pools as pool}
+    {#if $pools}
+      {#each $pools as pool}
         <PoolRow
           pool={pool}
           rowObject={pool.rowData}
-          clickData={pool}
           buttons={[{ text: "View", onClick: viewPool }]}
         />
       {/each}

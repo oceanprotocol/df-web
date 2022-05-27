@@ -4,17 +4,26 @@ import * as networksDataArray from "../networks-metadata.json";
 import {initChainIds} from "../app.config";
 
 export let userAddress = writable("");
-export let userBalances = writable("");
 export let poolContracts = writable("");
 export let web3Provider = writable("");
 export let networkSigner = writable("");
 export let connectedChainId = writable("");
 export let web3 = writable("");
 export let selectedNetworks = writable(initChainIds);
+export let jsonRPCProvider = writable({});
 
 const Web3 = window.Web3;
 const Web3Modal = window.Web3Modal.default;
 const WalletConnectProvider = window.WalletConnectProvider.default;
+
+const chainIdRPCs = {
+  3 : "https://ropsten.infura.io/v3/05d2b0098cf44eb789387708af2527a1",
+  4 : "https://rinkeby.infura.io/v3/05d2b0098cf44eb789387708af2527a1"
+  // 56 : "https://bsc-dataseed.binance.org/",
+  // 137 : "https://polygon-rpc.com",
+  // 246 : "https://rpc.energyweb.org",
+  // 1285 : "https://rpc.api.moonriver.moonbeam.network",
+}
 
 const providerOptions = {
   walletconnect: {
@@ -32,12 +41,28 @@ const web3Modal = new Web3Modal({
   disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
 });
 
+export function getNetworkDataById(
+    data,
+    networkId
+) {
+  if (!networkId) return
+  const networkData = data.filter(
+      (chain) => chain.chainId === networkId
+  )
+  return networkData[0]
+}
+
+export function getRpcUrlByChainId(chainId){
+  return chainIdRPCs[chainId]
+}
+
 export const setValuesAfterConnection = async (instance) => {
   const provider = new ethers.providers.Web3Provider(instance);
   const signer = provider.getSigner();
   networkSigner.set(signer);
   const signerAddress = await signer.getAddress();
   const chainId= (await provider.getNetwork()).chainId;
+
   connectedChainId.set(chainId)
   userAddress.set(signerAddress);
   web3Provider.set(provider)
@@ -175,4 +200,20 @@ export async function addCustomNetwork(
   console.log(
     `Added ${network.name} (0x${network.chainId}) network to MetaMask`
   )
+}
+
+export async function getJsonRpcProvider(chainId) {
+  try {
+    if( !jsonRPCProvider[chainId] ) {
+      const rpcURL = getRpcUrlByChainId(chainId);
+      if (rpcURL) {
+        jsonRPCProvider[chainId] = new ethers.providers.JsonRpcProvider(rpcURL);
+        jsonRPCProvider.set(jsonRPCProvider);
+      }
+    }
+    console.log("jsonRPCProvider is: ", jsonRPCProvider[chainId]);
+    return jsonRPCProvider[chainId];
+  } catch(err) {
+    console.log(err);
+  }
 }

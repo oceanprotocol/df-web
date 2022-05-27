@@ -2,24 +2,18 @@
   import NetworkRewards from "./NetworkRewards.svelte";
   import MainMessage from "../common/MainMessage.svelte";
   import { userAddress, selectedNetworks } from "../../stores/web3.js";
-  import { updateAllClaimables } from "../../utils/airdrops";
-  import { supportedChainIds } from "../../app.config";
-  import { airdrops } from "../../stores/airdrops";
+  import { airdrops, updateAllClaimables } from "../../stores/airdrops";
 
   let loading = false;
 
-  async function loadClaimables() {
+  async function initAirdrops() {
     loading = true;
-    let newAirdrops = await updateAllClaimables(
-      $userAddress,
-      supportedChainIds
-    );
-    airdrops.update(() => newAirdrops);
+    await updateAllClaimables($airdrops, $selectedNetworks, $userAddress);
     loading = false;
   }
 
-  $: if ($userAddress && !$airdrops) {
-    loadClaimables();
+  $: if ($userAddress) {
+    initAirdrops();
   }
 </script>
 

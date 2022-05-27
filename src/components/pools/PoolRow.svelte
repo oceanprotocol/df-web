@@ -5,7 +5,6 @@
 
   export let pool;
   export let rowObject;
-  export let clickData;
   export let buttons;
   export let size = "normal";
 </script>
@@ -37,7 +36,7 @@
           <Button
             text={button.text}
             onclick={() =>
-              clickData ? button.onClick(clickData) : button.onClick(rowObject)
+              button.onClick(pool)
             }
             disabled={button.disabled}
           />
