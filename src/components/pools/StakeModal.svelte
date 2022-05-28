@@ -2,24 +2,33 @@
   import Button from "../common/Button.svelte";
   import {connectWallet, connectWalletFromLocalStorage, userAddress} from "../../stores/web3";
   import {userBalances, balanceOf} from "../../stores/tokens";
+  import {calcPoolOutSingleIn} from "../../stores/bpools";
   import {ethers} from "ethers";
 
   export let pool;
-  let isOpen;
-  let tokenBalance;
+  export let stakeAmount = 0.0;
 
+  let isOpen;
+  let tokenBalance = 0;
+  let calcAmountBPTOut = 0.0;
+  let canStake = false;
+
+  // MODAL
   async function open() {
-    if ($userAddress === "") {
-      if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
-          connectWalletFromLocalStorage();
-      } else {
-          connectWallet();
-      }
-    } else {
       isOpen = true;
       const balanceInWei = await balanceOf($userBalances, pool.chainID, pool.basetokenAddress, $userAddress);
-      tokenBalance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10))
-    }
+      tokenBalance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
+    // if ($userAddress === "") {
+    //   if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
+    //       connectWalletFromLocalStorage();
+    //   } else {
+    //       connectWallet();
+    //   }
+    // } else {
+    //   isOpen = true;
+    //   const balanceInWei = await balanceOf($userBalances, pool.chainID, pool.basetokenAddress, $userAddress);
+    //   tokenBalance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
+    // }
   }
 
   function close() {
@@ -33,18 +42,31 @@
     }
   }
 
-  function connect() {
-
+  // OTHERS
+  async function updateAmountBPTOut(amount) {
+      console.log(">>>> Update calcAmountBPTOut.");
+      console.log("chainId: ", pool.chainID);
+      console.log("poolInfo: ", pool);
+      console.log("amount: ", amount);
+      console.log("stakeAmount: ", stakeAmount);
+      calcAmountBPTOut = await calcPoolOutSingleIn(pool.chainID, pool, amount);
   }
 
+  function handleStakeAmount() {
+      canStake = stakeAmount > 0.0 && stakeAmount <= tokenBalance;
+      console.log("canStake: ", canStake);
+  }
+
+  // BUTTONS
   function stake() {
-      console.log("Staked assets into pool")
+      console.log("Stake: Add Liquidity.");
   }
 
   function unstake() {
-      console.log("Remove staked position")
+      console.log("Stake: Remove Liquidity.");
   }
 
+  calcAmountBPTOut.sub
 </script>
 
 <style>
@@ -60,8 +82,8 @@
   }
   div.content-wrapper {
     position: absolute;
-    width: 20vw;
-    height: 30vh;
+    width: 50vw;
+    height: 70vh;
     border-radius: 0.3rem;
     background-color: white;
     border: 4px solid var(--brand-grey-dimmed);
@@ -69,15 +91,17 @@
   }
   .container {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: calc(var(--spacer) / 4) 8%;
+      padding: 5px;
       overflow-y: hidden;
   }
-  .closeButton {
+  .button {
       display: flex;
       justify-content: left;
       align-items: center;
+      padding: 10px;
   }
 </style>
 
@@ -85,24 +109,39 @@
 {#if isOpen}
   <div class="modal" on:keydown={keydown} tabindex={0} autofocus>
     <div class="content-wrapper">
-        <div class="closeButton">
+        <div class="button">
             <Button text="X" onclick={() => close()}/>
         </div>
         <div>
             {#if pool && tokenBalance}
-                <p>DataToken Symbol: {pool.rowData.datatoken}</p>
-                <p>Basetoken: {pool.rowData.basetoken}</p>
-                <p>TVL: {pool.rowData.tvl}</p>
-                <p>Volume: {pool.rowData.volume}</p>
-                <p>Your token balance: {tokenBalance}</p>
+                <div class="container">
+                    <h3>Pool Data</h3>
+                    <p>DataToken Symbol: {pool.rowData.datatoken}</p>
+                    <p>Basetoken: {pool.rowData.basetoken}</p>
+                    <p>TVL: {pool.rowData.tvl}</p>
+                    <p>Volume: {pool.rowData.volume}</p>
+                </div>
+                <div class="container">
+                    <h3>Staking</h3>
+                    <p>Your {pool.rowData.basetoken} balance: {tokenBalance}</p>
+                    {#if tokenBalance >= 0}
+                        <p>Amount to stake.</p>
+                        <label>
+                            <input type=number bind:value={stakeAmount} min=0 max={tokenBalance} on:input={handleStakeAmount} />
+                        </label>
+                        {#if stakeAmount >= 0.0 && calcAmountBPTOut}
+                            <p>Calculated BPT Out: {calcAmountBPTOut}</p>
+                        {/if}
+                    {:else}
+                        <p>You do not have any tokens.</p>
+                    {/if}
+                    <div class="button">
+                        <Button text="Stake" onclick={() => stake()} disabled={!canStake}/>
+                    </div>
+                </div>
             {:else}
                 <p>Loading...</p>
             {/if}
-        </div>
-
-        <div class="container">
-            <Button text="Stake" onclick={() => stake()}/>
-            <Button text="Unstake" onclick={() => unstake()}/>
         </div>
     </div>
   </div>

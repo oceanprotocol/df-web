@@ -1,26 +1,35 @@
 <script>
   import PoolRow from "./PoolRow.svelte";
-  import {pools} from "../../stores/pools";
+  import {loadPools, pools} from "../../stores/pools";
+
+  function init() {
+    loadPools();
+  }
 
   function viewPool(pool) {
     window.open(pool.url, "_blank");
   }
 
+  init();
 </script>
 
-<div class="container">
-  <div class="pools">
-    {#if $pools}
-      {#each $pools as pool}
-        <PoolRow
-          pool={pool}
-          rowObject={pool.rowData}
-          buttons={[{ text: "View", onClick: viewPool }]}
-        />
-      {/each}
-    {/if}
+{#if $pools}
+  <div class="container">
+    <div class="pools">
+        {#each $pools as pool}
+          <PoolRow
+            pool={pool}
+            rowObject={pool.rowData}
+            buttons={[{ text: "View", onClick: viewPool }]}
+          />
+        {/each}
+    </div>
   </div>
-</div>
+{:else}
+    <div class="container">
+        <p>Loading...</p>
+    </div>
+{/if}
 
 <style>
   .container {

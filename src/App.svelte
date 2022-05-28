@@ -10,7 +10,7 @@
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import { supportedChainIds } from "./app.config";
-  import { initPools } from "./stores/pools";
+  import { loadPools } from "./stores/pools";
 
   if ($userAddress === "") {
     if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
@@ -30,8 +30,6 @@
   } else {
     selectedNetworks.update(() => supportedChainIds);
   }
-
-  initPools();
 </script>
 
 <Router>

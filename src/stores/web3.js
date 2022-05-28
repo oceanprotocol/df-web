@@ -56,6 +56,35 @@ export function getRpcUrlByChainId(chainId){
   return chainIdRPCs[chainId]
 }
 
+// Using store
+// export async function getJsonRpcProvider(chainId) {
+//   try {
+//     if( !jsonRPCProvider[chainId] ) {
+//       const rpcURL = getRpcUrlByChainId(chainId);
+//       if (rpcURL) {
+//         jsonRPCProvider[chainId] = new ethers.providers.JsonRpcProvider(rpcURL);
+//         jsonRPCProvider.set(jsonRPCProvider);
+//       }
+//     }
+//     console.log("jsonRPCProvider is: ", jsonRPCProvider[chainId]);
+//     return jsonRPCProvider[chainId];
+//   } catch(err) {
+//     console.log(err);
+//   }
+// }
+
+export async function getJsonRpcProvider(chainId) {
+  try {
+    const rpcURL = getRpcUrlByChainId(chainId);
+    if (rpcURL) {
+      return new ethers.providers.JsonRpcProvider(rpcURL);
+    }
+    return null;
+  } catch(err) {
+    console.log(err);
+  }
+}
+
 export const setValuesAfterConnection = async (instance) => {
   const provider = new ethers.providers.Web3Provider(instance);
   const signer = provider.getSigner();
@@ -200,20 +229,4 @@ export async function addCustomNetwork(
   console.log(
     `Added ${network.name} (0x${network.chainId}) network to MetaMask`
   )
-}
-
-export async function getJsonRpcProvider(chainId) {
-  try {
-    if( !jsonRPCProvider[chainId] ) {
-      const rpcURL = getRpcUrlByChainId(chainId);
-      if (rpcURL) {
-        jsonRPCProvider[chainId] = new ethers.providers.JsonRpcProvider(rpcURL);
-        jsonRPCProvider.set(jsonRPCProvider);
-      }
-    }
-    console.log("jsonRPCProvider is: ", jsonRPCProvider[chainId]);
-    return jsonRPCProvider[chainId];
-  } catch(err) {
-    console.log(err);
-  }
 }

@@ -23,7 +23,7 @@ function getRow(poolInfo) {
   };
 }
 
-export const initPools = () => {
+export const loadPools = () => {
   const poolInfo = {
     3: poolInfoChain3,
     4: poolInfoChain4,

@@ -29,7 +29,9 @@ export async function balanceOf(balances, chainId, tokenAddress, account) {
       balances[chainId] = {};
     }
 
-    balances[chainId][tokenAddress] = await tokenContract.balanceOf(account);
+    const balance = await tokenContract.balanceOf(account);
+    console.log("Token balance is: ", balance);
+    balances[chainId][tokenAddress] = balance;
     userBalances.set(balances);
 
     return balances[chainId][tokenAddress];
