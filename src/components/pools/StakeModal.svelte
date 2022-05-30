@@ -1,38 +1,55 @@
 <script>
   import Button from "../common/Button.svelte";
-  import {connectWallet, connectWalletFromLocalStorage, userAddress} from "../../stores/web3";
+  import {
+      connectWallet,
+      connectWalletFromLocalStorage,
+      userAddress,
+      networkSigner,
+      connectedChainId, switchWalletNetwork
+  } from "../../stores/web3";
   import {userBalances, balanceOf} from "../../stores/tokens";
-  import {calcPoolOutSingleIn} from "../../stores/bpools";
+  import {calcPoolOutSingleIn, joinSwapExternAmountIn} from "../../stores/bpools";
   import {ethers} from "ethers";
+  import Swal from "sweetalert2";
+  import {updateAllClaimables} from "../../stores/airdrops";
 
   export let pool;
   export let stakeAmount = 0.0;
 
   let isOpen;
-  let tokenBalance = 0;
-  let calcAmountBPTOut = 0.0;
+  let balance = 0;
+  let calcBPTOut = 0.0;
+  let finalBPTOut = 0.0;
   let canStake = false;
+  let networkDisabled = false;
+  let loading = false;
 
   // MODAL
   async function open() {
-      isOpen = true;
-      const balanceInWei = await balanceOf($userBalances, pool.chainID, pool.basetokenAddress, $userAddress);
-      tokenBalance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
-    // if ($userAddress === "") {
-    //   if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
-    //       connectWalletFromLocalStorage();
-    //   } else {
-    //       connectWallet();
-    //   }
-    // } else {
-    //   isOpen = true;
-    //   const balanceInWei = await balanceOf($userBalances, pool.chainID, pool.basetokenAddress, $userAddress);
-    //   tokenBalance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
-    // }
+    if ($userAddress === "") {
+        networkDisabled = true;
+        if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
+            connectWalletFromLocalStorage();
+        } else {
+            connectWallet();
+        }
+    } else {
+        isOpen = true;
+
+        console.log("Pool chain id: ", pool.chainId);
+        console.log("Connected chain id: ", $connectedChainId);
+        updateNetworkDisabled();
+        console.log("Network disabled: ", networkDisabled);
+
+        const balanceInWei = await balanceOf($userBalances, pool.chainId, pool.basetokenAddress, $userAddress);
+        balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
+    }
   }
 
   function close() {
     isOpen = false;
+    calcBPTOut = 0.0;
+    finalBPTOut = 0.0;
   }
 
   function keydown(e) {
@@ -43,30 +60,79 @@
   }
 
   // OTHERS
-  async function updateAmountBPTOut(amount) {
-      console.log(">>>> Update calcAmountBPTOut.");
-      console.log("chainId: ", pool.chainID);
-      console.log("poolInfo: ", pool);
-      console.log("amount: ", amount);
-      console.log("stakeAmount: ", stakeAmount);
-      calcAmountBPTOut = await calcPoolOutSingleIn(pool.chainID, pool, amount);
+  async function updateBalance() {
+      const balanceInWei = await balanceOf($userBalances, pool.chainId, pool.basetokenAddress, $userAddress);
+      balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
   }
 
-  function handleStakeAmount() {
-      canStake = stakeAmount > 0.0 && stakeAmount <= tokenBalance;
-      console.log("canStake: ", canStake);
+  function updateCanStake() {
+      canStake = stakeAmount > 0.0 && stakeAmount <= balance;
   }
 
-  // BUTTONS
-  function stake() {
-      console.log("Stake: Add Liquidity.");
+  function updateNetworkDisabled() {
+      networkDisabled = pool.chainId !== $connectedChainId.toString();
   }
 
-  function unstake() {
-      console.log("Stake: Remove Liquidity.");
+  async function handleStakeAmount() {
+      finalBPTOut = 0.0;
+      if( stakeAmount > 0.0 ) {
+          updateCanStake();
+          const bptOutWei = await calcPoolOutSingleIn(pool.chainId, pool, stakeAmount);
+          calcBPTOut = ethers.utils.formatEther(BigInt(bptOutWei).toString(10));
+      } else canStake = false;
   }
 
-  calcAmountBPTOut.sub
+  async function stake() {
+      try {
+          loading = true;
+
+          const resp = await joinSwapExternAmountIn(
+              pool.chainId,
+              pool,
+              stakeAmount,
+              calcBPTOut,
+              $networkSigner
+          );
+          console.log("response: ", resp);
+          const receipt = await resp.wait();
+          console.log("response events:", receipt.events);
+
+          const event = receipt.events.find(event => event.event === 'LOG_BPT_SS');
+          const [from, to, value] = event.args;
+          console.log("bptOutWei response:", from, to, value);
+
+          finalBPTOut = ethers.utils.formatEther(BigInt(value).toString(10));
+          if( finalBPTOut > 0.0 ) {
+              Swal.fire(
+                  "Success!",
+                  "You've staked " + pool.basetoken + " into pool.",
+                  "success"
+              ).then(() => {
+                  updateBalance();
+                  updateCanStake();
+                  loading=false;
+              })
+          }
+      } catch(error) {
+          console.log("Error: ", error);
+          Swal.fire(
+              "Error!",
+              "Failed to stake " + pool.basetoken + " into pool.",
+              "error"
+          ).then(() => {
+              loading=false;
+          })
+      }
+  }
+
+  async function switchNetwork() {
+      await switchWalletNetwork(pool.chainId);
+  }
+
+  $: if ($connectedChainId) {
+      updateNetworkDisabled();
+  }
+
 </script>
 
 <style>
@@ -110,10 +176,10 @@
   <div class="modal" on:keydown={keydown} tabindex={0} autofocus>
     <div class="content-wrapper">
         <div class="button">
-            <Button text="X" onclick={() => close()}/>
+            <Button text="X" onclick={() => close()} disabled={loading}/>
         </div>
         <div>
-            {#if pool && tokenBalance}
+            {#if pool && balance}
                 <div class="container">
                     <h3>Pool Data</h3>
                     <p>DataToken Symbol: {pool.rowData.datatoken}</p>
@@ -123,21 +189,25 @@
                 </div>
                 <div class="container">
                     <h3>Staking</h3>
-                    <p>Your {pool.rowData.basetoken} balance: {tokenBalance}</p>
-                    {#if tokenBalance >= 0}
-                        <p>Amount to stake.</p>
-                        <label>
-                            <input type=number bind:value={stakeAmount} min=0 max={tokenBalance} on:input={handleStakeAmount} />
-                        </label>
-                        {#if stakeAmount >= 0.0 && calcAmountBPTOut}
-                            <p>Calculated BPT Out: {calcAmountBPTOut}</p>
-                        {/if}
+                    {#if networkDisabled }
+                        <div class="button">
+                            <Button text="Switch Network" onclick={() => switchNetwork()} disabled={!networkDisabled}/>
+                        </div>
                     {:else}
-                        <p>You do not have any tokens.</p>
+                        <p>{pool.rowData.basetoken} Balance: {balance}</p>
+                        {#if balance >= 0}
+                            <label>
+                                <input type=number bind:value={stakeAmount} min=0 max={balance} on:input={handleStakeAmount} />
+                            </label>
+                            <p>Calc Pool Shares: {calcBPTOut}</p>
+                            {#if finalBPTOut > 0.0}
+                                <p>Final Pool Shares: {finalBPTOut}</p>
+                            {/if}
+                        {/if}
+                        <div class="button">
+                            <Button text="Stake" onclick={() => stake()} disabled={!canStake || loading}/>
+                        </div>
                     {/if}
-                    <div class="button">
-                        <Button text="Stake" onclick={() => stake()} disabled={!canStake}/>
-                    </div>
                 </div>
             {:else}
                 <p>Loading...</p>

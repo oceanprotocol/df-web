@@ -7,12 +7,12 @@ export let pools = writable("");
 
 function getRow(poolInfo) {
   return {
-    chainID: poolInfo.chainID,
+    chainId: poolInfo.chainID,
     url: poolInfo.url,
     poolAddress: poolInfo.pool_addr,
     nftAddress: poolInfo.nft_addr,
     DTAddress: poolInfo.DT_addr,
-    basetokenAddress: getTokenAddress(poolInfo.chainID, poolInfo.basetoken),
+    basetokenAddress: poolInfo.basetoken_addr,
     rowData: {
       network: poolInfo.chainID,
       datatoken: poolInfo.DT_symbol,
@@ -21,6 +21,17 @@ function getRow(poolInfo) {
       volume: parseFloat(poolInfo.vol_amt),
     },
   };
+}
+
+const validateAirdropsConfiguration = (pools) => {
+  console.log(pools);
+
+  for (const pool of pools) {
+    const token = airdropsConfig[pool.chainId].tokensData[pool.basetokenAddress];
+    if (token === undefined) {
+      console.log("Can't find token: ", pool.basetokenAddress, " from chain: ", pool.chainId, " in airdrops config.");
+    }
+  }
 }
 
 export const loadPools = () => {
@@ -39,6 +50,8 @@ export const loadPools = () => {
       allPools.push(getRow(poolInfo));
     });
   }
+
+  validateAirdropsConfiguration(allPools);
 
   pools.set(allPools);
   console.log("Pools initialized: ", allPools);

@@ -8,7 +8,7 @@ export const airdropsConfig = {
     3: {
         airdropAddress: "0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16",
         tokensData:{
-            "0x400a17C7644fEF90EC5e85C59BA2034A6D4B1366": {
+            "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9": {
                 symbol: 'OCEAN',
                 amount: 0
             },
@@ -23,7 +23,7 @@ export const airdropsConfig = {
     4: {
         airdropAddress: "0x4751774A124D02f1611dFe17f4d697dDdF932Fd5",
         tokensData:{
-            "0xe6239d757c064c237dF31e08EbdD582f0608aCE0": {
+            "0x8967BCF84170c91B0d24D4302C2376283b0B3a07": {
                 symbol: 'OCEAN',
                 amount: 0
             },
@@ -105,6 +105,7 @@ export async function claimRewards(airdropData, chainId, tokensData, userAddress
         }
 
         if( positiveClaimables.length > 0 ) {
+
             const contract = new ethers.Contract(
                 airdropData[chainId].airdropAddress,
                 airdropData[chainId].abi,

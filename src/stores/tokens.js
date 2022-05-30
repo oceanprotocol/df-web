@@ -21,16 +21,12 @@ export async function getTokenContract(chainId, address) {
 
 export async function balanceOf(balances, chainId, tokenAddress, account) {
   try {
-    console.log("Token address is: ", tokenAddress);
     const tokenContract = await getTokenContract(chainId, tokenAddress);
-    console.log("Token contract is: ", tokenContract);
-
     if (balances[chainId] === undefined) {
       balances[chainId] = {};
     }
 
     const balance = await tokenContract.balanceOf(account);
-    console.log("Token balance is: ", balance);
     balances[chainId][tokenAddress] = balance;
     userBalances.set(balances);
 

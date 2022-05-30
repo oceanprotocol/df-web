@@ -2,6 +2,7 @@
   import Button from "../common/Button.svelte";
   import NetworkItem from "../common/NetworkItem.svelte";
   import StakeModal from "./StakeModal.svelte";
+  import {connectedChainId, switchWalletNetwork} from "../../stores/web3";
 
   export let pool;
   export let rowObject;
