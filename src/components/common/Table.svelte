@@ -64,45 +64,52 @@
 </script>
 
 {#if colData && rowData}
-  <DataTable
-    sortable
-    {title}
-    {description}
-    headers={colData}
-    pageSize={pagination.pageSize}
-    page={pagination.page}
-    rows={rowData}
-    class="customTable"
-  >
+  <div>
     <div class="tableActionsContainer">
       <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
     </div>
-    <Toolbar size="sm">
-      <ToolbarContent>
-        <ToolbarSearch persistent shouldFilterRows />
-      </ToolbarContent>
-    </Toolbar>
-    <svelte:fragment slot="cell" let:cell>
-      {#if cell.key === "action"}
-        <Button
-          text="view"
-          onclick={() => {
-            window.open(cell.value, "_blank");
-          }}
-          disabled={false}
-        />
-      {:else}{cell.value}{/if}
-    </svelte:fragment>
-  </DataTable>
-  <Pagination
-    bind:pageSize={pagination.pageSize}
-    bind:page={pagination.page}
-    totalItems={rowData.length}
-    pageSizeInputDisabled
-  />
+    <div class="tableContainer">
+      <DataTable
+        sortable
+        headers={colData}
+        pageSize={pagination.pageSize}
+        page={pagination.page}
+        rows={rowData}
+        class="customTable"
+      >
+        <Toolbar>
+          <ToolbarContent>
+            <ToolbarSearch persistent shouldFilterRows />
+          </ToolbarContent>
+        </Toolbar>
+
+        <svelte:fragment slot="cell" let:cell>
+          {#if cell.key === "action"}
+            <Button
+              text="view"
+              onclick={() => {
+                window.open(cell.value, "_blank");
+              }}
+              disabled={false}
+            />
+          {:else}{cell.value}{/if}
+        </svelte:fragment>
+      </DataTable>
+    </div>
+    <Pagination
+      bind:pageSize={pagination.pageSize}
+      bind:page={pagination.page}
+      totalItems={rowData.length}
+      pageSizeInputDisabled
+    />
+  </div>
 {/if}
 
 <style>
+  .tableContainer {
+    width: 100%;
+    overflow-y: scroll;
+  }
   :global(.tableActionsContainer) {
     display: flex !important;
     justify-content: flex-end !important;
@@ -145,9 +152,9 @@
   }
   :global([class*="table-toolbar"]) {
     z-index: 0 !important;
+    position: fixed !important;
   }
   :global(.bx--data-table) {
-    overflow: scroll;
-    display: inline-block;
+    margin-top: 3rem;
   }
 </style>
