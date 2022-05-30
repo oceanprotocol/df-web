@@ -6,8 +6,16 @@
   const aboutURL =
     "https://docs.google.com/document/d/1BVwgZ_reNC25pcYc64Yllcz3tEw43JbwYhS8bQ6IIlg/edit";
   const location = useLocation();
+  console.log($location);
 </script>
 
+<svelte:head>
+  <title>
+    {`${$location.pathname
+      .charAt(1)
+      .toUpperCase()}${$location.pathname.substring(2)} - Ocean Farm`}
+  </title>
+</svelte:head>
 <header>
   <div class="logo">
     <Link to="/" class="link">
@@ -16,8 +24,8 @@
   </div>
   <nav>
     <ul>
-      <li class:active={$location.pathname === "/"}>
-        <Link to="/" class="link">CLAIM PORTAL</Link>
+      <li class:active={$location.pathname === "/rewards"}>
+        <Link to="/rewards" class="link">CLAIM PORTAL</Link>
       </li>
       <li class:active={$location.pathname === "/pools"}>
         <Link to="/pools" class="link">POOL EXPLORER</Link>
