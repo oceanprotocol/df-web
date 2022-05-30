@@ -12,8 +12,6 @@
 
   export let colData = undefined;
   export let rowData = undefined;
-  export let title = undefined;
-  export let description = undefined;
   export let notHidableColumns = [];
 
   let columns = {};
