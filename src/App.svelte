@@ -34,7 +34,7 @@
 <Router>
   <Header />
   <main>
-    <Route path="/">
+    <Route path="/rewards">
       <ClaimPortal />
     </Route>
     <Route path="/pools">

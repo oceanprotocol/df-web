@@ -1,12 +1,15 @@
 <script>
   import WalletConnect from "./WalletConnect.svelte";
   import NetworkSelection from "./NetworkSelection.svelte";
-  import { Link, useLocation } from "svelte-navigator";
+  import { Link, useLocation, useNavigate } from "svelte-navigator";
 
   const aboutURL =
     "https://docs.google.com/document/d/1BVwgZ_reNC25pcYc64Yllcz3tEw43JbwYhS8bQ6IIlg/edit";
   const location = useLocation();
-  console.log($location);
+  const navigate = useNavigate();
+  $: if ($location.pathname !== "/pools") {
+    navigate("/rewards");
+  }
 </script>
 
 <svelte:head>
