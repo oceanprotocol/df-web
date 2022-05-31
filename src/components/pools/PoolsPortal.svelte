@@ -1,38 +1,18 @@
 <script>
-  import PoolRow from "./PoolRow.svelte";
-  import { loadPools, pools } from "../../stores/pools";
+  import { loadPools, pools, columnsData } from "../../stores/pools";
   import Table from "../common/Table.svelte";
-  import * as networksDataArray from "../../networks-metadata.json";
-  import { getNetworkDataById } from "../../stores/web3";
-  import * as poolInfoChain3 from "../../utils/metadata/pools/poolinfo-chain3.csv";
-  import * as poolInfoChain4 from "../../utils/metadata/pools/poolinfo-chain4.csv";
-
-  // TODO - Perhaps we should use the token-symbol vs. farm
-  // TODO - Fix row styling - See "Ethereum Mainnet" vs. "Ropsten".
 
   $: if (!$pools) {
     loadPools();
-    console.log($pools);
   }
 </script>
 
 <div class="container">
   <h1>Pool Explorer</h1>
-  {#if pools}
+  {#if $pools}
     <div class="pools">
       <Table
-        colData={[
-          { key: "network", value: "Network" },
-          { key: "datatoken", value: "Datatoken" },
-          { key: "basetoken", value: "Basetoken" },
-          { key: "tvl", value: "TVL", display: (cost) => "$ " + cost },
-          {
-            key: "volume",
-            value: "Volume",
-            display: (volume) => "$ " + volume,
-          },
-          { key: "action", value: "Action" },
-        ]}
+        colData={columnsData}
         notHidableColumns={["Network", "Action"]}
         rowData={$pools}
         description="Explore all the pools that are eligible for staking, and stake your Ocean token to get rewards."

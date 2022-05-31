@@ -51,6 +51,8 @@
 
   function onCheck(key, value) {
     columns[key] = value;
+    console.log(key, value);
+    console.log(colData);
     if (value) {
       colData = [...colData, { key: key.toLowerCase(), value: key }];
       switchArrayItemsPosition(colData, colData.length - 1, colData.length - 2);

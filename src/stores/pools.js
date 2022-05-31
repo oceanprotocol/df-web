@@ -1,33 +1,33 @@
 import { writable } from "svelte/store";
-import { airdropsConfig, getTokenAddress } from "./airdrops";
-import * as poolInfoChain3 from "../utils/metadata/pools/poolinfo-chain3.csv";
-import * as poolInfoChain4 from "../utils/metadata/pools/poolinfo-chain4.csv";
+import { getNetworkDataById } from "./web3";
+import * as networksDataArray from "../networks-metadata.json";
+
+let networksData = networksDataArray.default
 
 export let pools = writable("");
 
-/*function getRow(poolInfo) {
-  return {
-    chainId: poolInfo.chainID,
-    url: poolInfo.url,
-    poolAddress: poolInfo.pool_addr,
-    nftAddress: poolInfo.nft_addr,
-    DTAddress: poolInfo.DT_addr,
-    basetokenAddress: poolInfo.basetoken_addr,
-    rowData: {
-      network: poolInfo.chainID,
-      datatoken: poolInfo.DT_symbol,
-      basetoken: poolInfo.basetoken,
-      tvl: parseFloat(poolInfo.stake_amt),
-      volume: parseFloat(poolInfo.vol_amt),
-    },
-  };
-}*/
+export const columnsData = [
+  { key: "network", value: "Network" },
+  { key: "datatoken", value: "Datatoken" },
+  { key: "dtaddress", value: "DTAddress" },
+  { key: "basetoken", value: "Basetoken" },
+  { key: "basetokenaddress", value: "BasetokenAddress" },
+  { key: "tvl", value: "TVL", display: (cost) => "$ " + cost },
+  {
+    key: "volume",
+    value: "Volume",
+    display: (volume) => "$ " + volume,
+  },
+  { key: "pooladdress", value: "PoolAddress" },
+  { key: "nftaddress", value: "NFTAddress" },
+  { key: "action", value: "Action" },
+]
 
 async function getPools() {
   const query = {};
   let res;
   try {
-    res = await fetch(`http://test-df-sql.oceandao.org/pools`, {
+    res = await fetch(`https://test-df-sql.oceandao.org/pools`, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
@@ -50,22 +50,15 @@ function getRow(poolInfo, key) {
     id: key + poolInfo.chainID,
     network: getNetworkDataById(networksData, poolInfo.chainId)?.name,
     datatoken: poolInfo.DT_symbol,
+    dtaddress: poolInfo.DT_addr,
     basetoken: poolInfo.basetoken,
+    basetokenaddress: poolInfo.basetoken_addr,
+    pooladdress: poolInfo.pool_addr,
+    nftaddress: poolInfo.nft_addr,
     tvl: parseFloat(poolInfo.stake_amt).toFixed(3),
     volume: parseFloat(poolInfo.vol_amt).toFixed(3),
     action: poolInfo.url,
   };
-}
-
-const validateAirdropsConfiguration = (pools) => {
-  console.log(pools);
-
-  for (const pool of pools) {
-    const token = airdropsConfig[pool.chainId].tokensData[pool.basetokenAddress];
-    if (token === undefined) {
-      console.log("Can't find token: ", pool.basetokenAddress, " from chain: ", pool.chainId, " in airdrops config.");
-    }
-  }
 }
 
 export async function loadPools() {
@@ -74,12 +67,12 @@ export async function loadPools() {
     pools.set([]);
     return;
   }
-  poolInfo.totalPools = allPools.length;
-  poolInfo.totalTVL = allPools.reduce(
-    (total, pool) => total + parseFloat(pool.stake_amt)
-  );
-  newPools = [];
+  let newPools = [];
   allPools.forEach((poolInfo, key) => {
+     poolInfo.totalPools = allPools.length;
+     poolInfo.totalTVL = allPools.reduce(
+      (total, pool) => total + parseFloat(pool.stake_amt)
+    );
     newPools.push(getRow(poolInfo, key));
   });
   pools.set(newPools);
