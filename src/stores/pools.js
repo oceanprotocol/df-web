@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 import { getNetworkDataById } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
+import {getTokenAddress} from "./airdrops";
 
 let networksData = networksDataArray.default
 
@@ -20,6 +21,7 @@ export const columnsData = [
   },
   { key: "pooladdress", value: "PoolAddress" },
   { key: "nftaddress", value: "NFTAddress" },
+  { key: "lp", value:"LP" },
   { key: "action", value: "Action" },
 ]
 
@@ -57,6 +59,21 @@ function getRow(poolInfo, key) {
     nftaddress: poolInfo.nft_addr,
     tvl: parseFloat(poolInfo.stake_amt).toFixed(3),
     volume: parseFloat(poolInfo.vol_amt).toFixed(3),
+    lp: {
+      chainID: poolInfo.chainID,
+      url: poolInfo.url,
+      poolAddress: poolInfo.pool_addr,
+      nftAddress: poolInfo.nft_addr,
+      DTAddress: poolInfo.DT_addr,
+      basetokenAddress: getTokenAddress(poolInfo.chainID, poolInfo.basetoken),
+      rowData: {
+        network: poolInfo.chainID,
+        datatoken: poolInfo.DT_symbol,
+        basetoken: poolInfo.basetoken,
+        tvl: parseFloat(poolInfo.stake_amt),
+        volume: parseFloat(poolInfo.vol_amt),
+      }
+    },
     action: poolInfo.url,
   };
 }

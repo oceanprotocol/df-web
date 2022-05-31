@@ -7,6 +7,7 @@
     ToolbarSearch,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
+  import StakeModal from "../pools/StakeModal.svelte";
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
 
@@ -92,7 +93,8 @@
             window.open(cell.value, "_blank");
           }}
           disabled={false}
-        />
+        />{:else if cell.key === "lp"}
+        <StakeModal pool={cell.value} />
       {:else}{cell.value}{/if}
     </svelte:fragment>
   </DataTable>
