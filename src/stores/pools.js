@@ -60,7 +60,7 @@ function getRow(poolInfo, key) {
     tvl: parseFloat(poolInfo.stake_amt).toFixed(3),
     volume: parseFloat(poolInfo.vol_amt).toFixed(3),
     lp: {
-      chainID: poolInfo.chainID,
+      chainId: poolInfo.chainID,
       url: poolInfo.url,
       poolAddress: poolInfo.pool_addr,
       nftAddress: poolInfo.nft_addr,
