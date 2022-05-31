@@ -23,15 +23,13 @@
 <div class="container">
   <span class="text"> Selected networks </span>
   <Tooltip icon={ChevronDown} align="end">
-    <div class="tooltipContainer">
-      {#each supportedChainIds as chainId}
-        <NetworkItem
-          {chainId}
-          checked={$selectedNetworks.includes(chainId)}
-          {onCheck}
-        />
-      {/each}
-    </div>
+    {#each supportedChainIds as chainId}
+      <NetworkItem
+        {chainId}
+        checked={$selectedNetworks.includes(chainId)}
+        {onCheck}
+      />
+    {/each}
   </Tooltip>
 </div>
 
@@ -43,16 +41,6 @@
     align-items: center;
     margin-right: calc(var(--spacer) / 3);
     background-color: var(--background-content);
-  }
-  .tooltipContainer {
-    position: fixed;
-    border: 1px solid var(--brand-grey-lighter);
-    padding: calc(var(--spacer) / 8) calc(var(--spacer) / 6);
-    background-color: var(--brand-white);
-    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
-    transform: translate3d(0, -0.05rem, 0);
-    border-radius: var(--border-radius);
-    width: 180px;
   }
   .text {
     color: var(--brand-black);

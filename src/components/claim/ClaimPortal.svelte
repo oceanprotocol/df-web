@@ -25,13 +25,13 @@
         <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
       {/each}
     </div>
-  {:else if $selectedNetworks.length > 0}
-    <div>Loading</div>
+  {:else if $selectedNetworks.length > 0 && $userAddress}
+    <span class="loading">Loading...</span>
   {/if}
   {#if !$userAddress}
     <MainMessage
       title="No wallet connected"
-      message={`No wallet is connected to this page. Connect your wallet to see rewards.`}
+      message={`Connect your wallet to see the rewards`}
     />
   {/if}
   {#if $selectedNetworks.length === 0 && $userAddress}
@@ -57,6 +57,11 @@
 
   h1 {
     margin: calc(var(--spacer) * 2) 0;
+  }
+
+  .loading {
+    font-size: var(--font-size-normal);
+    color: var(--brand-grey-light);
   }
 
   @media (min-width: 640px) {

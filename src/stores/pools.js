@@ -5,7 +5,7 @@ import * as poolInfoChain4 from "../utils/metadata/pools/poolinfo-chain4.csv";
 
 export let pools = writable("");
 
-function getRow(poolInfo) {
+/*function getRow(poolInfo) {
   return {
     chainId: poolInfo.chainID,
     url: poolInfo.url,
@@ -21,6 +21,40 @@ function getRow(poolInfo) {
       volume: parseFloat(poolInfo.vol_amt),
     },
   };
+}*/
+
+async function getPools() {
+  const query = {};
+  let res;
+  try {
+    res = await fetch(`http://test-df-sql.oceandao.org/pools`, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        query,
+      }),
+    });
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+  let data = await res.json();
+  return data;
+}
+
+function getRow(poolInfo, key) {
+  return {
+    id: key + poolInfo.chainID,
+    network: getNetworkDataById(networksData, poolInfo.chainId)?.name,
+    datatoken: poolInfo.DT_symbol,
+    basetoken: poolInfo.basetoken,
+    tvl: parseFloat(poolInfo.stake_amt).toFixed(3),
+    volume: parseFloat(poolInfo.vol_amt).toFixed(3),
+    action: poolInfo.url,
+  };
 }
 
 const validateAirdropsConfiguration = (pools) => {
@@ -34,25 +68,19 @@ const validateAirdropsConfiguration = (pools) => {
   }
 }
 
-export const loadPools = () => {
-  const poolInfo = {
-    3: poolInfoChain3,
-    4: poolInfoChain4,
-  };
-  let allPools = [];
-  for (const poolsByChain of Object.values(poolInfo)) {
-    // poolInfo.totalPools = Object.entries(poolsByChain.default).length;
-    // poolInfo.totalTVL = Object.values(poolsByChain.default).reduce(
-    //     (total, pool) => total + parseFloat(pool.stake_amt)
-    // );
-
-    poolsByChain.default.forEach((poolInfo) => {
-      allPools.push(getRow(poolInfo));
-    });
+export async function loadPools() {
+  const allPools = await getPools();
+  if (allPools.length === 0) {
+    pools.set([]);
+    return;
   }
-
-  validateAirdropsConfiguration(allPools);
-
-  pools.set(allPools);
-  console.log("Pools initialized: ", allPools);
+  poolInfo.totalPools = allPools.length;
+  poolInfo.totalTVL = allPools.reduce(
+    (total, pool) => total + parseFloat(pool.stake_amt)
+  );
+  newPools = [];
+  allPools.forEach((poolInfo, key) => {
+    newPools.push(getRow(poolInfo, key));
+  });
+  pools.set(newPools);
 }
