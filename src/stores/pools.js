@@ -50,7 +50,7 @@ async function getPools() {
 function getRow(poolInfo, key) {
   return {
     id: key + poolInfo.chainID,
-    network: getNetworkDataById(networksData, poolInfo.chainId)?.name,
+    network: getNetworkDataById(networksData, parseInt(poolInfo.chainID))?.name,
     datatoken: poolInfo.DT_symbol,
     dtaddress: poolInfo.DT_addr,
     basetoken: poolInfo.basetoken,
