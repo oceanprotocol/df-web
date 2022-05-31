@@ -172,7 +172,7 @@
           </div>
           <div class="container">
             <h3>Staking</h3>
-            {#if networkDisabled}
+            {#if networkDisabled && pool.chainId !== $connectedChainId}
               <div class="button">
                 <Button
                   text="Switch Network"
