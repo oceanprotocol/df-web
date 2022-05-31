@@ -8,7 +8,7 @@
     connectedChainId,
     switchWalletNetwork,
   } from "../../stores/web3";
-  import { userBalances, balanceOf } from "../../stores/tokens";
+  import { userBalances, balanceOf, approveToken } from "../../stores/tokens";
   import {
     calcPoolOutSingleIn,
     joinSwapExternAmountIn,
@@ -101,9 +101,15 @@
   }
 
   async function stake() {
+    /*await approveToken(
+      "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
+      $userAddress,
+      stakeAmount,
+      $networkSigner
+    );*/
     try {
       loading = true;
-
+      console.log(pool.chainId, pool, stakeAmount, calcBPTOut, $networkSigner);
       const resp = await joinSwapExternAmountIn(
         pool.chainId,
         pool,

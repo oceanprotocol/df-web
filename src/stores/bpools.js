@@ -52,15 +52,17 @@ export const calcPoolOutSingleIn = async (chainId, poolInfo, amountIn) => {
 
 export const joinSwapExternAmountIn = async (chainId, poolInfo, amountIn, minPoolAmountOut, signer) => {
   if (!chainId || !poolInfo) return null;
+  console.log(chainId, poolInfo, amountIn, minPoolAmountOut, signer)
   try {
     const contract = new ethers.Contract(
-        poolInfo.poolAddress,
+        '0xd64243148a2b92289Aa9c7fC31604be68422e6C3',
         BPoolABI.default,
         signer
     );
 
     if( contract ) {
-      return contract.joinswapExternAmountIn(ethers.utils.parseEther(amountIn.toString()), ethers.utils.parseEther(minPoolAmountOut.toString()));
+      const tx = await contract.joinswapExternAmountIn("0x8967bcf84170c91b0d24d4302c2376283b0b3a07",ethers.utils.parseEther(amountIn.toString()), ethers.utils.parseEther(minPoolAmountOut.toString())).estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas));
+      tx.wait()
     }
   } catch (err) {
     console.error(err);

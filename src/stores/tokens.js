@@ -35,3 +35,20 @@ export async function balanceOf(balances, chainId, tokenAddress, account) {
     console.error(err);
   }
 }
+
+export const approveToken = async (tokenAddress, spender, amount, signer) => {
+  try {
+    const contract = new ethers.Contract(
+        tokenAddress,
+        TokenABI.default,
+        signer
+    );
+
+    if( contract ) {
+      const tx = await contract.approve(spender, ethers.utils.parseEther(amount.toString()))
+      tx.wait()
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
