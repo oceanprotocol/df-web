@@ -167,8 +167,8 @@
             <h3>Pool Data</h3>
             <p>DataToken Symbol: {pool.rowData.datatoken}</p>
             <p>Basetoken: {pool.rowData.basetoken}</p>
-            <p>TVL: {pool.rowData.tvl}</p>
-            <p>Volume: {pool.rowData.volume}</p>
+            <p>TVL: {parseInt(pool.rowData.tvl).toFixed(3)}</p>
+            <p>Volume: {parseInt(pool.rowData.volume).toFixed(3)}</p>
           </div>
           <div class="container">
             <h3>Staking</h3>
@@ -181,7 +181,9 @@
                 />
               </div>
             {:else}
-              <p>{pool.rowData.basetoken} Balance: {balance}</p>
+              <p>
+                {pool.rowData.basetoken} Balance: {parseInt(balance).toFixed(3)}
+              </p>
               {#if balance >= 0}
                 <label>
                   <input
@@ -192,9 +194,9 @@
                     on:input={handleStakeAmount}
                   />
                 </label>
-                <p>Calc Pool Shares: {calcBPTOut}</p>
+                <p>Calc Pool Shares: {parseInt(calcBPTOut).toFixed(3)}</p>
                 {#if finalBPTOut > 0.0}
-                  <p>Final Pool Shares: {finalBPTOut}</p>
+                  <p>Final Pool Shares: {parseInt(finalBPTOut).toFixed(3)}</p>
                 {/if}
               {/if}
               <div class="button">
