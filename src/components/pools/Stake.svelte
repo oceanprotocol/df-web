@@ -107,7 +107,7 @@
 {#if pool}
   <div class="header">
     <h4>Stake</h4>
-    <span>{pool.rowData.basetoken}</span>
+    <span>{pool.basetoken}</span>
   </div>
   <div class="items-container">
     {#if $userAddress && pool.chainId !== $connectedChainId}
@@ -130,7 +130,7 @@
         />
       {/if}
       <ItemWithLabel
-        title={`${pool.rowData.basetoken} Balance`}
+        title={`${pool.basetoken} Balance`}
         value={parseInt(balance).toFixed(3)}
       />
       {#if balance >= 0}
