@@ -14,7 +14,7 @@
       <Table
         colData={columnsData}
         notHidableColumns={["Network", "Action"]}
-        rowData={$pools}
+        rowData={[$pools[$pools.length - 1]]}
         description="Explore all the pools that are eligible for staking, and stake your Ocean token to get rewards."
       />
     </div>
