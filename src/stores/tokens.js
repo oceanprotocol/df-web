@@ -25,12 +25,7 @@ export async function balanceOf(balances, chainId, tokenAddress, account) {
     if (balances[chainId] === undefined) {
       balances[chainId] = {};
     }
-
-    const balance = await tokenContract.balanceOf(account);
-    balances[chainId][tokenAddress] = balance;
-    userBalances.set(balances);
-
-    return balances[chainId][tokenAddress];
+    return await tokenContract.balanceOf(account);
   } catch(err) {
     console.error(err);
   }
