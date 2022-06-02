@@ -43,6 +43,7 @@ const web3Modal = new Web3Modal({
   disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
 });
 
+// TODO - Replace networkData w/ networksDataArray
 export function getNetworkDataById(
     data,
     networkId
