@@ -1,6 +1,8 @@
 import { ethers } from "ethers";
-import { web3, getJsonRpcProvider, getRpcUrlByChainId } from "./web3";
+import { getJsonRpcProvider, getRpcUrlByChainId, GASLIMIT_DEFAULT } from "./web3";
 import * as TokenABI from "./abis/tokenABI";
+
+const tokenABI = TokenABI.default
 
 //TODO - Standardize function calls & Params to follow ocean.js
 export const getTokenContract = async (chainId, address) => {
@@ -79,4 +81,54 @@ export const approve = async (datatokenAdress, spender, amount, address) => {
         gasPrice: await getFairGasPrice()
       })
   return trxReceipt
+}
+
+export const BPallowance = async (
+  datatokenAdress,
+  owner,
+  spender,
+  signer
+) => {
+  const datatoken = new ethers.Contract(datatokenAdress, tokenABI, signer);
+
+  const trxReceipt = await datatoken.allowance(owner, spender)
+  return ethers.utils.formatEther(trxReceipt)
+}
+
+export const BPapprove = async (
+  account,
+  datatokenAddress,
+  spender, //bpool is spender
+  amount,
+  force = false,
+  signer
+) => {
+  const datatoken = new ethers.Contract(datatokenAddress, tokenABI, signer);
+
+  if (!force) {
+      const currentAllowence = await BPallowance(datatokenAddress, account, spender)
+      if (
+          new Decimal(ethers.utils.toWei(currentAllowence)).greaterThanOrEqualTo(amount)
+      ) {
+          return currentAllowence
+      }
+  }
+  let result = null
+  const gasLimitDefault = GASLIMIT_DEFAULT
+  let estGas
+  console.log(spender)
+  try {
+      estGas = await datatoken.approve(spender, amount)
+  
+  } catch (e) {
+      estGas = gasLimitDefault
+  }
+
+  try {
+      result = await datatoken.approve(spender, amount)
+      
+  } catch (e) {
+      console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
+  }
+  return result
 }

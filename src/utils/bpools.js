@@ -3,6 +3,7 @@ import { getJsonRpcProvider, getRpcUrlByChainId, getFairGasPrice, GASLIMIT_DEFAU
 import * as BPoolABI from "../utils/abis/BPoolABI";
 import Decimal from 'decimal.js';
 import {networkSigner} from '../stores/web3'
+import {BPapprove} from './tokens'
 const POOL_MAX_AMOUNT_IN_LIMIT = 0.25 
 
 const bpoolABI = BPoolABI.default
@@ -37,49 +38,6 @@ const allowance = async (
 
   const trxReceipt = await datatoken.methods.allowance(owner, spender).call()
   return ethers.utils.fromWei(trxReceipt)
-}
-
-// From ocean.js
-export const approve = async (
-    account,
-    datatokenAddress,
-    spender,
-    amount,
-    force = false
-) => {
-  const datatoken = new ethers.Contract(tokenABI, datatokenAddress, {
-    from: account
-  });
-
-  if (!force) {
-    const currentAllowence = await allowance(datatokenAddress, account, spender)
-    if (
-        new Decimal(ethers.utils.toWei(currentAllowence)).greaterThanOrEqualTo(amount)
-    ) {
-      return currentAllowence
-    }
-  }
-  let result = null
-  const gasLimitDefault = GASLIMIT_DEFAULT
-  let estGas
-  try {
-    estGas = await datatoken.methods
-        .approve(spender, amount)
-        .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-  } catch (e) {
-    estGas = gasLimitDefault
-  }
-
-  try {
-    result = await datatoken.methods.approve(spender, amount).send({
-      from: account,
-      gas: estGas + 1,
-      gasPrice: await getFairGasPrice()
-    })
-  } catch (e) {
-    console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
-  }
-  return result
 }
 
 
@@ -124,63 +82,6 @@ const joinswapExternAmountIn = async (
   return result
 }
 
-const BPallowance = async (
-  datatokenAdress,
-  owner,
-  spender
-) => {
-  const datatoken = new ethers.Contract(tokenABI, datatokenAdress, {
-      from: spender
-  });
-
-  const trxReceipt = await datatoken.methods.allowance(owner, spender).call()
-  return ethers.utils.fromWei(trxReceipt)
-}
-
-const BPapprove = async (
-  account,
-  datatokenAddress,
-  spender, //bpool is spender
-  amount,
-  force = false
-) => {
-  const datatoken = new ethers.Contract(tokenABI, datatokenAddress, {
-      from: account
-  });
-
-  if (!force) {
-      const currentAllowence = await BPallowance(datatokenAddress, account, spender)
-      if (
-          new Decimal(ethers.utils.toWei(currentAllowence)).greaterThanOrEqualTo(amount)
-      ) {
-          return currentAllowence
-      }
-  }
-  let result = null
-  const gasLimitDefault = GASLIMIT_DEFAULT
-  let estGas
-  try {
-      estGas = await datatoken.methods
-          .approve(spender, amount)
-          .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
-  } catch (e) {
-      estGas = gasLimitDefault
-  }
-
-  try {
-      result = await datatoken.methods
-          .approve(spender, amount)
-          .send({
-          from: account,
-          gas: estGas + 1,
-          gasPrice: await getFairGasPrice()
-      })
-  } catch (e) {
-      console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
-  }
-  return result
-}
-
 const getReserve = async (poolAddress, datatokenAddress, signer) => {
   let amount = null
   try {
@@ -212,7 +113,8 @@ export const addDTLiquidity = async (account, datatokenAddress, poolAddress, amo
       account,
       datatokenAddress,
       poolAddress,
-      ethers.utils.toWei(amount)
+      ethers.utils.formatUnits(amount),
+      signer
   )
   if (!txid) {
       console.log('ERROR: Failed to call approve DT token')
