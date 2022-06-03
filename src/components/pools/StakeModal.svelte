@@ -59,11 +59,10 @@
           <div class="container">
             <PoolInfo {pool} />
           </div>
+        {:else if pool && balance}
           <div class="container">
             <Stake {pool} />
           </div>
-        {:else}
-          <p>Loading...</p>
         {/if}
       </div>
     </div>

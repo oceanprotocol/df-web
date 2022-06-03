@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { ethers } from "ethers";
+import { ethers, BigNumber } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
 import {initChainIds} from "../app.config";
 
@@ -11,6 +11,8 @@ export let connectedChainId = writable("");
 export let web3 = writable("");
 export let selectedNetworks = writable(initChainIds);
 export let jsonRPCProvider = writable({});
+
+export const GASLIMIT_DEFAULT = 1000000;
 
 const Web3 = window.Web3;
 const Web3Modal = window.Web3Modal.default;
@@ -41,6 +43,7 @@ const web3Modal = new Web3Modal({
   disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
 });
 
+// TODO - Replace networkData w/ networksDataArray
 export function getNetworkDataById(
     data,
     networkId
@@ -225,4 +228,25 @@ export async function addCustomNetwork(
   console.log(
     `Added ${network.name} (0x${network.chainId}) network to MetaMask`
   )
+}
+
+export function getGasFeeMultiplier(chainId) {
+  const gasFeeMultiplier = {
+    1: 1.05,
+    3: 1,
+    4: 1,
+    56: 1.05,
+    246: 1.05,
+    1285: 1.05
+  }
+  return gasFeeMultiplier.indexOf(chainId) >= 0 ? gasFeeMultiplier[chainId] : 1;
+}
+
+export async function getFairGasPrice(chainId) {
+  const x = await web3.eth.getGasPrice();
+  const gasFeeMultiplier = getGasFeeMultiplier(chainId);
+  return x
+        .multipliedBy(gasFeeMultiplier)
+        .integerValue(BigNumber.ROUND_DOWN)
+        .toString(10);
 }
