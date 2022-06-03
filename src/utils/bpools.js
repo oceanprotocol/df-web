@@ -1,6 +1,11 @@
 import { ethers } from "ethers";
 import { getJsonRpcProvider, getRpcUrlByChainId, getFairGasPrice, GASLIMIT_DEFAULT } from "./web3";
 import * as BPoolABI from "../utils/abis/BPoolABI";
+import Decimal from 'decimal.js';
+import {networkSigner} from '../stores/web3'
+const POOL_MAX_AMOUNT_IN_LIMIT = 0.25 
+
+const bpoolABI = BPoolABI.default
 
 // TODO - Store/Access contracts (also destroy/manage objects, i.e. svelte comp destroys)
 export async function getPoolContract(chainId, address) {
@@ -26,12 +31,12 @@ const allowance = async (
     owner,
     spender
 ) => {
-  const datatoken = new web3.eth.Contract(tokenABI, datatokenAdress, {
+  const datatoken = new ethers.Contract(tokenABI, datatokenAdress, {
     from: spender
   });
 
   const trxReceipt = await datatoken.methods.allowance(owner, spender).call()
-  return web3.utils.fromWei(trxReceipt)
+  return ethers.utils.fromWei(trxReceipt)
 }
 
 // From ocean.js
@@ -42,14 +47,14 @@ export const approve = async (
     amount,
     force = false
 ) => {
-  const datatoken = new web3.eth.Contract(tokenABI, datatokenAddress, {
+  const datatoken = new ethers.Contract(tokenABI, datatokenAddress, {
     from: account
   });
 
   if (!force) {
     const currentAllowence = await allowance(datatokenAddress, account, spender)
     if (
-        new Decimal(web3.utils.toWei(currentAllowence)).greaterThanOrEqualTo(amount)
+        new Decimal(ethers.utils.toWei(currentAllowence)).greaterThanOrEqualTo(amount)
     ) {
       return currentAllowence
     }
@@ -88,7 +93,7 @@ const joinswapExternAmountIn = async (
   tokenAmountIn,
   minPoolAmountOut
 ) => {
-  const pool = new web3.eth.Contract(bpoolABI, poolAddress);
+  const pool = new ethers.Contract(bpoolABI, poolAddress);
   let result = null
   const gasLimitDefault = GASLIMIT_DEFAULT
   let estGas
@@ -124,12 +129,12 @@ const BPallowance = async (
   owner,
   spender
 ) => {
-  const datatoken = new web3.eth.Contract(tokenABI, datatokenAdress, {
+  const datatoken = new ethers.Contract(tokenABI, datatokenAdress, {
       from: spender
   });
 
   const trxReceipt = await datatoken.methods.allowance(owner, spender).call()
-  return web3.utils.fromWei(trxReceipt)
+  return ethers.utils.fromWei(trxReceipt)
 }
 
 const BPapprove = async (
@@ -139,14 +144,14 @@ const BPapprove = async (
   amount,
   force = false
 ) => {
-  const datatoken = new web3.eth.Contract(tokenABI, datatokenAddress, {
+  const datatoken = new ethers.Contract(tokenABI, datatokenAddress, {
       from: account
   });
 
   if (!force) {
       const currentAllowence = await BPallowance(datatokenAddress, account, spender)
       if (
-          new Decimal(web3.utils.toWei(currentAllowence)).greaterThanOrEqualTo(amount)
+          new Decimal(ethers.utils.toWei(currentAllowence)).greaterThanOrEqualTo(amount)
       ) {
           return currentAllowence
       }
@@ -176,27 +181,28 @@ const BPapprove = async (
   return result
 }
 
-const getReserve = async (poolAddress, datatokenAddress) => {
+const getReserve = async (poolAddress, datatokenAddress, signer) => {
   let amount = null
   try {
-      const pool = new web3.eth.Contract(bpoolABI, poolAddress);
-      const result = await pool.methods.getBalance(datatokenAddress).call();
-      amount = web3.utils.fromWei(result);
+      const pool = new ethers.Contract(poolAddress, bpoolABI, signer);
+      const result = await pool.getBalance(datatokenAddress);
+      amount = ethers.utils.formatEther(result);
+      console.log(amount)
   } catch (e) {
       console.log(`ERROR: Failed to get how many tokens are in the pool: ${e.message}`)
   }
   return amount
 }
 
-const getMaxAddLiquidity = async (poolAddress, datatokenAddress) => {
-  const balance = await getReserve(poolAddress, datatokenAddress);
+const getMaxAddLiquidity = async (poolAddress, datatokenAddress, signer) => {
+  const balance = await getReserve(poolAddress, datatokenAddress, signer);
   if (parseFloat(balance) > 0) {
       return new Decimal(balance).mul(POOL_MAX_AMOUNT_IN_LIMIT).toString()
   } else return '0'
 }
 
 export const addDTLiquidity = async (account, datatokenAddress, poolAddress, amount, signer) => {
-  const maxAmount = await getMaxAddLiquidity(poolAddress, datatokenAddress);
+  const maxAmount = await getMaxAddLiquidity(poolAddress, datatokenAddress ,signer);
   if (new Decimal(amount).greaterThan(maxAmount)) {
       console.log('ERROR: Too much reserve to add')
       return null
@@ -206,7 +212,7 @@ export const addDTLiquidity = async (account, datatokenAddress, poolAddress, amo
       account,
       datatokenAddress,
       poolAddress,
-      web3.utils.toWei(amount)
+      ethers.utils.toWei(amount)
   )
   if (!txid) {
       console.log('ERROR: Failed to call approve DT token')

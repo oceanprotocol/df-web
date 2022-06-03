@@ -34,7 +34,7 @@ export default {
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,
-		format: 'iife',
+		format: 'cjs',
 		name: 'app',
 		file: 'public/build/bundle.js'
 	},
@@ -58,7 +58,6 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
-		commonjs(),
 
 		json({
 			compact: true
@@ -75,7 +74,8 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser(),
+		commonjs({include: 'node_modules/**',transformMixedEsModules:true})
 	],
 	watch: {
 		clearScreen: false
