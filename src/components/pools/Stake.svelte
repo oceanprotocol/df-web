@@ -144,11 +144,7 @@
           />
         </label>
       {/if}
-      <Button
-        text="Stake"
-        onclick={() => stake()}
-        disabled={!canStake || loading}
-      />
+      <Button text="Stake" onclick={() => stake()} disabled={!canStake} />
     {/if}
   </div>
 {:else}{/if}

@@ -49,7 +49,7 @@
 
 <Button text="LP" onclick={() => open()} />
 {#if isOpen}
-  <div class="modal" on:keydown={keydown} tabindex={0} autofocus>
+  <div class="modal" on:keydown={keydown} tabindex={0}>
     <div class="content-wrapper">
       <div class="button">
         <Button text="X" onclick={() => close()} disabled={loading} />
@@ -59,7 +59,6 @@
           <div class="container">
             <PoolInfo {pool} />
           </div>
-        {:else if pool && balance}
           <div class="container">
             <Stake {pool} />
           </div>
