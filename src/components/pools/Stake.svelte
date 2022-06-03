@@ -9,6 +9,8 @@
   import { ethers } from "ethers";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
+  import Swal from "sweetalert2";
+  import { addDTLiquidity } from "../../utils/bpools";
 
   export let pool;
 
@@ -17,6 +19,7 @@
   let calcBPTOut = 0.0;
   let finalBPTOut = 0.0;
   let canStake = false;
+  let loading = false;
 
   const updateBalance = async () => {
     const balanceInWei = await balanceOf(
@@ -40,12 +43,18 @@
     );*/
     try {
       loading = true;
-      console.log(pool.chainId, pool, stakeAmount, calcBPTOut, $networkSigner);
-      const resp = await joinSwapExternAmountIn(
-        pool.chainId,
-        pool,
+      console.log(
+        $userAddress,
+        pool.basetokenAddress,
+        pool.poolAddress,
         stakeAmount,
-        calcBPTOut,
+        $networkSigner
+      );
+      const resp = await addDTLiquidity(
+        $userAddress,
+        pool.basetokenAddress,
+        pool.poolAddress,
+        stakeAmount,
         $networkSigner
       );
       console.log("response: ", resp);
