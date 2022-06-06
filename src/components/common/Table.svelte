@@ -11,6 +11,9 @@
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
 
+  // TODO - Fix RowData vs. LPData
+  // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
+  // TODO - LPData == Everything Required (basetokenAddress, LPAddress, url, etc...)
   export let colData = undefined;
   export let rowData = undefined;
   export let title = undefined;

@@ -54,22 +54,22 @@ function getRow(poolInfo, key) {
     datatoken: poolInfo.DT_symbol,
     dtaddress: poolInfo.DT_addr,
     basetoken: poolInfo.basetoken,
-    basetokenaddress: "0x8967BCF84170c91B0d24D4302C2376283b0B3a07", //poolInfo.basetoken_addr,
-    pooladdress: "0x92fce550a77ffd6a7ae6ced8c04b0e1ba988ef7b", //poolInfo.pool_addr,
+    basetokenaddress: poolInfo.basetoken_addr,
+    pooladdress: poolInfo.pool_addr,
     nftaddress: poolInfo.nft_addr,
     tvl: parseFloat(poolInfo.stake_amt).toFixed(3),
     volume: parseFloat(poolInfo.vol_amt).toFixed(3),
     lp: {
       chainId: poolInfo.chainID,
       url: poolInfo.url,
-      poolAddress: "0x92fce550a77ffd6a7ae6ced8c04b0e1ba988ef7b",
+      poolAddress: poolInfo.pool_addr,
       nftAddress: poolInfo.nft_addr,
       DTAddress: poolInfo.DT_addr,
-      basetokenAddress: "0x8967BCF84170c91B0d24D4302C2376283b0B3a07",
-        DTSymbol: poolInfo.DT_symbol,
-        basetoken: poolInfo.basetoken,
-        tvl: parseFloat(poolInfo.stake_amt),
-        volume: parseFloat(poolInfo.vol_amt),
+      basetokenAddress: poolInfo.basetoken_addr,
+      DTSymbol: poolInfo.DT_symbol,
+      basetoken: poolInfo.basetoken,
+      tvl: parseFloat(poolInfo.stake_amt),
+      volume: parseFloat(poolInfo.vol_amt),
     },
     action: poolInfo.url,
   };
@@ -89,5 +89,6 @@ export async function loadPools() {
     );
     newPools.push(getRow(poolInfo, key));
   });
+
   pools.set(newPools);
 }
