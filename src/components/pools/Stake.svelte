@@ -11,6 +11,7 @@
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import Swal from "sweetalert2";
   import { addDTLiquidity } from "../../utils/bpools";
+  import {calcPoolOutSingleIn} from "../../stores/bpools";
 
   export let pool;
 
@@ -30,8 +31,39 @@
     );
     balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
   };
+
   $: if ($userAddress) {
     updateBalance();
+  }
+
+  async function addLiquidty() {
+    console.log("$userAddress: ", $userAddress);
+    console.log("pool.basetokenAddress: ", pool.basetokenAddress);
+    console.log("pool.poolAddress: ", pool.poolAddress);
+    console.log("stakeAmount: ", stakeAmount);
+    console.log("$networkSigner: ", $networkSigner);
+
+    const resp = await addDTLiquidity(
+      $userAddress,
+      pool.basetokenAddress,
+      pool.poolAddress,
+      stakeAmount,
+      $networkSigner
+    );
+
+    if( resp.events && 'LOG_BPT_SS' in resp.events) {
+      const args = resp.events['LOG_BPT_SS'];
+      const finalBPTOut = ethers.utils.formatEther(BigInt(args.returnValues.bptAmount).toString(10));
+
+      console.log("addLiquidity: ", finalBPTOut);
+      return {
+        event: args,
+        finalBPTOut: finalBPTOut
+      }
+    }
+    else {
+      throw 'Staking failed';
+    }
   }
 
   async function stake() {
@@ -50,31 +82,15 @@
         stakeAmount,
         $networkSigner
       );
-      const resp = await addDTLiquidity(
-        $userAddress,
-        pool.basetokenAddress,
-        pool.poolAddress,
-        stakeAmount,
-        $networkSigner
-      );
-      console.log("response: ", resp);
-      const receipt = await resp.wait();
-      console.log("response events:", receipt.events);
 
-      const event = receipt.events.find(
-        (event) => event.event === "LOG_BPT_SS"
-      );
-      const [from, to, value] = event.args;
-      console.log("bptOutWei response:", from, to, value);
-
-      finalBPTOut = ethers.utils.formatEther(BigInt(value).toString(10));
-      if (finalBPTOut > 0.0) {
+      const results = await addLiquidty();
+      if (results && results.finalBPTOut > 0.0) {
         Swal.fire(
           "Success!",
           "You've staked " + pool.basetoken + " into pool.",
           "success"
-        ).then(() => {
-          updateBalance();
+        ).then(async () => {
+          await updateBalance();
           updateCanStake();
           loading = false;
         });
@@ -94,6 +110,9 @@
   async function handleStakeAmount() {
     finalBPTOut = 0.0;
     if (stakeAmount > 0.0) {
+      console.log("stakeAmountChanged: ", stakeAmount);
+
+      await updateBalance();
       updateCanStake();
       const bptOutWei = await calcPoolOutSingleIn(
         pool.chainId,
@@ -101,6 +120,8 @@
         stakeAmount
       );
       calcBPTOut = ethers.utils.formatEther(BigInt(bptOutWei).toString(10));
+      console.log("bptOutWei: ", bptOutWei);
+      console.log("calcBPTOut: ", calcBPTOut);
     } else canStake = false;
   }
 
@@ -130,17 +151,17 @@
     {:else}
       <ItemWithLabel
         title="Calc Pool Shares"
-        value={parseInt(calcBPTOut).toFixed(3)}
+        value={parseFloat(calcBPTOut).toFixed(3)}
       />
       {#if finalBPTOut > 0.0}
         <ItemWithLabel
           title="Final Pool Shares"
-          value={parseInt(finalBPTOut).toFixed(3)}
+          value={parseFloat(finalBPTOut).toFixed(3)}
         />
       {/if}
       <ItemWithLabel
         title={`${pool.basetoken} Balance`}
-        value={parseInt(balance).toFixed(3)}
+        value={parseFloat(balance).toFixed(3)}
       />
       {#if balance >= 0}
         <label>

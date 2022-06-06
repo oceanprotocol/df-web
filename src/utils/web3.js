@@ -47,7 +47,8 @@ export const getGasFeeMultiplier = (chainId) => {
 }
 
 export const getFairGasPrice = async (chainId) => {
-  const x = await web3.eth.getGasPrice();
+  const x = await ethers.getGasPrice();
+  console.log("ethers getGasPrice: ", x);
   const gasFeeMultiplier = getGasFeeMultiplier(chainId);
   return x
       .multipliedBy(gasFeeMultiplier)

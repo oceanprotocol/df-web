@@ -4,7 +4,7 @@ import * as BPoolABI from "../utils/abis/BPoolABI";
 import Decimal from 'decimal.js';
 import {networkSigner} from '../stores/web3'
 import {BPapprove} from './tokens'
-const POOL_MAX_AMOUNT_IN_LIMIT = 0.25 
+const POOL_MAX_AMOUNT_IN_LIMIT = 0.25
 
 const bpoolABI = BPoolABI.default
 
@@ -49,35 +49,31 @@ const joinswapExternAmountIn = async (
   poolAddress,
   tokenIn,
   tokenAmountIn,
-  minPoolAmountOut
+  minPoolAmountOut,
+  signer
 ) => {
-  const pool = new ethers.Contract(bpoolABI, poolAddress);
+  const pool = new ethers.Contract(poolAddress, bpoolABI, signer);
   let result = null
   const gasLimitDefault = GASLIMIT_DEFAULT
   let estGas
   try {
-      estGas = await pool.methods
+      estGas = await pool
+          .estimateGas
           .joinswapExternAmountIn(
-              web3.utils.toWei(tokenAmountIn),
-              web3.utils.toWei(minPoolAmountOut)
-          )
-          .estimateGas({ from: account }, (err, estGas) => (err ? gasLimitDefault : estGas))
+              ethers.utils.parseEther(tokenAmountIn.toString()),
+              ethers.utils.parseEther(minPoolAmountOut.toString())
+          );
   } catch (e) {
       estGas = gasLimitDefault
   }
   try {
-      result = await pool.methods
+      result = await pool
           .joinswapExternAmountIn(
-              web3.utils.toWei(tokenAmountIn),
-              web3.utils.toWei(minPoolAmountOut)
+              ethers.utils.parseEther(tokenAmountIn.toString()),
+              ethers.utils.parseEther(minPoolAmountOut.toString())
           )
-          .send({
-              from: account,
-              gas: estGas + 1,
-              gasPrice: await getFairGasPrice()
-          })
   } catch (e) {
-      console.log(`ERROR: Failed to pay tokens in order to join the pool: ${e.message}`)
+      console.log(`ERROR: Failed to pay tokens in order to join the pool: ${e}`)
   }
   return result
 }
@@ -108,12 +104,13 @@ export const addDTLiquidity = async (account, datatokenAddress, poolAddress, amo
       console.log('ERROR: Too much reserve to add')
       return null
   }
-
+  console.log("addDTLiquidity signer: ", signer);
+  console.log("addDTLiquidity amount: ", amount);
   const txid = await BPapprove(
       account,
       datatokenAddress,
       poolAddress,
-      ethers.utils.formatUnits(amount),
+      amount,
       signer
   )
   if (!txid) {
@@ -121,12 +118,14 @@ export const addDTLiquidity = async (account, datatokenAddress, poolAddress, amo
       throw new Error('ERROR: Failed to call approve DT token')
   }
 
+  console.log("resulting txid: ", txid);
   const result = await joinswapExternAmountIn(
       account,
       poolAddress,
       datatokenAddress,
       amount,
-      '0'
+      '0',
+      signer
   )
   return result
 }

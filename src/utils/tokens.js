@@ -1,3 +1,4 @@
+import { Decimal } from 'decimal.js';
 import { ethers } from "ethers";
 import { getJsonRpcProvider, getRpcUrlByChainId, GASLIMIT_DEFAULT } from "./web3";
 import * as TokenABI from "./abis/tokenABI";
@@ -51,16 +52,16 @@ export const approveToken = async (tokenAddress, spender, amount, signer) => {
 
 export const allowance = async (datatokenAddress, owner, spender) => {
   try {
-    const datatoken = new web3.eth.Contract(tokenABI, datatokenAddress, {from: spender});
+    const datatoken = new ethers.Contract(datatokenAddress, tokenABI,{from: spender});
     const trxReceipt = await datatoken.methods.allowance(owner, spender).call();
-    return web3.utils.fromWei(trxReceipt);
+    return ethers.utils.formatEther(trxReceipt);
   } catch (e) {
     console.log(e);
   }
 }
 
 export const approve = async (datatokenAdress, spender, amount, address) => {
-  const datatoken = new web3.eth.Contract(tokenABI, datatokenAdress, {
+  const datatoken = new ethers.Contract(datatokenAdress, tokenABI, {
     from: address
   });
 
@@ -68,13 +69,13 @@ export const approve = async (datatokenAdress, spender, amount, address) => {
   let estGas
   try {
     estGas = await datatoken.methods
-        .approve(spender, web3.utils.toWei(amount))
+        .approve(spender, ethers.utils.parseEther(amount.toString()))
         .estimateGas({ from: address }, (err, estGas) => (err ? gasLimitDefault : estGas))
   } catch (e) {
     estGas = gasLimitDefault
   }
   const trxReceipt = await datatoken.methods
-      .approve(spender, web3.utils.toWei(amount))
+      .approve(spender, ethers.utils.parseEther(amount.toString()))
       .send({
         from: address,
         gas: estGas + 1,
@@ -91,7 +92,13 @@ export const BPallowance = async (
 ) => {
   const datatoken = new ethers.Contract(datatokenAdress, tokenABI, signer);
 
+  console.log("signer: ", signer);
+  console.log("datatoken datatokenAdress: ", datatokenAdress);
+  console.log("datatoken contract: ", datatoken);
+
   const trxReceipt = await datatoken.allowance(owner, spender)
+  console.log("allowance txReceipt: ", trxReceipt);
+
   return ethers.utils.formatEther(trxReceipt)
 }
 
@@ -100,33 +107,40 @@ export const BPapprove = async (
   datatokenAddress,
   spender, //bpool is spender
   amount,
-  force = false,
-  signer
+  signer,
+  force = false
 ) => {
   const datatoken = new ethers.Contract(datatokenAddress, tokenABI, signer);
 
+  console.log("BPapprove account: ", account);
+  console.log("BPapprove spender: ", spender);
+  console.log("BPapprove amount: ", amount);
+  console.log("BPapprove signer: ", signer);
+  console.log("BPapprove datatoken datatokenAdress: ", datatokenAddress);
+  console.log("BPapprove datatoken contract: ", datatoken);
+
   if (!force) {
-      const currentAllowence = await BPallowance(datatokenAddress, account, spender)
-      if (
-          new Decimal(ethers.utils.toWei(currentAllowence)).greaterThanOrEqualTo(amount)
-      ) {
-          return currentAllowence
+      const allowance = await BPallowance(datatokenAddress, account, spender, signer)
+      if ( new Decimal(allowance).greaterThanOrEqualTo(amount) ) {
+          console.log("Allowance > amount, use allowance. Allowance is: ", allowance);
+          return allowance
       }
   }
   let result = null
   const gasLimitDefault = GASLIMIT_DEFAULT
   let estGas
-  console.log(spender)
+  console.log("Spender is: ", spender);
   try {
-      estGas = await datatoken.approve(spender, amount)
-  
+    console.log("Esimated gas for allowance of amount: ", amount);
+    estGas = await datatoken.estimateGas.approve(spender, ethers.utils.parseEther(amount.toString()))
+    console.log("Esimated gas is: ", estGas);
   } catch (e) {
       estGas = gasLimitDefault
   }
 
   try {
-      result = await datatoken.approve(spender, amount)
-      
+      result = await datatoken.approve(spender, ethers.utils.parseEther(amount.toString()))
+      console.log("Approved datatoken: ", result);
   } catch (e) {
       console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
   }

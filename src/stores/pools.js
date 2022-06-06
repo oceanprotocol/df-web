@@ -65,7 +65,7 @@ function getRow(poolInfo, key) {
       poolAddress: "0x92fce550a77ffd6a7ae6ced8c04b0e1ba988ef7b",
       nftAddress: poolInfo.nft_addr,
       DTAddress: poolInfo.DT_addr,
-      basetokenAddress: getTokenAddress(poolInfo.chainID, poolInfo.basetoken),
+      basetokenAddress: "0x8967BCF84170c91B0d24D4302C2376283b0B3a07",
         DTSymbol: poolInfo.DT_symbol,
         basetoken: poolInfo.basetoken,
         tvl: parseFloat(poolInfo.stake_amt),
