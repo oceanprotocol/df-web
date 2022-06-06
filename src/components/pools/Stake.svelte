@@ -21,6 +21,7 @@
   let finalBPTOut = 0.0;
   let canStake = false;
   let loading = false;
+  let cta = "Stake";
 
   const updateBalance = async () => {
     const balanceInWei = await balanceOf(
@@ -72,6 +73,16 @@
     throw 'Staking failed';
   }
 
+  function startLoading() {
+    loading = true;
+    cta = "Loading";
+  }
+
+  function stopLoading() {
+    loading = false;
+    cta = "Stake";
+  }
+
   async function stake() {
     /*await approveToken(
       "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
@@ -80,7 +91,8 @@
       $networkSigner
     );*/
     try {
-      loading = true;
+      startLoading();
+
       console.log(
         $userAddress,
         pool.basetokenAddress,
@@ -98,7 +110,7 @@
         ).then(async () => {
           await updateBalance();
           updateCanStake();
-          loading = false;
+          stopLoading();
         });
       }
     } catch (error) {
@@ -108,7 +120,7 @@
         "Failed to stake " + pool.basetoken + " into pool.",
         "error"
       ).then(() => {
-        loading = false;
+        stopLoading();
       });
     }
   }
@@ -178,7 +190,7 @@
           />
         </label>
       {/if}
-      <Button text="Stake"
+      <Button text={cta}
               onclick={() => stake()} disabled={!canStake || loading} />
     {/if}
   </div>
