@@ -43,7 +43,7 @@
     console.log("stakeAmount: ", stakeAmount);
     console.log("$networkSigner: ", $networkSigner);
 
-    const resp = await addDTLiquidity(
+    const tx = await addDTLiquidity(
       $userAddress,
       pool.basetokenAddress,
       pool.poolAddress,
@@ -51,19 +51,25 @@
       $networkSigner
     );
 
-    if( resp.events && 'LOG_BPT_SS' in resp.events) {
-      const args = resp.events['LOG_BPT_SS'];
-      const finalBPTOut = ethers.utils.formatEther(BigInt(args.returnValues.bptAmount).toString(10));
+    console.log("addDTLiquidity tx: ", tx);
+    if( tx ) {
+      let receipt = await tx.wait();
+      console.log("addDTLiquidity receipt: ", receipt);
 
-      console.log("addLiquidity: ", finalBPTOut);
-      return {
-        event: args,
-        finalBPTOut: finalBPTOut
+      if( receipt.events ){
+        const stakeEvent = receipt.events.filter(x => x.event === 'LOG_BPT_SS');
+        if( stakeEvent[0].event === 'LOG_BPT_SS' ) {
+          finalBPTOut = ethers.utils.formatEther(BigInt(stakeEvent[0].args.bptAmount).toString(10));
+          console.log("addLiquidity: ", finalBPTOut);
+          return {
+            event: stakeEvent,
+            finalBPTOut: finalBPTOut
+          }
+        }
       }
     }
-    else {
-      throw 'Staking failed';
-    }
+
+    throw 'Staking failed';
   }
 
   async function stake() {
@@ -113,7 +119,6 @@
       console.log("stakeAmountChanged: ", stakeAmount);
 
       await updateBalance();
-      updateCanStake();
       const bptOutWei = await calcPoolOutSingleIn(
         pool.chainId,
         pool,
@@ -122,6 +127,7 @@
       calcBPTOut = ethers.utils.formatEther(BigInt(bptOutWei).toString(10));
       console.log("bptOutWei: ", bptOutWei);
       console.log("calcBPTOut: ", calcBPTOut);
+      updateCanStake();
     } else canStake = false;
   }
 
@@ -150,18 +156,16 @@
       </div>
     {:else}
       <ItemWithLabel
+              title={`${pool.basetoken} Balance`}
+              value={parseFloat(balance).toFixed(3)}
+      />
+      <ItemWithLabel
         title="Calc Pool Shares"
         value={parseFloat(calcBPTOut).toFixed(3)}
       />
-      {#if finalBPTOut > 0.0}
-        <ItemWithLabel
-          title="Final Pool Shares"
-          value={parseFloat(finalBPTOut).toFixed(3)}
-        />
-      {/if}
       <ItemWithLabel
-        title={`${pool.basetoken} Balance`}
-        value={parseFloat(balance).toFixed(3)}
+        title="Final Pool Shares"
+        value={parseFloat(finalBPTOut).toFixed(3)}
       />
       {#if balance >= 0}
         <label>
@@ -174,7 +178,8 @@
           />
         </label>
       {/if}
-      <Button text="Stake" onclick={() => stake()} disabled={!canStake} />
+      <Button text="Stake"
+              onclick={() => stake()} disabled={!canStake || loading} />
     {/if}
   </div>
 {:else}{/if}

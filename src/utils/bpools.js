@@ -3,7 +3,7 @@ import { getJsonRpcProvider, getRpcUrlByChainId, getFairGasPrice, GASLIMIT_DEFAU
 import * as BPoolABI from "../utils/abis/BPoolABI";
 import Decimal from 'decimal.js';
 import {networkSigner} from '../stores/web3'
-import {BPapprove} from './tokens'
+import {approve, approve as DTApprove} from './tokens'
 const POOL_MAX_AMOUNT_IN_LIMIT = 0.25
 
 const bpoolABI = BPoolABI.default
@@ -27,22 +27,18 @@ export const calcPoolOutSingleIn = async (chainId, poolInfo, amountIn) => {
   }
 }
 
-const allowance = async (
-    datatokenAdress,
-    owner,
-    spender
-) => {
-  const datatoken = new ethers.Contract(tokenABI, datatokenAdress, {
-    from: spender
-  });
-
-  const trxReceipt = await datatoken.methods.allowance(owner, spender).call()
-  return ethers.utils.fromWei(trxReceipt)
-}
-
-
-
-
+// const allowance = async (
+//     datatokenAdress,
+//     owner,
+//     spender
+// ) => {
+//   const datatoken = new ethers.Contract(tokenABI, datatokenAdress, {
+//     from: spender
+//   });
+//
+//   const trxReceipt = await datatoken.methods.allowance(owner, spender).call()
+//   return ethers.utils.fromWei(trxReceipt)
+// }
 
 const joinswapExternAmountIn = async (
   account,
@@ -53,7 +49,6 @@ const joinswapExternAmountIn = async (
   signer
 ) => {
   const pool = new ethers.Contract(poolAddress, bpoolABI, signer);
-  let result = null
   const gasLimitDefault = GASLIMIT_DEFAULT
   let estGas
   try {
@@ -67,15 +62,19 @@ const joinswapExternAmountIn = async (
       estGas = gasLimitDefault
   }
   try {
-      result = await pool
+      // TODO - Add Price & Send() - Make sure it's completing w/ events in response
+      // let gasPrice = getFairGasPrice();
+      let tx = await pool
           .joinswapExternAmountIn(
               ethers.utils.parseEther(tokenAmountIn.toString()),
               ethers.utils.parseEther(minPoolAmountOut.toString())
-          )
+          );
+      return tx;
   } catch (e) {
       console.log(`ERROR: Failed to pay tokens in order to join the pool: ${e}`)
   }
-  return result
+
+  return null;
 }
 
 const getReserve = async (poolAddress, datatokenAddress, signer) => {
@@ -99,34 +98,32 @@ const getMaxAddLiquidity = async (poolAddress, datatokenAddress, signer) => {
 }
 
 export const addDTLiquidity = async (account, datatokenAddress, poolAddress, amount, signer) => {
-  const maxAmount = await getMaxAddLiquidity(poolAddress, datatokenAddress ,signer);
-  if (new Decimal(amount).greaterThan(maxAmount)) {
+    const maxAmount = await getMaxAddLiquidity(poolAddress, datatokenAddress ,signer);
+    if (new Decimal(amount).greaterThan(maxAmount)) {
       console.log('ERROR: Too much reserve to add')
       return null
-  }
-  console.log("addDTLiquidity signer: ", signer);
-  console.log("addDTLiquidity amount: ", amount);
-  const txid = await BPapprove(
+    }
+    console.log("addDTLiquidity signer: ", signer);
+    console.log("addDTLiquidity amount: ", amount);
+    const approveTx = await DTApprove(
       account,
       datatokenAddress,
       poolAddress,
       amount,
       signer
-  )
-  if (!txid) {
-      console.log('ERROR: Failed to call approve DT token')
-      throw new Error('ERROR: Failed to call approve DT token')
-  }
+    )
+    console.log("DTApproved tx: ", approveTx);
+    const approveReceipt = await approveTx.wait();
+    console.log("DTApproved receit: ", approveReceipt);
 
-  console.log("resulting txid: ", txid);
-  const result = await joinswapExternAmountIn(
+    const tx = await joinswapExternAmountIn(
       account,
       poolAddress,
       datatokenAddress,
       amount,
       '0',
       signer
-  )
-  return result
+    )
+    return tx;
 }
 

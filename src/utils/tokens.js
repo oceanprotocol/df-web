@@ -50,41 +50,42 @@ export const approveToken = async (tokenAddress, spender, amount, signer) => {
   }
 }
 
-export const allowance = async (datatokenAddress, owner, spender) => {
-  try {
-    const datatoken = new ethers.Contract(datatokenAddress, tokenABI,{from: spender});
-    const trxReceipt = await datatoken.methods.allowance(owner, spender).call();
-    return ethers.utils.formatEther(trxReceipt);
-  } catch (e) {
-    console.log(e);
-  }
-}
+// export const allowance = async (datatokenAddress, owner, spender) => {
+//   try {
+//     const datatoken = new ethers.Contract(datatokenAddress, tokenABI,{from: spender});
+//     const trxReceipt = await datatoken.methods.allowance(owner, spender).call();
+//     return ethers.utils.formatEther(trxReceipt);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
+//
+// export const approve = async (datatokenAdress, spender, amount, address) => {
+//   const datatoken = new ethers.Contract(datatokenAdress, tokenABI, {
+//     from: address
+//   });
+//
+//   const gasLimitDefault = GASLIMIT_DEFAULT
+//   let estGas
+//   try {
+//     estGas = await datatoken.methods
+//         .approve(spender, ethers.utils.parseEther(amount.toString()))
+//         .estimateGas({ from: address }, (err, estGas) => (err ? gasLimitDefault : estGas))
+//   } catch (e) {
+//     estGas = gasLimitDefault
+//   }
+//   const trxReceipt = await datatoken.methods
+//       .approve(spender, ethers.utils.parseEther(amount.toString()))
+//       .send({
+//         from: address,
+//         gas: estGas + 1,
+//         gasPrice: await getFairGasPrice()
+//       })
+//   return trxReceipt
+// }
 
-export const approve = async (datatokenAdress, spender, amount, address) => {
-  const datatoken = new ethers.Contract(datatokenAdress, tokenABI, {
-    from: address
-  });
-
-  const gasLimitDefault = GASLIMIT_DEFAULT
-  let estGas
-  try {
-    estGas = await datatoken.methods
-        .approve(spender, ethers.utils.parseEther(amount.toString()))
-        .estimateGas({ from: address }, (err, estGas) => (err ? gasLimitDefault : estGas))
-  } catch (e) {
-    estGas = gasLimitDefault
-  }
-  const trxReceipt = await datatoken.methods
-      .approve(spender, ethers.utils.parseEther(amount.toString()))
-      .send({
-        from: address,
-        gas: estGas + 1,
-        gasPrice: await getFairGasPrice()
-      })
-  return trxReceipt
-}
-
-export const BPallowance = async (
+// Getter/View
+export const allowance = async (
   datatokenAdress,
   owner,
   spender,
@@ -96,13 +97,13 @@ export const BPallowance = async (
   console.log("datatoken datatokenAdress: ", datatokenAdress);
   console.log("datatoken contract: ", datatoken);
 
-  const trxReceipt = await datatoken.allowance(owner, spender)
-  console.log("allowance txReceipt: ", trxReceipt);
-
-  return ethers.utils.formatEther(trxReceipt)
+  return datatoken.allowance(owner, spender);
 }
 
-export const BPapprove = async (
+// Tx
+// what: helper function to approve a certain tx, returns approval amount
+// returns: float approvalAmount
+export const approve = async (
   account,
   datatokenAddress,
   spender, //bpool is spender
@@ -120,13 +121,14 @@ export const BPapprove = async (
   console.log("BPapprove datatoken contract: ", datatoken);
 
   if (!force) {
-      const allowance = await BPallowance(datatokenAddress, account, spender, signer)
-      if ( new Decimal(allowance).greaterThanOrEqualTo(amount) ) {
-          console.log("Allowance > amount, use allowance. Allowance is: ", allowance);
-          return allowance
+      const result = await allowance(datatokenAddress, account, spender, signer)
+      console.log("allowance result: ", result);
+      const allowanceEthers = ethers.utils.formatEther(result);
+      if ( new Decimal(allowanceEthers).greaterThanOrEqualTo(amount) ) {
+          console.log("Allowance > amount, use allowance. Allowance is: ", allowanceEthers);
+          amount = allowanceEthers;
       }
   }
-  let result = null
   const gasLimitDefault = GASLIMIT_DEFAULT
   let estGas
   console.log("Spender is: ", spender);
@@ -139,10 +141,14 @@ export const BPapprove = async (
   }
 
   try {
-      result = await datatoken.approve(spender, ethers.utils.parseEther(amount.toString()))
-      console.log("Approved datatoken: ", result);
+      // TODO - Override gas price & limit
+      // let gasPrice = getFairGasPrice();
+      const tx = await datatoken.approve(
+          spender,
+          ethers.utils.parseEther(amount.toString()));
+      return tx;
   } catch (e) {
       console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
   }
-  return result
+  return null;
 }
