@@ -1,13 +1,24 @@
 <script>
   import WalletConnect from "./WalletConnect.svelte";
   import NetworkSelection from "./NetworkSelection.svelte";
-  import { Link, useLocation } from "svelte-navigator";
+  import { Link, useLocation, useNavigate } from "svelte-navigator";
 
   const aboutURL =
     "https://docs.google.com/document/d/1BVwgZ_reNC25pcYc64Yllcz3tEw43JbwYhS8bQ6IIlg/edit";
   const location = useLocation();
+  const navigate = useNavigate();
+  $: if ($location.pathname !== "/pools") {
+    navigate("/rewards");
+  }
 </script>
 
+<svelte:head>
+  <title>
+    {`${$location.pathname
+      .charAt(1)
+      .toUpperCase()}${$location.pathname.substring(2)} - Ocean Farm`}
+  </title>
+</svelte:head>
 <header>
   <div class="logo">
     <Link to="/" class="link">
@@ -16,8 +27,8 @@
   </div>
   <nav>
     <ul>
-      <li class:active={$location.pathname === "/"}>
-        <Link to="/" class="link">CLAIM PORTAL</Link>
+      <li class:active={$location.pathname === "/rewards"}>
+        <Link to="/rewards" class="link">CLAIM PORTAL</Link>
       </li>
       <li class:active={$location.pathname === "/pools"}>
         <Link to="/pools" class="link">POOL EXPLORER</Link>
