@@ -101,6 +101,7 @@
           "You've staked " + pool.basetoken + " into pool.",
           "success"
         ).then(async () => {
+          stakeAmount = 0;
           await updateBalance();
           updateCanStake();
           stopLoading();
@@ -188,6 +189,7 @@
         tokenName={pool.basetoken}
         poolAddress={pool.poolAddress}
         amount={stakeAmount}
+        bind:loading
       >
         <Button
           text={cta}

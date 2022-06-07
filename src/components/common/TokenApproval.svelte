@@ -1,8 +1,10 @@
 <script>
   import Button from "./Button.svelte";
-  import { approve as approveToken } from "../../utils/tokens";
+  import {
+    approve as approveToken,
+    isTokenAmountApproved,
+  } from "../../utils/tokens";
   import { networkSigner, userAddress } from "../../stores/web3";
-  import { isTokenAmountApproved } from "../../utils/tokens";
 
   export let disabled = false;
   export let loading = false;
@@ -15,7 +17,15 @@
 
   const onClick = async () => {
     loading = true;
-    approveToken(tokenAddress, poolAddress, spender, amount, $networkSigner);
+    let resp = await approveToken(
+      tokenAddress,
+      poolAddress,
+      amount,
+      $networkSigner
+    );
+    if (resp) {
+      isAmountApproved = true;
+    }
     loading = false;
   };
 
@@ -23,8 +33,8 @@
     isTokenAmountApproved(
       tokenAddress,
       amount,
-      poolAddress,
       $userAddress,
+      poolAddress,
       $networkSigner
     ).then((resp) => {
       isAmountApproved = resp;
@@ -34,9 +44,9 @@
 <div>
   {#if isAmountApproved === false}
     <Button
-      text={`Approve ${tokenName}`}
+      text={loading ? "Approving" : `Approve ${tokenName}`}
       onclick={() => onClick()}
-      {disabled}
+      disabled={disabled || loading}
     />
   {:else}
     <slot />
