@@ -58,7 +58,6 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
-		commonjs(),
 
 		json({
 			compact: true
@@ -75,7 +74,8 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser(),
+		commonjs()
 	],
 	watch: {
 		clearScreen: false

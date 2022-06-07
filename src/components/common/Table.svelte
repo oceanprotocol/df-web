@@ -7,9 +7,13 @@
     ToolbarSearch,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
+  import StakeModal from "../pools/StakeModal.svelte";
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
 
+  // TODO - Fix RowData vs. LPData
+  // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
+  // TODO - LPData == Everything Required (basetokenAddress, LPAddress, url, etc...)
   export let colData = undefined;
   export let rowData = undefined;
   export let title = undefined;
@@ -51,6 +55,8 @@
 
   function onCheck(key, value) {
     columns[key] = value;
+    console.log(key, value);
+    console.log(colData);
     if (value) {
       colData = [...colData, { key: key.toLowerCase(), value: key }];
       switchArrayItemsPosition(colData, colData.length - 1, colData.length - 2);
@@ -90,7 +96,8 @@
             window.open(cell.value, "_blank");
           }}
           disabled={false}
-        />
+        />{:else if cell.key === "lp"}
+        <StakeModal pool={cell.value} />
       {:else}{cell.value}{/if}
     </svelte:fragment>
   </DataTable>

@@ -7,8 +7,7 @@
     selectedNetworks,
     web3Provider,
   } from "../../stores/web3";
-  import { claimRewards, updateAllClaimables } from "../../utils/airdrops";
-  import { airdrops } from "../../stores/airdrops";
+  import { airdrops, claimRewards, updateAllClaimables } from "../../stores/airdrops";
   import Row from "../common/Row.svelte";
   import Swal from "sweetalert2";
 
@@ -23,11 +22,11 @@
     loading = true;
 
     const result = await claimRewards(
-      $userAddress,
+      $airdrops,
       $connectedChainId,
       claimables.tokensData,
-      $networkSigner,
-      $web3Provider
+      $userAddress,
+      $networkSigner
     );
 
     if (result > 0) {
@@ -36,11 +35,11 @@
         `You've claimed your Data Farming rewards!`,
         "success"
       ).then(async (result) => {
-          let newAirdrops = await updateAllClaimables(
-              $userAddress,
-              $selectedNetworks
+          await updateAllClaimables(
+              $airdrops,
+              $selectedNetworks,
+              $userAddress
           );
-          airdrops.update(() => newAirdrops);
       })
     } else if(result === false) {
       Swal.fire("Error!", "Failed to claim Data Farming rewards!", "error");
