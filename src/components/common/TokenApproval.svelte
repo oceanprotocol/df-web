@@ -44,7 +44,9 @@
 <div>
   {#if isAmountApproved === false}
     <Button
-      text={loading ? "Approving" : `Approve ${tokenName}`}
+      text={loading
+        ? "Approving"
+        : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
       onclick={() => onClick()}
       disabled={disabled || loading}
     />
