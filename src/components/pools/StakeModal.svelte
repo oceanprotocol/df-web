@@ -49,7 +49,6 @@
 
 <Button text="LP" onclick={() => open()} />
 {#if isOpen}
-  {console.log(loading)}
   <div class="modal" on:keydown={keydown} tabindex={0}>
     <div class="content-wrapper">
       <div class="button">

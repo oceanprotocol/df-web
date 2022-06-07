@@ -107,6 +107,7 @@
   }
 
   async function handleStakeAmount() {
+    loading = true;
     finalBPTOut = 0.0;
     if (stakeAmount > 0.0) {
       console.log("stakeAmountChanged: ", stakeAmount);
@@ -121,9 +122,11 @@
       console.log("bptOutWei: ", bptOutWei);
       console.log("calcBPTOut: ", calcBPTOut);
       updateCanStake();
+      loading = false;
     } else {
       calcBPTOut = 0;
       canStake = false;
+      loading = false;
     }
   }
 
@@ -157,7 +160,7 @@
       />
       <ItemWithLabel
         title="Calc Pool Shares"
-        value={parseFloat(calcBPTOut).toFixed(3)}
+        value={loading ? "Loading" : parseFloat(calcBPTOut).toFixed(3)}
       />
       <ItemWithLabel
         title="Final Pool Shares"
