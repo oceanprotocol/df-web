@@ -14,14 +14,13 @@
   import { calcPoolOutSingleIn } from "../../stores/bpools";
 
   export let pool;
+  export let loading = false;
 
   let stakeAmount = 0.0;
   let balance = 0;
   let calcBPTOut = 0.0;
   let finalBPTOut = 0.0;
   let canStake = false;
-  let loading = false;
-  let cta = "Stake";
 
   const updateBalance = async () => {
     const balanceInWei = await balanceOf(
@@ -71,19 +70,9 @@
     throw "Staking failed";
   }
 
-  function startLoading() {
-    loading = true;
-    cta = "Loading";
-  }
-
-  function stopLoading() {
-    loading = false;
-    cta = "Stake";
-  }
-
   async function stake() {
     try {
-      startLoading();
+      loading = true;
 
       console.log(
         $userAddress,
@@ -102,7 +91,7 @@
         ).then(async () => {
           await updateBalance();
           updateCanStake();
-          stopLoading();
+          loading = false;
         });
       }
     } catch (error) {
@@ -112,7 +101,7 @@
         "Failed to stake " + pool.basetoken + " into pool.",
         "error"
       ).then(() => {
-        stopLoading();
+        loading = false;
       });
     }
   }
@@ -183,7 +172,7 @@
         </label>
       {/if}
       <Button
-        text={cta}
+        text={loading ? "Loading" : "Stake"}
         onclick={() => stake()}
         disabled={!canStake || loading}
       />

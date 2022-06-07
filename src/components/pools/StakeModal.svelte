@@ -49,6 +49,7 @@
 
 <Button text="LP" onclick={() => open()} />
 {#if isOpen}
+  {console.log(loading)}
   <div class="modal" on:keydown={keydown} tabindex={0}>
     <div class="content-wrapper">
       <div class="button">
@@ -60,7 +61,7 @@
             <PoolInfo {pool} />
           </div>
           <div class="container">
-            <Stake {pool} />
+            <Stake {pool} bind:loading />
           </div>
         {/if}
       </div>
