@@ -1,9 +1,8 @@
 import { ethers } from "ethers";
-import { getJsonRpcProvider, getRpcUrlByChainId, getFairGasPrice, GASLIMIT_DEFAULT } from "./web3";
+import { getJsonRpcProvider, GASLIMIT_DEFAULT } from "./web3";
 import * as BPoolABI from "../utils/abis/BPoolABI";
 import Decimal from 'decimal.js';
-import {networkSigner} from '../stores/web3'
-import {approve, approve as DTApprove} from './tokens'
+import {approve as DTApprove} from './tokens'
 const POOL_MAX_AMOUNT_IN_LIMIT = 0.25
 
 const bpoolABI = BPoolABI.default
@@ -26,19 +25,6 @@ export const calcPoolOutSingleIn = async (chainId, poolInfo, amountIn) => {
     console.error(err);
   }
 }
-
-// const allowance = async (
-//     datatokenAdress,
-//     owner,
-//     spender
-// ) => {
-//   const datatoken = new ethers.Contract(tokenABI, datatokenAdress, {
-//     from: spender
-//   });
-//
-//   const trxReceipt = await datatoken.methods.allowance(owner, spender).call()
-//   return ethers.utils.fromWei(trxReceipt)
-// }
 
 const joinswapExternAmountIn = async (
   account,

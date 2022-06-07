@@ -5,13 +5,13 @@
     connectedChainId,
     switchWalletNetwork,
   } from "../../stores/web3";
-  import { userBalances, balanceOf, approveToken } from "../../stores/tokens";
+  import { userBalances, balanceOf } from "../../stores/tokens";
   import { ethers } from "ethers";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import Swal from "sweetalert2";
   import { addDTLiquidity } from "../../utils/bpools";
-  import {calcPoolOutSingleIn} from "../../stores/bpools";
+  import { calcPoolOutSingleIn } from "../../stores/bpools";
 
   export let pool;
 
@@ -38,12 +38,6 @@
   }
 
   async function addLiquidty() {
-    console.log("$userAddress: ", $userAddress);
-    console.log("pool.basetokenAddress: ", pool.basetokenAddress);
-    console.log("pool.poolAddress: ", pool.poolAddress);
-    console.log("stakeAmount: ", stakeAmount);
-    console.log("$networkSigner: ", $networkSigner);
-
     const tx = await addDTLiquidity(
       $userAddress,
       pool.basetokenAddress,
@@ -53,24 +47,28 @@
     );
 
     console.log("addDTLiquidity tx: ", tx);
-    if( tx ) {
+    if (tx) {
       let receipt = await tx.wait();
       console.log("addDTLiquidity receipt: ", receipt);
 
-      if( receipt.events ){
-        const stakeEvent = receipt.events.filter(x => x.event === 'LOG_BPT_SS');
-        if( stakeEvent[0].event === 'LOG_BPT_SS' ) {
-          finalBPTOut = ethers.utils.formatEther(BigInt(stakeEvent[0].args.bptAmount).toString(10));
+      if (receipt.events) {
+        const stakeEvent = receipt.events.filter(
+          (x) => x.event === "LOG_BPT_SS"
+        );
+        if (stakeEvent[0].event === "LOG_BPT_SS") {
+          finalBPTOut = ethers.utils.formatEther(
+            BigInt(stakeEvent[0].args.bptAmount).toString(10)
+          );
           console.log("addLiquidity: ", finalBPTOut);
           return {
             event: stakeEvent,
-            finalBPTOut: finalBPTOut
-          }
+            finalBPTOut: finalBPTOut,
+          };
         }
       }
     }
 
-    throw 'Staking failed';
+    throw "Staking failed";
   }
 
   function startLoading() {
@@ -84,12 +82,6 @@
   }
 
   async function stake() {
-    /*await approveToken(
-      "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
-      $userAddress,
-      stakeAmount,
-      $networkSigner
-    );*/
     try {
       startLoading();
 
@@ -168,8 +160,8 @@
       </div>
     {:else}
       <ItemWithLabel
-              title={`${pool.basetoken} Balance`}
-              value={parseFloat(balance).toFixed(3)}
+        title={`${pool.basetoken} Balance`}
+        value={parseFloat(balance).toFixed(3)}
       />
       <ItemWithLabel
         title="Calc Pool Shares"
@@ -190,8 +182,11 @@
           />
         </label>
       {/if}
-      <Button text={cta}
-              onclick={() => stake()} disabled={!canStake || loading} />
+      <Button
+        text={cta}
+        onclick={() => stake()}
+        disabled={!canStake || loading}
+      />
     {/if}
   </div>
 {:else}{/if}

@@ -1,6 +1,6 @@
 import { Decimal } from 'decimal.js';
 import { ethers } from "ethers";
-import { getJsonRpcProvider, getRpcUrlByChainId, GASLIMIT_DEFAULT } from "./web3";
+import { getRpcUrlByChainId, GASLIMIT_DEFAULT } from "./web3";
 import * as TokenABI from "./abis/tokenABI";
 
 const tokenABI = TokenABI.default
@@ -50,40 +50,6 @@ export const approveToken = async (tokenAddress, spender, amount, signer) => {
   }
 }
 
-// export const allowance = async (datatokenAddress, owner, spender) => {
-//   try {
-//     const datatoken = new ethers.Contract(datatokenAddress, tokenABI,{from: spender});
-//     const trxReceipt = await datatoken.methods.allowance(owner, spender).call();
-//     return ethers.utils.formatEther(trxReceipt);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
-//
-// export const approve = async (datatokenAdress, spender, amount, address) => {
-//   const datatoken = new ethers.Contract(datatokenAdress, tokenABI, {
-//     from: address
-//   });
-//
-//   const gasLimitDefault = GASLIMIT_DEFAULT
-//   let estGas
-//   try {
-//     estGas = await datatoken.methods
-//         .approve(spender, ethers.utils.parseEther(amount.toString()))
-//         .estimateGas({ from: address }, (err, estGas) => (err ? gasLimitDefault : estGas))
-//   } catch (e) {
-//     estGas = gasLimitDefault
-//   }
-//   const trxReceipt = await datatoken.methods
-//       .approve(spender, ethers.utils.parseEther(amount.toString()))
-//       .send({
-//         from: address,
-//         gas: estGas + 1,
-//         gasPrice: await getFairGasPrice()
-//       })
-//   return trxReceipt
-// }
-
 // Getter/View
 export const allowance = async (
   datatokenAdress,
@@ -92,10 +58,6 @@ export const allowance = async (
   signer
 ) => {
   const datatoken = new ethers.Contract(datatokenAdress, tokenABI, signer);
-
-  console.log("signer: ", signer);
-  console.log("datatoken datatokenAdress: ", datatokenAdress);
-  console.log("datatoken contract: ", datatoken);
 
   return datatoken.allowance(owner, spender);
 }
@@ -112,13 +74,6 @@ export const approve = async (
   force = false
 ) => {
   const datatoken = new ethers.Contract(datatokenAddress, tokenABI, signer);
-
-  console.log("BPapprove account: ", account);
-  console.log("BPapprove spender: ", spender);
-  console.log("BPapprove amount: ", amount);
-  console.log("BPapprove signer: ", signer);
-  console.log("BPapprove datatoken datatokenAdress: ", datatokenAddress);
-  console.log("BPapprove datatoken contract: ", datatoken);
 
   if (!force) {
       const result = await allowance(datatokenAddress, account, spender, signer)

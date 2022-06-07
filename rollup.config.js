@@ -34,7 +34,7 @@ export default {
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,
-		format: 'cjs',
+		format: 'iife',
 		name: 'app',
 		file: 'public/build/bundle.js'
 	},
@@ -75,7 +75,7 @@ export default {
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
 		production && terser(),
-		commonjs({include: 'node_modules/**',transformMixedEsModules:true})
+		commonjs()
 	],
 	watch: {
 		clearScreen: false
