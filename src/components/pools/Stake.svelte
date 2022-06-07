@@ -17,7 +17,7 @@
   export let pool;
 
   let stakeAmount = 0.0;
-  let balance = 0;
+  let balance = 0.0;
   let calcBPTOut = 0.0;
   let finalBPTOut = 0.0;
   let canStake = false;
@@ -151,7 +151,7 @@
     <h4>Stake</h4>
     <span>{pool.basetoken}</span>
   </div>
-  <div class="items-container">
+  <div class="components-container">
     {#if $userAddress && pool.chainId !== $connectedChainId}
       <div class="button">
         <Button
@@ -161,29 +161,27 @@
         />
       </div>
     {:else}
-      <ItemWithLabel
-        title={`${pool.basetoken} Balance`}
-        value={parseFloat(balance).toFixed(3)}
+      <div class="items-container">
+        <ItemWithLabel
+          title={`${pool.basetoken} Balance`}
+          value={parseFloat(balance).toFixed(3)}
+        />
+        <ItemWithLabel
+          title="Calc Pool Shares"
+          value={parseFloat(calcBPTOut).toFixed(3)}
+        />
+        <ItemWithLabel
+          title="Final Pool Shares"
+          value={parseFloat(finalBPTOut).toFixed(3)}
+        />
+      </div>
+      <input
+        type="number"
+        bind:value={stakeAmount}
+        min="0"
+        max={balance}
+        on:input={handleStakeAmount}
       />
-      <ItemWithLabel
-        title="Calc Pool Shares"
-        value={parseFloat(calcBPTOut).toFixed(3)}
-      />
-      <ItemWithLabel
-        title="Final Pool Shares"
-        value={parseFloat(finalBPTOut).toFixed(3)}
-      />
-      {#if balance >= 0}
-        <label>
-          <input
-            type="number"
-            bind:value={stakeAmount}
-            min="0"
-            max={balance}
-            on:input={handleStakeAmount}
-          />
-        </label>
-      {/if}
       <TokenApproval
         tokenAddress={pool.basetokenAddress}
         tokenName={pool.basetoken}
@@ -202,11 +200,19 @@
 {:else}{/if}
 
 <style>
+  .components-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
   .items-container {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: calc(var(--spacer) / 4);
   }
   .button {
     width: 100%;
@@ -222,5 +228,8 @@
   }
   h4 {
     margin-right: calc((var(--spacer)) / 6);
+  }
+  input {
+    margin-bottom: calc(var(--spacer) / 4);
   }
 </style>
