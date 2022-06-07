@@ -91,16 +91,6 @@ export const addDTLiquidity = async (account, datatokenAddress, poolAddress, amo
     }
     console.log("addDTLiquidity signer: ", signer);
     console.log("addDTLiquidity amount: ", amount);
-    const approveTx = await DTApprove(
-      account,
-      datatokenAddress,
-      poolAddress,
-      amount,
-      signer
-    )
-    console.log("DTApproved tx: ", approveTx);
-    const approveReceipt = await approveTx.wait();
-    console.log("DTApproved receit: ", approveReceipt);
 
     const tx = await joinswapExternAmountIn(
       account,

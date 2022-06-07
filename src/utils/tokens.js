@@ -32,6 +32,27 @@ export const balanceOf = async (balances, chainId, tokenAddress, account) => {
   }
 }
 
+export const isTokenAmountApproved = async (tokenAddress, amount,
+  owner,
+  spender,signer)=>{
+    if(!amount) return true
+    try {
+    const datatoken = new ethers.Contract(
+      tokenAddress,
+      TokenABI.default,
+      signer
+  );
+    const allowedAmount = await datatoken.allowance(owner, spender)
+    const allowedAmountFormated = ethers.utils.formatEther(allowedAmount);
+    console.log(allowedAmountFormated)
+    return new Decimal(allowedAmountFormated).greaterThanOrEqualTo(amount)
+  }catch (err) {
+    console.error(err);
+  }
+
+
+}
+
 //TODO - Standardize function calls & Params to follow ocean.js
 export const approveToken = async (tokenAddress, spender, amount, signer) => {
   try {

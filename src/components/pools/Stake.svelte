@@ -12,6 +12,7 @@
   import Swal from "sweetalert2";
   import { addDTLiquidity } from "../../utils/bpools";
   import { calcPoolOutSingleIn } from "../../stores/bpools";
+  import TokenApproval from "../common/TokenApproval.svelte";
 
   export let pool;
 
@@ -182,11 +183,18 @@
           />
         </label>
       {/if}
-      <Button
-        text={cta}
-        onclick={() => stake()}
-        disabled={!canStake || loading}
-      />
+      <TokenApproval
+        tokenAddress={pool.basetokenAddress}
+        tokenName={pool.basetoken}
+        poolAddress={pool.poolAddress}
+        amount={stakeAmount}
+      >
+        <Button
+          text={cta}
+          onclick={() => stake()}
+          disabled={!canStake || loading}
+        />
+      </TokenApproval>
     {/if}
   </div>
 {:else}{/if}
