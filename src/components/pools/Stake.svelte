@@ -121,7 +121,10 @@
       console.log("bptOutWei: ", bptOutWei);
       console.log("calcBPTOut: ", calcBPTOut);
       updateCanStake();
-    } else canStake = false;
+    } else {
+      calcBPTOut = 0;
+      canStake = false;
+    }
   }
 
   function updateCanStake() {
