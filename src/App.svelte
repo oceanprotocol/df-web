@@ -1,5 +1,6 @@
 <script>
   import Header from "../src/components/header/Header.svelte";
+  import MainMessage from "./components/common/MainMessage.svelte";
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
   import PoolsPortal from "./components/pools/PoolsPortal.svelte";
   import {
@@ -34,6 +35,11 @@
 <Router>
   <Header />
   <main>
+    <MainMessage
+            title="This software is a Beta release."
+            message={`Under construction, use at your own discretion.`}
+    />
+
     <Route path="/rewards">
       <ClaimPortal />
     </Route>

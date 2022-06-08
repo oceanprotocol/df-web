@@ -10,18 +10,18 @@
   }
 </script>
 
-<div class="networkRewardsContainer">
-  <ClaimRewards
-    {chainId}
-    totalRewards={airdropData.totalRewards}
-    claimables={airdropData}
-  />
-  {#if airdropData}
+{#if airdropData}
+  <div class="networkRewardsContainer">
+    <ClaimRewards
+      {chainId}
+      totalRewards={airdropData.totalRewards}
+      claimables={airdropData}
+    />
     {#each getTokens() as token}
       <Row rowObject={airdropData.tokensData[token]} />
     {/each}
-  {/if}
-</div>
+  </div>
+{/if}
 
 <style>
   .networkRewardsContainer {
