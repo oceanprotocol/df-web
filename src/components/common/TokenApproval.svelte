@@ -5,6 +5,7 @@
     isTokenAmountApproved,
   } from "../../utils/tokens";
   import { networkSigner, userAddress } from "../../stores/web3";
+  import Swal from "sweetalert2";
 
   export let disabled = false;
   export let loading = false;
@@ -19,17 +20,27 @@
   const onClick = async () => {
     loading = true;
     approving = true;
-    let resp = await approveToken(
-      tokenAddress,
-      poolAddress,
-      amount,
-      $networkSigner
-    );
-    if (resp) {
-      isAmountApproved = true;
+    try {
+      let resp = await approveToken(
+        tokenAddress,
+        poolAddress,
+        amount,
+        $networkSigner
+      );
+    } catch (e) {
+      Swal.fire("Error!", e.message, "error").then(() => {
+        loading = false;
+        approving = false;
+      });
+      return;
     }
-    loading = false;
-    approving = false;
+    Swal.fire("Success!", "Tokens succesfully approved.", "success").then(
+      async () => {
+        isAmountApproved = true;
+        loading = false;
+        approving = false;
+      }
+    );
   };
 
   $: amount,

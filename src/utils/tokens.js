@@ -88,6 +88,6 @@ export const approve = async (
       return tx;
   } catch (e) {
       console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
-      return null;
+      throw e;
   }
 }
