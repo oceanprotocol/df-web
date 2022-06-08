@@ -10,6 +10,7 @@
   import StakeModal from "../pools/StakeModal.svelte";
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
+  import { defaultColumns } from "../../stores/pools";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -44,8 +45,15 @@
       getColumnsFromLocalStorage();
     } else {
       colData.forEach((col) => {
-        columns[col.value] = true;
+        columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
+        console.log(
+          (columns[col.value] = defaultColumns.indexOf(col.value) !== -1)
+        );
       });
+
+      localStorage.setItem("poolsDisplayedColumns", JSON.stringify(columns));
+
+      getColumnsFromLocalStorage();
 
       notHidableColumns.forEach((column) => {
         delete columns[column];
