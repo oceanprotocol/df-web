@@ -13,6 +13,7 @@
   import { addDTLiquidity } from "../../utils/bpools";
   import { calcPoolOutSingleIn } from "../../stores/bpools";
   import TokenApproval from "../common/TokenApproval.svelte";
+  import Input from "../common/Input.svelte";
 
   export let pool;
   export let loading = false;
@@ -170,13 +171,15 @@
           value={parseFloat(finalBPTOut).toFixed(3)}
         />
       </div>
-      <input
-        type="number"
-        bind:value={stakeAmount}
-        min="0"
-        max={balance}
-        on:input={handleStakeAmount}
-      />
+      <div class="inputContainer">
+        <Input
+          type="number"
+          bind:value={stakeAmount}
+          min="0"
+          max={balance}
+          onChange={handleStakeAmount}
+        />
+      </div>
       <TokenApproval
         tokenAddress={pool.basetokenAddress}
         tokenName={pool.basetoken}
@@ -224,7 +227,7 @@
   h4 {
     margin-right: calc((var(--spacer)) / 6);
   }
-  input {
+  .inputContainer {
     margin-bottom: calc(var(--spacer) / 4);
   }
 </style>
