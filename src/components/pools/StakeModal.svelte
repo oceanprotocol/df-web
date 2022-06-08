@@ -60,7 +60,7 @@
             <PoolInfo {pool} />
           </div>
           <div class="container">
-            <Stake {pool} />
+            <Stake {pool} bind:loading />
           </div>
         {/if}
       </div>
