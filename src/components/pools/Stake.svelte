@@ -15,14 +15,13 @@
   import TokenApproval from "../common/TokenApproval.svelte";
 
   export let pool;
+  export let loading = false;
 
   let stakeAmount = 0.0;
   let balance = 0.0;
   let calcBPTOut = 0.0;
   let finalBPTOut = 0.0;
   let canStake = false;
-  let loading = false;
-  let cta = "Stake";
 
   const updateBalance = async () => {
     const balanceInWei = await balanceOf(
@@ -72,19 +71,9 @@
     throw "Staking failed";
   }
 
-  function startLoading() {
-    loading = true;
-    cta = "Loading";
-  }
-
-  function stopLoading() {
-    loading = false;
-    cta = "Stake";
-  }
-
   async function stake() {
     try {
-      startLoading();
+      loading = true;
 
       console.log(
         $userAddress,
@@ -104,7 +93,7 @@
           stakeAmount = 0;
           await updateBalance();
           updateCanStake();
-          stopLoading();
+          loading = false;
         });
       }
     } catch (error) {
@@ -114,12 +103,13 @@
         "Failed to stake " + pool.basetoken + " into pool.",
         "error"
       ).then(() => {
-        stopLoading();
+        loading = false;
       });
     }
   }
 
   async function handleStakeAmount() {
+    loading = true;
     finalBPTOut = 0.0;
     if (stakeAmount > 0.0) {
       console.log("stakeAmountChanged: ", stakeAmount);
@@ -134,7 +124,12 @@
       console.log("bptOutWei: ", bptOutWei);
       console.log("calcBPTOut: ", calcBPTOut);
       updateCanStake();
-    } else canStake = false;
+      loading = false;
+    } else {
+      calcBPTOut = 0;
+      canStake = false;
+      loading = false;
+    }
   }
 
   function updateCanStake() {
@@ -190,7 +185,7 @@
         bind:loading
       >
         <Button
-          text={cta}
+          text={loading ? "Staking" : "Stake"}
           onclick={() => stake()}
           disabled={!canStake || loading}
         />

@@ -12,11 +12,13 @@
   export let tokenName;
   export let tokenAddress;
   export let poolAddress;
+  export let approving = false;
 
   let isAmountApproved;
 
   const onClick = async () => {
     loading = true;
+    approving = true;
     let resp = await approveToken(
       tokenAddress,
       poolAddress,
@@ -27,6 +29,7 @@
       isAmountApproved = true;
     }
     loading = false;
+    approving = false;
   };
 
   $: amount,
@@ -44,7 +47,7 @@
 <div>
   {#if isAmountApproved === false}
     <Button
-      text={loading
+      text={approving
         ? "Approving"
         : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
       onclick={() => onClick()}
