@@ -40,6 +40,8 @@
       message={`Select one or more networks from the **Selected networks** dropdown in
     order to see rewards from those networks.`}
     />
+  {:else}
+    <MainMessage title="Coming Soon" />
   {/if}
 </div>
 
