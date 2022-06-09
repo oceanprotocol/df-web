@@ -5,19 +5,22 @@
     connectedChainId,
     switchWalletNetwork,
   } from "../../stores/web3";
-  import { userBalances, balanceOf } from "../../stores/tokens";
+  import { userBalances } from "../../stores/tokens";
+  import { balanceOf } from "../../utils/tokens";
   import { ethers } from "ethers";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import Swal from "sweetalert2";
   import { addDTLiquidity } from "../../utils/bpools";
   import { calcPoolOutSingleIn } from "../../stores/bpools";
+  import TokenApproval from "../common/TokenApproval.svelte";
+  import Input from "../common/Input.svelte";
 
   export let pool;
   export let loading = false;
 
   let stakeAmount = 0.0;
-  let balance = 0;
+  let balance = 0.0;
   let calcBPTOut = 0.0;
   let finalBPTOut = 0.0;
   let canStake = false;
@@ -89,6 +92,7 @@
           "You've staked " + pool.basetoken + " into pool.",
           "success"
         ).then(async () => {
+          stakeAmount = 0;
           await updateBalance();
           updateCanStake();
           loading = false;
@@ -144,7 +148,7 @@
     <h4>Stake</h4>
     <span>{pool.basetoken}</span>
   </div>
-  <div class="items-container">
+  <div class="components-container">
     {#if $userAddress && pool.chainId !== $connectedChainId}
       <div class="button">
         <Button
@@ -154,44 +158,60 @@
         />
       </div>
     {:else}
-      <ItemWithLabel
-        title={`${pool.basetoken} Balance`}
-        value={parseFloat(balance).toFixed(3)}
-      />
-      <ItemWithLabel
-        title="Calc Pool Shares"
-        value={loading ? "Loading" : parseFloat(calcBPTOut).toFixed(3)}
-      />
-      <ItemWithLabel
-        title="Final Pool Shares"
-        value={parseFloat(finalBPTOut).toFixed(3)}
-      />
-      {#if balance >= 0}
-        <label>
-          <input
-            type="number"
-            bind:value={stakeAmount}
-            min="0"
-            max={balance}
-            on:input={handleStakeAmount}
-          />
-        </label>
-      {/if}
-      <Button
-        text={loading ? "Loading" : "Stake"}
-        onclick={() => stake()}
-        disabled={!canStake || loading}
-      />
+      <div class="items-container">
+        <ItemWithLabel
+          title={`${pool.basetoken} Balance`}
+          value={parseFloat(balance).toFixed(3)}
+        />
+        <ItemWithLabel
+          title="Calc Pool Shares"
+          value={parseFloat(calcBPTOut).toFixed(3)}
+        />
+        <ItemWithLabel
+          title="Final Pool Shares"
+          value={parseFloat(finalBPTOut).toFixed(3)}
+        />
+      </div>
+      <div class="inputContainer">
+        <Input
+          type="number"
+          bind:value={stakeAmount}
+          min="0"
+          max={balance}
+          onChange={handleStakeAmount}
+        />
+      </div>
+      <TokenApproval
+        tokenAddress={pool.basetokenAddress}
+        tokenName={pool.basetoken}
+        poolAddress={pool.poolAddress}
+        amount={stakeAmount}
+        bind:loading
+      >
+        <Button
+          text={loading ? "Staking" : "Stake"}
+          onclick={() => stake()}
+          disabled={!canStake || loading}
+        />
+      </TokenApproval>
     {/if}
   </div>
 {:else}{/if}
 
 <style>
+  .components-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
   .items-container {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: calc(var(--spacer) / 4);
   }
   .button {
     width: 100%;
@@ -207,5 +227,8 @@
   }
   h4 {
     margin-right: calc((var(--spacer)) / 6);
+  }
+  .inputContainer {
+    margin-bottom: calc(var(--spacer) / 4);
   }
 </style>
