@@ -5,7 +5,8 @@
     connectedChainId,
     switchWalletNetwork,
   } from "../../stores/web3";
-  import { userBalances, balanceOf } from "../../stores/tokens";
+  import { userBalances } from "../../stores/tokens";
+  import { balanceOf } from "../../utils/tokens";
   import { ethers } from "ethers";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";

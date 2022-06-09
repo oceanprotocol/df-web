@@ -21,12 +21,13 @@
     loading = true;
     approving = true;
     try {
-      let resp = await approveToken(
+      let tx = await approveToken(
         tokenAddress,
         poolAddress,
         amount,
         $networkSigner
       );
+      const receipt = await tx.wait();
     } catch (e) {
       Swal.fire("Error!", e.message, "error").then(() => {
         loading = false;

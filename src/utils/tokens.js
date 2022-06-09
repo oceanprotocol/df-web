@@ -84,7 +84,6 @@ export const approve = async (
       // TODO - Override gas price & limit
       // let gasPrice = getFairGasPrice();
       const tx = await datatoken.approve(spender,ethers.utils.parseEther(amount.toString()));
-      await tx.wait()
       return tx;
   } catch (e) {
       console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
