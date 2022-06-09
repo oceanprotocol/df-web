@@ -25,7 +25,7 @@ export const columnsData = [
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Network", "Datatoken", "Basetoken", "TVL", "Volume", "LP", "Action"]
+export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
 
 async function getPools() {
   const query = {};
