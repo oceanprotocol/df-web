@@ -10,14 +10,13 @@
   import StakeModal from "../pools/StakeModal.svelte";
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
+  import { defaultColumns } from "../../stores/pools";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
   // TODO - LPData == Everything Required (basetokenAddress, LPAddress, url, etc...)
   export let colData = undefined;
   export let rowData = undefined;
-  export let title = undefined;
-  export let description = undefined;
   export let notHidableColumns = [];
 
   let columns = {};
@@ -44,8 +43,15 @@
       getColumnsFromLocalStorage();
     } else {
       colData.forEach((col) => {
-        columns[col.value] = true;
+        columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
+        console.log(
+          (columns[col.value] = defaultColumns.indexOf(col.value) !== -1)
+        );
       });
+
+      localStorage.setItem("poolsDisplayedColumns", JSON.stringify(columns));
+
+      getColumnsFromLocalStorage();
 
       notHidableColumns.forEach((column) => {
         delete columns[column];
@@ -70,54 +76,59 @@
 </script>
 
 {#if colData && rowData}
-  <DataTable
-    sortable
-    {title}
-    {description}
-    headers={colData}
-    pageSize={pagination.pageSize}
-    page={pagination.page}
-    rows={rowData}
-    class="customTable"
-  >
+  <div>
     <div class="tableActionsContainer">
       <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
     </div>
-    <Toolbar size="sm">
-      <ToolbarContent>
-        <ToolbarSearch persistent shouldFilterRows />
-      </ToolbarContent>
-    </Toolbar>
-    <svelte:fragment slot="cell" let:cell>
-      {#if cell.key === "action"}
-        <Button
-          text="view"
-          onclick={() => {
-            window.open(cell.value, "_blank");
-          }}
-          disabled={false}
-        />{:else if cell.key === "lp"}
-        <StakeModal pool={cell.value} />
-      {:else}{cell.value}{/if}
-    </svelte:fragment>
-  </DataTable>
-  <Pagination
-    bind:pageSize={pagination.pageSize}
-    bind:page={pagination.page}
-    totalItems={rowData.length}
-    pageSizeInputDisabled
-  />
+    <div class="tableContainer">
+      <DataTable
+        sortable
+        headers={colData}
+        pageSize={pagination.pageSize}
+        page={pagination.page}
+        rows={rowData}
+        class="customTable"
+      >
+        <Toolbar size="sm">
+          <ToolbarContent>
+            <ToolbarSearch persistent shouldFilterRows />
+          </ToolbarContent>
+        </Toolbar>
+        <svelte:fragment slot="cell" let:cell>
+          {#if cell.key === "action"}
+            <Button
+              text="view"
+              onclick={() => {
+                window.open(cell.value, "_blank");
+              }}
+              disabled={false}
+            />{:else if cell.key === "lp"}
+            <StakeModal pool={cell.value} />
+          {:else}{cell.value}{/if}
+        </svelte:fragment>
+      </DataTable>
+    </div>
+    <Pagination
+      bind:pageSize={pagination.pageSize}
+      bind:page={pagination.page}
+      totalItems={rowData.length}
+      pageSizeInputDisabled
+    />
+  </div>
 {/if}
 
 <style>
+  .tableContainer {
+    width: 100%;
+    overflow-y: scroll;
+  }
   :global(.tableActionsContainer) {
     display: flex !important;
     justify-content: flex-end !important;
   }
 
   :global(.customTable) {
-    width: 100%;
-    overflow: scroll !important;
+    max-width: 100%;
     background-color: var(--brand-white) !important;
   }
   :global(td) {
@@ -153,5 +164,9 @@
   }
   :global([class*="table-toolbar"]) {
     z-index: 0 !important;
+    position: fixed !important;
+  }
+  :global(.bx--data-table) {
+    margin-top: 2rem;
   }
 </style>

@@ -38,7 +38,7 @@
     width: auto;
     align-items: center;
     justify-content: flex-start;
-    margin-bottom: calc(var(--spacer) / 6);
+    margin: calc(var(--spacer) / 6);
     padding: 0 calc(var(--spacer) / 8);
   }
   .optionsContainer {
@@ -66,6 +66,10 @@
   .value {
     font-size: var(--font-size-small);
     color: var(--brand-black);
+    width: 100%;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .option:last-child {
     margin: 0;

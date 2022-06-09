@@ -18,6 +18,8 @@
         description="Explore all the pools that are eligible for staking, and stake your Ocean token to get rewards."
       />
     </div>
+  {:else}
+    <span class="loading">Loading...</span>
   {/if}
 </div>
 
@@ -41,9 +43,8 @@
     border-radius: var(--border-radius);
   }
 
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
+  .loading {
+    font-size: var(--font-size-normal);
+    color: var(--brand-grey-light);
   }
 </style>
