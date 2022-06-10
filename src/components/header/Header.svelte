@@ -127,7 +127,7 @@
     z-index: 100;
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 660px) {
     header {
       flex-direction: row;
       margin: 0;

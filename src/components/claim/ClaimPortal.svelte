@@ -59,6 +59,7 @@
 
   h1 {
     margin: calc(var(--spacer) * 2) 0;
+    margin-bottom: calc(var(--spacer));
   }
 
   .loading {
@@ -66,9 +67,9 @@
     color: var(--brand-grey-light);
   }
 
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
+  @media only screen and (min-width: 660px) {
+    h1 {
+      margin: calc(var(--spacer) * 2) 0;
     }
   }
 </style>
