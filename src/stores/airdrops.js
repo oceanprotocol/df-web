@@ -6,14 +6,11 @@ import * as airdropABI from '../utils/abis/airdropABI';
 
 export const airdropsConfig = {
     3: {
-        airdropAddress: "0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16",
+        airdropAddress: "0xEEd8434992b6742275Ac6386c286038fadcDdA9D",
+        rewardAddress: "0x7a11195F780DfFda832f95853BBC69A9975eeEdE",
         tokensData:{
-            "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9": {
+            "0x8967BCF84170c91B0d24D4302C2376283b0B3a07": {
                 symbol: 'OCEAN',
-                amount: 0
-            },
-            "0x0d92cadB0A0BC3693e985FB15E47BcF4d1Dc3792": {
-                symbol: 'H2O',
                 amount: 0
             }
         },
@@ -21,14 +18,23 @@ export const airdropsConfig = {
         abi: airdropABI.default
     },
     4: {
-        airdropAddress: "0x4751774A124D02f1611dFe17f4d697dDdF932Fd5",
+        airdropAddress: "0x8EF47a82beBBCb4A95E3AABae76F0c1F0F1b63c1",
+        rewardAddress: "0x7AC282A7Dc7a64D0F355B2f4CFc535C4c488BF12",
         tokensData:{
-            "0x8967BCF84170c91B0d24D4302C2376283b0B3a07": {
+            "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9": {
                 symbol: 'OCEAN',
                 amount: 0
-            },
-            "0xc6913d3eCed79021a39E6955015313B22B72b76E": {
-                symbol: 'H2O',
+            }
+        },
+        totalRewards: 0,
+        abi: airdropABI.default
+    },
+    80001: {
+        airdropAddress: "0xceaE92012f766F49A9Ed05132B8D77142308ed89",
+        rewardAddress: "0xEEd8434992b6742275Ac6386c286038fadcDdA9D",
+        tokensData:{
+            "0xd8992Ed72C445c35Cb4A2be468568Ed1079357c8": {
+                symbol: 'OCEAN',
                 amount: 0
             }
         },
