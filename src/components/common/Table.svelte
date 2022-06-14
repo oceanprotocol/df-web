@@ -44,9 +44,6 @@
     } else {
       colData.forEach((col) => {
         columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
-        console.log(
-          (columns[col.value] = defaultColumns.indexOf(col.value) !== -1)
-        );
       });
 
       localStorage.setItem("poolsDisplayedColumns", JSON.stringify(columns));
@@ -61,8 +58,6 @@
 
   function onCheck(key, value) {
     columns[key] = value;
-    console.log(key, value);
-    console.log(colData);
     if (value) {
       colData = [...colData, { key: key.toLowerCase(), value: key }];
       switchArrayItemsPosition(colData, colData.length - 1, colData.length - 2);
