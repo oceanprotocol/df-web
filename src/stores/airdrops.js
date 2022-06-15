@@ -40,6 +40,18 @@ export const airdropsConfig = {
         },
         totalRewards: 0,
         abi: airdropABI.default
+    },
+    1287: {
+        airdropAddress: "0x4614dfCfcEB30Bc8f5408b005F07A47619f666F4",
+        rewardAddress: "0x0cea7da0883C26BFb6B80B65e38d9577c1AD0909",
+        tokensData:{
+            "0xF6410bf5d773C7a41ebFf972f38e7463FA242477": {
+                symbol: 'OCEAN',
+                amount: 0
+            }
+        },
+        totalRewards: 0,
+        abi: airdropABI.default
     }
 };
 
