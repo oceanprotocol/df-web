@@ -1,7 +1,7 @@
 <script>
   import Button from "../common/Button.svelte";
   import {
-    connectWallet,
+    isWalletConnectModalOpen,
     connectWalletFromLocalStorage,
     userAddress,
     connectedChainId,
@@ -24,7 +24,7 @@
       if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
         connectWalletFromLocalStorage();
       } else {
-        connectWallet();
+        isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
       }
     } else {
       isOpen = true;
