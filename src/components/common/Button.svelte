@@ -26,37 +26,72 @@
 
 <style>
   .button {
-    background-color: var(--brand-color-primary);
+    border: 0;
+    cursor: pointer;
+    outline: 0;
+    margin: 0;
+    display: inline-block;
+    width: fit-content;
+    min-width: 7rem;
+    padding: calc(var(--spacer) / 4) calc(var(--spacer) / 2);
     font-size: var(--font-size-small);
-    padding: calc(var(--spacer) / 8);
-    color: var(--brand-white);
-    font-weight: bold;
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-bold);
     text-transform: uppercase;
     border-radius: var(--border-radius);
-    border: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    transition: 0.2s ease-out;
+    color: var(--brand-white);
+    background: var(--brand-gradient);
+    
+    box-shadow: 0 9px 18px 0 rgba(0, 0, 0, 0.1);
+    user-select: none;
+    text-align: center;
+  }
+
+  .button:hover,
+  .button:focus {
+    color: var(--brand-white);
+    background: var(--brand-grey-light);
+    text-decoration: none;
+    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
+    transform: translate3d(0, -0.05rem, 0);
+  }
+
+  .button:active {
+    background: var(--brand-grey-light);
+    transition: none;
+    transform: none;
+    box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .button:disabled,
+  .button.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.25;
   }
   .loadingSpinnerContainer {
     margin-right: 5px;
   }
-  .disabled {
-    background-color: var(--button-disabled-color);
-  }
+
   .buttonSecondary {
-    background-color: var(--brand-white);
-    color: var(--brand-black);
-    border-radius: var(--border-radius);
-    border: 1px solid var(--brand-grey-lighter);
-    box-shadow: 0 6px 15px 0 rgb(0 0 0 / 5%);
+    background: var(--brand-grey-light);
   }
-  .textOnly {
-    background-color: transparent;
-    color: var(--brand-black);
+
+  .textOnly,
+  .textOnly:hover,
+  .textOnly:focus,
+  .textOnly:active {
     border: 0;
+    border-radius: 0;
+    outline: 0;
     padding: 0;
+    display: inline-block;
+    background: 0;
+    color: var(--brand-pink);
+    box-shadow: none;
+    cursor: pointer;
+    min-width: auto;
   }
   span {
     display: box;

@@ -31,6 +31,7 @@
         <div class="buttonContainer">
           <Button
             text={button.text}
+            textOnly={button.textOnly}
             onclick={() =>
               clickData ? button.onClick(clickData) : button.onClick(rowObject)}
             disabled={button.disabled}

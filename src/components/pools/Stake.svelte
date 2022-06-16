@@ -153,6 +153,7 @@
       <div class="button">
         <Button
           text="Switch Network"
+          textOnly
           onclick={() => switchNetwork()}
           disabled={!$userAddress}
         />
