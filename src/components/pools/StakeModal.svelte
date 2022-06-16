@@ -52,7 +52,7 @@
   <div class="modal" on:keydown={keydown} tabindex={0}>
     <div class="content-wrapper">
       <div class="button">
-        <Button text="X" onclick={() => close()} disabled={loading} />
+        <Button text="X" textOnly onclick={() => close()} disabled={loading} />
       </div>
       <div>
         {#if pool && isOpen}
@@ -99,7 +99,7 @@
   }
   .button {
     display: flex;
-    justify-content: left;
+    justify-content: right;
     align-items: center;
     padding: 10px;
   }
