@@ -1,6 +1,6 @@
 <script>
   import Header from "../src/components/header/Header.svelte";
-  import MainMessage from "./components/common/MainMessage.svelte";
+  import BannerMessage from "./components/common/BannerMessage.svelte";
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
   import PoolsPortal from "./components/pools/PoolsPortal.svelte";
   import {
@@ -34,13 +34,13 @@
 </script>
 
 <Router>
-  <Header />
+  <BannerMessage
+    title="This software is a Beta release."
+    message={`The website is under construction, use at your own discretion.`}
+  />
   <WalletConnectModal />
   <main>
-    <MainMessage
-      title="This software is a Beta release."
-      message={`Under construction, use at your own discretion.`}
-    />
+    <Header />
     <Route path="/rewards">
       <ClaimPortal />
     </Route>
@@ -54,25 +54,13 @@
   main {
     text-align: center;
     max-width: 240px;
+    max-width: 1024px;
     margin: 0 auto;
   }
 
   @media only screen and (max-width: 660px) {
     main {
-      max-width: 100%;
-    }
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
+      max-width: 1024px;
     }
   }
 </style>

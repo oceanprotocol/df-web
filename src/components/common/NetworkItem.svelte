@@ -46,6 +46,7 @@
   .container {
     display: flex;
     align-items: center;
+    width: 100%;
     margin-bottom: calc(var(--spacer) / 4);
   }
   input {
@@ -54,6 +55,7 @@
   .networkName {
     font-size: var(--font-size-small);
     color: var(--brand-black);
+    text-align: start;
   }
   .large {
     font-size: var(--font-size-large);

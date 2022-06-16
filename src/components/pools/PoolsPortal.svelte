@@ -32,7 +32,7 @@
   }
 
   h1 {
-    margin: calc(var(--spacer) * 2) 0;
+    margin: calc(var(--spacer)) 0;
   }
 
   .pools {
@@ -46,5 +46,11 @@
   .loading {
     font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
+  }
+
+  @media only screen and (min-width: 660px) {
+    h1 {
+      margin: calc(var(--spacer) * 2) 0;
+    }
   }
 </style>

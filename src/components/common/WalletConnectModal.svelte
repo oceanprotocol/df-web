@@ -92,12 +92,6 @@
     margin-bottom: calc(var(--spacer) / 2);
   }
 
-  @media (min-width: 1024px) {
-    div.modal {
-      left: calc((1024px - 100vw) / 2);
-    }
-  }
-
   @media (min-width: 640px) {
     div.modal {
       top: 0;

@@ -31,7 +31,7 @@ async function getPools() {
   const query = {};
   let res;
   try {
-    res = await fetch(`https://test-df-sql.oceandao.org/pools`, {
+    res = await fetch(`https://df-sql.oceandao.org/pools`, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
@@ -49,13 +49,21 @@ async function getPools() {
   return data;
 }
 
+const getTokenSymbolByAddress = (address) => {
+  if(address==='0x282d8efce846a88b159800bd4130ad77443fa1a1'){
+    return 'mOCEAN'
+  }else{
+    return 'OCEAN'
+  }
+}
+
 function getRow(poolInfo, key) {
   return {
     id: key + poolInfo.chainID,
     network: getNetworkDataById(networksData, parseInt(poolInfo.chainID))?.name,
     datatoken: poolInfo.DT_symbol,
     dtaddress: poolInfo.DT_addr,
-    basetoken: poolInfo.basetoken,
+    basetoken: getTokenSymbolByAddress(poolInfo.basetoken),
     basetokenaddress: poolInfo.basetoken_addr,
     pooladdress: poolInfo.pool_addr,
     nftaddress: poolInfo.nft_addr,
@@ -69,7 +77,7 @@ function getRow(poolInfo, key) {
       DTAddress: poolInfo.DT_addr,
       basetokenAddress: poolInfo.basetoken_addr,
       DTSymbol: poolInfo.DT_symbol,
-      basetoken: poolInfo.basetoken,
+      basetoken: getTokenSymbolByAddress(poolInfo.basetoken),
       tvl: parseFloat(poolInfo.stake_amt),
       volume: parseFloat(poolInfo.vol_amt),
     },
