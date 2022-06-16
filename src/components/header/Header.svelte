@@ -46,6 +46,8 @@
 
 <style>
   header {
+    position: sticky;
+    top: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -53,6 +55,7 @@
     height: 80px;
     margin: auto;
     margin-top: calc(var(--spacer) / 4);
+    background-color: rgba(255, 255, 255, 0.9);
   }
 
   .headerActions {

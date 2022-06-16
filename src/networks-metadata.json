@@ -7124,7 +7124,7 @@
     {
       "name": "Mumbai",
       "title": "Polygon Testnet Mumbai",
-      "chain": "Polygon",
+      "chain": "Mumbai",
       "rpc": [
         "https://matic-mumbai.chainstacklabs.com",
         "https://rpc-mumbai.maticvigil.com",
