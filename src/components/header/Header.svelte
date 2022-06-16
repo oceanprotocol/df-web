@@ -46,25 +46,20 @@
 
 <style>
   header {
+    position: sticky;
+    top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 80px;
+    height: 140px;
     margin: auto;
-    margin-top: calc(var(--spacer) / 4);
+    padding-top: calc(var(--spacer) / 4);
+    background-color: rgba(255, 255, 255, 0.9);
   }
 
   .headerActions {
     display: flex;
-  }
-
-  .logo a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
   }
 
   .logo img {
@@ -131,6 +126,9 @@
     header {
       flex-direction: row;
       margin: 0;
+      padding: 0;
+      top: 38px;
+      height: 80px;
     }
   }
 </style>

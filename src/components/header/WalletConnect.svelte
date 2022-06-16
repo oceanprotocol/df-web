@@ -1,7 +1,7 @@
 <script>
   import Button from "../common/Button.svelte";
   import {
-    connectWallet,
+    isWalletConnectModalOpen,
     userAddress,
     disconnect,
     connectedChainId,
@@ -13,7 +13,13 @@
 
 <div class="container">
   {#if !$userAddress}
-    <Button onclick={() => connectWallet()} text={`Connect Wallet`} textOnly />
+    <Button
+      onclick={() => {
+        isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
+      }}
+      text={`Connect Wallet`}
+      textOnly
+    />
   {:else}
     <div class="walletContainer">
       <NetworkItem chainId={$connectedChainId} minimal />

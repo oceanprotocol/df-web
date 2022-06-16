@@ -4,19 +4,20 @@
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
   import PoolsPortal from "./components/pools/PoolsPortal.svelte";
   import {
-    connectWallet,
+    isWalletConnectModalOpen,
     userAddress,
     connectWalletFromLocalStorage,
     selectedNetworks,
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import { supportedChainIds } from "./app.config";
+  import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
 
   if ($userAddress === "") {
     if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
       connectWalletFromLocalStorage();
     } else {
-      connectWallet();
+      isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
     }
   }
 
@@ -37,6 +38,7 @@
     title="This software is a Beta release."
     message={`The website is under construction, use at your own discretion.`}
   />
+  <WalletConnectModal />
   <main>
     <Header />
     <Route path="/rewards">

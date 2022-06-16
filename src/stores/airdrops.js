@@ -5,6 +5,54 @@ import {ethers} from "ethers";
 import * as airdropABI from '../utils/abis/airdropABI';
 
 export const airdropsConfig = {
+    3: {
+        airdropAddress: "0xEEd8434992b6742275Ac6386c286038fadcDdA9D",
+        rewardAddress: "0x7a11195F780DfFda832f95853BBC69A9975eeEdE",
+        tokensData:{
+            "0x8967BCF84170c91B0d24D4302C2376283b0B3a07": {
+                symbol: 'OCEAN',
+                amount: 0
+            }
+        },
+        totalRewards: 0,
+        abi: airdropABI.default
+    },
+    4: {
+        airdropAddress: "0x8EF47a82beBBCb4A95E3AABae76F0c1F0F1b63c1",
+        rewardAddress: "0x7AC282A7Dc7a64D0F355B2f4CFc535C4c488BF12",
+        tokensData:{
+            "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9": {
+                symbol: 'OCEAN',
+                amount: 0
+            }
+        },
+        totalRewards: 0,
+        abi: airdropABI.default
+    },
+    80001: {
+        airdropAddress: "0xceaE92012f766F49A9Ed05132B8D77142308ed89",
+        rewardAddress: "0xEEd8434992b6742275Ac6386c286038fadcDdA9D",
+        tokensData:{
+            "0xd8992Ed72C445c35Cb4A2be468568Ed1079357c8": {
+                symbol: 'OCEAN',
+                amount: 0
+            }
+        },
+        totalRewards: 0,
+        abi: airdropABI.default
+    },
+    1287: {
+        airdropAddress: "0x4614dfCfcEB30Bc8f5408b005F07A47619f666F4",
+        rewardAddress: "0x0cea7da0883C26BFb6B80B65e38d9577c1AD0909",
+        tokensData:{
+            "0xF6410bf5d773C7a41ebFf972f38e7463FA242477": {
+                symbol: 'OCEAN',
+                amount: 0
+            }
+        },
+        totalRewards: 0,
+        abi: airdropABI.default
+    }
 };
 
 export let contracts = writable({});

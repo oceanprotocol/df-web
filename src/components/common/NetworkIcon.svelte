@@ -13,7 +13,8 @@
   $: if (name) {
     IconMapped = name.includes("ETH")
       ? EthIcon
-      : name.includes(minimal ? "Polygon" : "Polygon")
+      : name.includes(minimal ? "Polygon" : "Polygon") ||
+        name.includes(minimal ? "Mumbai" : "Mumbai")
       ? PolygonIcon
       : name.includes(minimal ? "Moon" : "Moon")
       ? MoonbeamIcon

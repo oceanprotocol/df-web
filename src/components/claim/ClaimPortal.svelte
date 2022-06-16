@@ -40,7 +40,8 @@
       message={`Select one or more networks from the **Selected networks** dropdown in
     order to see rewards from those networks.`}
     />
-  {:else}
+  {/if}
+  {#if $userAddress && loading === false && $selectedNetworks.length > 0 && Object.keys($airdrops) === 0}
     <MainMessage title="Coming Soon" />
   {/if}
 </div>
@@ -58,8 +59,7 @@
   }
 
   h1 {
-    margin: calc(var(--spacer) * 2) 0;
-    margin-bottom: calc(var(--spacer));
+    margin: calc(var(--spacer)) 0;
   }
 
   .loading {

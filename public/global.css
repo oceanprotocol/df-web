@@ -5,6 +5,10 @@ body {
   height: 100%;
 }
 
+html {
+  font-size: 80% !important;
+}
+
 body {
   color: #333;
   background-color: #fcfcfc;
@@ -84,8 +88,8 @@ h1:focus-visible {
   justify-content: center;
 }
 
-@media only screen and (max-width: 660px) {
+@media (min-width: 660px) {
   html {
-    font-size: 6px;
+    font-size: 100% !important;
   }
 }
