@@ -31,7 +31,7 @@ async function getPools() {
   const query = {};
   let res;
   try {
-    res = await fetch(`https://df-sql.oceandao.org/pools`, {
+    res = await fetch(`https://test-df-sql.oceandao.org/pools`, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
