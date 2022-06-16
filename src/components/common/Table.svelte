@@ -44,9 +44,6 @@
     } else {
       colData.forEach((col) => {
         columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
-        console.log(
-          (columns[col.value] = defaultColumns.indexOf(col.value) !== -1)
-        );
       });
 
       localStorage.setItem("poolsDisplayedColumns", JSON.stringify(columns));
