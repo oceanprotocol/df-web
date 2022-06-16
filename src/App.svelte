@@ -12,6 +12,7 @@
   import { Router, Route } from "svelte-navigator";
   import { supportedChainIds } from "./app.config";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
+  import '@oceanprotocol/typographies/css/ocean-typo.css';
 
   if ($userAddress === "") {
     if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {

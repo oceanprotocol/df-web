@@ -26,6 +26,7 @@
     "web3": "^1.7.3"
   },
   "dependencies": {
+    "@oceanprotocol/typographies": "^0.1.0",
     "carbon-components-svelte": "^0.63.8",
     "carbon-icons-svelte": "^11.0.1",
     "ethers": "^5.6.5",
