@@ -118,7 +118,6 @@ export const connectWalletToSpecificProvider = async (provider) => {
   let instance;
   try {
     instance = await web3Modal.connectTo(provider);
-    console.log('herrre')
     //provider = new ethers.providers.Web3Provider(window.ethereum)
   } catch (e) {
     console.log("Could not get a wallet connection", e);
@@ -140,7 +139,6 @@ export const connectWallet = async () => {
   let instance;
   try {
     instance = await web3Modal.connect();
-    console.log('herrre')
     //provider = new ethers.providers.Web3Provider(window.ethereum)
   } catch (e) {
     console.log("Could not get a wallet connection", e);
