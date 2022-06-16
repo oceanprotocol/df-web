@@ -35,12 +35,12 @@
 
 <Router>
   <Header />
+  <WalletConnectModal />
   <main>
     <MainMessage
       title="This software is a Beta release."
       message={`Under construction, use at your own discretion.`}
     />
-    <WalletConnectModal />
     <Route path="/rewards">
       <ClaimPortal />
     </Route>

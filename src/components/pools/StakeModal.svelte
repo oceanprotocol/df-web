@@ -83,10 +83,10 @@
     width: 50vw;
     border-radius: 0.3rem;
     background-color: white;
-    padding: 0 calc(var(--spacer) / 2);
-    border: 4px solid var(--brand-grey-dimmed);
+    padding: calc(var(--spacer) / 2);
+    border: 2px solid var(--brand-grey-dimmed);
+    box-shadow: 0 6px 15px 0 rgb(0 0 0 / 5%);
     overflow: hidden;
-    padding-bottom: calc(var(--spacer) / 2);
   }
   .container {
     display: flex;
