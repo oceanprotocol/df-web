@@ -11,6 +11,7 @@ export let connectedChainId = writable("");
 export let web3 = writable("");
 export let selectedNetworks = writable(initChainIds);
 export let jsonRPCProvider = writable({});
+export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
 
@@ -112,6 +113,27 @@ export const signMessage = async (msg, signer) => {
   const signedMessage = await signer.signMessage(msg);
   return signedMessage;
 };
+
+export const connectWalletToSpecificProvider = async (provider) => {
+  let instance;
+  try {
+    instance = await web3Modal.connectTo(provider);
+    //provider = new ethers.providers.Web3Provider(window.ethereum)
+  } catch (e) {
+    console.log("Could not get a wallet connection", e);
+    return;
+  }
+
+  // Subscribe to networkId change
+  instance.on("networkChanged", (networkId) => {
+    connectedChainId.set(parseInt(networkId))
+  });
+
+  // Subscribe to networkId change
+  instance.on("disconnect", disconnect);
+
+  setValuesAfterConnection(instance);
+}
 
 export const connectWallet = async () => {
   let instance;
