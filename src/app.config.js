@@ -1,7 +1,7 @@
 import networks from "./networks-metadata.json"
 
-export const supportedChainIds = [3, 4, 1287, 80001];
-export const initChainIds = [3, 4, 1287, 80001];
+export const supportedChainIds = [1, 137, 56, 246, 1285];
+export const initChainIds = [1, 137, 56, 246, 1285];
 
 export const getNetworkByChainId = async (chainId) => {
     if (!chainId) return false;
