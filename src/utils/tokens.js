@@ -11,6 +11,7 @@ export const getTokenContract = async (chainId, address) => {
     const rpcURL = getRpcUrlByChainId(chainId);
     if( rpcURL ) {
       const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+      console.log(provider)
       return new ethers.Contract(address, TokenABI.default, provider);
     }
   } catch (err) {
@@ -22,10 +23,16 @@ export const getTokenContract = async (chainId, address) => {
 //TODO - Standardize function calls & Params to follow ocean.js
 export const balanceOf = async (balances, chainId, tokenAddress, account) => {
   try {
+    console.log(balances, chainId, tokenAddress, account)
     const tokenContract = await getTokenContract(chainId, tokenAddress);
     if (balances[chainId] === undefined) {
       balances[chainId] = {};
     }
+    console.log(account)
+    console.log(tokenAddress)
+    console.log(chainId)
+    console.log(balances)
+    console.log(tokenContract)
     return await tokenContract.balanceOf(account);
   } catch(err) {
     console.error(err);
