@@ -44,7 +44,8 @@
       $userAddress,
       pool.basetokenAddress,
       pool.poolAddress,
-      stakeAmount
+      stakeAmount,
+      $networkSigner
     );
 
     console.log("addDTLiquidity tx: ", tx);
