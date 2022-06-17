@@ -13,12 +13,13 @@ export async function getPoolContract(chainId, address) {
   return new ethers.Contract(address, BPoolABI.default, provider);
 }
 
-export const calcPoolOutSingleIn = async (chainId, poolInfo, amountIn) => {
+export const calcPoolOutSingleIn = async (chainId, poolInfo, amountIn, signer) => {
   if (!chainId || !poolInfo) return null;
   try {
-    const contract = await getPoolContract(chainId, poolInfo.poolAddress);
+    const contract = new ethers.Contract(poolInfo.poolAddress, BPoolABI.default, signer);
     if( contract ) {
-      return contract.calcPoolOutSingleIn(poolInfo.basetokenAddress, ethers.utils.parseEther(amountIn.toString()));
+      const resp =  await contract.calcPoolOutSingleIn(poolInfo.basetokenAddress, ethers.utils.parseEther(amountIn.toString()));
+      return resp
     }
   } catch (err) {
     console.error(err);
@@ -27,7 +28,6 @@ export const calcPoolOutSingleIn = async (chainId, poolInfo, amountIn) => {
 
 export const joinSwapExternAmountIn = async (chainId, poolInfo, amountIn, minPoolAmountOut, userAddress, signer) => {
   if (!chainId || !poolInfo) return null;
-  console.log(chainId, poolInfo, amountIn, minPoolAmountOut, signer)
   try {
     const contract = new ethers.Contract(
         poolInfo.poolAddress,
