@@ -39,7 +39,6 @@ export const isTokenAmountApproved = async (tokenAddress, amount,
     try {
     const allowedAmount = await allowance(tokenAddress, owner, spender, signer)
     const allowedAmountFormated = ethers.utils.formatEther(allowedAmount);
-    console.log(allowedAmountFormated)
     return new Decimal(allowedAmountFormated).greaterThanOrEqualTo(amount)
   }catch (err) {
     console.error(err);

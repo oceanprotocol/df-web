@@ -69,7 +69,6 @@ const getReserve = async (poolAddress, datatokenAddress, signer) => {
       const pool = new ethers.Contract(poolAddress, bpoolABI, signer);
       const result = await pool.getBalance(datatokenAddress);
       amount = ethers.utils.formatEther(result);
-      console.log(amount)
   } catch (e) {
       console.log(`ERROR: Failed to get how many tokens are in the pool: ${e.message}`)
   }

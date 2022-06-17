@@ -115,12 +115,12 @@
     finalBPTOut = 0.0;
     if (stakeAmount > 0.0) {
       console.log("stakeAmountChanged: ", stakeAmount);
-
       await updateBalance();
       const bptOutWei = await calcPoolOutSingleIn(
         pool.chainId,
         pool,
-        stakeAmount
+        stakeAmount,
+        $networkSigner
       );
       calcBPTOut = ethers.utils.formatEther(BigInt(bptOutWei).toString(10));
       console.log("bptOutWei: ", bptOutWei);

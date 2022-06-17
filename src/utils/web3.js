@@ -16,6 +16,8 @@ const chainIdRPCs = {
   137 : "https://polygon-rpc.com",
   246 : "https://rpc.energyweb.org",
   1285 : "https://rpc.api.moonriver.moonbeam.network",
+  1287 : "https://rpc.api.moonbase.moonbeam.network",
+  80001 : "https://matic-mumbai.chainstacklabs.com",
 }
 
 const providerOptions = {
