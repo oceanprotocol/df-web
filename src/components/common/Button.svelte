@@ -42,7 +42,6 @@
     transition: 0.2s ease-out;
     color: var(--brand-white);
     background: var(--brand-gradient);
-    
     box-shadow: 0 9px 18px 0 rgba(0, 0, 0, 0.1);
     user-select: none;
     text-align: center;
