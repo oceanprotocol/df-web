@@ -1,7 +1,6 @@
 import { writable } from "svelte/store";
 import { ethers, BigNumber } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
-import {initChainIds} from "../app.config";
 
 export let userAddress = writable("");
 export let poolContracts = writable("");
@@ -9,7 +8,7 @@ export let web3Provider = writable("");
 export let networkSigner = writable("");
 export let connectedChainId = writable("");
 export let web3 = writable("");
-export let selectedNetworks = writable(initChainIds);
+export let selectedNetworks = writable([]);
 export let jsonRPCProvider = writable({});
 export let isWalletConnectModalOpen = writable(false)
 

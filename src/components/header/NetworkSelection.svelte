@@ -2,7 +2,6 @@
   import { selectedNetworks } from "../../stores/web3";
   import { Tooltip } from "carbon-components-svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
-  import { supportedChainIds } from "../../app.config";
   import NetworkItem from "../common/NetworkItem.svelte";
 
   function onCheck(checked, value) {
@@ -23,7 +22,7 @@
 <div class="container">
   <span class="text"> Selected networks </span>
   <Tooltip icon={ChevronDown} align="end">
-    {#each supportedChainIds as chainId}
+    {#each JSON.parse(process.env.SUPPORTED_CHAIN_IDS) as chainId}
       <NetworkItem
         {chainId}
         checked={$selectedNetworks.includes(chainId)}

@@ -1,5 +1,4 @@
 import { writable } from "svelte/store";
-import {supportedChainIds} from "../app.config";
 import {getRpcUrlByChainId} from "./web3";
 import {ethers} from "ethers";
 import * as airdropABI from '../utils/abis/airdropABI';
@@ -98,7 +97,7 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
 }
 
 export const updateAllClaimables = async (airdropData, selectedNetworks, userAddress) => {
-    const filteredChains = supportedChainIds.filter(x => selectedNetworks.indexOf(x) >= 0);
+    const filteredChains = JSON.parse(process.env.SUPPORTED_CHAIN_IDS).filter(x => selectedNetworks.indexOf(x) >= 0);
 
     await Promise.all(filteredChains.map(async function(chainId) {
         if( airdropData[chainId] ) {
