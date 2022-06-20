@@ -132,7 +132,6 @@ fieldset {
 table {
   width: 100%;
   border-collapse: collapse;
-  display: block;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
