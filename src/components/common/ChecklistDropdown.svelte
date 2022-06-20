@@ -53,7 +53,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: calc(var(--spacer) / 6);
+    margin-bottom: calc(var(--spacer) / 2);
   }
   .title {
     color: var(--brand-black);

@@ -155,6 +155,7 @@ h1:focus-visible {
 }
 
 .bx--tooltip {
+  z-index: 100;
   margin: 0 !important;
   background-color: var(--brand-white);
   top: 35px !important;
@@ -162,7 +163,7 @@ h1:focus-visible {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 10rem !important;
+  min-width: 12rem !important;
 }
 
 .bx--tooltip__trigger:not(.bx--btn--icon-only):focus {
