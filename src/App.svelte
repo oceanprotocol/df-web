@@ -10,7 +10,6 @@
     selectedNetworks,
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
-  import { supportedChainIds } from "./app.config";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
 
   if ($userAddress === "") {
@@ -29,7 +28,7 @@
     );
     selectedNetworks.update(() => selectedNetworksFromLocalStorage);
   } else {
-    selectedNetworks.update(() => supportedChainIds);
+    selectedNetworks.update(() => JSON.parse(process.env.SUPPORTED_CHAIN_IDS));
   }
 </script>
 

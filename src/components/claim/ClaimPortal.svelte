@@ -8,7 +8,11 @@
 
   async function initAirdrops() {
     loading = true;
-    await updateAllClaimables($airdrops, $selectedNetworks, $userAddress);
+    await updateAllClaimables(
+      JSON.parse(process.env.AIRDROP_CONFIG),
+      $selectedNetworks,
+      $userAddress
+    );
     loading = false;
   }
 

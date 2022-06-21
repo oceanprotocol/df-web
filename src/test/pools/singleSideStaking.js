@@ -13,37 +13,6 @@ const GASLIMIT_DEFAULT = 1000000;
 const POOL_MAX_AMOUNT_IN_LIMIT = 0.25 // maximum 1/4 of the pool reserve
 const POOL_MAX_AMOUNT_OUT_LIMIT = 0.25 // maximum 1/4 of the pool reserve
 
-const airdrops = {
-    3: {
-        airdropAddress: "0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16",
-        tokensData:{
-            "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9": {
-                symbol: 'OCEAN',
-                rewards: 0
-            },
-            "0x0d92cadB0A0BC3693e985FB15E47BcF4d1Dc3792": {
-                symbol: 'PSDN',
-                rewards: 0
-            }
-        },
-        abi: airdropABI
-    },
-    4: {
-        airdropAddress: "0x4751774A124D02f1611dFe17f4d697dDdF932Fd5",
-        tokensData:{
-            "0x8967BCF84170c91B0d24D4302C2376283b0B3a07": {
-                symbol: 'OCEAN',
-                rewards: 0
-            },
-            "0xc6913d3eCed79021a39E6955015313B22B72b76E": {
-                symbol: 'PSDN',
-                rewards: 0
-            }
-        },
-        abi: airdropABI
-    },
-};
-
 const rinProvider = ethers.getDefaultProvider('rinkeby');
 const rinSigner = new ethers.Wallet(process.env.ETH_PRIVATE_KEY, rinProvider);
 

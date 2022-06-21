@@ -26,11 +26,11 @@ export const columnsData = [
 
 export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
 
-async function getPools() {
+async function getPools(api) {
   const query = {};
   let res;
   try {
-    res = await fetch(`https://test-df-sql.oceandao.org/pools`, {
+    res = await fetch(api, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
@@ -84,8 +84,8 @@ function getRow(poolInfo, key) {
   };
 }
 
-export async function loadPools() {
-  const allPools = await getPools();
+export async function loadPools(poolsApi) {
+  const allPools = await getPools(poolsApi);
   if (allPools.length === 0) {
     pools.set([]);
     return;
