@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import {getRpcUrlByChainId} from "./web3";
+import {getRpcUrlByChainId} from "../utils/web3";
 import {ethers} from "ethers";
 import * as airdropABI from "../utils/abis/airdropABI";
 
@@ -28,7 +28,7 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
     if (!chainId || !address) return null;
 
     try {
-        const rpcURL = getRpcUrlByChainId(chainId);
+        const rpcURL = await getRpcUrlByChainId(chainId);
         if( rpcURL ) {
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
             const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropABI.default, provider);

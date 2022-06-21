@@ -1,24 +1,12 @@
 import { ethers, BigNumber } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
 
+let networksList = networksDataArray.default;
 export const GASLIMIT_DEFAULT = 1000000;
 
 const Web3 = window ? window.Web3 : null;
 const Web3Modal = window ? window.Web3Modal.default : null;
 const WalletConnectProvider = window ? window.WalletConnectProvider.default : null;
-
-// TODO - Stop using this and switch to RPCs via networks-metadata
-const chainIdRPCs = {
-  1 : "https://mainnet.infura.io/v3/4b9c931a4f26483aaf53db3ed884549e",
-  3 : "https://ropsten.infura.io/v3/4b9c931a4f26483aaf53db3ed884549e",
-  4 : "https://rinkeby.infura.io/v3/4b9c931a4f26483aaf53db3ed884549e",
-  56 : "https://bsc-dataseed.binance.org/",
-  137 : "https://polygon-rpc.com",
-  246 : "https://rpc.energyweb.org",
-  1285 : "https://rpc.api.moonriver.moonbeam.network",
-  1287 : "https://rpc.api.moonbase.moonbeam.network",
-  80001 : "https://matic-mumbai.chainstacklabs.com",
-}
 
 const providerOptions = {
   walletconnect: {
@@ -66,13 +54,16 @@ export const getNetworkDataById = (data,networkId) => {
   return networkData[0]
 }
 
-export const getRpcUrlByChainId = (chainId) => {
-  return chainIdRPCs[chainId]
+export const getRpcUrlByChainId = async(chainId) => {
+  const networkNode = await networksList.find(
+    (data) => data.chainId === parseInt(chainId)
+  )
+  return networkNode.rpc[0]
 }
 
-export const getJsonRpcProvider = (chainId) => {
+export const getJsonRpcProvider = async (chainId) => {
   try {
-    const rpcURL = getRpcUrlByChainId(chainId);
+    const rpcURL = await getRpcUrlByChainId(chainId);
     if (rpcURL) {
       return new ethers.providers.JsonRpcProvider(rpcURL);
     }

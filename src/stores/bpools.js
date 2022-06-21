@@ -2,8 +2,6 @@ import { writable } from "svelte/store";
 import { ethers } from "ethers";
 import { getJsonRpcProvider, getFairGasPrice, GASLIMIT_DEFAULT } from "./web3";
 import * as BPoolABI from "../utils/abis/BPoolABI";
-import {pool} from "../components/pools/StakeModal.svelte";
-import * as networksDataArray from "../networks-metadata.json";
 
 export let poolContracts = writable({});
 

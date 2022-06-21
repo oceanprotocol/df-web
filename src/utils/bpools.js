@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import { getJsonRpcProvider, GASLIMIT_DEFAULT } from "./web3";
 import * as BPoolABI from "../utils/abis/BPoolABI";
 import Decimal from 'decimal.js';
-import {approve as DTApprove} from './tokens'
 const POOL_MAX_AMOUNT_IN_LIMIT = 0.25
 
 const bpoolABI = BPoolABI.default
