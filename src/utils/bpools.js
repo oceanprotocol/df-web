@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import { getJsonRpcProvider, GASLIMIT_DEFAULT } from "./web3";
 import * as BPoolABI from "../utils/abis/BPoolABI";
 import Decimal from 'decimal.js';
-import {approve as DTApprove} from './tokens'
 const POOL_MAX_AMOUNT_IN_LIMIT = 0.25
 
 const bpoolABI = BPoolABI.default
@@ -69,7 +68,6 @@ const getReserve = async (poolAddress, datatokenAddress, signer) => {
       const pool = new ethers.Contract(poolAddress, bpoolABI, signer);
       const result = await pool.getBalance(datatokenAddress);
       amount = ethers.utils.formatEther(result);
-      console.log(amount)
   } catch (e) {
       console.log(`ERROR: Failed to get how many tokens are in the pool: ${e.message}`)
   }

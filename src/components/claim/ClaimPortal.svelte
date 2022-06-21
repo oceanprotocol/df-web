@@ -8,7 +8,11 @@
 
   async function initAirdrops() {
     loading = true;
-    await updateAllClaimables($airdrops, $selectedNetworks, $userAddress);
+    await updateAllClaimables(
+      JSON.parse(process.env.AIRDROP_CONFIG),
+      $selectedNetworks,
+      $userAddress
+    );
     loading = false;
   }
 
@@ -41,7 +45,7 @@
     order to see rewards from those networks.`}
     />
   {/if}
-  {#if $userAddress && loading === false && $selectedNetworks.length > 0 && Object.keys($airdrops)}
+  {#if $userAddress && loading === false && $selectedNetworks.length > 0 && !$airdrops}
     <MainMessage title="Coming Soon" />
   {/if}
 </div>

@@ -1,7 +1,6 @@
 import { writable } from "svelte/store";
 import { getNetworkDataById } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
-import {getTokenAddress} from "./airdrops";
 
 let networksData = networksDataArray.default
 
@@ -27,11 +26,11 @@ export const columnsData = [
 
 export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
 
-async function getPools() {
+async function getPools(api) {
   const query = {};
   let res;
   try {
-    res = await fetch(`https://df-sql.oceandao.org/pools`, {
+    res = await fetch(api, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
@@ -85,8 +84,8 @@ function getRow(poolInfo, key) {
   };
 }
 
-export async function loadPools() {
-  const allPools = await getPools();
+export async function loadPools(poolsApi) {
+  const allPools = await getPools(poolsApi);
   if (allPools.length === 0) {
     pools.set([]);
     return;
