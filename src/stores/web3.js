@@ -112,8 +112,8 @@ export const connectWalletToSpecificProvider = async (provider) => {
   }
 
   // Subscribe to networkId change
-  instance.on("networkChanged", (networkId) => {
-    connectedChainId.set(parseInt(networkId))
+  instance.on("chainChanged", (chainId) => {
+    connectedChainId.set(parseInt(chainId, 16))
   });
 
   // Subscribe to networkId change
@@ -133,14 +133,11 @@ export const connectWallet = async () => {
   }
 
   // Subscribe to accounts change
-  /*instance.on("accountsChanged", (accounts) => {});
+  /*instance.on("accountsChanged", (accounts) => {});*/
 
-  // Subscribe to chainId change
-  instance.on("chainChanged", (chainId) => {});*/
-
-  // Subscribe to networkId change
-  instance.on("networkChanged", (networkId) => {
-    connectedChainId.set(parseInt(networkId))
+  // Subscribe to chainChanged change
+  instance.on("chainChanged", (chainId) => {
+    connectedChainId.set(parseInt(chainId, 16))
   });
 
   // Subscribe to networkId change
