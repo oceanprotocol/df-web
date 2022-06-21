@@ -8,7 +8,6 @@
 
   async function initAirdrops() {
     loading = true;
-    console.log(JSON.parse(JSON.stringify(process.env.AIRDROP_CONFIG)));
     await updateAllClaimables(
       JSON.parse(process.env.AIRDROP_CONFIG),
       $selectedNetworks,

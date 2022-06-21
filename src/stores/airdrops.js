@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 import {getRpcUrlByChainId} from "./web3";
 import {ethers} from "ethers";
+import * as airdropABI from "../utils/abis/airdropABI";
 
 export let contracts = writable({});
 export let airdrops = writable({});
@@ -30,12 +31,13 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
         const rpcURL = getRpcUrlByChainId(chainId);
         if( rpcURL ) {
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-            const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropData[chainId].abi, provider);
+            const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropABI.default, provider);
             const tokens = Object.keys(airdropData[chainId].tokensData)
             const claimableRewards = await contract.claimables(address, tokens)
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
                 airdropData[chainId].tokensData[tokens[i]].amount = rewardInEthers > 0.0 ? rewardInEthers : 0.0
+                airdropData[chainId].totalRewards = parseInt(airdropData[chainId].totalRewards)
                 airdropData[chainId].totalRewards += rewardInEthers > 0.0 ? 1 : 0
             }
         }
@@ -45,9 +47,7 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
 }
 
 export const updateAllClaimables = async (airdropData, selectedNetworks, userAddress) => {
-    console.log(airdropData)
     const filteredChains = JSON.parse(process.env.SUPPORTED_CHAIN_IDS).filter(x => selectedNetworks.indexOf(x) >= 0);
-    console.log(airdropData)
     await Promise.all(filteredChains.map(async function(chainId) {
         if( airdropData[chainId] ) {
             await updateClaimablesFromAirdrop(airdropData, chainId, userAddress);
