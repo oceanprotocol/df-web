@@ -49,7 +49,7 @@ export function getNetworkDataById(
 
 export async function getJsonRpcProvider(chainId) {
   try {
-    const rpcURL = getRpcUrlByChainId(chainId);
+    const rpcURL = await getRpcUrlByChainId(chainId);
     if (rpcURL) {
       return new ethers.providers.JsonRpcProvider(rpcURL);
     }

@@ -80,7 +80,7 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
     if (!chainId || !address) return null;
 
     try {
-        const rpcURL = getRpcUrlByChainId(chainId);
+        const rpcURL = await getRpcUrlByChainId(chainId);
         if( rpcURL ) {
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
             const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropData[chainId].abi, provider);
