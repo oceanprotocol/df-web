@@ -45,7 +45,7 @@
     order to see rewards from those networks.`}
     />
   {/if}
-  {#if $userAddress && loading === false && $selectedNetworks.length > 0 && !$airdrops}
+  {#if $userAddress && loading === false && $selectedNetworks.length > 0 && Object.keys($airdrops).length === 0}
     <MainMessage title="Coming Soon" />
   {/if}
 </div>
