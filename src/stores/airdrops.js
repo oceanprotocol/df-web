@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import {supportedChainIds} from "../app.config";
-import {getRpcUrlByChainId} from "./web3";
+import {getRpcUrlByChainId} from "../utils/web3";
 import {ethers} from "ethers";
 import * as airdropABI from '../utils/abis/airdropABI';
 
@@ -80,7 +80,7 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
     if (!chainId || !address) return null;
 
     try {
-        const rpcURL = getRpcUrlByChainId(chainId);
+        const rpcURL = await getRpcUrlByChainId(chainId);
         if( rpcURL ) {
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
             const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropData[chainId].abi, provider);
@@ -99,7 +99,6 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
 
 export const updateAllClaimables = async (airdropData, selectedNetworks, userAddress) => {
     const filteredChains = supportedChainIds.filter(x => selectedNetworks.indexOf(x) >= 0);
-
     await Promise.all(filteredChains.map(async function(chainId) {
         if( airdropData[chainId] ) {
             await updateClaimablesFromAirdrop(airdropData, chainId, userAddress);

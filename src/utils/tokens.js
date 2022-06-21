@@ -8,7 +8,7 @@ const tokenABI = TokenABI.default
 //TODO - Standardize function calls & Params to follow ocean.js
 export const getTokenContract = async (chainId, address) => {
   try {
-    const rpcURL = getRpcUrlByChainId(chainId);
+    const rpcURL = await getRpcUrlByChainId(chainId);
     if( rpcURL ) {
       const provider = new ethers.providers.JsonRpcProvider(rpcURL);
       return new ethers.Contract(address, TokenABI.default, provider);

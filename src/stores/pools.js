@@ -1,7 +1,6 @@
 import { writable } from "svelte/store";
 import { getNetworkDataById } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
-import {getTokenAddress} from "./airdrops";
 
 let networksData = networksDataArray.default
 
