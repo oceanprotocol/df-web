@@ -3,7 +3,7 @@
   import Table from "../common/Table.svelte";
 
   $: if (!$pools) {
-    loadPools(process.env.POOLS_API);
+    loadPools(`${process.env.BACKEND_API}/pools`);
   }
 </script>
 

@@ -4,6 +4,9 @@
   import { userAddress, selectedNetworks } from "../../stores/web3.js";
   import { airdrops, updateAllClaimables } from "../../stores/airdrops";
 
+  import { rewards } from "../../stores/airdrops";
+  import { getRewards } from "../../utils/rewards";
+
   let loading = false;
 
   async function initAirdrops() {
@@ -16,8 +19,17 @@
     loading = false;
   }
 
+  async function initRewards() {
+    const newRewards = await getRewards(
+      `${process.env.BACKEND_API}/rewards`,
+      $userAddress
+    );
+    rewards.update(() => newRewards);
+  }
+
   $: if ($userAddress) {
     initAirdrops();
+    initRewards();
   }
 </script>
 

@@ -58,7 +58,7 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     min-width: 100px;
   }
   .title {
@@ -72,8 +72,8 @@
   .directionRow {
     flex-direction: row;
   }
-  .row:nth-child(2) {
-    align-items: center;
+  .row:nth-child(1) {
+    align-items: flex-start;
   }
   .row:last-child {
     align-items: center;

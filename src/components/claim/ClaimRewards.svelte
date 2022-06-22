@@ -70,7 +70,11 @@
 </script>
 
 <Row
-  rowObject={{ network: chainId, rewards: totalRewards }}
+  rowObject={{
+    network: chainId,
+    "estimated rewards": 2,
+    rewards: totalRewards,
+  }}
   {buttons}
   size="large"
 />

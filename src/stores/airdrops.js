@@ -5,6 +5,7 @@ import * as airdropABI from "../utils/abis/airdropABI";
 
 export let contracts = writable({});
 export let airdrops = writable({});
+export let rewards = writable();
 
 export const getTokenAddress = (chainId, tokenName, airdropsConfig) => {
     if (!chainId || !tokenName) return null;
@@ -34,6 +35,10 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
             const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropABI.default, provider);
             const tokens = Object.keys(airdropData[chainId].tokensData)
             const claimableRewards = await contract.claimables(address, tokens)
+            for (let tokenAddress of tokens) {
+                airdropData[chainId]['tokensData'][tokenAddress]['estimatedRewads'] = 0
+                airdropData[chainId]['tokensData'][tokenAddress]['amount'] = 0
+            }
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
                 airdropData[chainId].tokensData[tokens[i]].amount = rewardInEthers > 0.0 ? rewardInEthers : 0.0
