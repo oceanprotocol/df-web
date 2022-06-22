@@ -16,6 +16,7 @@
   import Swal from "sweetalert2";
 
   export let chainId;
+  export let estimatedRewards;
   export let totalRewards;
   export let claimables;
 
@@ -72,7 +73,7 @@
 <Row
   rowObject={{
     network: chainId,
-    "estimated rewards": 2,
+    "estimated rewards": estimatedRewards,
     rewards: totalRewards,
   }}
   {buttons}

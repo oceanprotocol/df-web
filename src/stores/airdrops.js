@@ -25,7 +25,7 @@ export const getTokenAddress = (chainId, tokenName, airdropsConfig) => {
     return null;
 }
 
-export const updateClaimablesFromAirdrop = async (airdropData, chainId, address) => {
+export const updateClaimablesFromAirdrop = async (airdropData, chainId, address, rewards) => {
     if (!chainId || !address) return null;
 
     try {
@@ -35,8 +35,21 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
             const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropABI.default, provider);
             const tokens = Object.keys(airdropData[chainId].tokensData)
             const claimableRewards = await contract.claimables(address, tokens)
+            let totalEstimatedRewardsForChain = 0
+            rewards.forEach((reward) => {
+                if(reward.chainID === chainId){
+                    totalEstimatedRewardsForChain += reward.amt
+                }
+            })
+            airdropData[chainId]['estimated rewards'] = totalEstimatedRewardsForChain===0 ? totalEstimatedRewardsForChain : totalEstimatedRewardsForChain.toFixed(4)
             for (let tokenAddress of tokens) {
-                airdropData[chainId]['tokensData'][tokenAddress]['estimatedRewads'] = 0
+                let totalEstimatedRewardsForToken = 0
+                rewards.forEach((reward) => {
+                    if(reward.chainID === chainId && airdropData[chainId].tokensData[tokenAddress].symbol === reward.token){
+                        totalEstimatedRewardsForToken += reward.amt
+                    }
+                })
+                airdropData[chainId]['tokensData'][tokenAddress]['estimatedRewads'] =  totalEstimatedRewardsForToken===0 ? totalEstimatedRewardsForToken : totalEstimatedRewardsForToken.toFixed(4)
                 airdropData[chainId]['tokensData'][tokenAddress]['amount'] = 0
             }
             for (let i = 0; i < claimableRewards.length; i++) {
@@ -51,11 +64,11 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
     }
 }
 
-export const updateAllClaimables = async (airdropData, selectedNetworks, userAddress) => {
+export const updateAllClaimables = async (airdropData, selectedNetworks, userAddress, rewards) => {
     const filteredChains = JSON.parse(process.env.SUPPORTED_CHAIN_IDS).filter(x => selectedNetworks.indexOf(x) >= 0);
     await Promise.all(filteredChains.map(async function(chainId) {
         if( airdropData[chainId] ) {
-            await updateClaimablesFromAirdrop(airdropData, chainId, userAddress);
+            await updateClaimablesFromAirdrop(airdropData, chainId, userAddress, rewards);
         } else {
             console.log("Airdrop configuration is not proprely initialized. Please check .supportedChainIds and app configuration.")
         }

@@ -14,7 +14,8 @@
     await updateAllClaimables(
       JSON.parse(process.env.AIRDROP_CONFIG),
       $selectedNetworks,
-      $userAddress
+      $userAddress,
+      $rewards
     );
     loading = false;
   }
@@ -28,8 +29,11 @@
   }
 
   $: if ($userAddress) {
-    initAirdrops();
     initRewards();
+  }
+
+  $: if ($rewards) {
+    initAirdrops();
   }
 </script>
 
