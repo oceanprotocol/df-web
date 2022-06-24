@@ -79,8 +79,11 @@ export const connectWalletFromLocalStorage = async () => {
   const instance = await web3Modal.connectTo(localStorageProvider);
 
   // Subscribe to accounts change
-  /*instance.on("accountsChanged", (accounts) => {});
-  */
+  instance.on("accountsChanged", (accounts) => {
+    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    userAddress.set(accounts[0])
+    networkSigner.set(signer)
+  });
 
   // Subscribe to chainId change
   instance.on("chainChanged", (chainId) => {
@@ -110,6 +113,13 @@ export const connectWalletToSpecificProvider = async (provider) => {
     return;
   }
 
+  // Subscribe to accounts change
+  instance.on("accountsChanged", (accounts) => {
+    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    userAddress.set(accounts[0])
+    networkSigner.set(signer)
+  });
+
   // Subscribe to networkId change
   instance.on("chainChanged", (chainId) => {
     connectedChainId.set(parseInt(chainId, 16))
@@ -132,7 +142,11 @@ export const connectWallet = async () => {
   }
 
   // Subscribe to accounts change
-  /*instance.on("accountsChanged", (accounts) => {});*/
+  instance.on("accountsChanged", (accounts) => {
+    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    userAddress.set(accounts[0])
+    networkSigner.set(signer)
+  });
 
   // Subscribe to chainChanged change
   instance.on("chainChanged", (chainId) => {
