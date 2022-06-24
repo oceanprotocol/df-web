@@ -44,6 +44,7 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
     } catch (err) {
         for (let i = 0; i < tokens.length; i++) {
             airdropData[chainId].tokensData[tokens[i]].amount = 0.0
+            airdropData[chainId].totalRewards = 0
         }
     }
 }
