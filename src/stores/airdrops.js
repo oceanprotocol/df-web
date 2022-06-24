@@ -26,13 +26,13 @@ export const getTokenAddress = (chainId, tokenName, airdropsConfig) => {
 
 export const updateClaimablesFromAirdrop = async (airdropData, chainId, address) => {
     if (!chainId || !address) return null;
-
+    let tokens
     try {
         const rpcURL = await getRpcUrlByChainId(chainId);
         if( rpcURL ) {
+            tokens = Object.keys(airdropData[chainId].tokensData)
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
             const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropABI.default, provider);
-            const tokens = Object.keys(airdropData[chainId].tokensData)
             const claimableRewards = await contract.claimables(address, tokens)
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
@@ -42,7 +42,9 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address)
             }
         }
     } catch (err) {
-        console.error(err);
+        for (let i = 0; i < tokens.length; i++) {
+            airdropData[chainId].tokensData[tokens[i]].amount = 0.0
+        }
     }
 }
 

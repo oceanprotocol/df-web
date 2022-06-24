@@ -25,7 +25,7 @@
     {#each JSON.parse(process.env.SUPPORTED_CHAIN_IDS) as chainId}
       <NetworkItem
         {chainId}
-        checked={$selectedNetworks.includes(chainId)}
+        checked={true}
         {onCheck}
       />
     {/each}
