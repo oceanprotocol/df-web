@@ -27,13 +27,13 @@ export const getTokenAddress = (chainId, tokenName, airdropsConfig) => {
 
 export const updateClaimablesFromAirdrop = async (airdropData, chainId, address, rewards) => {
     if (!chainId || !address) return null;
-
+    let tokens
     try {
         const rpcURL = await getRpcUrlByChainId(chainId);
         if( rpcURL ) {
+            tokens = Object.keys(airdropData[chainId].tokensData)
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
             const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropABI.default, provider);
-            const tokens = Object.keys(airdropData[chainId].tokensData)
             const claimableRewards = await contract.claimables(address, tokens)
             let totalEstimatedRewardsForChain = 0
             rewards.forEach((reward) => {
@@ -60,7 +60,10 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address,
             }
         }
     } catch (err) {
-        console.error(err);
+        for (let i = 0; i < tokens.length; i++) {
+            airdropData[chainId].tokensData[tokens[i]].amount = 0.0
+            airdropData[chainId].totalRewards = 0
+        }
     }
 }
 
@@ -81,7 +84,6 @@ export async function claimRewards(airdropData, chainId, tokensData, userAddress
     try {
         const tokenAddresses = Object.keys(tokensData);
         let positiveClaimables = [];
-
         // TODO - Make sure that claim is only done on non-zero tokens
         for (let i = 0; i < tokenAddresses.length; i++) {
             if (Number(tokensData[tokenAddresses[i]].amount) > 0)
@@ -89,10 +91,9 @@ export async function claimRewards(airdropData, chainId, tokensData, userAddress
         }
 
         if( positiveClaimables.length > 0 ) {
-
             const contract = new ethers.Contract(
                 airdropData[chainId].airdropAddress,
-                airdropData[chainId].abi,
+                airdropABI.default,
                 signer
             );
             const resp = await contract.claimMultiple(userAddress, positiveClaimables);
