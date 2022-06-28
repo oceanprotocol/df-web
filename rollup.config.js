@@ -11,7 +11,6 @@ import replace from '@rollup/plugin-replace';
 
 const configToReplace = {};
 for (const [key, v] of Object.entries(config().parsed)) {
-  console.log(`process.env.${key}`, `'${v}'`)
   configToReplace[`process.env.${key}`] = `'${v}'`;
 }
 

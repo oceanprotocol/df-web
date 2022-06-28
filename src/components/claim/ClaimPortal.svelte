@@ -81,7 +81,7 @@
     width: 100%;
   }
 
-  .totalRewardsContainer p {
+  .totalRewardsContainer {
     font-size: var(--font-size-large);
     margin: calc(var(--spacer)) 0;
   }
