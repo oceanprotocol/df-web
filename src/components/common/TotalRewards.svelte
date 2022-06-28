@@ -3,7 +3,6 @@
   let totalRewards = 0;
 
   function getTotalRewards() {
-    console.log($rewards);
     $rewards.forEach((reward) => {
       totalRewards += reward.amt;
     });
@@ -15,11 +14,19 @@
 </script>
 
 <p>
-  {`You have a total of ${totalRewards} estimated rewards accross all the pools from all networks`}
+  You have a total of <span>{totalRewards}</span> estimated rewards accross all the
+  pools from all networks
 </p>
 
 <style>
-  p {
+  p,
+  span {
     font-size: var(--font-size-large);
+    color: var(--brand-grey-light);
+  }
+
+  span {
+    color: var(--text-color-primary);
+    font-weight: bold;
   }
 </style>
