@@ -4,7 +4,7 @@
   import { Link, useLocation, useNavigate } from "svelte-navigator";
 
   const aboutURL =
-    "https://blog.oceanprotocol.com/ocean-data-farming-is-launching-f633532d831c";
+    "https://blog.oceanprotocol.com/ocean-data-farming-series-c7922f1d0e45";
   const location = useLocation();
   const navigate = useNavigate();
   $: if ($location.pathname !== "/pools") {
