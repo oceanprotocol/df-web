@@ -27,19 +27,23 @@ export const columnsData = [
 export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
 
 async function getPools(api) {
-  const query = {};
+  const params = {
+    query:{
+    },
+    sort:{
+      vol_amt:-1
+    }
+  }
   let res;
   try {
     res = await fetch(api, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        query,
-      }),
-    });
+      body: JSON.stringify(params)
+    })
   } catch (error) {
     console.log(error);
     return [];
@@ -58,7 +62,7 @@ const getTokenSymbolByAddress = (address) => {
 
 function getRow(poolInfo, key) {
   return {
-    id: key + poolInfo.chainID,
+    id: key,
     network: getNetworkDataById(networksData, parseInt(poolInfo.chainID))?.name,
     datatoken: poolInfo.DT_symbol,
     dtaddress: poolInfo.DT_addr,
