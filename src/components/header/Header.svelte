@@ -52,8 +52,8 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 140px;
     margin: auto;
+    margin-top: calc(var(--spacer) / 4);
     padding-top: calc(var(--spacer) / 4);
     background-color: rgba(255, 255, 255, 0.9);
   }
@@ -128,7 +128,7 @@
       margin: 0;
       padding: 0;
       top: 38px;
-      height: 80px;
+      margin-top: calc(var(--spacer) / 4);
     }
   }
 </style>
