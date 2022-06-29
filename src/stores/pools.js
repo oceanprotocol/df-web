@@ -43,7 +43,7 @@ async function getPools(api) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(params)
-    })
+    });
   } catch (error) {
     console.log(error);
     return [];

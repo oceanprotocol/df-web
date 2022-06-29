@@ -13,7 +13,7 @@
     <div class="pools">
       <Table
         colData={columnsData}
-        notHidableColumns={["Action"]}
+        notHidableColumns={["Action", "LP"]}
         rowData={$pools}
         description="Explore all the pools that are eligible for staking, and stake your Ocean token to get rewards."
       />

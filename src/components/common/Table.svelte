@@ -59,8 +59,8 @@
   function onCheck(key, value) {
     columns[key] = value;
     if (value) {
-      colData = [...colData, { key: key.toLowerCase(), value: key }];
-      switchArrayItemsPosition(colData, colData.length - 1, colData.length - 2);
+      colData.splice(2, 0, { key: key.toLowerCase(), value: key });
+      colData = colData;
     } else {
       colData = colData.filter((col) => col.value !== key);
     }
