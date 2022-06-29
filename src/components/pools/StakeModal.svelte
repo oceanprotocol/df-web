@@ -1,7 +1,7 @@
 <script>
   import Button from "../common/Button.svelte";
   import {
-    connectWallet,
+    isWalletConnectModalOpen,
     connectWalletFromLocalStorage,
     userAddress,
     connectedChainId,
@@ -24,7 +24,7 @@
       if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
         connectWalletFromLocalStorage();
       } else {
-        connectWallet();
+        isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
       }
     } else {
       isOpen = true;
@@ -52,7 +52,7 @@
   <div class="modal" on:keydown={keydown} tabindex={0}>
     <div class="content-wrapper">
       <div class="button">
-        <Button text="X" onclick={() => close()} disabled={loading} />
+        <Button text="X" textOnly onclick={() => close()} disabled={loading} />
       </div>
       <div>
         {#if pool && isOpen}
@@ -83,10 +83,10 @@
     width: 50vw;
     border-radius: 0.3rem;
     background-color: white;
-    padding: 0 calc(var(--spacer) / 2);
-    border: 4px solid var(--brand-grey-dimmed);
+    padding: calc(var(--spacer) / 2);
+    border: 2px solid var(--brand-grey-dimmed);
+    box-shadow: 0 6px 15px 0 rgb(0 0 0 / 5%);
     overflow: hidden;
-    padding-bottom: calc(var(--spacer) / 2);
   }
   .container {
     display: flex;
@@ -99,7 +99,7 @@
   }
   .button {
     display: flex;
-    justify-content: left;
+    justify-content: right;
     align-items: center;
     padding: 10px;
   }

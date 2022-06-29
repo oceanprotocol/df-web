@@ -1,46 +1,12 @@
 import { writable } from "svelte/store";
-import {supportedChainIds} from "../app.config";
-import {getRpcUrlByChainId} from "./web3";
+import {getRpcUrlByChainId} from "../utils/web3";
 import {ethers} from "ethers";
-import * as airdropABI from '../utils/abis/airdropABI';
-
-export const airdropsConfig = {
-    3: {
-        airdropAddress: "0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16",
-        tokensData:{
-            "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9": {
-                symbol: 'OCEAN',
-                amount: 0
-            },
-            "0x0d92cadB0A0BC3693e985FB15E47BcF4d1Dc3792": {
-                symbol: 'H2O',
-                amount: 0
-            }
-        },
-        totalRewards: 0,
-        abi: airdropABI.default
-    },
-    4: {
-        airdropAddress: "0x4751774A124D02f1611dFe17f4d697dDdF932Fd5",
-        tokensData:{
-            "0x8967BCF84170c91B0d24D4302C2376283b0B3a07": {
-                symbol: 'OCEAN',
-                amount: 0
-            },
-            "0xc6913d3eCed79021a39E6955015313B22B72b76E": {
-                symbol: 'H2O',
-                amount: 0
-            }
-        },
-        totalRewards: 0,
-        abi: airdropABI.default
-    }
-};
+import * as airdropABI from "../utils/abis/airdropABI";
 
 export let contracts = writable({});
-export let airdrops = writable(airdropsConfig);
+export let airdrops = writable({});
 
-export const getTokenAddress = (chainId, tokenName) => {
+export const getTokenAddress = (chainId, tokenName, airdropsConfig) => {
     if (!chainId || !tokenName) return null;
     try {
         if (airdropsConfig[chainId]) {
@@ -60,28 +26,31 @@ export const getTokenAddress = (chainId, tokenName) => {
 
 export const updateClaimablesFromAirdrop = async (airdropData, chainId, address) => {
     if (!chainId || !address) return null;
-
+    let tokens
     try {
-        const rpcURL = getRpcUrlByChainId(chainId);
+        const rpcURL = await getRpcUrlByChainId(chainId);
         if( rpcURL ) {
+            tokens = Object.keys(airdropData[chainId].tokensData)
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-            const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropData[chainId].abi, provider);
-            const tokens = Object.keys(airdropData[chainId].tokensData)
+            const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropABI.default, provider);
             const claimableRewards = await contract.claimables(address, tokens)
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
                 airdropData[chainId].tokensData[tokens[i]].amount = rewardInEthers > 0.0 ? rewardInEthers : 0.0
+                airdropData[chainId].totalRewards = parseInt(airdropData[chainId].totalRewards)
                 airdropData[chainId].totalRewards += rewardInEthers > 0.0 ? 1 : 0
             }
         }
     } catch (err) {
-        console.error(err);
+        for (let i = 0; i < tokens.length; i++) {
+            airdropData[chainId].tokensData[tokens[i]].amount = 0.0
+            airdropData[chainId].totalRewards = 0
+        }
     }
 }
 
 export const updateAllClaimables = async (airdropData, selectedNetworks, userAddress) => {
-    const filteredChains = supportedChainIds.filter(x => selectedNetworks.indexOf(x) >= 0);
-
+    const filteredChains = JSON.parse(process.env.SUPPORTED_CHAIN_IDS).filter(x => selectedNetworks.indexOf(x) >= 0);
     await Promise.all(filteredChains.map(async function(chainId) {
         if( airdropData[chainId] ) {
             await updateClaimablesFromAirdrop(airdropData, chainId, userAddress);
@@ -97,7 +66,6 @@ export async function claimRewards(airdropData, chainId, tokensData, userAddress
     try {
         const tokenAddresses = Object.keys(tokensData);
         let positiveClaimables = [];
-
         // TODO - Make sure that claim is only done on non-zero tokens
         for (let i = 0; i < tokenAddresses.length; i++) {
             if (Number(tokensData[tokenAddresses[i]].amount) > 0)
@@ -105,10 +73,9 @@ export async function claimRewards(airdropData, chainId, tokensData, userAddress
         }
 
         if( positiveClaimables.length > 0 ) {
-
             const contract = new ethers.Contract(
                 airdropData[chainId].airdropAddress,
-                airdropData[chainId].abi,
+                airdropABI.default,
                 signer
             );
             const resp = await contract.claimMultiple(userAddress, positiveClaimables);

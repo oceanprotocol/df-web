@@ -8,7 +8,11 @@
 
   async function initAirdrops() {
     loading = true;
-    await updateAllClaimables($airdrops, $selectedNetworks, $userAddress);
+    await updateAllClaimables(
+      JSON.parse(process.env.AIRDROP_CONFIG),
+      $selectedNetworks,
+      $userAddress
+    );
     loading = false;
   }
 
@@ -41,6 +45,9 @@
     order to see rewards from those networks.`}
     />
   {/if}
+  {#if $userAddress && loading === false && $selectedNetworks.length > 0 && Object.keys($airdrops).length === 0}
+    <MainMessage title="Coming Soon" />
+  {/if}
 </div>
 
 <style>
@@ -56,7 +63,7 @@
   }
 
   h1 {
-    margin: calc(var(--spacer) * 2) 0;
+    margin: calc(var(--spacer)) 0;
   }
 
   .loading {
@@ -64,9 +71,9 @@
     color: var(--brand-grey-light);
   }
 
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
+  @media only screen and (min-width: 660px) {
+    h1 {
+      margin: calc(var(--spacer) * 2) 0;
     }
   }
 </style>

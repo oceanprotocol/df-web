@@ -1,7 +1,6 @@
 import { writable } from "svelte/store";
 import { ethers, BigNumber } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
-import {initChainIds} from "../app.config";
 
 export let userAddress = writable("");
 export let poolContracts = writable("");
@@ -9,23 +8,15 @@ export let web3Provider = writable("");
 export let networkSigner = writable("");
 export let connectedChainId = writable("");
 export let web3 = writable("");
-export let selectedNetworks = writable(initChainIds);
+export let selectedNetworks = writable([]);
 export let jsonRPCProvider = writable({});
+export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
 
 const Web3 = window.Web3;
 const Web3Modal = window.Web3Modal.default;
 const WalletConnectProvider = window.WalletConnectProvider.default;
-
-const chainIdRPCs = {
-  3 : "https://ropsten.infura.io/v3/05d2b0098cf44eb789387708af2527a1",
-  4 : "https://rinkeby.infura.io/v3/05d2b0098cf44eb789387708af2527a1"
-  // 56 : "https://bsc-dataseed.binance.org/",
-  // 137 : "https://polygon-rpc.com",
-  // 246 : "https://rpc.energyweb.org",
-  // 1285 : "https://rpc.api.moonriver.moonbeam.network",
-}
 
 const providerOptions = {
   walletconnect: {
@@ -55,13 +46,9 @@ export function getNetworkDataById(
   return networkData[0]
 }
 
-export function getRpcUrlByChainId(chainId){
-  return chainIdRPCs[chainId]
-}
-
 export async function getJsonRpcProvider(chainId) {
   try {
-    const rpcURL = getRpcUrlByChainId(chainId);
+    const rpcURL = await getRpcUrlByChainId(chainId);
     if (rpcURL) {
       return new ethers.providers.JsonRpcProvider(rpcURL);
     }
@@ -92,8 +79,11 @@ export const connectWalletFromLocalStorage = async () => {
   const instance = await web3Modal.connectTo(localStorageProvider);
 
   // Subscribe to accounts change
-  /*instance.on("accountsChanged", (accounts) => {});
-  */
+  instance.on("accountsChanged", (accounts) => {
+    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    userAddress.set(accounts[0])
+    networkSigner.set(signer)
+  });
 
   // Subscribe to chainId change
   instance.on("chainChanged", (chainId) => {
@@ -113,6 +103,34 @@ export const signMessage = async (msg, signer) => {
   return signedMessage;
 };
 
+export const connectWalletToSpecificProvider = async (provider) => {
+  let instance;
+  try {
+    instance = await web3Modal.connectTo(provider);
+    //provider = new ethers.providers.Web3Provider(window.ethereum)
+  } catch (e) {
+    console.log("Could not get a wallet connection", e);
+    return;
+  }
+
+  // Subscribe to accounts change
+  instance.on("accountsChanged", (accounts) => {
+    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    userAddress.set(accounts[0])
+    networkSigner.set(signer)
+  });
+
+  // Subscribe to networkId change
+  instance.on("chainChanged", (chainId) => {
+    connectedChainId.set(parseInt(chainId, 16))
+  });
+
+  // Subscribe to networkId change
+  instance.on("disconnect", disconnect);
+
+  setValuesAfterConnection(instance);
+}
+
 export const connectWallet = async () => {
   let instance;
   try {
@@ -124,14 +142,15 @@ export const connectWallet = async () => {
   }
 
   // Subscribe to accounts change
-  /*instance.on("accountsChanged", (accounts) => {});
+  instance.on("accountsChanged", (accounts) => {
+    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    userAddress.set(accounts[0])
+    networkSigner.set(signer)
+  });
 
-  // Subscribe to chainId change
-  instance.on("chainChanged", (chainId) => {});*/
-
-  // Subscribe to networkId change
-  instance.on("networkChanged", (networkId) => {
-    connectedChainId.set(parseInt(networkId))
+  // Subscribe to chainChanged change
+  instance.on("chainChanged", (chainId) => {
+    connectedChainId.set(parseInt(chainId, 16))
   });
 
   // Subscribe to networkId change

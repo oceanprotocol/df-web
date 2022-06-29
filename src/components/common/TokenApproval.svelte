@@ -53,6 +53,7 @@
       $networkSigner
     ).then((resp) => {
       isAmountApproved = resp;
+      loading = false;
     });
 </script>
 
