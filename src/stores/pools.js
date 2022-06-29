@@ -53,7 +53,7 @@ async function getPools(api) {
 }
 
 const getTokenSymbolByAddress = (address) => {
-  if(address==='0x282d8efc846a88b159800bd4130ad77443fa1a1'){
+  if(address==='0x282d8efce846a88b159800bd4130ad77443fa1a1'){
     return 'mOCEAN'
   }else{
     return 'OCEAN'
