@@ -43,7 +43,7 @@ async function getPools(api) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(params)
-    })
+    });
   } catch (error) {
     console.log(error);
     return [];
@@ -53,7 +53,7 @@ async function getPools(api) {
 }
 
 const getTokenSymbolByAddress = (address) => {
-  if(address==='0x282d8efce846a88b159800bd4130ad77443fa1a1'){
+  if(address==='0x282d8efc846a88b159800bd4130ad77443fa1a1'){
     return 'mOCEAN'
   }else{
     return 'OCEAN'
@@ -88,8 +88,8 @@ function getRow(poolInfo, key) {
   };
 }
 
-export async function loadPools(poolsApi) {
-  const allPools = await getPools(poolsApi);
+export async function loadPools(api) {
+  const allPools = await getPools(api);
   if (allPools.length === 0) {
     pools.set([]);
     return;
