@@ -88,8 +88,8 @@ function getRow(poolInfo, key) {
   };
 }
 
-export async function loadPools(api) {
-  const allPools = await getPools(api);
+export async function loadPools(poolsApi) {
+  const allPools = await getPools(poolsApi);
   if (allPools.length === 0) {
     pools.set([]);
     return;
