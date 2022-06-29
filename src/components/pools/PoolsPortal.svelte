@@ -37,7 +37,7 @@
     box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
     transform: translate3d(0, -0.05rem, 0);
     border-radius: var(--border-radius);
-    margin-top: calc(var(--spacer) * 3);
+    margin-top: calc(var(--spacer) * 2);
   }
 
   .loading {

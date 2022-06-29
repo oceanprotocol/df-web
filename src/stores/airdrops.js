@@ -41,7 +41,7 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address,
                     totalEstimatedRewardsForChain += reward.amt
                 }
             })
-            airdropData[chainId]['estimated rewards'] = totalEstimatedRewardsForChain===0 ? totalEstimatedRewardsForChain : totalEstimatedRewardsForChain.toFixed(4)
+            airdropData[chainId]['estimated rewards'] = totalEstimatedRewardsForChain===0 ? totalEstimatedRewardsForChain : totalEstimatedRewardsForChain.toFixed(6)
             for (let tokenAddress of tokens) {
                 let totalEstimatedRewardsForToken = 0
                 rewards.forEach((reward) => {
@@ -49,12 +49,12 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address,
                         totalEstimatedRewardsForToken += reward.amt
                     }
                 })
-                airdropData[chainId]['tokensData'][tokenAddress]['estimatedRewads'] =  totalEstimatedRewardsForToken===0 ? totalEstimatedRewardsForToken : totalEstimatedRewardsForToken.toFixed(4)
+                airdropData[chainId]['tokensData'][tokenAddress]['estimatedRewads'] =  totalEstimatedRewardsForToken===0 ? totalEstimatedRewardsForToken : totalEstimatedRewardsForToken.toFixed(6)
                 airdropData[chainId]['tokensData'][tokenAddress]['amount'] = 0
             }
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
-                airdropData[chainId].tokensData[tokens[i]].amount = rewardInEthers > 0.0 ? rewardInEthers : 0.0
+                airdropData[chainId].tokensData[tokens[i]].amount = rewardInEthers > 0.0 ? (Math.round(rewardInEthers * 1000000) / 1000000).toFixed(6) : 0.0
                 airdropData[chainId].totalRewards = parseInt(airdropData[chainId].totalRewards)
                 airdropData[chainId].totalRewards += rewardInEthers > 0.0 ? 1 : 0
             }

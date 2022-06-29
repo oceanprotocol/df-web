@@ -8,7 +8,7 @@
   import { rewards } from "../../stores/airdrops";
   import { getRewards } from "../../utils/rewards";
 
-  let loading = false;
+  let loading = true;
 
   async function initAirdrops() {
     loading = true;
@@ -20,7 +20,6 @@
     );
     loading = false;
   }
-
   async function initRewards() {
     const newRewards = await getRewards(
       `${process.env.BACKEND_API}/rewards`,
@@ -39,10 +38,10 @@
 </script>
 
 <div class="container">
-  <div class="totalRewardsContainer">
-    <TotalRewards />
-  </div>
   {#if $userAddress && loading === false && $airdrops}
+    <div class="totalRewardsContainer">
+      <TotalRewards />
+    </div>
     <div class="pools">
       {#each $selectedNetworks as chainId}
         <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
@@ -75,6 +74,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-height: calc(100vh - 300px);
   }
 
   .pools {
@@ -94,6 +94,9 @@
   @media only screen and (min-width: 660px) {
     .totalRewardsContainer {
       margin: var(--spacer) 0;
+    }
+    .container {
+      min-height: calc(100vh - 200px);
     }
   }
 </style>

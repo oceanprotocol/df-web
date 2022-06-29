@@ -1,21 +1,33 @@
 <script>
   import { rewards } from "../../stores/airdrops";
-  let totalRewards = 0;
+  import TokenReward from "../common/TokenReward.svelte";
+  let totalRewards;
 
   function getTotalRewards() {
+    totalRewards = {};
     $rewards.forEach((reward) => {
-      totalRewards += reward.amt;
+      if (!totalRewards[reward.token]) {
+        totalRewards[reward.token] = 0;
+      }
+      totalRewards[reward.token] += reward.amt;
     });
   }
 
-  $: if ($rewards) {
+  $: if ($rewards && !totalRewards) {
     getTotalRewards();
   }
 </script>
 
 <p>
-  You have a total of <span>{totalRewards}</span> estimated rewards accross all the
-  pools from all networks
+  You have a total of <span>
+    {#if totalRewards && Object.entries(totalRewards)?.length > 0}
+      {#each Object.entries(totalRewards) as [symbol, amount]}
+        <TokenReward {amount} {symbol} />
+      {/each}
+    {:else}
+      0
+    {/if}
+  </span> estimated rewards accross all the pools from all networks
 </p>
 
 <style>
