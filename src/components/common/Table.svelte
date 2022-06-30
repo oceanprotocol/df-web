@@ -99,7 +99,7 @@
               disabled={false}
             />{:else if cell.key === "lp"}
             <StakeModal pool={cell.value} />
-          {:else}{cell.value}{/if}
+          {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
         </svelte:fragment>
       </DataTable>
     </div>
