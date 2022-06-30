@@ -14,6 +14,7 @@
   <div class="networkRewardsContainer">
     <ClaimRewards
       {chainId}
+      estimatedRewards={airdropData["estimated rewards"]}
       totalRewards={airdropData.totalRewards}
       claimables={airdropData}
     />

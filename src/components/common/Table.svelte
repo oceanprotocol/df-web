@@ -67,7 +67,7 @@
     localStorage.setItem("poolsDisplayedColumns", JSON.stringify(columns));
   }
 
-  let pagination = { pageSize: 6, page: 1 };
+  let pagination = { pageSize: 13, page: 1 };
 </script>
 
 {#if colData && rowData}

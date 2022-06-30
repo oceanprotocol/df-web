@@ -12,6 +12,10 @@
   import { Router, Route } from "svelte-navigator";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
 
+  window.process = {
+    ...window.process,
+  };
+
   if ($userAddress === "") {
     if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
       connectWalletFromLocalStorage();

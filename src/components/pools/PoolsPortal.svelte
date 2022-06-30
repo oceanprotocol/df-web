@@ -3,12 +3,11 @@
   import Table from "../common/Table.svelte";
 
   $: if (!$pools) {
-    loadPools(process.env.POOLS_API);
+    loadPools(`${process.env.BACKEND_API}/pools`);
   }
 </script>
 
 <div class="container">
-  <h1>Pool Explorer</h1>
   {#if $pools}
     <div class="pools">
       <Table
@@ -29,10 +28,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-
-  h1 {
-    margin: calc(var(--spacer)) 0;
+    height: calc(100vh - 115px);
   }
 
   .pools {
@@ -41,6 +37,7 @@
     box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
     transform: translate3d(0, -0.05rem, 0);
     border-radius: var(--border-radius);
+    margin-top: calc(var(--spacer) * 2);
   }
 
   .loading {
@@ -48,9 +45,9 @@
     color: var(--brand-grey-light);
   }
 
-  @media only screen and (min-width: 660px) {
-    h1 {
-      margin: calc(var(--spacer) * 2) 0;
+  @media (min-width: 640px) {
+    .pools {
+      margin-top: calc(var(--spacer) / 2);
     }
   }
 </style>
