@@ -16,6 +16,7 @@
   import Swal from "sweetalert2";
 
   export let chainId;
+  export let estimatedRewards;
   export let totalRewards;
   export let claimables;
 
@@ -70,7 +71,11 @@
 </script>
 
 <Row
-  rowObject={{ network: chainId, rewards: totalRewards }}
+  rowObject={{
+    network: chainId,
+    "estimated rewards": estimatedRewards,
+    rewards: totalRewards,
+  }}
   {buttons}
   size="large"
 />
