@@ -15,6 +15,7 @@
   import { calcPoolOutSingleIn } from "../../stores/bpools";
   import TokenApproval from "../common/TokenApproval.svelte";
   import Input from "../common/Input.svelte";
+  import { getPoolSharesForLPAddress } from "../../utils/poolShares";
 
   export let pool;
   export let loading = false;
@@ -26,6 +27,11 @@
   let canStake = false;
 
   const updateBalance = async () => {
+    calcBPTOut = await getPoolSharesForLPAddress(
+      pool.poolAddress,
+      $userAddress
+    );
+    console.log(calcBPTOut, pool.poolAddress);
     const balanceInWei = await balanceOf(
       $userBalances,
       pool.chainId,
