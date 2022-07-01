@@ -11,6 +11,8 @@
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/pools";
+  import { filterPoolsByUserShares } from "../../utils/pools";
+  import { userStakes } from "../../stores/poolShares";
   import Input from "./Input.svelte";
 
   // TODO - Fix RowData vs. LPData
@@ -19,9 +21,11 @@
   export let colData = undefined;
   export let rowData = undefined;
   export let notHidableColumns = [];
-  export let showPoolsWithShares = false;
+  let showPoolsWithShares = false;
+  let poolsWithShares = undefined;
 
   let columns = {};
+  let pagination = { pageSize: 13, page: 1 };
 
   loadVisibleColumns();
 
@@ -63,13 +67,24 @@
     localStorage.setItem("poolsDisplayedColumns", JSON.stringify(columns));
   }
 
-  let pagination = { pageSize: 13, page: 1 };
+  $: if (showPoolsWithShares) {
+    const newData = filterPoolsByUserShares(rowData, $userStakes);
+    poolsWithShares = newData;
+  }
+
+  $: if (!showPoolsWithShares && poolsWithShares !== undefined) {
+    poolsWithShares = undefined;
+  }
 </script>
 
 {#if colData && rowData}
   <div>
     <div class="tableActionsContainer">
-      <Input type="checkbox" label="My stakes" value={showPoolsWithShares} />
+      <Input
+        type="checkbox"
+        label="My stakes"
+        bind:value={showPoolsWithShares}
+      />
       <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
     </div>
     <div class="tableContainer">
@@ -78,7 +93,7 @@
         headers={colData}
         pageSize={pagination.pageSize}
         page={pagination.page}
-        rows={rowData}
+        rows={poolsWithShares ? poolsWithShares : rowData}
         class="customTable"
       >
         <Toolbar size="sm">
@@ -103,7 +118,7 @@
     <Pagination
       bind:pageSize={pagination.pageSize}
       bind:page={pagination.page}
-      totalItems={rowData.length}
+      totalItems={poolsWithShares ? poolsWithShares.length : rowData.length}
       pageSizeInputDisabled
     />
   </div>

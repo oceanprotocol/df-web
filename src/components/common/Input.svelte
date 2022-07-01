@@ -23,13 +23,7 @@
       on:input={onChange}
     />
   {:else if type === "checkbox"}
-    <input
-      class="input"
-      type="checkbox"
-      bind:value
-      {placeholder}
-      on:input={onChange}
-    />
+    <input class="input" type="checkbox" bind:checked={value} {placeholder} />
   {:else}
     <input
       class="input"

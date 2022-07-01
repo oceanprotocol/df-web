@@ -40,5 +40,5 @@ export const getAllPoolSharesForLPAddress = async(userAddress) => {
       return [];
     }
     let data = await res.json();
-    return data.length>0 ? data[0] : 0;
+    return data.length>0 ? data[0].stake_amt : 0;
   }

@@ -27,13 +27,6 @@ export const columnsData = [
 export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
 
 async function getPools(api) {
-  const params = {
-    query:{
-    },
-    sort:{
-      vol_amt:-1
-    }
-  }
   let res;
   try {
     res = await fetch(api, {
@@ -42,7 +35,13 @@ async function getPools(api) {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(params)
+      body: JSON.stringify({
+        "query":{
+        },
+        "sort":{
+          "vol_amt":-1
+        }
+      })
     });
   } catch (error) {
     console.log(error);

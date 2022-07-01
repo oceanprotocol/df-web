@@ -1,9 +1,15 @@
 <script>
   import { loadPools, pools, columnsData } from "../../stores/pools";
+  import { getAllPoolSharesForLPAddress } from "../../utils/poolShares";
+  import { userStakes } from "../../stores/poolShares";
+  import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
 
   $: if (!$pools) {
     loadPools(`${process.env.BACKEND_API}/pools`);
+    getAllPoolSharesForLPAddress($userAddress).then((resp) => {
+      userStakes.update(() => resp);
+    });
   }
 </script>
 
