@@ -1,17 +1,15 @@
 export const getAllPoolSharesForLPAddress = async(userAddress) => {
-    const query = {
-      LP_addr: userAddress
-    };
     let res;
     try {
       res = await fetch(`${process.env.BACKEND_API}/stakes`, {
         method: "POST",
         headers: {
-          'Accept': 'application/json',
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          query,
+          "query":{
+            "LP_addr": userAddress.toLowerCase()
+          }
         }),
       });
     } catch (error) {
@@ -23,19 +21,18 @@ export const getAllPoolSharesForLPAddress = async(userAddress) => {
   }
 
   export const getPoolSharesForLPAddress = async(poolAddress, userAddress) => {
-    const query = {
-      LP_addr: userAddress
-    };
     let res;
     try {
-      res = await fetch(`https://test-df-sql.oceandao.org/stakes`, {
+      res = await fetch(`${process.env.BACKEND_API}/stakes`, {
         method: "POST",
         headers: {
-          'Accept': 'application/json',
-          "Content-Type": "application/json"
+        "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          query,
+          "query":{
+            "LP_addr":userAddress.toLowerCase(),
+            "pool_addr":poolAddress.toLowerCase()
+          }
         }),
       });
     } catch (error) {
@@ -43,5 +40,5 @@ export const getAllPoolSharesForLPAddress = async(userAddress) => {
       return [];
     }
     let data = await res.json();
-    return data;
+    return data.length>0 ? data[0] : 0;
   }
