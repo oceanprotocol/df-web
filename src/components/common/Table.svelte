@@ -11,6 +11,7 @@
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/pools";
+  import Input from "./Input.svelte";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -18,16 +19,11 @@
   export let colData = undefined;
   export let rowData = undefined;
   export let notHidableColumns = [];
+  export let showPoolsWithShares = false;
 
   let columns = {};
 
   loadVisibleColumns();
-
-  function switchArrayItemsPosition(array, first, second) {
-    var intermadiate = array[first];
-    array[first] = array[second];
-    array[second] = intermadiate;
-  }
 
   function getColumnsFromLocalStorage() {
     columns = JSON.parse(localStorage.getItem("poolsDisplayedColumns"));
@@ -73,6 +69,7 @@
 {#if colData && rowData}
   <div>
     <div class="tableActionsContainer">
+      <Input type="checkbox" label="My stakes" value={showPoolsWithShares} />
       <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
     </div>
     <div class="tableContainer">

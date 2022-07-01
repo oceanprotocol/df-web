@@ -28,7 +28,7 @@ export const getAllPoolSharesForLPAddress = async(userAddress) => {
     };
     let res;
     try {
-      res = await fetch(`https://df-sql.oceandao.org/stakes`, {
+      res = await fetch(`https://test-df-sql.oceandao.org/stakes`, {
         method: "POST",
         headers: {
           'Accept': 'application/json',

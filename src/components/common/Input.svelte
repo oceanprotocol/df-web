@@ -22,6 +22,14 @@
       {placeholder}
       on:input={onChange}
     />
+  {:else if type === "checkbox"}
+    <input
+      class="input"
+      type="checkbox"
+      bind:value
+      {placeholder}
+      on:input={onChange}
+    />
   {:else}
     <input
       class="input"
@@ -37,6 +45,9 @@
 
 <style>
   .inputContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .input {
     border: 1px solid var(--brand-grey-lighter);
