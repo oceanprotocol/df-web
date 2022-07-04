@@ -15,7 +15,7 @@
   import { calcPoolOutSingleIn } from "../../stores/bpools";
   import TokenApproval from "../common/TokenApproval.svelte";
   import Input from "../common/Input.svelte";
-  import { getPoolSharesForLPAddress } from "../../utils/poolShares";
+  import { getStakedAmountForLPAddress } from "../../utils/poolShares";
 
   export let pool;
   export let loading = false;
@@ -29,7 +29,7 @@
   let canStake = false;
 
   const updateBalance = async () => {
-    stakedAmount = await getPoolSharesForLPAddress(
+    stakedAmount = await getStakedAmountForLPAddress(
       pool.poolAddress,
       $userAddress
     );

@@ -12,7 +12,7 @@ export const columnsData = [
   { key: "dtaddress", value: "DTAddress" },
   { key: "basetoken", value: "Basetoken" },
   { key: "basetokenaddress", value: "BasetokenAddress" },
-  { key: "tvl", value: "TVL", display: (cost) => "$ " + cost },
+  { key: "tvl", value: "TVL", display: (cost) => "$ " + cost * 2 },
   {
     key: "volume",
     value: "Volume",

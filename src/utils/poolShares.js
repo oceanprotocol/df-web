@@ -20,7 +20,7 @@ export const getAllPoolSharesForLPAddress = async(userAddress) => {
     return data;
   }
 
-  export const getPoolSharesForLPAddress = async(poolAddress, userAddress) => {
+  export const getStakedAmountForLPAddress = async(poolAddress, userAddress) => {
     let res;
     try {
       res = await fetch(`${process.env.BACKEND_API}/stakes`, {
@@ -40,5 +40,5 @@ export const getAllPoolSharesForLPAddress = async(userAddress) => {
       return [];
     }
     let data = await res.json();
-    return data.length>0 ? data[0].stake_amt : 0;
+    return data.length>0 ? data[0].stake_amt * 2 : 0;
   }
