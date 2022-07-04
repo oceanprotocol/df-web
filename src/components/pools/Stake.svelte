@@ -15,17 +15,28 @@
   import { calcPoolOutSingleIn } from "../../stores/bpools";
   import TokenApproval from "../common/TokenApproval.svelte";
   import Input from "../common/Input.svelte";
+  import { getStakedAmountForLPAddress } from "../../utils/poolShares";
+  import { userStakes } from "../../stores/poolShares";
 
   export let pool;
   export let loading = false;
 
   let stakeAmount = 0.0;
+  let stakedAmount = 0.0;
+  let currentPoolShare = 0.0;
   let balance = 0.0;
   let calcBPTOut = 0.0;
   let finalBPTOut = 0.0;
   let canStake = false;
 
   const updateBalance = async () => {
+    stakedAmount = await getStakedAmountForLPAddress(
+      $userStakes,
+      pool.poolAddress
+    );
+    calcBPTOut = await getPoolSharesBasedOnStakeAmount(stakedAmount);
+    currentPoolShare = calcBPTOut;
+
     const balanceInWei = await balanceOf(
       $userBalances,
       pool.chainId,
@@ -35,7 +46,7 @@
     balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
   };
 
-  $: if ($userAddress) {
+  $: if ($userAddress && pool.chainId === $connectedChainId) {
     updateBalance();
   }
 
@@ -110,16 +121,28 @@
     }
   }
 
+  async function getPoolSharesBasedOnStakeAmount(stakeAmount) {
+    if (stakeAmount === 0) return 0.0;
+    const bptOutWei = await calcPoolOutSingleIn(
+      pool.chainId,
+      pool,
+      stakeAmount,
+      $networkSigner
+    );
+    let shares = ethers.utils.formatEther(BigInt(bptOutWei).toString(10));
+    return shares;
+  }
+
   async function handleStakeAmount() {
     loading = true;
     finalBPTOut = 0.0;
-    if (stakeAmount > 0.0) {
+    if (stakeAmount > 0.0 && pool.chainId === $connectedChainId) {
       console.log("stakeAmountChanged: ", stakeAmount);
       await updateBalance();
       const bptOutWei = await calcPoolOutSingleIn(
         pool.chainId,
         pool,
-        stakeAmount,
+        stakeAmount + stakedAmount,
         $networkSigner
       );
       calcBPTOut = ethers.utils.formatEther(BigInt(bptOutWei).toString(10));
@@ -128,7 +151,7 @@
       updateCanStake();
       loading = false;
     } else {
-      calcBPTOut = 0;
+      calcBPTOut = currentPoolShare;
       canStake = false;
       loading = false;
     }
@@ -162,6 +185,10 @@
         <ItemWithLabel
           title={`${pool.basetoken} Balance`}
           value={parseFloat(balance).toFixed(3)}
+        />
+        <ItemWithLabel
+          title={`${pool.basetoken} staked`}
+          value={parseFloat(stakedAmount).toFixed(3)}
         />
         <ItemWithLabel
           title="Calc Pool Shares"

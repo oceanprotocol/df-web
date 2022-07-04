@@ -21,10 +21,7 @@
     loading = false;
   }
   async function initRewards() {
-    const newRewards = await getRewards(
-      `${process.env.BACKEND_API}/rewards`,
-      $userAddress
-    );
+    const newRewards = await getRewards($userAddress);
     rewards.update(() => newRewards);
   }
 

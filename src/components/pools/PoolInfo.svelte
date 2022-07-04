@@ -13,7 +13,7 @@
   <div class="items-container">
     <ItemWithLabel title="DataToken Symbol" value={pool.DTSymbol} />
     <ItemWithLabel title="Basetoken" value={pool.basetoken} />
-    <ItemWithLabel title="TVL" value={parseInt(pool.tvl).toFixed(3)} />
+    <ItemWithLabel title="TVL" value={(parseInt(pool.tvl) * 2).toFixed(3)} />
     <ItemWithLabel title="Volume" value={parseInt(pool.volume).toFixed(3)} />
   </div>
 {:else}{/if}

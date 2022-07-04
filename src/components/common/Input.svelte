@@ -22,6 +22,8 @@
       {placeholder}
       on:input={onChange}
     />
+  {:else if type === "checkbox"}
+    <input class="input" type="checkbox" bind:checked={value} {placeholder} />
   {:else}
     <input
       class="input"
@@ -37,10 +39,18 @@
 
 <style>
   .inputContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .input {
     border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
+  }
+  label {
+    font-weight: bold;
+    margin-right: calc(var(--spacer) / 8);
+    font-size: var(--font-size-small);
   }
 </style>

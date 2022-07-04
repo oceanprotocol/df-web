@@ -1,17 +1,15 @@
-export const getRewards = async(api, userAddress) => {
-  const query = {
-    LP_addr: userAddress
-  };
+export const getRewards = async(userAddress) => {
   let res;
   try {
-    res = await fetch(api, {
+    res = await fetch(`${process.env.BACKEND_API}/rewards`, {
       method: "POST",
       headers: {
-        'Accept': 'application/json',
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        query,
+        "query":{
+          "LP_addr":userAddress.toLowerCase()
+      }
       }),
     });
   } catch (error) {
