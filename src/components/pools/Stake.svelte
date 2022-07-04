@@ -34,7 +34,6 @@
       $userStakes,
       pool.poolAddress
     );
-    console.log(stakedAmount);
     calcBPTOut = await getPoolSharesBasedOnStakeAmount(stakedAmount);
     currentPoolShare = calcBPTOut;
 

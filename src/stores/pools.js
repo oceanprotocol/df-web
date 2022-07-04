@@ -12,11 +12,11 @@ export const columnsData = [
   { key: "dtaddress", value: "DTAddress" },
   { key: "basetoken", value: "Basetoken" },
   { key: "basetokenaddress", value: "BasetokenAddress" },
-  { key: "tvl", value: "TVL", display: (cost) => "$ " + cost * 2 },
+  { key: "tvl", value: "TVL", display: (cost) => cost * 2 },
   {
     key: "volume",
     value: "Volume",
-    display: (volume) => "$ " + volume,
+    display: (volume) => volume,
   },
   { key: "pooladdress", value: "PoolAddress" },
   { key: "nftaddress", value: "NFTAddress" },

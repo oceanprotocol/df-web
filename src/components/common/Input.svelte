@@ -48,4 +48,9 @@
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
   }
+  label {
+    font-weight: bold;
+    margin-right: calc(var(--spacer) / 8);
+    font-size: var(--font-size-small);
+  }
 </style>
