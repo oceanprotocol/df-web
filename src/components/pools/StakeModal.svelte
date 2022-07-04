@@ -75,12 +75,8 @@
     top: 0;
     left: 0;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
   div.content-wrapper {
-    width: 50vw;
     border-radius: 0.3rem;
     background-color: white;
     padding: calc(var(--spacer) / 2);
@@ -102,5 +98,17 @@
     justify-content: right;
     align-items: center;
     padding: 10px;
+  }
+
+  @media (min-width: 660px) {
+    div.content-wrapper {
+      font-size: 100% !important;
+      width: 50vw;
+    }
+    div.modal {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 </style>

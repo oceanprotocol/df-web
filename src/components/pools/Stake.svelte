@@ -205,7 +205,7 @@
         />
         <ItemWithLabel
           title="Estimated Rewards"
-          value={parseFloat(estimatedRewards).toFixed(3)}
+          value={`${parseFloat(estimatedRewards).toFixed(3)} ${pool.basetoken}`}
         />
       </div>
       <div class="inputContainer">
