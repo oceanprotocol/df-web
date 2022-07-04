@@ -16,6 +16,7 @@
   import TokenApproval from "../common/TokenApproval.svelte";
   import Input from "../common/Input.svelte";
   import { getStakedAmountForLPAddress } from "../../utils/poolShares";
+  import { userStakes } from "../../stores/poolShares";
 
   export let pool;
   export let loading = false;
@@ -30,9 +31,10 @@
 
   const updateBalance = async () => {
     stakedAmount = await getStakedAmountForLPAddress(
-      pool.poolAddress,
-      $userAddress
+      $userStakes,
+      pool.poolAddress
     );
+    console.log(stakedAmount);
     calcBPTOut = await getPoolSharesBasedOnStakeAmount(stakedAmount);
     currentPoolShare = calcBPTOut;
 
@@ -122,6 +124,7 @@
   }
 
   async function getPoolSharesBasedOnStakeAmount(stakeAmount) {
+    if (stakeAmount === 0) return 0.0;
     const bptOutWei = await calcPoolOutSingleIn(
       pool.chainId,
       pool,
