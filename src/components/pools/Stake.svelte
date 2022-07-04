@@ -16,6 +16,8 @@
   import TokenApproval from "../common/TokenApproval.svelte";
   import Input from "../common/Input.svelte";
   import { getStakedAmountForLPAddress } from "../../utils/poolShares";
+  import { getRewardsForPoolUser, getRewards } from "../../utils/rewards";
+  import { rewards } from "../../stores/airdrops";
   import { userStakes } from "../../stores/poolShares";
 
   export let pool;
@@ -26,7 +28,7 @@
   let currentPoolShare = 0.0;
   let balance = 0.0;
   let calcBPTOut = 0.0;
-  let finalBPTOut = 0.0;
+  let estimatedRewards = 0.0;
   let canStake = false;
 
   const updateBalance = async () => {
@@ -35,6 +37,13 @@
       pool.poolAddress
     );
     calcBPTOut = await getPoolSharesBasedOnStakeAmount(stakedAmount);
+    if (!rewards) {
+    }
+    estimatedRewards = getRewardsForPoolUser(
+      $rewards,
+      $userAddress,
+      pool.poolAddress
+    );
     currentPoolShare = calcBPTOut;
 
     const balanceInWei = await balanceOf(
@@ -69,13 +78,13 @@
           (x) => x.event === "LOG_BPT_SS"
         );
         if (stakeEvent[0].event === "LOG_BPT_SS") {
-          finalBPTOut = ethers.utils.formatEther(
+          calcBPTOut = ethers.utils.formatEther(
             BigInt(stakeEvent[0].args.bptAmount).toString(10)
           );
-          console.log("addLiquidity: ", finalBPTOut);
+          console.log("addLiquidity: ", calcBPTOut);
           return {
             event: stakeEvent,
-            finalBPTOut: finalBPTOut,
+            calcBPTOut: calcBPTOut,
           };
         }
       }
@@ -97,7 +106,7 @@
       );
 
       const results = await addLiquidty();
-      if (results && results.finalBPTOut > 0.0) {
+      if (results && results.calcBPTOut > 0.0) {
         Swal.fire(
           "Success!",
           "You've staked " + pool.basetoken + " into pool.",
@@ -135,7 +144,7 @@
 
   async function handleStakeAmount() {
     loading = true;
-    finalBPTOut = 0.0;
+    calcBPTOut = 0.0;
     if (stakeAmount > 0.0 && pool.chainId === $connectedChainId) {
       console.log("stakeAmountChanged: ", stakeAmount);
       await updateBalance();
@@ -195,8 +204,8 @@
           value={parseFloat(calcBPTOut).toFixed(3)}
         />
         <ItemWithLabel
-          title="Final Pool Shares"
-          value={parseFloat(finalBPTOut).toFixed(3)}
+          title="Estimated Rewards"
+          value={parseFloat(estimatedRewards).toFixed(3)}
         />
       </div>
       <div class="inputContainer">

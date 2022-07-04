@@ -6,7 +6,6 @@
   import { airdrops, updateAllClaimables } from "../../stores/airdrops";
 
   import { rewards } from "../../stores/airdrops";
-  import { getRewards } from "../../utils/rewards";
 
   let loading = true;
 
@@ -19,14 +18,6 @@
       $rewards
     );
     loading = false;
-  }
-  async function initRewards() {
-    const newRewards = await getRewards($userAddress);
-    rewards.update(() => newRewards);
-  }
-
-  $: if ($userAddress) {
-    initRewards();
   }
 
   $: if ($rewards) {
