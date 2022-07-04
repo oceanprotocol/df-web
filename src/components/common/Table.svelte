@@ -82,7 +82,7 @@
     <div class="tableActionsContainer">
       <Input
         type="checkbox"
-        label="My stakes"
+        label="Only pools where I have shares"
         bind:value={showPoolsWithShares}
       />
       <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
