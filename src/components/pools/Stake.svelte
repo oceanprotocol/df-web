@@ -37,7 +37,6 @@
     calcBPTOut = await getPoolSharesBasedOnStakeAmount(stakedAmount);
     currentPoolShare = calcBPTOut;
 
-    console.log(calcBPTOut, pool.poolAddress);
     const balanceInWei = await balanceOf(
       $userBalances,
       pool.chainId,
@@ -47,7 +46,7 @@
     balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
   };
 
-  $: if ($userAddress) {
+  $: if ($userAddress && pool.chainId === $connectedChainId) {
     updateBalance();
   }
 
@@ -137,7 +136,7 @@
   async function handleStakeAmount() {
     loading = true;
     finalBPTOut = 0.0;
-    if (stakeAmount > 0.0) {
+    if (stakeAmount > 0.0 && pool.chainId === $connectedChainId) {
       console.log("stakeAmountChanged: ", stakeAmount);
       await updateBalance();
       const bptOutWei = await calcPoolOutSingleIn(

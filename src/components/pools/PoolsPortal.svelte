@@ -13,7 +13,7 @@
   }
 </script>
 
-<div class="container">
+<div class={`container ${!$pools && "alignContentCenter"}`}>
   {#if $pools}
     <div class="pools">
       <Table
@@ -49,6 +49,10 @@
   .loading {
     font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
+  }
+
+  .alignContentCenter {
+    justify-content: center;
   }
 
   @media (min-width: 640px) {
