@@ -20,8 +20,12 @@ export const getAllPoolSharesForLPAddress = async(userAddress) => {
     return data;
   }
 
-  export const getStakedAmountForLPAddress = async(stakes,poolAddress) => {
-    let pool;
-    pool = stakes.find((poolStake) =>poolStake.pool_addr === poolAddress)
+export const getStakedAmountForLPAddress = async(stakes,poolAddress) => {
+  let pool;
+  pool = stakes.find((poolStake) =>poolStake.pool_addr === poolAddress)
     return pool ? pool.stake_amt * 2 : 0;
-  }
+}
+
+export const calculatePoolShares = async(TVL, stakedAmount) => {
+    return (100 * stakedAmount) / TVL
+}

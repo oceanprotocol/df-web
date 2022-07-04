@@ -15,8 +15,11 @@
   import { calcPoolOutSingleIn } from "../../stores/bpools";
   import TokenApproval from "../common/TokenApproval.svelte";
   import Input from "../common/Input.svelte";
-  import { getStakedAmountForLPAddress } from "../../utils/poolShares";
-  import { getRewardsForPoolUser, getRewards } from "../../utils/rewards";
+  import {
+    getStakedAmountForLPAddress,
+    calculatePoolShares,
+  } from "../../utils/poolShares";
+  import { getRewardsForPoolUser } from "../../utils/rewards";
   import { rewards } from "../../stores/airdrops";
   import { userStakes } from "../../stores/poolShares";
 
@@ -36,7 +39,7 @@
       $userStakes,
       pool.poolAddress
     );
-    calcBPTOut = await getPoolSharesBasedOnStakeAmount(stakedAmount);
+    calcBPTOut = await calculatePoolShares(pool.tvl * 2, stakedAmount);
     if (!rewards) {
     }
     estimatedRewards = getRewardsForPoolUser(
@@ -130,32 +133,16 @@
     }
   }
 
-  async function getPoolSharesBasedOnStakeAmount(stakeAmount) {
-    if (stakeAmount === 0) return 0.0;
-    const bptOutWei = await calcPoolOutSingleIn(
-      pool.chainId,
-      pool,
-      stakeAmount,
-      $networkSigner
-    );
-    let shares = ethers.utils.formatEther(BigInt(bptOutWei).toString(10));
-    return shares;
-  }
-
   async function handleStakeAmount() {
     loading = true;
     calcBPTOut = 0.0;
     if (stakeAmount > 0.0 && pool.chainId === $connectedChainId) {
       console.log("stakeAmountChanged: ", stakeAmount);
       await updateBalance();
-      const bptOutWei = await calcPoolOutSingleIn(
-        pool.chainId,
-        pool,
-        stakeAmount + stakedAmount,
-        $networkSigner
+      calcBPTOut = await calculatePoolShares(
+        pool.tvl * 2,
+        stakeAmount + stakedAmount
       );
-      calcBPTOut = ethers.utils.formatEther(BigInt(bptOutWei).toString(10));
-      console.log("bptOutWei: ", bptOutWei);
       console.log("calcBPTOut: ", calcBPTOut);
       updateCanStake();
       loading = false;
@@ -201,7 +188,7 @@
         />
         <ItemWithLabel
           title="Calc Pool Shares"
-          value={parseFloat(calcBPTOut).toFixed(3)}
+          value={`${parseFloat(calcBPTOut).toFixed(2)}%`}
         />
         <ItemWithLabel
           title="Estimated Rewards"
