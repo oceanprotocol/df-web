@@ -87,7 +87,7 @@ export async function claimRewards(airdropData, chainId, tokensData, userAddress
         let positiveClaimables = [];
         // TODO - Make sure that claim is only done on non-zero tokens
         for (let i = 0; i < tokenAddresses.length; i++) {
-            if (Number(tokensData[tokenAddresses[i]].amount) > 0)
+            if (Number(tokensData[tokenAddresses[i]]['claimable amount']) > 0)
                 positiveClaimables.push(tokenAddresses[i]);
         }
 
