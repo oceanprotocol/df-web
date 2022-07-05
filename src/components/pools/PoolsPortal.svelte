@@ -5,8 +5,11 @@
   import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
 
-  $: if ($userAddress) {
+  $: if (!$pools) {
     loadPools(`${process.env.BACKEND_API}/pools`);
+  }
+
+  $: if ($userAddress) {
     getAllPoolSharesForLPAddress($userAddress).then((resp) => {
       userStakes.update(() => resp);
     });
