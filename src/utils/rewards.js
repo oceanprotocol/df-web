@@ -1,17 +1,15 @@
-export const getRewards = async(api, userAddress) => {
-  const query = {
-    LP_addr: userAddress
-  };
+export const getRewards = async(userAddress) => {
   let res;
   try {
-    res = await fetch(api, {
+    res = await fetch(`${process.env.BACKEND_API}/rewards`, {
       method: "POST",
       headers: {
-        'Accept': 'application/json',
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        query,
+        "query":{
+          "LP_addr":userAddress.toLowerCase()
+      }
       }),
     });
   } catch (error) {
@@ -20,4 +18,13 @@ export const getRewards = async(api, userAddress) => {
   }
   let data = await res.json();
   return data;
+}
+
+export const getRewardsForPoolUser = (rewards,  userAddress, poolAddress) => {
+  let reward = rewards.find((reward) => {
+    if(reward.LP_addr === userAddress && reward.pool_addr === poolAddress){
+      return reward
+    }
+  })
+  return reward ? reward.amt : 0.0
 }

@@ -1,13 +1,19 @@
 <script>
   import { loadPools, pools, columnsData } from "../../stores/pools";
+  import { getAllPoolSharesForLPAddress } from "../../utils/poolShares";
+  import { userStakes } from "../../stores/poolShares";
+  import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
 
   $: if (!$pools) {
     loadPools(`${process.env.BACKEND_API}/pools`);
+    getAllPoolSharesForLPAddress($userAddress).then((resp) => {
+      userStakes.update(() => resp);
+    });
   }
 </script>
 
-<div class="container">
+<div class={`container ${!$pools && "alignContentCenter"}`}>
   {#if $pools}
     <div class="pools">
       <Table
@@ -27,7 +33,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     height: calc(100vh - 115px);
   }
 
@@ -43,6 +49,10 @@
   .loading {
     font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
+  }
+
+  .alignContentCenter {
+    justify-content: center;
   }
 
   @media (min-width: 640px) {
