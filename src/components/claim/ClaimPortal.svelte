@@ -1,7 +1,7 @@
 <script>
   import NetworkRewards from "./NetworkRewards.svelte";
   import MainMessage from "../common/MainMessage.svelte";
-  import TotalRewards from "../common/TotalRewards.svelte";
+  import ClaimableRewards from "../common/ClaimableRewards.svelte";
   import { userAddress, selectedNetworks } from "../../stores/web3.js";
   import { airdrops, updateAllClaimables } from "../../stores/airdrops";
 
@@ -27,8 +27,8 @@
 
 <div class="container">
   {#if $userAddress && loading === false && $airdrops}
-    <div class="totalRewardsContainer">
-      <TotalRewards />
+    <div class="claimableRewardsContainer">
+      <ClaimableRewards />
     </div>
     <div class="pools">
       {#each $selectedNetworks as chainId}
@@ -69,7 +69,7 @@
     width: 100%;
   }
 
-  .totalRewardsContainer {
+  .claimableRewardsContainer {
     font-size: var(--font-size-large);
     margin: calc(var(--spacer)) 0;
   }
@@ -80,7 +80,7 @@
   }
 
   @media only screen and (min-width: 660px) {
-    .totalRewardsContainer {
+    .claimableRewardsContainer {
       margin: var(--spacer) 0;
     }
     .container {

@@ -30,7 +30,7 @@ SUPPORTED_CHAIN_IDS = [3, 4, 1287, 80001]
 POOLS_API = https://test-df-sql.oceandao.org/pools
 
 //rewards config containing the airdrop contracts and token addresses for each network
-AIRDROP_CONFIG = {\"NETWORK_ID":{\"airdropAddress\":\"AIRDROP_CONTRACT_ADDRESS\",\"rewardAddress\":\"REWARD_CONTRACT_ADDRESS\",\"tokensData\":{\"TOKEN_ADDRESS\":{\"symbol\":\"TOKEN_SYMBOL\",\"amount\":\"TOKEN_AMOUNT\"}},\"totalRewards\":\"TOTAL_REWARD_AMOUNT\"}
+AIRDROP_CONFIG = {\"NETWORK_ID":{\"airdropAddress\":\"AIRDROP_CONTRACT_ADDRESS\",\"rewardAddress\":\"REWARD_CONTRACT_ADDRESS\",\"tokensData\":{\"TOKEN_ADDRESS\":{\"symbol\":\"TOKEN_SYMBOL\",\"amount\":\"TOKEN_AMOUNT\"}}}
 ```
 
 ## Get started

@@ -35,13 +35,14 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address,
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
             const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropABI.default, provider);
             const claimableRewards = await contract.claimables(address, tokens)
-            let totalEstimatedRewardsForChain = 0
+            let claimableRewardsNumber = 0
+            let estimatedRewardsNumber = 0
             rewards.forEach((reward) => {
                 if(reward.chainID === chainId){
-                    totalEstimatedRewardsForChain += reward.amt
+                    estimatedRewardsNumber+=1
                 }
             })
-            airdropData[chainId]['estimated rewards'] = totalEstimatedRewardsForChain===0 ? totalEstimatedRewardsForChain : totalEstimatedRewardsForChain.toFixed(6)
+            airdropData[chainId]['estimatedRewards'] = estimatedRewardsNumber
             for (let tokenAddress of tokens) {
                 let totalEstimatedRewardsForToken = 0
                 rewards.forEach((reward) => {
@@ -49,20 +50,20 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address,
                         totalEstimatedRewardsForToken += reward.amt
                     }
                 })
-                airdropData[chainId]['tokensData'][tokenAddress]['estimatedRewads'] =  totalEstimatedRewardsForToken===0 ? totalEstimatedRewardsForToken : totalEstimatedRewardsForToken.toFixed(6)
-                airdropData[chainId]['tokensData'][tokenAddress]['amount'] = 0
+                airdropData[chainId]['tokensData'][tokenAddress]['estimated amount'] =  totalEstimatedRewardsForToken===0 ? totalEstimatedRewardsForToken : totalEstimatedRewardsForToken.toFixed(6)
             }
             for (let i = 0; i < claimableRewards.length; i++) {
                 const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
-                airdropData[chainId].tokensData[tokens[i]].amount = rewardInEthers > 0.0 ? (Math.round(rewardInEthers * 1000000) / 1000000).toFixed(6) : 0.0
-                airdropData[chainId].totalRewards = parseInt(airdropData[chainId].totalRewards)
-                airdropData[chainId].totalRewards += rewardInEthers > 0.0 ? 1 : 0
+                airdropData[chainId].tokensData[tokens[i]]['claimable amount'] = rewardInEthers > 0.0 ? (Math.round(rewardInEthers * 1000000) / 1000000).toFixed(6) : 0.0
+                claimableRewardsNumber += rewardInEthers > 0.0 ? 1 : 0
+                airdropData[chainId]['claimableRewards'] = claimableRewardsNumber
             }
         }
     } catch (err) {
         for (let i = 0; i < tokens.length; i++) {
-            airdropData[chainId].tokensData[tokens[i]].amount = 0.0
-            airdropData[chainId].totalRewards = 0
+            airdropData[chainId].tokensData[tokens[i]]['estimated amount'] = 0.0
+            airdropData[chainId].estimatedRewards = 0
+            airdropData[chainId].claimableRewards = 0
         }
     }
 }

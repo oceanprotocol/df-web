@@ -17,7 +17,7 @@
 
   export let chainId;
   export let estimatedRewards;
-  export let totalRewards;
+  export let claimableRewards;
   export let claimables;
 
   let loading = false;
@@ -64,7 +64,7 @@
         text: loading ? "lOADING.." : "Claim",
         onClick: () => claim(),
         disabled:
-          chainId !== $connectedChainId || totalRewards === 0 || loading,
+          chainId !== $connectedChainId || claimableRewards === 0 || loading,
       },
     ];
   }
@@ -74,7 +74,7 @@
   rowObject={{
     network: chainId,
     "estimated rewards": estimatedRewards,
-    rewards: totalRewards,
+    "claimable rewards": claimableRewards,
   }}
   {buttons}
   size="large"

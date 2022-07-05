@@ -47,6 +47,7 @@
 <style>
   header {
     position: sticky;
+    z-index: 101;
     top: 50px;
     display: flex;
     flex-direction: column;
