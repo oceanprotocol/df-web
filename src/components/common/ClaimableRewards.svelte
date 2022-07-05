@@ -1,27 +1,27 @@
 <script>
   import { rewards } from "../../stores/airdrops";
   import TokenReward from "../common/TokenReward.svelte";
-  let totalRewards;
+  let claimableRewards;
 
-  function getTotalRewards() {
-    totalRewards = {};
+  function getClaimableRewards() {
+    claimableRewards = {};
     $rewards.forEach((reward) => {
-      if (!totalRewards[reward.token]) {
-        totalRewards[reward.token] = 0;
+      if (!claimableRewards[reward.token]) {
+        claimableRewards[reward.token] = 0;
       }
-      totalRewards[reward.token] += reward.amt;
+      claimableRewards[reward.token] += reward.amt;
     });
   }
 
-  $: if ($rewards && !totalRewards) {
-    getTotalRewards();
+  $: if ($rewards && !claimableRewards) {
+    getClaimableRewards();
   }
 </script>
 
 <p>
   You have a total of <span>
-    {#if totalRewards && Object.entries(totalRewards)?.length > 0}
-      {#each Object.entries(totalRewards) as [symbol, amount]}
+    {#if claimableRewards && Object.entries(claimableRewards)?.length > 0}
+      {#each Object.entries(claimableRewards) as [symbol, amount]}
         <TokenReward {amount} {symbol} />
       {/each}
     {:else}

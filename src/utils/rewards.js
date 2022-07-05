@@ -8,7 +8,7 @@ export const getRewards = async(userAddress) => {
       },
       body: JSON.stringify({
         "query":{
-          "LP_addr":userAddress.toLowerCase()
+
       }
       }),
     });
