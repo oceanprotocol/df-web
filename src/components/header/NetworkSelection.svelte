@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import { selectedNetworks } from "../../stores/web3";
   import { Tooltip } from "carbon-components-svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
@@ -13,6 +14,32 @@
       selectedNetworks.update(() => [...$selectedNetworks, value]);
     }
   }
+
+  onMount(() => {
+    if (!localStorage.getItem("SupportedChainIds")) {
+      localStorage.setItem(
+        "SupportedChainIds",
+        JSON.stringify(JSON.parse(process.env.SUPPORTED_CHAIN_IDS))
+      );
+    } else {
+      let localStorageSupportedChainIds = JSON.parse(
+        localStorage.getItem("SupportedChainIds")
+      );
+      let envSupportedChainIds = JSON.parse(process.env.SUPPORTED_CHAIN_IDS);
+      if (
+        envSupportedChainIds.length != localStorageSupportedChainIds.length ||
+        envSupportedChainIds.every(function (element, index) {
+          return element !== localStorageSupportedChainIds[index];
+        })
+      ) {
+        selectedNetworks.update(() => envSupportedChainIds);
+        localStorage.setItem(
+          "SupportedChainIds",
+          JSON.stringify(envSupportedChainIds)
+        );
+      }
+    }
+  });
 
   $: if ($selectedNetworks) {
     localStorage.setItem("selectedNetworks", JSON.stringify($selectedNetworks));
