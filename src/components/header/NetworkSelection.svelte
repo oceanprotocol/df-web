@@ -22,13 +22,15 @@
 <div class="container">
   <span class="text"> Selected networks </span>
   <Tooltip icon={ChevronDown} align="end">
-    {#each JSON.parse(process.env.SUPPORTED_CHAIN_IDS) as chainId}
-      <NetworkItem
-        {chainId}
-        checked={true}
-        {onCheck}
-      />
-    {/each}
+    {#if $selectedNetworks}
+      {#each JSON.parse(process.env.SUPPORTED_CHAIN_IDS) as chainId}
+        <NetworkItem
+          {chainId}
+          checked={$selectedNetworks.find((id) => id === chainId) !== undefined}
+          {onCheck}
+        />
+      {/each}
+    {/if}
   </Tooltip>
 </div>
 

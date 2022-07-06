@@ -8,7 +8,7 @@ export let web3Provider = writable("");
 export let networkSigner = writable("");
 export let connectedChainId = writable("");
 export let web3 = writable("");
-export let selectedNetworks = writable([]);
+export let selectedNetworks = writable(localStorage.getItem("selectedNetworks") ? JSON.parse(localStorage.getItem("selectedNetworks")): []);
 export let jsonRPCProvider = writable({});
 export let isWalletConnectModalOpen = writable(false)
 
