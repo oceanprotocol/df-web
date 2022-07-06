@@ -69,8 +69,7 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address,
 }
 
 export const updateAllClaimables = async (airdropData, selectedNetworks, userAddress, rewards) => {
-    const filteredChains = JSON.parse(process.env.SUPPORTED_CHAIN_IDS).filter(x => selectedNetworks.indexOf(x) >= 0);
-    await Promise.all(filteredChains.map(async function(chainId) {
+    await Promise.all(JSON.parse(process.env.SUPPORTED_CHAIN_IDS).map(async function(chainId) {
         if( airdropData[chainId] ) {
             await updateClaimablesFromAirdrop(airdropData, chainId, userAddress, rewards);
         } else {
