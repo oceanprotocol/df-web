@@ -25,7 +25,11 @@
   }
 </script>
 
-<div class="container">
+<div
+  class={`container ${
+    (!$userAddress || loading === true || !$airdrops) && "alignContentCenter"
+  }`}
+>
   {#if $userAddress && loading === false && $airdrops}
     <div class="claimableRewardsContainer">
       <ClaimableRewards />
@@ -61,7 +65,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     min-height: calc(100vh - 300px);
   }
 
@@ -77,6 +81,10 @@
   .loading {
     font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
+  }
+
+  .alignContentCenter {
+    justify-content: center;
   }
 
   @media only screen and (min-width: 660px) {
