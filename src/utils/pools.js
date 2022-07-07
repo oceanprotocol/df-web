@@ -9,3 +9,7 @@ export let filterPoolsByUserShares = (pools, shares) => {
     })
     return filteredPools
 }
+
+ export let calcMaxAllowedStakeInput = (poolReserve) => {
+    return (poolReserve / 2).toFixed(3)
+}

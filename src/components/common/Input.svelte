@@ -8,38 +8,49 @@
   export let onChange;
 </script>
 
-<div class="inputContainer">
+<div class="container">
   {#if label}
     <label>{label}</label>
   {/if}
-  {#if type === "number"}
-    <input
-      class="input"
-      type="number"
-      {min}
-      {max}
-      bind:value
-      {placeholder}
-      on:input={onChange}
-    />
-  {:else if type === "checkbox"}
-    <input class="input" type="checkbox" bind:checked={value} {placeholder} />
-  {:else}
-    <input
-      class="input"
-      type="text"
-      {min}
-      {max}
-      bind:value
-      {placeholder}
-      on:input={onChange}
-    />
-  {/if}
+  <div class="inputContainer">
+    {#if type === "number"}
+      <input
+        class="input"
+        type="number"
+        {min}
+        {max}
+        bind:value
+        {placeholder}
+        on:input={onChange}
+      />
+    {:else if type === "checkbox"}
+      <input class="input" type="checkbox" bind:checked={value} {placeholder} />
+    {:else}
+      <input
+        class="input"
+        type="text"
+        {min}
+        {max}
+        bind:value
+        {placeholder}
+        on:input={onChange}
+      />
+    {/if}
+    {#if value > max}
+      <p class="message">{`The maximum allowed amount is ${max}`}</p>
+    {/if}
+  </div>
 </div>
 
 <style>
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .inputContainer {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
   }
@@ -52,5 +63,10 @@
     font-weight: bold;
     margin-right: calc(var(--spacer) / 8);
     font-size: var(--font-size-small);
+  }
+  .message {
+    font-size: var(--font-size-small);
+    margin-top: calc(var(--spacer) / 6);
+    color: var(--brand-alert-red);
   }
 </style>
