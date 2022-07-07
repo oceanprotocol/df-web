@@ -12,7 +12,6 @@
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import Swal from "sweetalert2";
   import { addDTLiquidity } from "../../utils/bpools";
-  import { calcPoolOutSingleIn } from "../../stores/bpools";
   import TokenApproval from "../common/TokenApproval.svelte";
   import Input from "../common/Input.svelte";
   import {
@@ -20,6 +19,7 @@
     calculatePoolShares,
   } from "../../utils/poolShares";
   import { getRewardsForPoolUser } from "../../utils/rewards";
+  import { calcMaxAllowedStakeInput } from "../../utils/pools";
   import { rewards } from "../../stores/airdrops";
   import { userStakes } from "../../stores/poolShares";
 
@@ -33,6 +33,7 @@
   let calcBPTOut = 0.0;
   let estimatedRewards = 0.0;
   let canStake = false;
+  let maxPoolInputAllowed = calcMaxAllowedStakeInput(pool.tvl * 2);
 
   const updateBalance = async () => {
     stakedAmount = await getStakedAmountForLPAddress(
@@ -99,15 +100,6 @@
   async function stake() {
     try {
       loading = true;
-
-      console.log(
-        $userAddress,
-        pool.basetokenAddress,
-        pool.poolAddress,
-        stakeAmount,
-        $networkSigner
-      );
-
       const results = await addLiquidty();
       if (results && results.calcBPTOut > 0.0) {
         Swal.fire(
@@ -137,13 +129,11 @@
     loading = true;
     calcBPTOut = 0.0;
     if (stakeAmount > 0.0 && pool.chainId === $connectedChainId) {
-      console.log("stakeAmountChanged: ", stakeAmount);
       await updateBalance();
       calcBPTOut = await calculatePoolShares(
         pool.tvl * 2,
         stakeAmount + stakedAmount
       );
-      console.log("calcBPTOut: ", calcBPTOut);
       updateCanStake();
       loading = false;
     } else {
@@ -154,7 +144,10 @@
   }
 
   function updateCanStake() {
-    canStake = stakeAmount > 0.0 && stakeAmount <= balance;
+    canStake =
+      stakeAmount > 0.0 &&
+      stakeAmount <= balance &&
+      stakeAmount < maxPoolInputAllowed;
   }
 
   async function switchNetwork() {
@@ -200,7 +193,7 @@
           type="number"
           bind:value={stakeAmount}
           min="0"
-          max={balance}
+          max={maxPoolInputAllowed > balance ? balance : maxPoolInputAllowed}
           onChange={handleStakeAmount}
         />
       </div>
@@ -209,6 +202,7 @@
         tokenName={pool.basetoken}
         poolAddress={pool.poolAddress}
         amount={stakeAmount}
+        disabled={!canStake}
         bind:loading
       >
         <Button
