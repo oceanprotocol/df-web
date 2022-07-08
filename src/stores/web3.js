@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
 import { ethers, BigNumber } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
 
@@ -80,7 +80,7 @@ export const connectWalletFromLocalStorage = async () => {
 
   // Subscribe to accounts change
   instance.on("accountsChanged", (accounts) => {
-    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    const signer = (new ethers.providers.Web3Provider(get(web3Provider))).getSigner()
     userAddress.set(accounts[0])
     networkSigner.set(signer)
   });
@@ -88,7 +88,7 @@ export const connectWalletFromLocalStorage = async () => {
   // Subscribe to chainId change
   instance.on("chainChanged", (chainId) => {
     connectedChainId.set(Number(chainId))
-    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    const signer = (new ethers.providers.Web3Provider(get(web3Provider))).getSigner()
     networkSigner.set(signer)
   });
 
@@ -115,7 +115,7 @@ export const connectWalletToSpecificProvider = async (provider) => {
 
   // Subscribe to accounts change
   instance.on("accountsChanged", (accounts) => {
-    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    const signer = (new ethers.providers.Web3Provider(get(web3Provider))).getSigner()
     userAddress.set(accounts[0])
     networkSigner.set(signer)
   });
@@ -123,6 +123,8 @@ export const connectWalletToSpecificProvider = async (provider) => {
   // Subscribe to networkId change
   instance.on("chainChanged", (chainId) => {
     connectedChainId.set(parseInt(chainId, 16))
+    const signer = (new ethers.providers.Web3Provider(get(web3Provider))).getSigner()
+    networkSigner.set(signer)
   });
 
   // Subscribe to networkId change
@@ -143,7 +145,7 @@ export const connectWallet = async () => {
 
   // Subscribe to accounts change
   instance.on("accountsChanged", (accounts) => {
-    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+    const signer = (new ethers.providers.Web3Provider(get(web3Provider))).getSigner()
     userAddress.set(accounts[0])
     networkSigner.set(signer)
   });
@@ -171,23 +173,22 @@ export const disconnect = async () => {
   window.location.href = "/";
 };
 
-export const switchWalletNetwork = async(chainId) => {
+export const switchWalletNetwork = async(chainId, web3Provider) => {
   let networksList = networksDataArray.default;
   const networkNode = await networksList.find(
     (data) => data.chainId === parseInt(chainId)
   )
-  addCustomNetwork(networkNode)
+  addCustomNetwork(networkNode, web3Provider)
 }
 
 export async function addCustomNetwork(
-  network
+  network, web3Provider
 ) {
   // Always add explorer URL from ocean.js first, as it's null sometimes
   // in network data
   const blockExplorerUrls = [
     network.explorers && network.explorers[0].url
   ]
-
   const newNetworkData = {
     chainId: `0x${network.chainId.toString(16)}`,
     chainName: network.name,
@@ -196,13 +197,13 @@ export async function addCustomNetwork(
     blockExplorerUrls
   }
   try {
-    await window.ethereum.request({
+    await web3Provider.provider.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: newNetworkData.chainId }]
     })
   } catch (switchError) {
     if (switchError.code === 4902) {
-      await window.ethereum.request(
+      await web3Provider.provider.request(
         {
           method: 'wallet_addEthereumChain',
           params: [newNetworkData]
