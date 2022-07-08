@@ -89,7 +89,7 @@ export async function claimRewards(airdropData, chainId, tokensData, userAddress
             if (Number(tokensData[tokenAddresses[i]]['claimable amount']) > 0)
                 positiveClaimables.push(tokenAddresses[i]);
         }
-
+        console.log(userAddress, signer)
         if( positiveClaimables.length > 0 ) {
             const contract = new ethers.Contract(
                 airdropData[chainId].airdropAddress,

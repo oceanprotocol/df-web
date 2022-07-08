@@ -57,7 +57,7 @@
     buttons = [
       {
         text: "Switch network",
-        onClick: () => switchWalletNetwork(chainId),
+        onClick: () => switchWalletNetwork(chainId, $web3Provider),
         disabled: chainId === $connectedChainId,
       },
       {
