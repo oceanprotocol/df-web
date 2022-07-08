@@ -25,6 +25,7 @@
     width: 100%;
     color: var(--brand-black);
     font-size: var(--font-size-smaller);
+    z-index: 101;
   }
   .warning {
     background-color: var(--brand-alert-yellow);

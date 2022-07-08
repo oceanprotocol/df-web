@@ -1,6 +1,6 @@
-*Psst — looking for a more complete solution? Check out [SvelteKit](https://kit.svelte.dev), the official framework for building web applications of all sizes, with a beautiful development experience and flexible filesystem-based routing.*
+_Psst — looking for a more complete solution? Check out [SvelteKit](https://kit.svelte.dev), the official framework for building web applications of all sizes, with a beautiful development experience and flexible filesystem-based routing._
 
-*Looking for a shareable component template instead? You can [use SvelteKit for that as well](https://kit.svelte.dev/docs#packaging) or the older [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+_Looking for a shareable component template instead? You can [use SvelteKit for that as well](https://kit.svelte.dev/docs#packaging) or the older [sveltejs/component-template](https://github.com/sveltejs/component-template)_
 
 ---
 
@@ -15,8 +15,23 @@ npx degit sveltejs/template svelte-app
 cd svelte-app
 ```
 
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
+_Note that you will need to have [Node.js](https://nodejs.org) installed._
 
+## Environment variables
+
+The `.env` file is used to differentiate the staging params from the production params.
+In order to get the app working create a `.env` in the root of the project directory, and add the following env variables:
+
+```js
+//list of suppoerted chainIDs
+SUPPORTED_CHAIN_IDS = [3, 4, 1287, 80001]
+
+//api endpoint to get the pools list
+POOLS_API = https://test-df-sql.oceandao.org/pools
+
+//rewards config containing the airdrop contracts and token addresses for each network
+AIRDROP_CONFIG = {\"NETWORK_ID":{\"airdropAddress\":\"AIRDROP_CONTRACT_ADDRESS\",\"rewardAddress\":\"REWARD_CONTRACT_ADDRESS\",\"tokensData\":{\"TOKEN_ADDRESS\":{\"symbol\":\"TOKEN_SYMBOL\",\"amount\":\"TOKEN_AMOUNT\"}}}
+```
 
 ## Get started
 
@@ -49,12 +64,11 @@ npm run build
 
 You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
 
-
 ## Single-page app mode
 
 By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
 
-If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
+If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for _any_ path. You can make it so by editing the `"start"` command in package.json:
 
 ```js
 "start": "sirv public --single"

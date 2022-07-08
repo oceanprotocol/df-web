@@ -10,9 +10,14 @@
     selectedNetworks,
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
-  import { supportedChainIds } from "./app.config";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
-  import '@oceanprotocol/typographies/css/ocean-typo.css';
+  import "@oceanprotocol/typographies/css/ocean-typo.css";
+  import { rewards } from "./stores/airdrops";
+  import { getRewards } from "./utils/rewards";
+
+  window.process = {
+    ...window.process,
+  };
 
   if ($userAddress === "") {
     if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
@@ -20,6 +25,15 @@
     } else {
       isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
     }
+  }
+
+  async function initRewards() {
+    const newRewards = await getRewards($userAddress);
+    rewards.update(() => newRewards);
+  }
+
+  $: if ($userAddress) {
+    initRewards();
   }
 
   let selectedNetworksFromLocalStorage =
@@ -30,7 +44,7 @@
     );
     selectedNetworks.update(() => selectedNetworksFromLocalStorage);
   } else {
-    selectedNetworks.update(() => supportedChainIds);
+    selectedNetworks.update(() => JSON.parse(process.env.SUPPORTED_CHAIN_IDS));
   }
 </script>
 

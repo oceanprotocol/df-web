@@ -1,7 +1,6 @@
 import { writable } from "svelte/store";
 import { getNetworkDataById } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
-import {getTokenAddress} from "./airdrops";
 
 let networksData = networksDataArray.default
 
@@ -13,11 +12,11 @@ export const columnsData = [
   { key: "dtaddress", value: "DTAddress" },
   { key: "basetoken", value: "Basetoken" },
   { key: "basetokenaddress", value: "BasetokenAddress" },
-  { key: "tvl", value: "TVL", display: (cost) => "$ " + cost },
+  { key: "tvl", value: "TVL", display: (cost) => cost * 2 },
   {
     key: "volume",
     value: "Volume",
-    display: (volume) => "$ " + volume,
+    display: (volume) => volume,
   },
   { key: "pooladdress", value: "PoolAddress" },
   { key: "nftaddress", value: "NFTAddress" },
@@ -27,19 +26,22 @@ export const columnsData = [
 
 export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
 
-async function getPools() {
-  const query = {};
+async function getPools(api) {
   let res;
   try {
-    res = await fetch(`https://test-df-sql.oceandao.org/pools`, {
+    res = await fetch(api, {
       method: "POST",
       headers: {
         'Accept': 'application/json',
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        query,
-      }),
+        "query":{
+        },
+        "sort":{
+          "vol_amt":-1
+        }
+      })
     });
   } catch (error) {
     console.log(error);
@@ -59,7 +61,7 @@ const getTokenSymbolByAddress = (address) => {
 
 function getRow(poolInfo, key) {
   return {
-    id: key + poolInfo.chainID,
+    id: key,
     network: getNetworkDataById(networksData, parseInt(poolInfo.chainID))?.name,
     datatoken: poolInfo.DT_symbol,
     dtaddress: poolInfo.DT_addr,
@@ -85,8 +87,8 @@ function getRow(poolInfo, key) {
   };
 }
 
-export async function loadPools() {
-  const allPools = await getPools();
+export async function loadPools(poolsApi) {
+  const allPools = await getPools(poolsApi);
   if (allPools.length === 0) {
     pools.set([]);
     return;
