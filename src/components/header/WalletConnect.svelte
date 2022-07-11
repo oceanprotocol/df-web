@@ -6,7 +6,7 @@
     disconnect,
     connectedChainId,
   } from "../../stores/web3";
-  import { Tooltip } from "carbon-components-svelte";
+  import Tooltip from "carbon-components-svelte/src/Tooltip/Tooltip.svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
   import NetworkItem from "../common/NetworkItem.svelte";
 </script>

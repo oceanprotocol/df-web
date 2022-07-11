@@ -1,12 +1,10 @@
 <script>
-  import {
-    DataTable,
-    Pagination,
-    Toolbar,
-    ToolbarContent,
-    ToolbarSearch,
-  } from "carbon-components-svelte";
-  import "carbon-components-svelte/css/white.css";
+  import DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
+  import Pagination from "carbon-components-svelte/src/Pagination/Pagination.svelte";
+  import Toolbar from "carbon-components-svelte/src/DataTable/Toolbar.svelte";
+  import ToolbarContent from "carbon-components-svelte/src/DataTable/ToolbarContent.svelte";
+  import ToolbarSearch from "carbon-components-svelte/src/DataTable/ToolbarSearch.svelte";
+  import "carbon-components/scss/globals/scss/vendor/@carbon/themes/scss";
   import StakeModal from "../pools/StakeModal.svelte";
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";

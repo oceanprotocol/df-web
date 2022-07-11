@@ -1,5 +1,5 @@
 <script>
-  import { Tooltip } from "carbon-components-svelte";
+  import Tooltip from "carbon-components-svelte/src/Tooltip/Tooltip.svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
 
   export let options = undefined;
