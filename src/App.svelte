@@ -11,6 +11,7 @@
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
+  import "@oceanprotocol/typographies/css/ocean-typo.css";
   import { rewards } from "./stores/airdrops";
   import { getRewards } from "./utils/rewards";
 
