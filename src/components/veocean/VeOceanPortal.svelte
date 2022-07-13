@@ -1,15 +1,13 @@
 <script>
   import { userAddress } from "../../stores/web3";
-  import Card from "../common/Card.svelte";
+  import VeOceanCard from "./VeOceanCard.svelte";
 
   $: if ($userAddress) {
   }
 </script>
 
 <div class={`container`}>
-  <Card title="My veOCEAN">
-    <div>123456</div>
-  </Card>
+  <VeOceanCard />
 </div>
 
 <style>
@@ -19,6 +17,7 @@
     align-items: center;
     justify-content: flex-start;
     height: calc(100vh - 115px);
+    padding-top: calc(var(--spacer) * 2);
   }
 
   .pools {
@@ -40,8 +39,8 @@
   }
 
   @media (min-width: 640px) {
-    .pools {
-      margin-top: calc(var(--spacer) / 2);
+    .container {
+      padding-top: calc(var(--spacer) / 2);
     }
   }
 </style>
