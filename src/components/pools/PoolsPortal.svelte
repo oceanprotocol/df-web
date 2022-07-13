@@ -60,7 +60,7 @@
 
   @media (min-width: 640px) {
     .pools {
-      margin-top: calc(var(--spacer) / 2);
+      margin-top: var(--spacer);
     }
   }
 </style>
