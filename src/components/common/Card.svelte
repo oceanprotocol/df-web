@@ -16,9 +16,9 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 2) calc(var(--spacer));
     background-color: var(--background-content);
+    box-shadow: var(--box-shadow);
   }
   .title {
     font-size: var(--font-size-normal);

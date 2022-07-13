@@ -18,8 +18,8 @@
   .container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: calc(var(--spacer) / 2);
-    padding-top: calc(var(--spacer) * 2);
+    gap: var(--spacer);
+    padding-top: var(--spacer);
   }
 
   .loading {
@@ -34,6 +34,7 @@
   @media (min-width: 640px) {
     .container {
       padding-top: calc(var(--spacer) / 2);
+      gap: calc(var(--spacer) / 2);
     }
   }
 </style>

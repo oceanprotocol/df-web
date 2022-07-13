@@ -49,7 +49,6 @@
     justify-content: center;
     align-items: center;
     padding: calc(var(--spacer) / 4) 8%;
-    border-bottom: 2px solid var(--brand-grey-dimmed);
     overflow-y: hidden;
     min-width: 450px;
     overflow-y: scroll;
@@ -91,7 +90,7 @@
 
   .large {
     padding: calc(var(--spacer) / 3) 8%;
-    border-bottom: 2px solid var(--brand-grey-lighter);
+    border-bottom: 1px solid var(--brand-grey-dimmed);
   }
 
   .buttonContainer {

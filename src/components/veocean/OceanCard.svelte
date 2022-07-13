@@ -33,7 +33,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    grid-column: 1 / 2;
+    grid-column: 1 / 3;
     width: 100%;
   }
 
@@ -45,5 +45,8 @@
   }
 
   @media (min-width: 640px) {
+    .container {
+      grid-column: 1 / 2;
+    }
   }
 </style>
