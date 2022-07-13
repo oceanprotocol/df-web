@@ -48,12 +48,12 @@
 <style>
   div.modal {
     position: absolute;
-    z-index: 100;
+    z-index: 300;
     top: calc(100vh - (100vh + var(--spacer) / 4));
     bottom: 0;
     width: 100vw;
     height: calc(100vh + var(--spacer) / 4);
-    background-color: rgba(191, 191, 191, 0.7);
+    background-color: rgba(191, 191, 191, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;

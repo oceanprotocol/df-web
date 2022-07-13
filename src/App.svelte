@@ -11,6 +11,12 @@
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
+  import { rewards } from "./stores/airdrops";
+  import { getRewards } from "./utils/rewards";
+
+  window.process = {
+    ...window.process,
+  };
 
   if ($userAddress === "") {
     if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
@@ -18,6 +24,15 @@
     } else {
       isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
     }
+  }
+
+  async function initRewards() {
+    const newRewards = await getRewards($userAddress);
+    rewards.update(() => newRewards);
+  }
+
+  $: if ($userAddress) {
+    initRewards();
   }
 
   let selectedNetworksFromLocalStorage =

@@ -1,29 +1,39 @@
 <script>
   import NetworkRewards from "./NetworkRewards.svelte";
   import MainMessage from "../common/MainMessage.svelte";
+  import ClaimableRewards from "../common/ClaimableRewards.svelte";
   import { userAddress, selectedNetworks } from "../../stores/web3.js";
   import { airdrops, updateAllClaimables } from "../../stores/airdrops";
 
-  let loading = false;
+  import { rewards } from "../../stores/airdrops";
+
+  let loading = true;
 
   async function initAirdrops() {
     loading = true;
     await updateAllClaimables(
       JSON.parse(process.env.AIRDROP_CONFIG),
       $selectedNetworks,
-      $userAddress
+      $userAddress,
+      $rewards
     );
     loading = false;
   }
 
-  $: if ($userAddress) {
+  $: if ($rewards) {
     initAirdrops();
   }
 </script>
 
-<div class="container">
-  <h1>Claim Portal</h1>
+<div
+  class={`container ${
+    (!$userAddress || loading === true || !$airdrops) && "alignContentCenter"
+  }`}
+>
   {#if $userAddress && loading === false && $airdrops}
+    <div class="claimableRewardsContainer">
+      <ClaimableRewards />
+    </div>
     <div class="pools">
       {#each $selectedNetworks as chainId}
         <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
@@ -55,14 +65,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    min-height: calc(100vh - 300px);
   }
 
   .pools {
     width: 100%;
   }
 
-  h1 {
+  .claimableRewardsContainer {
+    font-size: var(--font-size-large);
     margin: calc(var(--spacer)) 0;
   }
 
@@ -71,9 +83,16 @@
     color: var(--brand-grey-light);
   }
 
+  .alignContentCenter {
+    justify-content: center;
+  }
+
   @media only screen and (min-width: 660px) {
-    h1 {
-      margin: calc(var(--spacer) * 2) 0;
+    .claimableRewardsContainer {
+      margin: var(--spacer) 0;
+    }
+    .container {
+      min-height: calc(100vh - 200px);
     }
   }
 </style>

@@ -16,7 +16,8 @@
   import Swal from "sweetalert2";
 
   export let chainId;
-  export let totalRewards;
+  export let estimatedRewards;
+  export let claimableRewards;
   export let claimables;
 
   let loading = false;
@@ -63,14 +64,18 @@
         text: loading ? "lOADING.." : "Claim",
         onClick: () => claim(),
         disabled:
-          chainId !== $connectedChainId || totalRewards === 0 || loading,
+          chainId !== $connectedChainId || claimableRewards === 0 || loading,
       },
     ];
   }
 </script>
 
 <Row
-  rowObject={{ network: chainId, rewards: totalRewards }}
+  rowObject={{
+    network: chainId,
+    "estimated rewards": estimatedRewards,
+    "claimable rewards": claimableRewards,
+  }}
   {buttons}
   size="large"
 />
