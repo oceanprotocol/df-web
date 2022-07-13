@@ -2,6 +2,7 @@
   import Header from "../src/components/header/Header.svelte";
   import BannerMessage from "./components/common/BannerMessage.svelte";
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
+  import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
   import PoolsPortal from "./components/pools/PoolsPortal.svelte";
   import {
     isWalletConnectModalOpen,
@@ -55,6 +56,9 @@
   <WalletConnectModal />
   <main>
     <Header />
+    <Route path="/veOCEAN">
+      <VeOceanPortal />
+    </Route>
     <Route path="/rewards">
       <ClaimPortal />
     </Route>
