@@ -6,11 +6,13 @@
   export let min;
   export let max;
   export let onChange;
+  export let direction = "row";
 </script>
 
-<div class="container">
+<div class={`container ${direction === "row" ? "row" : "column"}`}>
   {#if label}
-    <label>{label}</label>
+    <label class={`${direction === "column" && "margin-bottom"}`}>{label}</label
+    >
   {/if}
   <div class="inputContainer">
     {#if type === "number"}
@@ -68,5 +70,14 @@
     font-size: var(--font-size-small);
     margin-top: calc(var(--spacer) / 6);
     color: var(--brand-alert-red);
+  }
+  .row {
+    flex-direction: row;
+  }
+  .column {
+    flex-direction: column;
+  }
+  .margin-bottom {
+    margin-bottom: calc(var(--spacer) / 6);
   }
 </style>

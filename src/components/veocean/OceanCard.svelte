@@ -4,7 +4,7 @@
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
 
   let balance = 0;
-  let unlockDate = 0;
+  let lockedOceans = 0;
   let loading = true;
 
   $: if ($userAddress) {
@@ -14,14 +14,14 @@
 
 <div class={`container`}>
   <Card title="My OCEAN">
-    <div class="veOcean-info">
+    <div class="ocean-info">
       <ItemWithLabel
         title={`Ocean Balance`}
         value={loading || `${parseFloat(balance).toFixed(3)} OCEAN`}
       />
       <ItemWithLabel
         title={`Locked`}
-        value={loading || `${parseFloat(balance).toFixed(3)} OCEAN`}
+        value={loading || `${parseFloat(lockedOceans).toFixed(3)} OCEAN`}
       />
     </div>
   </Card>
@@ -37,7 +37,7 @@
     width: 100%;
   }
 
-  .veOcean-info {
+  .ocean-info {
     display: flex;
     justify-content: space-between;
     align-items: center;

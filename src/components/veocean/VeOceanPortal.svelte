@@ -2,6 +2,7 @@
   import { userAddress } from "../../stores/web3";
   import VeOceanCard from "./VeOceanCard.svelte";
   import OceanCard from "./OceanCard.svelte";
+  import LockOcean from "./LockOcean.svelte";
 
   $: if ($userAddress) {
   }
@@ -10,7 +11,7 @@
 <div class={`container`}>
   <VeOceanCard />
   <OceanCard />
-  <OceanCard />
+  <LockOcean />
 </div>
 
 <style>

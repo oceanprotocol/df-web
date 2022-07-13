@@ -17,12 +17,12 @@
     justify-content: center;
     width: 100%;
     border: 1px solid var(--brand-grey-lighter);
-    padding: calc(var(--spacer) / 3) calc(var(--spacer) / 2);
+    padding: calc(var(--spacer) / 2) calc(var(--spacer));
     background-color: var(--background-content);
   }
   .title {
     font-size: var(--font-size-normal);
     font-weight: bold;
-    margin-bottom: calc(var(--spacer) / 3);
+    margin-bottom: calc(var(--spacer) / 2);
   }
 </style>
