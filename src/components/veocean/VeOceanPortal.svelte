@@ -1,6 +1,7 @@
 <script>
   import { userAddress } from "../../stores/web3";
   import VeOceanCard from "./VeOceanCard.svelte";
+  import OceanCard from "./OceanCard.svelte";
 
   $: if ($userAddress) {
   }
@@ -8,25 +9,16 @@
 
 <div class={`container`}>
   <VeOceanCard />
+  <OceanCard />
+  <OceanCard />
 </div>
 
 <style>
   .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: calc(100vh - 115px);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: calc(var(--spacer) / 2);
     padding-top: calc(var(--spacer) * 2);
-  }
-
-  .pools {
-    width: 100%;
-    background-color: var(--brand-white);
-    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
-    transform: translate3d(0, -0.05rem, 0);
-    border-radius: var(--border-radius);
-    margin-top: calc(var(--spacer) * 2);
   }
 
   .loading {
