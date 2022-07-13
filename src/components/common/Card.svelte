@@ -14,28 +14,19 @@
 <style>
   .container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .inputContainer {
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-  .input {
+    width: 100%;
     border: 1px solid var(--brand-grey-lighter);
-    padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
-    border-radius: 3px;
+    padding: calc(var(--spacer) / 3) calc(var(--spacer) / 6);
+    background-color: var(--background-content);
   }
-  label {
+  .title {
+    font-size: var(--font-size-normal);
     font-weight: bold;
-    margin-right: calc(var(--spacer) / 8);
-    font-size: var(--font-size-small);
   }
-  .message {
-    font-size: var(--font-size-small);
-    margin-top: calc(var(--spacer) / 6);
-    color: var(--brand-alert-red);
+  .content {
+    margin-top: calc(var(--spacer) / 3);
   }
 </style>

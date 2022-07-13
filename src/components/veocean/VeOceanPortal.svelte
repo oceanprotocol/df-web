@@ -1,11 +1,16 @@
 <script>
   import { userAddress } from "../../stores/web3";
+  import Card from "../common/Card.svelte";
 
   $: if ($userAddress) {
   }
 </script>
 
-<div class={`container`}>VEOCEAN</div>
+<div class={`container`}>
+  <Card title="My veOCEAN">
+    <div>123456</div>
+  </Card>
+</div>
 
 <style>
   .container {
