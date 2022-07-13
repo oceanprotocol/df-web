@@ -1,10 +1,23 @@
 <script>
   import { Tooltip } from "carbon-components-svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
+  import { onMount } from "svelte";
 
   export let options = undefined;
   export let title = undefined;
   export let onCheck = undefined;
+
+  onMount(() => {
+    const localStorageColumns = JSON.parse(
+      localStorage.getItem("poolsDisplayedColumns")
+    );
+    if (!localStorageColumns["LP"]) return;
+    delete localStorageColumns["LP"];
+    localStorage.setItem(
+      "poolsDisplayedColumns",
+      JSON.stringify(localStorageColumns)
+    );
+  });
 
   let showOptions = true;
 </script>

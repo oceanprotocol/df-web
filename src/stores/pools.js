@@ -20,11 +20,10 @@ export const columnsData = [
   },
   { key: "pooladdress", value: "PoolAddress" },
   { key: "nftaddress", value: "NFTAddress" },
-  { key: "lp", value:"LP" },
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
+export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "Action"]
 
 async function getPools(api) {
   let res;

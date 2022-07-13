@@ -49,8 +49,8 @@
 
 <Router>
   <BannerMessage
-    title="This software is a Beta release."
-    message={`The website is under construction, use at your own discretion.`}
+    title="Data Farming has been paused."
+    message={`Please remove your liquidity from pools.`}
   />
   <WalletConnectModal />
   <main>
