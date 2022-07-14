@@ -1,4 +1,6 @@
 <script>
+  import DateInput from "./DateInput.svelte";
+
   export let label = undefined;
   export let value;
   export let placeholder = undefined;
@@ -32,6 +34,8 @@
         bind:checked={value}
         {placeholder}
       />
+    {:else if type === "date"}
+      <DateInput {min} {max} bind:value {placeholder} on:input={onChange} />
     {:else}
       <input
         class="input"

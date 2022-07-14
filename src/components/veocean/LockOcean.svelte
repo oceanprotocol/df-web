@@ -9,6 +9,7 @@
   let multiplier = 0;
   let apy = 0;
   let amountToLock = undefined;
+  let lockUntil = new Date().toLocaleDateString("en-CA");
   let loading = true;
 
   $: if ($userAddress) {
@@ -31,10 +32,10 @@
       </div>
       <div class="item">
         <Input
-          type="number"
+          type="date"
           label="Lock until"
           direction="column"
-          bind:value={amountToLock}
+          bind:value={lockUntil}
         />
       </div>
       <div class="item">
