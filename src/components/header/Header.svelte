@@ -7,9 +7,6 @@
     "https://blog.oceanprotocol.com/ocean-data-farming-series-c7922f1d0e45";
   const location = useLocation();
   const navigate = useNavigate();
-  $: if ($location.pathname !== "/pools") {
-    navigate("/rewards");
-  }
 </script>
 
 <svelte:head>
@@ -27,6 +24,9 @@
   </div>
   <nav>
     <ul>
+      <li class:active={$location.pathname === "/veOCEAN"}>
+        <Link to="/veOCEAN" class="link">veOCEAN</Link>
+      </li>
       <li class:active={$location.pathname === "/rewards"}>
         <Link to="/rewards" class="link">CLAIM PORTAL</Link>
       </li>

@@ -87,7 +87,7 @@
     justify-content: center;
   }
 
-  @media only screen and (min-width: 660px) {
+  @media only screen and (min-width: 640px) {
     .claimableRewardsContainer {
       margin: var(--spacer) 0;
     }

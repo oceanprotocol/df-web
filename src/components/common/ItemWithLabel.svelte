@@ -4,7 +4,12 @@
 </script>
 
 <div class="item">
-  <span class="title">{title}</span><span class="value">{value}</span>
+  <span class="title">{title}</span>
+  {#if value}
+    <span class="value">{value}</span>
+  {:else}
+    <span class="value">loading...</span>
+  {/if}
 </div>
 
 <style>

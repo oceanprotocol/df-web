@@ -81,7 +81,7 @@
     background-color: white;
     padding: calc(var(--spacer) / 2);
     border: 2px solid var(--brand-grey-dimmed);
-    box-shadow: 0 6px 15px 0 rgb(0 0 0 / 5%);
+    box-shadow: var(--box-shadow);
     overflow: hidden;
   }
   .container {

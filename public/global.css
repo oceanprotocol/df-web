@@ -50,6 +50,8 @@ body {
 
   --border-radius: 0.2rem;
 
+  --box-shadow: 0 12px 30px 0 rgb(0 0 0 / 10%);
+
   --button-disabled-color: #ff409280;
 
   --brand-alert-green: #5fb359;
@@ -88,7 +90,7 @@ h1:focus-visible {
   justify-content: center;
 }
 
-@media (min-width: 660px) {
+@media (min-width: 640px) {
   html {
     font-size: 100% !important;
   }

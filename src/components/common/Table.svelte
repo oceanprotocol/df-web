@@ -80,11 +80,13 @@
 {#if colData && rowData}
   <div>
     <div class="tableActionsContainer">
-      <Input
-        type="checkbox"
-        label="Only pools where I have shares"
-        bind:value={showPoolsWithShares}
-      />
+      <div class="poolsWithSharesInputContainer">
+        <Input
+          type="checkbox"
+          label="Only pools where I have shares"
+          bind:value={showPoolsWithShares}
+        />
+      </div>
       <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
     </div>
     <div class="tableContainer">
@@ -125,6 +127,11 @@
 {/if}
 
 <style>
+  .poolsWithSharesInputContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .tableContainer {
     width: 100%;
     overflow-y: scroll;

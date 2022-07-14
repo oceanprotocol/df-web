@@ -6,13 +6,15 @@
   export let min;
   export let max;
   export let onChange;
+  export let direction = "row";
 </script>
 
-<div class="container">
+<div class={`container ${direction === "row" ? "row" : "column"}`}>
   {#if label}
-    <label>{label}</label>
+    <label class={`${direction === "column" && "margin-bottom"}`}>{label}</label
+    >
   {/if}
-  <div class="inputContainer">
+  <div class={`inputContainer ${type === "checkbox" && "checkbox"}`}>
     {#if type === "number"}
       <input
         class="input"
@@ -24,7 +26,12 @@
         on:input={onChange}
       />
     {:else if type === "checkbox"}
-      <input class="input" type="checkbox" bind:checked={value} {placeholder} />
+      <input
+        class="input checkbox"
+        type="checkbox"
+        bind:checked={value}
+        {placeholder}
+      />
     {:else}
       <input
         class="input"
@@ -47,17 +54,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
   }
   .inputContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
   }
   .input {
     border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
+    width: 100%;
   }
   label {
     font-weight: bold;
@@ -68,5 +78,17 @@
     font-size: var(--font-size-small);
     margin-top: calc(var(--spacer) / 6);
     color: var(--brand-alert-red);
+  }
+  .row {
+    flex-direction: row;
+  }
+  .column {
+    flex-direction: column;
+  }
+  .margin-bottom {
+    margin-bottom: calc(var(--spacer) / 6);
+  }
+  .checkbox {
+    width: auto;
   }
 </style>
