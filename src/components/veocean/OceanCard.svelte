@@ -6,7 +6,8 @@
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
 
   let lockedOceans = 0;
-  let loading = true;
+  let balance = 0;
+  let loading = false;
 
   $: if (
     $userAddress &&
@@ -14,6 +15,13 @@
       getOceanTokenAddressByChainId($connectedChainId).toLowerCase()
     ]
   ) {
+    loading = true;
+    balance =
+      $userBalances[
+        getOceanTokenAddressByChainId($connectedChainId)
+          .toLowerCase()
+          .toLowerCase()
+      ];
     loading = false;
   }
 </script>
@@ -23,21 +31,13 @@
     <div class="ocean-info">
       <ItemWithLabel
         title={`Ocean Balance`}
-        value={loading
-          ? "loading..."
-          : `${parseFloat(
-              $userBalances[
-                getOceanTokenAddressByChainId($connectedChainId)
-                  .toLowerCase()
-                  .toLowerCase()
-              ]
-            ).toFixed(3)} OCEAN`}
+        value={`${parseFloat(balance).toFixed(3)} OCEAN`}
+        {loading}
       />
       <ItemWithLabel
         title={`Locked`}
-        value={loading
-          ? "loading..."
-          : `${parseFloat(lockedOceans).toFixed(3)} OCEAN`}
+        value={`${parseFloat(lockedOceans).toFixed(3)} OCEAN`}
+        {loading}
       />
     </div>
   </Card>

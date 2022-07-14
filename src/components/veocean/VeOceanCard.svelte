@@ -6,7 +6,7 @@
   let balance = 0;
   let unlockDate = new Date();
   let votingPowerMultiplier = 0;
-  let loading = true;
+  let loading = false;
 
   $: if ($userAddress) {
     loading = false;
@@ -18,15 +18,18 @@
     <div class="veOcean-info">
       <ItemWithLabel
         title={`veOcean Balance`}
-        value={loading || `${parseFloat(balance).toFixed(3)} veOCEAN`}
+        value={`${parseFloat(balance).toFixed(3)} veOCEAN`}
+        {loading}
       />
       <ItemWithLabel
         title={`Locked until`}
-        value={loading || `${new Date(unlockDate).toLocaleDateString()}`}
+        value={`${new Date(unlockDate).toLocaleDateString()}`}
+        {loading}
       />
       <ItemWithLabel
         title={`Voting power multiplier`}
-        value={loading || `${parseFloat(votingPowerMultiplier).toFixed(3)} X`}
+        value={`${parseFloat(votingPowerMultiplier).toFixed(3)} X`}
+        {loading}
       />
     </div>
   </Card>
