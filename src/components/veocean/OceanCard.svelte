@@ -1,13 +1,19 @@
 <script>
-  import { userAddress } from "../../stores/web3";
+  import { userAddress, connectedChainId } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
+  import { userBalances } from "../../stores/tokens";
+  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
 
-  let balance = 0;
   let lockedOceans = 0;
   let loading = true;
 
-  $: if ($userAddress) {
+  $: if (
+    $userAddress &&
+    $userBalances[
+      getOceanTokenAddressByChainId($connectedChainId).toLowerCase()
+    ]
+  ) {
     loading = false;
   }
 </script>
@@ -17,11 +23,21 @@
     <div class="ocean-info">
       <ItemWithLabel
         title={`Ocean Balance`}
-        value={loading || `${parseFloat(balance).toFixed(3)} OCEAN`}
+        value={loading
+          ? "loading..."
+          : `${parseFloat(
+              $userBalances[
+                getOceanTokenAddressByChainId($connectedChainId)
+                  .toLowerCase()
+                  .toLowerCase()
+              ]
+            ).toFixed(3)} OCEAN`}
       />
       <ItemWithLabel
         title={`Locked`}
-        value={loading || `${parseFloat(lockedOceans).toFixed(3)} OCEAN`}
+        value={loading
+          ? "loading..."
+          : `${parseFloat(lockedOceans).toFixed(3)} OCEAN`}
       />
     </div>
   </Card>

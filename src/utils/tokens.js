@@ -5,10 +5,22 @@ import * as TokenABI from "./abis/tokenABI";
 
 const tokenABI = TokenABI.default
 
+const oceanTokenAddressesByChain = {
+  4:"0x8967BCF84170c91B0d24D4302C2376283b0B3a07",
+  3:"0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9",
+  80001: "0xd8992Ed72C445c35Cb4A2be468568Ed1079357c8",
+  1287: "0xF6410bf5d773C7a41ebFf972f38e7463FA242477"
+}
+
+export const getOceanTokenAddressByChainId = (chainId) => {
+  return oceanTokenAddressesByChain[chainId]
+}
+
 //TODO - Standardize function calls & Params to follow ocean.js
 export const getTokenContract = async (chainId, address) => {
   try {
     const rpcURL = await getRpcUrlByChainId(chainId);
+
     if( rpcURL ) {
       const provider = new ethers.providers.JsonRpcProvider(rpcURL);
       return new ethers.Contract(address, TokenABI.default, provider);
@@ -21,12 +33,14 @@ export const getTokenContract = async (chainId, address) => {
 
 //TODO - Standardize function calls & Params to follow ocean.js
 export const balanceOf = async (balances, chainId, tokenAddress, account) => {
+  let balance
   try {
-    const tokenContract = await getTokenContract(chainId, tokenAddress);
-    if (balances[chainId] === undefined) {
-      balances[chainId] = {};
+    if (balances[tokenAddress] === undefined) {
+      balances[tokenAddress] = {};
     }
-    return await tokenContract.balanceOf(account);
+    const tokenContract = await getTokenContract(chainId, tokenAddress);
+    balance = await tokenContract.balanceOf(account);
+    return balance
   } catch(err) {
     console.error(err);
   }
