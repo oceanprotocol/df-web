@@ -1,9 +1,33 @@
 <script>
-  export let value;
+  export let value = undefined;
   export let placeholder = undefined;
-  export let min;
-  export let max;
-  export let onChange;
+  export let min = undefined;
+  export let max = undefined;
+  export let onChange = undefined;
+
+  const periods = [
+    {
+      label: "~2 weeks",
+      days: 14,
+    },
+    {
+      label: "~1 month",
+      days: 30,
+    },
+    {
+      label: "~1 year",
+      days: 365,
+    },
+    {
+      label: "~2 years",
+      days: 730,
+    },
+  ];
+
+  const handleOnPeriodClick = (period) => {
+    let date = new Date().setDate(new Date().getDate() + period);
+    value = new Date(date).toLocaleDateString("en-CA");
+  };
 </script>
 
 <div class={`container`}>
@@ -17,10 +41,11 @@
     on:input={onChange}
   />
   <ul class="periodList">
-    <li class="periodItem">2 weeks</li>
-    <li class="periodItem">1 month</li>
-    <li class="periodItem">1 year</li>
-    <li class="periodItem">2 years</li>
+    {#each periods as period, index}
+      <li class="periodItem" on:click={() => handleOnPeriodClick(period.days)}>
+        {period.label}
+      </li>
+    {/each}
   </ul>
 </div>
 
@@ -43,8 +68,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: calc(var(--spacer) / 12);
+    padding: 0 calc(var(--spacer) / 8);
   }
   .periodItem {
     font-size: var(--font-size-mini);
+    color: var(--brand-grey-light);
+  }
+  .periodItem:hover {
+    cursor: pointer;
+    color: var(--brand-color-primary);
   }
 </style>
