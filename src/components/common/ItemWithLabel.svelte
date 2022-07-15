@@ -1,11 +1,12 @@
 <script>
   export let title;
   export let value;
+  export let loading;
 </script>
 
 <div class="item">
   <span class="title">{title}</span>
-  {#if value}
+  {#if !loading}
     <span class="value">{value}</span>
   {:else}
     <span class="value">loading...</span>

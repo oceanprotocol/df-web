@@ -8,12 +8,14 @@
     isWalletConnectModalOpen,
     userAddress,
     connectWalletFromLocalStorage,
+    connectedChainId,
     selectedNetworks,
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
   import { rewards } from "./stores/airdrops";
   import { getRewards } from "./utils/rewards";
+  import { addUserOceanBalanceToBalances } from "./stores/tokens";
 
   window.process = {
     ...window.process,
@@ -30,6 +32,7 @@
   async function initRewards() {
     const newRewards = await getRewards($userAddress);
     rewards.update(() => newRewards);
+    await addUserOceanBalanceToBalances($connectedChainId);
   }
 
   $: if ($userAddress) {

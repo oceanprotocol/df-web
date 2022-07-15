@@ -6,10 +6,8 @@
     userAddress,
     connectedChainId,
   } from "../../stores/web3";
-  import Swal from "sweetalert2";
   import PoolInfo from "./PoolInfo.svelte";
   import Stake from "./Stake.svelte";
-  import { updateAllClaimables } from "../../stores/airdrops";
 
   export let pool;
 

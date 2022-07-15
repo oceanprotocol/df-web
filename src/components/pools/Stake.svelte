@@ -5,8 +5,7 @@
     connectedChainId,
     switchWalletNetwork,
   } from "../../stores/web3";
-  import { userBalances } from "../../stores/tokens";
-  import { balanceOf } from "../../utils/tokens";
+  import { userBalances, addUserBalanceToBalances } from "../../stores/tokens";
   import { ethers } from "ethers";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
@@ -29,7 +28,6 @@
   let stakeAmount = 0.0;
   let stakedAmount = 0.0;
   let currentPoolShare = 0.0;
-  let balance = 0.0;
   let calcBPTOut = 0.0;
   let estimatedRewards = 0.0;
   let canStake = false;
@@ -49,14 +47,7 @@
       pool.poolAddress
     );
     currentPoolShare = calcBPTOut;
-
-    const balanceInWei = await balanceOf(
-      $userBalances,
-      pool.chainId,
-      pool.basetokenAddress,
-      $userAddress
-    );
-    balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
+    await addUserBalanceToBalances(pool.chainId, pool.basetokenAddress);
   };
 
   $: if ($userAddress && pool.chainId === $connectedChainId) {
@@ -146,7 +137,7 @@
   function updateCanStake() {
     canStake =
       stakeAmount > 0.0 &&
-      stakeAmount <= balance &&
+      stakeAmount <= $userBalances[pool.basetokenAddress] &&
       stakeAmount < maxPoolInputAllowed;
   }
 
@@ -173,7 +164,7 @@
       <div class="items-container">
         <ItemWithLabel
           title={`${pool.basetoken} Balance`}
-          value={parseFloat(balance).toFixed(3)}
+          value={parseFloat($userBalances[pool.basetokenAddress]).toFixed(3)}
         />
         <ItemWithLabel
           title={`${pool.basetoken} staked`}
@@ -193,7 +184,9 @@
           type="number"
           bind:value={stakeAmount}
           min="0"
-          max={maxPoolInputAllowed > balance ? balance : maxPoolInputAllowed}
+          max={maxPoolInputAllowed > $userBalances[pool.basetokenAddress]
+            ? $userBalances[pool.basetokenAddress]
+            : maxPoolInputAllowed}
           onChange={handleStakeAmount}
         />
       </div>
