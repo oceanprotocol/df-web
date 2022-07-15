@@ -1,7 +1,7 @@
 <script>
   export let title;
   export let value;
-  export let loading;
+  export let loading = false;
 </script>
 
 <div class="item">

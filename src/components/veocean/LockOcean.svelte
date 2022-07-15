@@ -9,6 +9,8 @@
   let multiplier = 0;
   let apy = 0;
   let amountToLock = undefined;
+  let currentDate = new Date();
+  let lockUntil = currentDate.toLocaleDateString("en-CA");
   let loading = true;
 
   $: if ($userAddress) {
@@ -31,10 +33,14 @@
       </div>
       <div class="item">
         <Input
-          type="number"
+          type="date"
           label="Lock until"
           direction="column"
-          bind:value={amountToLock}
+          min={new Date().toLocaleDateString("en-CA")}
+          max={new Date(
+            currentDate.setFullYear(currentDate.getFullYear() + 4)
+          ).toLocaleDateString("en-CA")}
+          bind:value={lockUntil}
         />
       </div>
       <div class="item">
