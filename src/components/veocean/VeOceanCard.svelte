@@ -2,14 +2,21 @@
   import { userAddress } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
+  import { getVeOceanBalance } from "../../utils/ve";
 
   let balance = 0;
   let unlockDate = new Date();
   let votingPowerMultiplier = 0;
   let loading = false;
 
+  const setVeOceanBalance = async () => {
+    balance = await getVeOceanBalance($userAddress);
+    console.log(balance);
+  };
+
   $: if ($userAddress) {
     loading = false;
+    setVeOceanBalance();
   }
 </script>
 
