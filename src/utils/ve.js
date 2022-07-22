@@ -61,11 +61,12 @@ export const getVeOceanBalance = async(userAddress) => {
     }
   }
 
-  export const loackOcean = async(userAddress) => {
+  export const lockOcean = async(userAddress, amount, unlockDate, signer) => {
     const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
     try {
+        console.log(userAddress, amount, unlockDate)
         const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
+        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const timestamp = (await provider.getBlock(1)).timestamp
         const timestampInUnit256 = bigIntethers.utils.formatUnits(timestamp).toString()
         console.log(contract, timestamp)

@@ -7,6 +7,7 @@
   export let loading = false;
   export let disabled = false;
   export let textOnly = false;
+  export let type = "button";
 </script>
 
 <button
@@ -14,7 +15,7 @@
   class="button {secondary && 'buttonSecondary'} {disabled &&
     'disabled'} {textOnly && 'textOnly'}"
   disabled={disabled === true}
-  type="button"
+  {type}
 >
   {#if loading === true}
     <div class="loadingSpinnerContainer">

@@ -23,4 +23,11 @@ export const addUserOceanBalanceToBalances = async (chainId) => {
     const oceanContractAddress = getOceanTokenAddressByChainId(chainId)
     await addUserBalanceToBalances(chainId, oceanContractAddress.toLowerCase())
 }
+
+export const getOceanBalance = (chainId) => {
+  console.log(get(userBalances))
+  return get(userBalances)[
+    getOceanTokenAddressByChainId(chainId).toLowerCase()
+  ]
+}
   

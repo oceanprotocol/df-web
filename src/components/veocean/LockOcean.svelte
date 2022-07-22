@@ -1,46 +1,84 @@
 <script>
-  import { userAddress } from "../../stores/web3";
+  import { userAddress, connectedChainId } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Card from "../common/Card.svelte";
   import Input from "../common/Input.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
+  import { getOceanBalance, userBalances } from "../../stores/tokens";
+  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
+  import { lockOcean } from "../../utils/ve";
+  import * as yup from "yup";
+  import { Form, isInvalid } from "svelte-yup";
 
   let multiplier = 0;
   let apy = 0;
-  let amountToLock = undefined;
   let currentDate = new Date();
-  let lockUntil = currentDate.toLocaleDateString("en-CA");
   let loading = true;
+  let submitted = false;
 
   $: if ($userAddress) {
     loading = false;
   }
 
-  const lockOcean = () => {};
+  const onSubmit = () => {
+    submitted = true;
+    console.log(schema.isValidSync(fields));
+    console.log(fields.amount, fields.unlockDate);
+    if (!schema.isValidSync(fields)) return;
+    //lockOcean(userAddress, fields.amount, fields.unlockDate);
+  };
+
+  let schema = yup.object().shape({
+    amount: yup
+      .number()
+      .required("Amount is requred")
+      .min(1)
+      .max()
+      .label("Amount"),
+    unlockDate: yup
+      .date()
+      .required("Unlock date is requred")
+      .label("Unlock Date"),
+  });
+  let fields = {
+    amount: undefined,
+    unlockDate: currentDate.toLocaleDateString("en-CA"),
+  };
+  $: invalid = (name) => {
+    if (submitted) {
+      return isInvalid(schema, name, fields);
+    }
+    return false;
+  };
+  $: if ($connectedChainId) {
+    console.log(getOceanTokenAddressByChainId($connectedChainId));
+  }
 </script>
 
 <div class={`container`}>
   <Card title="Lock OCEAN to get veOCEAN">
-    <div class="content">
+    <Form class="content" {schema} {fields} submitHandler={onSubmit}>
       <div class="item">
         <Input
           type="number"
+          error={invalid("amount")}
           label="How much do you want to lock?"
           direction="column"
-          bind:value={amountToLock}
+          bind:value={fields.amount}
         />
       </div>
       <div class="item">
         <Input
           type="date"
           label="Lock until"
+          error={invalid("unlockDate")}
           direction="column"
           min={new Date().toLocaleDateString("en-CA")}
           max={new Date(
             currentDate.setFullYear(currentDate.getFullYear() + 4)
           ).toLocaleDateString("en-CA")}
-          bind:value={lockUntil}
+          bind:value={fields.unlockDate}
         />
       </div>
       <div class="item">
@@ -55,21 +93,23 @@
           />
         </div>
       </div>
-      <TokenApproval
-        tokenAddress={""}
-        tokenName={""}
-        poolAddress={""}
-        amount={""}
-        disabled={""}
-        bind:loading
-      >
-        <Button
-          text={loading ? "Locking" : "Lock OCEAN"}
-          onclick={() => lockOcean()}
-          disabled={loading}
-        />
-      </TokenApproval>
-    </div>
+      <div class="item">
+        <TokenApproval
+          tokenAddress={""}
+          tokenName={""}
+          poolAddress={""}
+          amount={""}
+          disabled={""}
+          bind:loading
+        >
+          <Button
+            text={loading ? "Locking" : "Lock OCEAN"}
+            disabled={loading}
+            type="submit"
+          />
+        </TokenApproval>
+      </div>
+    </Form>
   </Card>
 </div>
 
@@ -103,6 +143,10 @@
     margin-bottom: calc(var(--spacer) / 3);
     display: flex;
     justify-content: center;
+  }
+
+  .item:last-child {
+    margin-bottom: 0;
   }
 
   @media (min-width: 640px) {

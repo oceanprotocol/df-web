@@ -8,6 +8,7 @@
   export let min = undefined;
   export let max = undefined;
   export let onChange = undefined;
+  export let error = false;
   export let direction = "row";
 </script>
 
@@ -20,6 +21,7 @@
     {#if type === "number"}
       <input
         class="input"
+        class:invalid={error}
         type="number"
         {min}
         {max}
@@ -29,6 +31,7 @@
       />
     {:else if type === "checkbox"}
       <input
+        class:invalid={error}
         class="input checkbox"
         type="checkbox"
         bind:checked={value}
@@ -40,12 +43,16 @@
       <input
         class="input"
         type="text"
+        class:invalid={error}
         {min}
         {max}
         bind:value
         {placeholder}
         on:input={onChange}
       />
+    {/if}
+    {#if error}
+      <p class="message">{error}</p>
     {/if}
     {#if value > max}
       <p class="message">{`The maximum allowed amount is ${max}`}</p>
@@ -94,5 +101,8 @@
   }
   .checkbox {
     width: auto;
+  }
+  .invalid {
+    border-color: red !important;
   }
 </style>
