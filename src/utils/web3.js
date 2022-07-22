@@ -13,7 +13,7 @@ const providerOptions = {
     package: WalletConnectProvider,
     options: {
       // Mikko's test key - don't copy as your mileage may vary
-      infuraId: "4b9c931a4f26483aaf53db3ed884549e",
+      infuraId: process.env.INFURA_KEY,
     },
   }
 };
@@ -58,7 +58,7 @@ export const getRpcUrlByChainId = async(chainId) => {
   const networkNode = await networksList.find(
     (data) => data.chainId === parseInt(chainId)
   )
-  return networkNode.rpc[0]
+  return networkNode.chain==="ETH" ? `${networkNode.rpc[0]}${process.env.INFURA_KEY}` : networkNode.rpc[0]
 }
 
 export const getJsonRpcProvider = async (chainId) => {
