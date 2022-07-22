@@ -21,7 +21,7 @@ const bpoolAddress = "0x92fce550a77ffd6a7ae6ced8c04b0e1ba988ef7b";
 const bpoolSSEvent = 'LOG_BPT_SS';
 
 // Load Providers
-const url = `https://rinkeby.infura.io/v3/4b9c931a4f26483aaf53db3ed884549e`;
+const url = `https://rinkeby.infura.io/v3/${process.env.INFURA_KEY}`;
 const web3 = new Web3(url);
 web3.eth.accounts.wallet.add(process.env.ETH_PRIVATE_KEY);
 
