@@ -65,12 +65,9 @@ export const getVeOceanBalance = async(userAddress) => {
     const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
     try {
         console.log(userAddress, amount, unlockDate)
-        const provider = new ethers.providers.JsonRpcProvider(rpcURL);
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
-        const timestamp = (await provider.getBlock(1)).timestamp
-        const timestampInUnit256 = bigIntethers.utils.formatUnits(timestamp).toString()
-        console.log(contract, timestamp)
-        const veOceanBalanceInEth = await contract.balanceOf(userAddress)
+        const amountToLockInEth = ethers.utils.formatUnits(amount)
+        const veOceanBalanceInEth = await contract.create_lock(amount, unlockDate)
         const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth).toString(10))
         return veOceanBalance
     } catch (error) {

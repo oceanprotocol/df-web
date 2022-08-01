@@ -1,5 +1,9 @@
 <script>
-  import { userAddress, connectedChainId } from "../../stores/web3";
+  import {
+    userAddress,
+    connectedChainId,
+    networkSigner,
+  } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Card from "../common/Card.svelte";
   import Input from "../common/Input.svelte";
@@ -13,6 +17,8 @@
   let multiplier = 0;
   let apy = 0;
   let currentDate = new Date();
+  let maxDate = new Date();
+  let minDate = new Date();
   let loading = true;
 
   $: if ($userAddress) {
@@ -32,7 +38,9 @@
   });
   let fields = {
     amount: 0,
-    unlockDate: currentDate.toLocaleDateString("en-CA"),
+    unlockDate: new Date(
+      minDate.setDate(currentDate.getDate() + 1)
+    ).toLocaleDateString("en-CA"),
   };
   const { form, errors, handleSubmit } = createForm({
     initialValues: fields,
@@ -41,7 +49,9 @@
   });
 
   const onFormSubmit = async (values) => {
-    lockOcean(userAddress, values.amount, values.unlockDate);
+    const timeDifference = Math.abs(new Date(values.unlockDate) - currentDate);
+    console.log(timeDifference);
+    lockOcean($userAddress, values.amount, timeDifference, $networkSigner);
   };
 </script>
 
@@ -65,9 +75,9 @@
           name="unlockDate"
           error={$errors.unlockDate}
           direction="column"
-          min={new Date().toLocaleDateString("en-CA")}
+          min={minDate.toLocaleDateString("en-CA")}
           max={new Date(
-            currentDate.setFullYear(currentDate.getFullYear() + 4)
+            maxDate.setFullYear(maxDate.getFullYear() + 4)
           ).toLocaleDateString("en-CA")}
           bind:value={$form.unlockDate}
         />
