@@ -54,9 +54,6 @@
     {#if error}
       <p class="message">{error}</p>
     {/if}
-    {#if value > max}
-      <p class="message">{`The maximum allowed amount is ${max}`}</p>
-    {/if}
   </div>
 </div>
 

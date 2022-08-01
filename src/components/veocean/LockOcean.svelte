@@ -6,35 +6,24 @@
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
   import { getOceanBalance, userBalances } from "../../stores/tokens";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { lockOcean } from "../../utils/ve";
   import * as yup from "yup";
-  import { Form, isInvalid } from "svelte-yup";
+  import { createForm } from "svelte-forms-lib";
 
   let multiplier = 0;
   let apy = 0;
   let currentDate = new Date();
   let loading = true;
-  let submitted = false;
 
   $: if ($userAddress) {
     loading = false;
   }
-
-  const onSubmit = () => {
-    submitted = true;
-    console.log(schema.isValidSync(fields));
-    console.log(fields.amount, fields.unlockDate);
-    if (!schema.isValidSync(fields)) return;
-    //lockOcean(userAddress, fields.amount, fields.unlockDate);
-  };
-
   let schema = yup.object().shape({
     amount: yup
       .number()
       .required("Amount is requred")
       .min(1)
-      .max()
+      .max(parseInt(getOceanBalance($connectedChainId)))
       .label("Amount"),
     unlockDate: yup
       .date()
@@ -42,43 +31,45 @@
       .label("Unlock Date"),
   });
   let fields = {
-    amount: undefined,
+    amount: 0,
     unlockDate: currentDate.toLocaleDateString("en-CA"),
   };
-  $: invalid = (name) => {
-    if (submitted) {
-      return isInvalid(schema, name, fields);
-    }
-    return false;
+  const { form, errors, handleSubmit } = createForm({
+    initialValues: fields,
+    validationSchema: schema,
+    onSubmit: (values) => onFormSubmit(values),
+  });
+
+  const onFormSubmit = async (values) => {
+    lockOcean(userAddress, values.amount, values.unlockDate);
   };
-  $: if ($connectedChainId) {
-    console.log(getOceanTokenAddressByChainId($connectedChainId));
-  }
 </script>
 
 <div class={`container`}>
   <Card title="Lock OCEAN to get veOCEAN">
-    <Form class="content" {schema} {fields} submitHandler={onSubmit}>
+    <form class="content" on:submit={handleSubmit}>
       <div class="item">
         <Input
           type="number"
-          error={invalid("amount")}
+          name="amount"
+          error={$errors.amount}
           label="How much do you want to lock?"
           direction="column"
-          bind:value={fields.amount}
+          bind:value={$form.amount}
         />
       </div>
       <div class="item">
         <Input
           type="date"
           label="Lock until"
-          error={invalid("unlockDate")}
+          name="unlockDate"
+          error={$errors.unlockDate}
           direction="column"
           min={new Date().toLocaleDateString("en-CA")}
           max={new Date(
             currentDate.setFullYear(currentDate.getFullYear() + 4)
           ).toLocaleDateString("en-CA")}
-          bind:value={fields.unlockDate}
+          bind:value={$form.unlockDate}
         />
       </div>
       <div class="item">
@@ -109,7 +100,7 @@
           />
         </TokenApproval>
       </div>
-    </Form>
+    </form>
   </Card>
 </div>
 

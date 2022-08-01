@@ -25,7 +25,7 @@ export const addUserOceanBalanceToBalances = async (chainId) => {
 }
 
 export const getOceanBalance = (chainId) => {
-  console.log(get(userBalances))
+  if(!getOceanTokenAddressByChainId(chainId)) return undefined
   return get(userBalances)[
     getOceanTokenAddressByChainId(chainId).toLowerCase()
   ]
