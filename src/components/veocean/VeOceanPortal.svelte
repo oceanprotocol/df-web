@@ -39,7 +39,7 @@
     {/if}
   </div>
 {:else}
-  <div class={`container`}>Loading...</div>
+  <div class={`loading`}>Loading...</div>
 {/if}
 
 <style>
@@ -51,8 +51,12 @@
   }
 
   .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
+    height: calc(100vh - 115px);
   }
 
   .alignContentCenter {
