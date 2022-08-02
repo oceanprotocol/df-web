@@ -6,6 +6,7 @@
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Card from "../common/Card.svelte";
+  import Swal from "sweetalert2";
   import Input from "../common/Input.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
@@ -50,14 +51,25 @@
   });
 
   const onFormSubmit = async (values) => {
+    const newDate = new Date(values.unlockDate);
+    console.log(newDate);
+    console.log(values.unlockDate);
     const timeDifference = new Date(values.unlockDate).getTime();
     //Math.abs(new Date(values.unlockDate) - currentDate) / 1000;
     console.log(timeDifference);
-    lockOcean(
-      $userAddress,
-      values.amount,
-      timeDifference / 1000,
-      $networkSigner
+    try {
+      await lockOcean(
+        $userAddress,
+        values.amount,
+        timeDifference / 1000,
+        $networkSigner
+      );
+    } catch (error) {
+      Swal.fire("Error!", error.message, "error").then(() => {});
+      return;
+    }
+    Swal.fire("Success!", "Oceans succesfully locked.", "success").then(
+      async () => {}
     );
   };
 </script>
@@ -105,7 +117,7 @@
         <TokenApproval
           tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
           tokenName={"OCEAN"}
-          poolAddress={"0xc28a327658Ee1BC51e8024993Ae6dB3E98DFCbc2"}
+          poolAddress={process.env.VE_OCEAN_CONTRACT}
           amount={$form.amount}
           disabled={false}
           bind:loading

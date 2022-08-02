@@ -3,18 +3,14 @@
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { userBalances } from "../../stores/tokens";
+  import { getLockedOceanAmount } from "../../utils/ve";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
 
   let lockedOceans = 0;
   let balance = 0;
   let loading = false;
 
-  $: if (
-    $userAddress &&
-    $userBalances[
-      getOceanTokenAddressByChainId($connectedChainId).toLowerCase()
-    ]
-  ) {
+  const setValues = async () => {
     loading = true;
     balance =
       $userBalances[
@@ -22,7 +18,17 @@
           .toLowerCase()
           .toLowerCase()
       ];
+    lockedOceans = await getLockedOceanAmount($userAddress);
     loading = false;
+  };
+
+  $: if (
+    $userAddress &&
+    $userBalances[
+      getOceanTokenAddressByChainId($connectedChainId).toLowerCase()
+    ]
+  ) {
+    setValues();
   }
 </script>
 
