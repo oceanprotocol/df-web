@@ -46,6 +46,7 @@ export const getVeOceanBalance = async(userAddress) => {
     try {
         const provider = new ethers.providers.JsonRpcProvider(rpcURL);
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
+        console.log(contract)
         const lock = await contract.locked(userAddress)
         const lockAmount = ethers.utils.formatEther(BigInt(lock.amount).toString(10))
         return lockAmount
@@ -74,6 +75,15 @@ export const getVeOceanBalance = async(userAddress) => {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
         await contract.create_lock(amountToLockInEth, unlockDate)
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  export const withdrawOcean = async(signer) => {
+    try {
+        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
+        await contract.withdraw()
     } catch (error) {
       throw error;
     }

@@ -7,6 +7,7 @@
   import { lockedOceanAmount } from "../../stores/veOcean";
   import { userBalances } from "../../stores/tokens";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
+  import WithdrawOcean from "./WithdrawOcean.svelte";
 
   let oceanTokenAddress;
   let loading = false;
@@ -29,7 +30,11 @@
   <div class={`container`}>
     <VeOceanCard />
     <OceanCard />
-    <LockOcean />
+    {#if lockedOceanAmount}
+      <WithdrawOcean />
+    {:else}
+      <LockOcean />
+    {/if}
   </div>
 {:else}
   <div class={`container`}>Loading...</div>

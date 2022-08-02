@@ -10,7 +10,7 @@
   import Input from "../common/Input.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
-  import { getOceanBalance, userBalances } from "../../stores/tokens";
+  import { getOceanBalance } from "../../stores/tokens";
   import { lockOcean } from "../../utils/ve";
   import * as yup from "yup";
   import { createForm } from "svelte-forms-lib";
@@ -61,7 +61,7 @@
       loading = false;
       return;
     }
-    Swal.fire("Success!", "Oceans succesfully locked.", "success").then(
+    Swal.fire("Success!", "Oceans successfully locked.", "success").then(
       async () => {
         loading = false;
       }
@@ -118,7 +118,7 @@
           bind:loading
         >
           <Button
-            text={loading ? "Locking" : "Lock OCEAN"}
+            text={loading ? "Locking..." : "Lock OCEAN"}
             disabled={loading || $lockedOceanAmount}
             type="submit"
           />
