@@ -4,7 +4,7 @@
   import Card from "../common/Card.svelte";
   import Swal from "sweetalert2";
   import { withdrawOcean } from "../../utils/ve";
-  import { lockedOceanAmount } from "../../stores/veOcean";
+  import { oceanUnlockDate, lockedOceanAmount } from "../../stores/veOcean";
 
   let loading = true;
 
@@ -47,7 +47,9 @@
       <div class="item">
         <Button
           text={loading ? "Withdrawing..." : "Withdraw all"}
-          disabled={loading || !$lockedOceanAmount}
+          disabled={loading ||
+            !$lockedOceanAmount ||
+            new Date() < $oceanUnlockDate}
           onclick={() => withdraw()}
         />
       </div>

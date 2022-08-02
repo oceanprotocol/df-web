@@ -3,8 +3,8 @@
   import VeOceanCard from "./VeOceanCard.svelte";
   import OceanCard from "./OceanCard.svelte";
   import LockOcean from "./LockOcean.svelte";
-  import { getLockedOceanAmount } from "../../utils/ve";
-  import { lockedOceanAmount } from "../../stores/veOcean";
+  import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
+  import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import { userBalances } from "../../stores/tokens";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import WithdrawOcean from "./WithdrawOcean.svelte";
@@ -18,6 +18,8 @@
       getOceanTokenAddressByChainId($connectedChainId).toLowerCase();
     let lockedOceans = await getLockedOceanAmount($userAddress);
     lockedOceanAmount.update(() => lockedOceans);
+    let unlockDateMilliseconds = await getLockedEndTime($userAddress);
+    oceanUnlockDate.update(() => new Date(unlockDateMilliseconds));
     loading = false;
   };
 
