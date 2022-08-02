@@ -6,31 +6,25 @@
   import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import { userBalances } from "../../stores/tokens";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import WithdrawOcean from "./WithdrawOcean.svelte";
 
-  let oceanTokenAddress;
   let loading = !$lockedOceanAmount;
 
   console.log(!$lockedOceanAmount);
 
   const loadValues = async () => {
     loading = true;
-    oceanTokenAddress =
-      getOceanTokenAddressByChainId($connectedChainId).toLowerCase();
     let lockedOceans = await getLockedOceanAmount($userAddress);
     lockedOceanAmount.update(() => lockedOceans);
     let unlockDateMilliseconds = await getLockedEndTime($userAddress);
-    oceanUnlockDate.update(() => new Date(unlockDateMilliseconds));
+    oceanUnlockDate.update(() =>
+      unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+    );
     loading = false;
   };
 
   $: if ($userAddress && $userBalances && $connectedChainId) {
-    if (!$lockedOceanAmount) {
-      loadValues();
-    } else {
-      loading = false;
-    }
+    loadValues();
   }
 </script>
 
@@ -38,7 +32,7 @@
   <div class={`container`}>
     <VeOceanCard />
     <OceanCard />
-    {#if lockedOceanAmount}
+    {#if $lockedOceanAmount > 0}
       <WithdrawOcean />
     {:else}
       <LockOcean />

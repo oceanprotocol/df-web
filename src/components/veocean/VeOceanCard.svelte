@@ -32,7 +32,7 @@
         value={`${
           $oceanUnlockDate
             ? $oceanUnlockDate.toLocaleDateString("en-CA")
-            : "no value"
+            : "not locked"
         }`}
         {loading}
       />

@@ -63,7 +63,7 @@ export const getVeOceanBalance = async(userAddress) => {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
         const lockEndTime = await contract.locked__end(userAddress)
         const lockEndTimeFormated = parseInt(BigInt(lockEndTime).toString(10))*1000
-        return lockEndTimeFormated
+        return lockEndTimeFormated > 0 ? lockEndTimeFormated : undefined
     } catch (error) {
       console.log(error);
       return undefined;
