@@ -10,7 +10,9 @@
   import WithdrawOcean from "./WithdrawOcean.svelte";
 
   let oceanTokenAddress;
-  let loading = false;
+  let loading = !$lockedOceanAmount;
+
+  console.log(!$lockedOceanAmount);
 
   const loadValues = async () => {
     loading = true;
@@ -24,11 +26,15 @@
   };
 
   $: if ($userAddress && $userBalances && $connectedChainId) {
-    loadValues();
+    if (!$lockedOceanAmount) {
+      loadValues();
+    } else {
+      loading = false;
+    }
   }
 </script>
 
-{#if !loading && $userBalances[oceanTokenAddress]}
+{#if !loading}
   <div class={`container`}>
     <VeOceanCard />
     <OceanCard />
