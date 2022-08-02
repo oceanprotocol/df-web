@@ -1,7 +1,7 @@
 <script>
   import { Circle } from "svelte-loading-spinners";
 
-  export let onclick;
+  export let onclick = () => {};
   export let text;
   export let secondary = false;
   export let loading = false;
@@ -14,7 +14,7 @@
   on:click={onclick}
   class="button {secondary && 'buttonSecondary'} {disabled &&
     'disabled'} {textOnly && 'textOnly'}"
-  disabled={disabled === true}
+  {disabled}
   {type}
 >
   {#if loading === true}
@@ -45,6 +45,7 @@
   }
   .disabled {
     background-color: var(--button-disabled-color);
+    cursor: default;
   }
   .buttonSecondary {
     background-color: var(--brand-white);

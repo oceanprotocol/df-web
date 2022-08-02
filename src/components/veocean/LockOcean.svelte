@@ -77,6 +77,7 @@
           type="number"
           name="amount"
           error={$errors.amount}
+          disabled={getOceanBalance($connectedChainId) <= 0}
           label="How much do you want to lock?"
           direction="column"
           bind:value={$form.amount}
@@ -90,6 +91,7 @@
           error={$errors.unlockDate}
           direction="column"
           min={minDate.toLocaleDateString("en-CA")}
+          disabled={getOceanBalance($connectedChainId) <= 0}
           max={new Date(
             maxDate.setFullYear(maxDate.getFullYear() + 4)
           ).toLocaleDateString("en-CA")}
@@ -114,12 +116,16 @@
           tokenName={"OCEAN"}
           poolAddress={process.env.VE_OCEAN_CONTRACT}
           amount={$form.amount}
-          disabled={loading || $lockedOceanAmount}
+          disabled={loading ||
+            $lockedOceanAmount ||
+            getOceanBalance($connectedChainId) <= 0}
           bind:loading
         >
           <Button
             text={loading ? "Locking..." : "Lock OCEAN"}
-            disabled={loading || $lockedOceanAmount}
+            disabled={loading ||
+              $lockedOceanAmount ||
+              getOceanBalance($connectedChainId) <= 0}
             type="submit"
           />
         </TokenApproval>
