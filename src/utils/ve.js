@@ -34,8 +34,8 @@ export const getVeOceanBalance = async(userAddress) => {
         const timestamp = await provider.getBlockNumber()
         console.log(contract)
         //const timestampInUnit256 = ethers.utils.parseEther(timestamp.toString())
-        //const veOceanBalanceInEth = await contract.balanceOf(userAddress,'11062967000000000000000000')
-        const veOceanBalanceInEth = await contract.locked(userAddress)
+        const veOceanBalanceInEth = await contract.balanceOf(userAddress)
+        //const veOceanBalanceInEth = await contract.locked(userAddress)
         console.log(veOceanBalanceInEth)
         const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth.amount).toString(10))
         return veOceanBalance
@@ -66,8 +66,8 @@ export const getVeOceanBalance = async(userAddress) => {
     try {
         console.log(userAddress, amount, unlockDate)
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
-        const amountToLockInEth = ethers.utils.formatUnits(amount)
-        const veOceanBalanceInEth = await contract.create_lock(amount, unlockDate)
+        const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
+        const veOceanBalanceInEth = await contract.create_lock(amountToLockInEth, unlockDate)
         const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth).toString(10))
         return veOceanBalance
     } catch (error) {

@@ -32,6 +32,7 @@
   async function initRewards() {
     const newRewards = await getRewards($userAddress);
     rewards.update(() => newRewards);
+    console.log($connectedChainId);
     await addUserOceanBalanceToBalances($connectedChainId);
   }
 

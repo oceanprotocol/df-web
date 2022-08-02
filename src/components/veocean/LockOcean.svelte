@@ -13,6 +13,7 @@
   import { lockOcean } from "../../utils/ve";
   import * as yup from "yup";
   import { createForm } from "svelte-forms-lib";
+  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
 
   let multiplier = 0;
   let apy = 0;
@@ -49,9 +50,15 @@
   });
 
   const onFormSubmit = async (values) => {
-    const timeDifference = Math.abs(new Date(values.unlockDate) - currentDate);
+    const timeDifference = new Date(values.unlockDate).getTime();
+    //Math.abs(new Date(values.unlockDate) - currentDate) / 1000;
     console.log(timeDifference);
-    lockOcean($userAddress, values.amount, timeDifference, $networkSigner);
+    lockOcean(
+      $userAddress,
+      values.amount,
+      timeDifference / 1000,
+      $networkSigner
+    );
   };
 </script>
 
@@ -96,11 +103,11 @@
       </div>
       <div class="item">
         <TokenApproval
-          tokenAddress={""}
-          tokenName={""}
-          poolAddress={""}
-          amount={""}
-          disabled={""}
+          tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
+          tokenName={"OCEAN"}
+          poolAddress={"0xc28a327658Ee1BC51e8024993Ae6dB3E98DFCbc2"}
+          amount={$form.amount}
+          disabled={false}
           bind:loading
         >
           <Button
