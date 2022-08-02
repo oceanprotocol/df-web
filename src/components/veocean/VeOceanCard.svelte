@@ -2,21 +2,22 @@
   import { userAddress } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
-  import { getVeOceanBalance } from "../../utils/ve";
+  import { getVeOceanBalance, getLockedEndTime } from "../../utils/ve";
 
   let balance = 0;
-  let unlockDate = new Date();
+  let unlockDate = undefined;
   let votingPowerMultiplier = 0;
-  let loading = false;
+  let loading = true;
 
-  const setVeOceanBalance = async () => {
+  const setValues = async () => {
     balance = await getVeOceanBalance($userAddress);
-    console.log(balance);
+    let unlockDateMilliseconds = await getLockedEndTime($userAddress);
+    unlockDate = new Date(unlockDateMilliseconds);
+    loading = false;
   };
 
   $: if ($userAddress) {
-    loading = false;
-    setVeOceanBalance();
+    setValues();
   }
 </script>
 
@@ -30,7 +31,9 @@
       />
       <ItemWithLabel
         title={`Locked until`}
-        value={`${new Date(unlockDate).toLocaleDateString()}`}
+        value={`${
+          unlockDate ? new Date(unlockDate).toLocaleDateString() : "no value"
+        }`}
         {loading}
       />
       <ItemWithLabel

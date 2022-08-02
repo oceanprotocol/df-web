@@ -3,18 +3,29 @@
   import VeOceanCard from "./VeOceanCard.svelte";
   import OceanCard from "./OceanCard.svelte";
   import LockOcean from "./LockOcean.svelte";
+  import { getLockedOceanAmount } from "../../utils/ve";
+  import { lockedOceanAmount } from "../../stores/veOcean";
   import { userBalances } from "../../stores/tokens";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
 
   let oceanTokenAddress;
+  let loading = false;
 
-  $: if ($userAddress && $userBalances && $connectedChainId) {
+  const loadValues = async () => {
+    loading = true;
     oceanTokenAddress =
       getOceanTokenAddressByChainId($connectedChainId).toLowerCase();
+    let lockedOceans = await getLockedOceanAmount($userAddress);
+    lockedOceanAmount.update(() => lockedOceans);
+    loading = false;
+  };
+
+  $: if ($userAddress && $userBalances && $connectedChainId) {
+    loadValues();
   }
 </script>
 
-{#if oceanTokenAddress && $userBalances[oceanTokenAddress]}
+{#if !loading && $userBalances[oceanTokenAddress]}
   <div class={`container`}>
     <VeOceanCard />
     <OceanCard />

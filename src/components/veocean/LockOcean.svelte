@@ -15,6 +15,7 @@
   import * as yup from "yup";
   import { createForm } from "svelte-forms-lib";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
+  import { lockedOceanAmount } from "../../stores/veOcean";
 
   let multiplier = 0;
   let apy = 0;
@@ -51,25 +52,19 @@
   });
 
   const onFormSubmit = async (values) => {
-    const newDate = new Date(values.unlockDate);
-    console.log(newDate);
-    console.log(values.unlockDate);
+    loading = true;
     const timeDifference = new Date(values.unlockDate).getTime();
-    //Math.abs(new Date(values.unlockDate) - currentDate) / 1000;
-    console.log(timeDifference);
     try {
-      await lockOcean(
-        $userAddress,
-        values.amount,
-        timeDifference / 1000,
-        $networkSigner
-      );
+      await lockOcean(values.amount, timeDifference / 1000, $networkSigner);
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
+      loading = false;
       return;
     }
     Swal.fire("Success!", "Oceans succesfully locked.", "success").then(
-      async () => {}
+      async () => {
+        loading = false;
+      }
     );
   };
 </script>
@@ -119,12 +114,12 @@
           tokenName={"OCEAN"}
           poolAddress={process.env.VE_OCEAN_CONTRACT}
           amount={$form.amount}
-          disabled={false}
+          disabled={loading || $lockedOceanAmount}
           bind:loading
         >
           <Button
             text={loading ? "Locking" : "Lock OCEAN"}
-            disabled={loading}
+            disabled={loading || $lockedOceanAmount}
             type="submit"
           />
         </TokenApproval>

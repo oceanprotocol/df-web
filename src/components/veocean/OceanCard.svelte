@@ -1,35 +1,18 @@
 <script>
-  import { userAddress, connectedChainId } from "../../stores/web3";
+  import { connectedChainId } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { userBalances } from "../../stores/tokens";
-  import { getLockedOceanAmount } from "../../utils/ve";
+  import { lockedOceanAmount } from "../../stores/veOcean";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
 
-  let lockedOceans = 0;
-  let balance = 0;
-  let loading = false;
-
-  const setValues = async () => {
-    loading = true;
-    balance =
-      $userBalances[
-        getOceanTokenAddressByChainId($connectedChainId)
-          .toLowerCase()
-          .toLowerCase()
-      ];
-    lockedOceans = await getLockedOceanAmount($userAddress);
-    loading = false;
-  };
-
-  $: if (
-    $userAddress &&
+  let balance =
     $userBalances[
-      getOceanTokenAddressByChainId($connectedChainId).toLowerCase()
-    ]
-  ) {
-    setValues();
-  }
+      getOceanTokenAddressByChainId($connectedChainId)
+        .toLowerCase()
+        .toLowerCase()
+    ];
+  let loading = false;
 </script>
 
 <div class={`container`}>
@@ -42,7 +25,7 @@
       />
       <ItemWithLabel
         title={`Locked`}
-        value={`${parseFloat(lockedOceans).toFixed(3)} OCEAN`}
+        value={`${parseFloat($lockedOceanAmount).toFixed(3)} OCEAN`}
         {loading}
       />
     </div>

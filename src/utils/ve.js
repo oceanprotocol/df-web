@@ -26,16 +26,13 @@ export const getAllocatedAmount = async(userAddress) => {
 
 export const getVeOceanBalance = async(userAddress) => {
     const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
-    console.log(rpcURL)
     try {
-        console.log(process.env.VE_OCEAN_CONTRACT)
         const provider = new ethers.providers.JsonRpcProvider(rpcURL);
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
         const timestamp = await provider.getBlockNumber()
         //const timestampInUnit256 = ethers.utils.parseEther(timestamp.toString())
         const veOceanBalanceInEth = await contract.balanceOf(userAddress)
         //const veOceanBalanceInEth = await contract.locked(userAddress)
-        console.log(veOceanBalanceInEth)
         const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth.amount).toString(10))
         return veOceanBalance
     } catch (error) {
@@ -46,9 +43,7 @@ export const getVeOceanBalance = async(userAddress) => {
 
   export const getLockedOceanAmount = async(userAddress) => {
     const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
-    console.log(rpcURL)
     try {
-        console.log(process.env.VE_OCEAN_CONTRACT)
         const provider = new ethers.providers.JsonRpcProvider(rpcURL);
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
         const lock = await contract.locked(userAddress)
@@ -60,9 +55,22 @@ export const getVeOceanBalance = async(userAddress) => {
     }
   }
 
-  export const lockOcean = async(userAddress, amount, unlockDate, signer) => {
+  export const getLockedEndTime = async(userAddress) => {
+    const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
     try {
-        console.log(userAddress, amount, unlockDate)
+        const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
+        const lockEndTime = await contract.locked__end(userAddress)
+        const lockEndTimeFormated = parseInt(BigInt(lockEndTime).toString(10))*1000
+        return lockEndTimeFormated
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
+
+  export const lockOcean = async(amount, unlockDate, signer) => {
+    try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
         await contract.create_lock(amountToLockInEth, unlockDate)
