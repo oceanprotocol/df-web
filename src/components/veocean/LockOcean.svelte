@@ -92,6 +92,7 @@
           type="date"
           label="Lock until"
           name="unlockDate"
+          step="7"
           error={$errors.unlockDate}
           direction="column"
           min={minDate.toLocaleDateString("en-CA")}

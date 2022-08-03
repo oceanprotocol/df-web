@@ -5,6 +5,7 @@
   export let max = undefined;
   export let disabled = false;
   export let onChange = undefined;
+  export let step = 1;
 
   const periods = [
     {
@@ -35,6 +36,7 @@
   <input
     class="input"
     type="date"
+    {step}
     {min}
     {max}
     bind:value

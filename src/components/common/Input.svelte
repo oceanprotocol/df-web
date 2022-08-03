@@ -11,6 +11,7 @@
   export let onChange = undefined;
   export let error = false;
   export let name = undefined;
+  export let step = 1;
   export let direction = "row";
 </script>
 
@@ -45,6 +46,7 @@
       <DateInput
         {min}
         {max}
+        {step}
         bind:value
         {placeholder}
         on:input={onChange}
