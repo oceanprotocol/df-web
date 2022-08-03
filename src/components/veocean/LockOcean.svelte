@@ -10,7 +10,10 @@
   import Input from "../common/Input.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
-  import { getOceanBalance } from "../../stores/tokens";
+  import {
+    getOceanBalance,
+    addUserOceanBalanceToBalances,
+  } from "../../stores/tokens";
   import { lockOcean } from "../../utils/ve";
   import * as yup from "yup";
   import { createForm } from "svelte-forms-lib";
@@ -64,6 +67,7 @@
     Swal.fire("Success!", "Oceans successfully locked.", "success").then(
       async () => {
         loading = false;
+        await addUserOceanBalanceToBalances($connectedChainId);
       }
     );
   };
@@ -102,11 +106,13 @@
         <div class="output-container">
           <ItemWithLabel
             title={`Votin power multiplier`}
-            value={loading || `${parseFloat(multiplier).toFixed(1)} X`}
+            value={loading
+              ? "loading"
+              : `${parseFloat(multiplier).toFixed(1)} X`}
           />
           <ItemWithLabel
             title={`APY`}
-            value={loading || `${parseFloat(apy)}%`}
+            value={loading ? "loading" : `${parseFloat(apy)}%`}
           />
         </div>
       </div>
@@ -117,15 +123,16 @@
           poolAddress={process.env.VE_OCEAN_CONTRACT}
           amount={$form.amount}
           disabled={loading ||
-            $lockedOceanAmount ||
+            $lockedOceanAmount > 0 ||
             getOceanBalance($connectedChainId) <= 0}
           bind:loading
         >
           <Button
             text={loading ? "Locking..." : "Lock OCEAN"}
             disabled={loading ||
-              $lockedOceanAmount ||
-              getOceanBalance($connectedChainId) <= 0}
+              $lockedOceanAmount > 0 ||
+              getOceanBalance($connectedChainId) <= 0 ||
+              $form.amount <= 0}
             type="submit"
           />
         </TokenApproval>
