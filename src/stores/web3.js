@@ -23,7 +23,7 @@ const providerOptions = {
     package: WalletConnectProvider,
     options: {
       // Mikko's test key - don't copy as your mileage may vary
-      infuraId: "4b9c931a4f26483aaf53db3ed884549e",
+      infuraId: process.env.INFURA_KEY,
     },
   }
 };

@@ -4,10 +4,13 @@
   export let label = undefined;
   export let value = undefined;
   export let placeholder = undefined;
+  export let disabled = false;
   export let type = "text";
   export let min = undefined;
   export let max = undefined;
   export let onChange = undefined;
+  export let error = false;
+  export let name = undefined;
   export let direction = "row";
 </script>
 
@@ -20,7 +23,9 @@
     {#if type === "number"}
       <input
         class="input"
+        class:invalid={error}
         type="number"
+        {disabled}
         {min}
         {max}
         bind:value
@@ -29,17 +34,28 @@
       />
     {:else if type === "checkbox"}
       <input
+        class:invalid={error}
+        {disabled}
         class="input checkbox"
         type="checkbox"
         bind:checked={value}
         {placeholder}
       />
     {:else if type === "date"}
-      <DateInput {min} {max} bind:value {placeholder} on:input={onChange} />
+      <DateInput
+        {min}
+        {max}
+        bind:value
+        {placeholder}
+        on:input={onChange}
+        {disabled}
+      />
     {:else}
       <input
         class="input"
+        {disabled}
         type="text"
+        class:invalid={error}
         {min}
         {max}
         bind:value
@@ -47,8 +63,8 @@
         on:input={onChange}
       />
     {/if}
-    {#if value > max}
-      <p class="message">{`The maximum allowed amount is ${max}`}</p>
+    {#if error}
+      <p class="message">{error}</p>
     {/if}
   </div>
 </div>
@@ -94,5 +110,8 @@
   }
   .checkbox {
     width: auto;
+  }
+  .invalid {
+    border-color: red !important;
   }
 </style>

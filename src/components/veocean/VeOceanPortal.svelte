@@ -1,18 +1,46 @@
 <script>
-  import { userAddress } from "../../stores/web3";
+  import { userAddress, connectedChainId } from "../../stores/web3";
   import VeOceanCard from "./VeOceanCard.svelte";
   import OceanCard from "./OceanCard.svelte";
   import LockOcean from "./LockOcean.svelte";
+  import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
+  import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
+  import { userBalances } from "../../stores/tokens";
+  import WithdrawOcean from "./WithdrawOcean.svelte";
 
-  $: if ($userAddress) {
+  let loading = !$lockedOceanAmount;
+
+  console.log(!$lockedOceanAmount);
+
+  const loadValues = async () => {
+    loading = true;
+    let lockedOceans = await getLockedOceanAmount($userAddress);
+    lockedOceanAmount.update(() => lockedOceans);
+    let unlockDateMilliseconds = await getLockedEndTime($userAddress);
+    oceanUnlockDate.update(() =>
+      unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+    );
+    loading = false;
+  };
+
+  $: if ($userAddress && $userBalances && $connectedChainId) {
+    loadValues();
   }
 </script>
 
-<div class={`container`}>
-  <VeOceanCard />
-  <OceanCard />
-  <LockOcean />
-</div>
+{#if !loading}
+  <div class={`container`}>
+    <VeOceanCard />
+    <OceanCard />
+    {#if $lockedOceanAmount > 0}
+      <WithdrawOcean />
+    {:else}
+      <LockOcean />
+    {/if}
+  </div>
+{:else}
+  <div class={`loading`}>Loading...</div>
+{/if}
 
 <style>
   .container {
@@ -23,8 +51,12 @@
   }
 
   .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
+    height: calc(100vh - 115px);
   }
 
   .alignContentCenter {

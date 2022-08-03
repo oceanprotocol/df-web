@@ -3,6 +3,7 @@
   export let placeholder = undefined;
   export let min = undefined;
   export let max = undefined;
+  export let disabled = false;
   export let onChange = undefined;
 
   const periods = [
@@ -39,6 +40,7 @@
     bind:value
     {placeholder}
     on:input={onChange}
+    {disabled}
   />
   <ul class="periodList">
     {#each periods as period, index}
