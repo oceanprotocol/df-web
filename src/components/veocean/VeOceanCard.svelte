@@ -30,9 +30,7 @@
       <ItemWithLabel
         title={`Locked until`}
         value={`${
-          $oceanUnlockDate
-            ? $oceanUnlockDate.toLocaleDateString("en-CA")
-            : "not locked"
+          $oceanUnlockDate ? $oceanUnlockDate.toLocaleDateString("en-CA") : "-"
         }`}
         {loading}
       />
