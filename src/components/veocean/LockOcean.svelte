@@ -22,10 +22,15 @@
 
   let multiplier = 0;
   let apy = 0;
-  let currentDate = new Date();
   let maxDate = new Date();
-  let minDate = new Date();
   let loading = true;
+
+  const getThursdayDate = () => {
+    var curr = new Date();
+    if (curr.getDay() > 4) curr.setDate(curr.getDate() + 4); // get current date
+    var first = curr.getDate() - curr.getDay();
+    return new Date(curr.setDate(first + 4)).toLocaleDateString("en-CA");
+  };
 
   $: if ($userAddress) {
     loading = false;
@@ -44,9 +49,7 @@
   });
   let fields = {
     amount: 0,
-    unlockDate: new Date(
-      minDate.setDate(currentDate.getDate() + 1)
-    ).toLocaleDateString("en-CA"),
+    unlockDate: getThursdayDate(),
   };
   const { form, errors, handleSubmit } = createForm({
     initialValues: fields,
@@ -95,7 +98,7 @@
           step="7"
           error={$errors.unlockDate}
           direction="column"
-          min={minDate.toLocaleDateString("en-CA")}
+          min={getThursdayDate()}
           disabled={getOceanBalance($connectedChainId) <= 0}
           max={new Date(
             maxDate.setFullYear(maxDate.getFullYear() + 4)
