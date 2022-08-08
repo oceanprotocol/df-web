@@ -33,7 +33,7 @@
     <VeOceanCard />
     <OceanCard />
     {#if $lockedOceanAmount > 0}
-      <WithdrawOcean />
+      <LockOcean />
     {:else}
       <LockOcean />
     {/if}

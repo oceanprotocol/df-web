@@ -88,3 +88,22 @@ export const getVeOceanBalance = async(userAddress) => {
       throw error;
     }
   }
+
+  export const updateLockedOceanAmount = async(amount, signer) => {
+    try {
+        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
+        const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
+        await contract.increase_amount(amountToLockInEth)
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  export const updateLuckPeriod = async(unlockDate, signer) => {
+    try {
+        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
+        await contract.increase_unlock_time(unlockDate)
+    } catch (error) {
+      throw error;
+    }
+  }
