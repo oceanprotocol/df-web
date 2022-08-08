@@ -28,7 +28,7 @@
         {loading}
       />
       <ItemWithLabel
-        title={`Locked until`}
+        title={`Lock period end`}
         value={`${
           $oceanUnlockDate ? $oceanUnlockDate.toLocaleDateString("en-CA") : "-"
         }`}
@@ -58,8 +58,5 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-  }
-
-  @media (min-width: 640px) {
   }
 </style>

@@ -5,6 +5,7 @@
   import { userBalances } from "../../stores/tokens";
   import { lockedOceanAmount } from "../../stores/veOcean";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
+  import WithdrawOcean from "./WithdrawOcean.svelte";
 
   let balance =
     $userBalances[
@@ -28,6 +29,11 @@
         value={`${parseFloat($lockedOceanAmount).toFixed(3)} OCEAN`}
         {loading}
       />
+    </div>
+    <div class="ocean-info">
+      {#if $lockedOceanAmount > 0}
+        <WithdrawOcean />
+      {/if}
     </div>
   </Card>
 </div>
