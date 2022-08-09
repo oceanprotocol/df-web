@@ -65,7 +65,7 @@
     <Route path="/rewards">
       <ClaimPortal />
     </Route>
-    <Route path="/pools">
+    <Route path="/data">
       <DataPortal />
     </Route>
   </main>
