@@ -70,11 +70,9 @@
     try {
       if ($lockedOceanAmount > 0) {
         if (values.amount > 0) {
-          console.log("update lock amount");
           await updateLockedOceanAmount(values.amount, $networkSigner);
         }
         if (new Date(values.unlockDate) > new Date($oceanUnlockDate)) {
-          console.log("extend lock time");
           await updateLuckPeriod(timeDifference / 1000, $networkSigner);
         }
       } else {
