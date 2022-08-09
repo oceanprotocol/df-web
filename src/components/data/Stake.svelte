@@ -10,17 +10,16 @@
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import Swal from "sweetalert2";
-  import { addDTLiquidity } from "../../utils/bpools";
   import TokenApproval from "../common/TokenApproval.svelte";
   import Input from "../common/Input.svelte";
   import {
-    getStakedAmountForLPAddress,
+    getAllocatedAmountForAddress,
     calculatePoolShares,
-  } from "../../utils/poolShares";
+  } from "../../utils/dataAllocations";
   import { getRewardsForPoolUser } from "../../utils/rewards";
-  import { calcMaxAllowedStakeInput } from "../../utils/pools";
+  import { calcMaxAllowedStakeInput } from "../../utils/data";
   import { rewards } from "../../stores/airdrops";
-  import { userStakes } from "../../stores/poolShares";
+  import { dataAllocations } from "../../stores/dataAllocations";
 
   export let pool;
   export let loading = false;
@@ -34,8 +33,8 @@
   let maxPoolInputAllowed = calcMaxAllowedStakeInput(pool.tvl * 2);
 
   const updateBalance = async () => {
-    stakedAmount = await getStakedAmountForLPAddress(
-      $userStakes,
+    stakedAmount = await getAllocatedAmountForAddress(
+      dataAllocations,
       pool.poolAddress
     );
     calcBPTOut = await calculatePoolShares(pool.tvl * 2, stakedAmount);

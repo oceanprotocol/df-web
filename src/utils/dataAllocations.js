@@ -1,4 +1,4 @@
-export const getAllPoolSharesForLPAddress = async(userAddress) => {
+export const getAllAllocationsForAddress = async(userAddress) => {
     let res;
     try {
       res = await fetch(`${process.env.BACKEND_API}/stakes`, {
@@ -20,7 +20,7 @@ export const getAllPoolSharesForLPAddress = async(userAddress) => {
     return data;
   }
 
-export const getStakedAmountForLPAddress = async(stakes,poolAddress) => {
+export const getAllocatedAmountForAddress = async(stakes,poolAddress) => {
   let pool;
   pool = stakes.find((poolStake) =>poolStake.pool_addr === poolAddress)
     return pool ? pool.stake_amt * 2 : 0;

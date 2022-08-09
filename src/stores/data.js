@@ -4,7 +4,7 @@ import * as networksDataArray from "../networks-metadata.json";
 
 let networksData = networksDataArray.default
 
-export let pools = writable("");
+export let datasets = writable("");
 
 export const columnsData = [
   { key: "network", value: "Network" },
@@ -26,7 +26,7 @@ export const columnsData = [
 
 export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
 
-async function getPools(api) {
+async function getDatasets(api) {
   let res;
   try {
     res = await fetch(api, {
@@ -59,48 +59,48 @@ const getTokenSymbolByAddress = (address) => {
   }
 }
 
-function getRow(poolInfo, key) {
+function getRow(dataInfo, key) {
   return {
     id: key,
-    network: getNetworkDataById(networksData, parseInt(poolInfo.chainID))?.name,
-    datatoken: poolInfo.DT_symbol,
-    dtaddress: poolInfo.DT_addr,
-    basetoken: getTokenSymbolByAddress(poolInfo.basetoken),
-    basetokenaddress: poolInfo.basetoken_addr,
-    pooladdress: poolInfo.pool_addr,
-    nftaddress: poolInfo.nft_addr,
-    tvl: parseFloat(poolInfo.stake_amt).toFixed(3),
-    volume: parseFloat(poolInfo.vol_amt).toFixed(3),
+    network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
+    datatoken: dataInfo.DT_symbol,
+    dtaddress: dataInfo.DT_addr,
+    basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
+    basetokenaddress: dataInfo.basetoken_addr,
+    pooladdress: dataInfo.pool_addr,
+    nftaddress: dataInfo.nft_addr,
+    tvl: parseFloat(dataInfo.stake_amt).toFixed(3),
+    volume: parseFloat(dataInfo.vol_amt).toFixed(3),
     lp: {
-      chainId: poolInfo.chainID,
-      url: poolInfo.url,
-      poolAddress: poolInfo.pool_addr,
-      nftAddress: poolInfo.nft_addr,
-      DTAddress: poolInfo.DT_addr,
-      basetokenAddress: poolInfo.basetoken_addr,
-      DTSymbol: poolInfo.DT_symbol,
-      basetoken: getTokenSymbolByAddress(poolInfo.basetoken),
-      tvl: parseFloat(poolInfo.stake_amt),
-      volume: parseFloat(poolInfo.vol_amt),
+      chainId: dataInfo.chainID,
+      url: dataInfo.url,
+      poolAddress: dataInfo.pool_addr,
+      nftAddress: dataInfo.nft_addr,
+      DTAddress: dataInfo.DT_addr,
+      basetokenAddress: dataInfo.basetoken_addr,
+      DTSymbol: dataInfo.DT_symbol,
+      basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
+      tvl: parseFloat(dataInfo.stake_amt),
+      volume: parseFloat(dataInfo.vol_amt),
     },
-    action: poolInfo.url,
+    action: dataInfo.url,
   };
 }
 
-export async function loadPools(poolsApi) {
-  const allPools = await getPools(poolsApi);
-  if (allPools.length === 0) {
-    pools.set([]);
+export async function loadDatasets(poolsApi) {
+  const allDatasets = await getDatasets(poolsApi);
+  if (allDatasets.length === 0) {
+    datasets.set([]);
     return;
   }
-  let newPools = [];
-  allPools.forEach((poolInfo, key) => {
-     poolInfo.totalPools = allPools.length;
-     poolInfo.totalTVL = allPools.reduce(
-      (total, pool) => total + parseFloat(pool.stake_amt)
+  let newDatasets = [];
+  allDatasets.forEach((datasetInfo, key) => {
+    datasetInfo.totalPools = allDatasets.length;
+    datasetInfo.totalTVL = allDatasets.reduce(
+      (total, dataset) => total + parseFloat(dataset.stake_amt)
     );
-    newPools.push(getRow(poolInfo, key));
+    newDatasets.push(getRow(datasetInfo, key));
   });
 
-  pools.set(newPools);
+  datasets.set(newDatasets);
 }

@@ -1,29 +1,29 @@
 <script>
-  import { loadPools, pools, columnsData } from "../../stores/pools";
-  import { getAllPoolSharesForLPAddress } from "../../utils/poolShares";
-  import { userStakes } from "../../stores/poolShares";
+  import { loadDatasets, datasets, columnsData } from "../../stores/data";
+  import { getAllAllocationsForAddress } from "../../utils/dataAllocations";
+  import { dataAllocations } from "../../stores/dataAllocations";
   import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
 
-  $: if (!$pools) {
-    loadPools(`${process.env.BACKEND_API}/pools`);
+  $: if (!$datasets) {
+    loadDatasets(`${process.env.BACKEND_API}/pools`);
   }
 
   $: if ($userAddress) {
-    getAllPoolSharesForLPAddress($userAddress).then((resp) => {
-      userStakes.update(() => resp);
+    getAllAllocationsForAddress($userAddress).then((resp) => {
+      dataAllocations.update(() => resp);
     });
   }
 </script>
 
-<div class={`container ${!$pools && "alignContentCenter"}`}>
-  {#if $pools}
-    <div class="pools">
+<div class={`container ${!$datasets && "alignContentCenter"}`}>
+  {#if $datasets}
+    <div class="data">
       <Table
         colData={columnsData}
         notHidableColumns={["Action", "LP"]}
-        rowData={$pools}
-        description="Explore all the pools that are eligible for staking, and stake your Ocean token to get rewards."
+        rowData={$datasets}
+        description="Explore all the datasets that are eligible for staking, and stake your Ocean token to get rewards."
       />
     </div>
   {:else}
@@ -40,7 +40,7 @@
     height: calc(100vh - 115px);
   }
 
-  .pools {
+  .data {
     width: 100%;
     background-color: var(--brand-white);
     box-shadow: var(--box-shadow);
@@ -59,7 +59,7 @@
   }
 
   @media (min-width: 640px) {
-    .pools {
+    .data {
       margin-top: var(--spacer);
     }
   }

@@ -34,7 +34,7 @@
     <div class="claimableRewardsContainer">
       <ClaimableRewards />
     </div>
-    <div class="pools">
+    <div class="datasets">
       {#each $selectedNetworks as chainId}
         <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
       {/each}
@@ -69,7 +69,7 @@
     min-height: calc(100vh - 300px);
   }
 
-  .pools {
+  .datasets {
     width: 100%;
   }
 

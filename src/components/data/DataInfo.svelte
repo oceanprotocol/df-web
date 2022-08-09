@@ -2,19 +2,19 @@
   import NetworkItem from "../common/NetworkItem.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
 
-  export let pool;
+  export let data;
 </script>
 
-{#if pool}
+{#if data}
   <div class="header">
     <h3>Pool</h3>
-    <NetworkItem chainId={pool.chainId} />
+    <NetworkItem chainId={data.chainId} />
   </div>
   <div class="items-container">
-    <ItemWithLabel title="DataToken Symbol" value={pool.DTSymbol} />
-    <ItemWithLabel title="Basetoken" value={pool.basetoken} />
-    <ItemWithLabel title="TVL" value={(parseInt(pool.tvl) * 2).toFixed(3)} />
-    <ItemWithLabel title="Volume" value={parseInt(pool.volume).toFixed(3)} />
+    <ItemWithLabel title="DataToken Symbol" value={data.DTSymbol} />
+    <ItemWithLabel title="Basetoken" value={data.basetoken} />
+    <ItemWithLabel title="TVL" value={(parseInt(data.tvl) * 2).toFixed(3)} />
+    <ItemWithLabel title="Volume" value={parseInt(data.volume).toFixed(3)} />
   </div>
 {:else}{/if}
 
