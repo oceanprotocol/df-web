@@ -2,7 +2,6 @@
   import Button from "../common/Button.svelte";
   import NetworkItem from "../common/NetworkItem.svelte";
   import StakeModal from "./StakeModal.svelte";
-  import {connectedChainId, switchWalletNetwork} from "../../stores/web3";
 
   export let pool;
   export let rowObject;
@@ -28,7 +27,7 @@
     </div>
   {/each}
   <div class="row directionRow placeRowEnd">
-    <StakeModal pool={pool}/>
+    <StakeModal {pool} />
   </div>
   {#if buttons}
     <div class="row directionRow placeRowEnd">
@@ -36,9 +35,7 @@
         <div class="buttonContainer">
           <Button
             text={button.text}
-            onclick={() =>
-              button.onClick(pool)
-            }
+            onclick={() => button.onClick(pool)}
             disabled={button.disabled}
           />
         </div>

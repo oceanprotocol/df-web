@@ -14,7 +14,7 @@
   on:click={onclick}
   class="button {secondary && 'buttonSecondary'} {disabled && secondary
     ? 'disabledSecondary'
-    : 'disabled'} {textOnly && 'textOnly'}"
+    : disabled && 'disabled'} {textOnly && 'textOnly'}"
   {disabled}
   {type}
 >

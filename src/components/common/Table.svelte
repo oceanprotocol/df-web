@@ -110,7 +110,7 @@
               onclick={() => {
                 window.open(cell.value, "_blank");
               }}
-              disabled={false}
+              disabled={true}
             />{:else if cell.key === "lp"}
             <StakeModal pool={cell.value} />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
