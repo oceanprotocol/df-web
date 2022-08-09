@@ -1,7 +1,7 @@
 <script>
   import { loadDatasets, datasets, columnsData } from "../../stores/data";
-  import { getAllPoolSharesForLPAddress } from "../../utils/poolShares";
-  import { userStakes } from "../../stores/poolShares";
+  import { getAllAllocationsForAddress } from "../../utils/dataAllocations";
+  import { dataAllocations } from "../../stores/dataAllocations";
   import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
 
@@ -10,8 +10,8 @@
   }
 
   $: if ($userAddress) {
-    getAllPoolSharesForLPAddress($userAddress).then((resp) => {
-      userStakes.update(() => resp);
+    getAllAllocationsForAddress($userAddress).then((resp) => {
+      dataAllocations.update(() => resp);
     });
   }
 </script>

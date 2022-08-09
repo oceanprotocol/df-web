@@ -12,7 +12,7 @@
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
   import { filterDataByUserAllocation } from "../../utils/data";
-  import { userStakes } from "../../stores/poolShares";
+  import { dataAllocations } from "../../stores/dataAllocations";
   import Input from "./Input.svelte";
 
   // TODO - Fix RowData vs. LPData
@@ -68,7 +68,7 @@
   }
 
   $: if (showPoolsWithShares) {
-    const newData = filterDataByUserAllocation(rowData, $userStakes);
+    const newData = filterDataByUserAllocation(rowData, $dataAllocations);
     poolsWithShares = newData;
   }
 
