@@ -1,7 +1,6 @@
 <script>
   import { userAddress, networkSigner } from "../../stores/web3";
   import Button from "../common/Button.svelte";
-  import Card from "../common/Card.svelte";
   import Swal from "sweetalert2";
   import { withdrawOcean } from "../../utils/ve";
   import { oceanUnlockDate, lockedOceanAmount } from "../../stores/veOcean";
@@ -30,31 +29,20 @@
 </script>
 
 <div class={`container`}>
-  <Card title="Withdraw OCEAN">
-    <div>
-      <div class="item">
-        <p>
-          <strong>OCEAN</strong> withdrawal will be enabled as soon as the lock period
-          is over.
-        </p>
-      </div>
-      <div class="item">
-        <p>
-          You can lock your <strong>OCEAN</strong> tokens again after you withdraw
-          the current locked amount.
-        </p>
-      </div>
-      <div class="item">
-        <Button
-          text={loading ? "Withdrawing..." : "Withdraw all"}
-          disabled={loading ||
-            !$lockedOceanAmount ||
-            new Date() < $oceanUnlockDate}
-          onclick={() => withdraw()}
-        />
-      </div>
-    </div>
-  </Card>
+  <div class="item">
+    <Button
+      text={loading ? "Withdrawing..." : "Withdraw all locked"}
+      secondary
+      disabled={loading || !$lockedOceanAmount || new Date() < $oceanUnlockDate}
+      onclick={() => withdraw()}
+    />
+  </div>
+  <div class="item">
+    <p>
+      <strong>OCEAN</strong> withdrawal will be enabled as soon as the lock period
+      is over.
+    </p>
+  </div>
 </div>
 
 <style>
@@ -67,39 +55,19 @@
     width: 100%;
   }
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-
-  .output-container {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-  }
-
   .item {
     width: 100%;
-    margin-bottom: calc(var(--spacer) / 3);
+    margin-top: calc(var(--spacer) / 2);
     display: flex;
     justify-content: center;
   }
 
   .item p {
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-mini);
   }
 
   .item:last-child {
+    margin-top: calc(var(--spacer) / 6);
     margin-bottom: 0;
-  }
-
-  @media (min-width: 640px) {
-    .container {
-      grid-column: 2 / 3;
-    }
   }
 </style>

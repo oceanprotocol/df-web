@@ -14,11 +14,15 @@
     getOceanBalance,
     addUserOceanBalanceToBalances,
   } from "../../stores/tokens";
-  import { lockOcean } from "../../utils/ve";
+  import {
+    lockOcean,
+    updateLockedOceanAmount,
+    updateLuckPeriod,
+  } from "../../utils/ve";
   import * as yup from "yup";
   import { createForm } from "svelte-forms-lib";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
-  import { lockedOceanAmount } from "../../stores/veOcean";
+  import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
 
   let multiplier = 0;
   let apy = 0;
@@ -39,7 +43,7 @@
     amount: yup
       .number()
       .required("Amount is requred")
-      .min(1)
+      .min($lockedOceanAmount ? 0 : 1)
       .max(parseInt(getOceanBalance($connectedChainId)))
       .label("Amount"),
     unlockDate: yup
@@ -49,7 +53,10 @@
   });
   let fields = {
     amount: 0,
-    unlockDate: getThursdayDate(),
+    unlockDate:
+      $lockedOceanAmount > 0
+        ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
+        : getThursdayDate(),
   };
   const { form, errors, handleSubmit } = createForm({
     initialValues: fields,
@@ -61,7 +68,16 @@
     loading = true;
     const timeDifference = new Date(values.unlockDate).getTime();
     try {
-      await lockOcean(values.amount, timeDifference / 1000, $networkSigner);
+      if ($lockedOceanAmount > 0) {
+        if (values.amount > 0) {
+          await updateLockedOceanAmount(values.amount, $networkSigner);
+        }
+        if (new Date(values.unlockDate) > new Date($oceanUnlockDate)) {
+          await updateLuckPeriod(timeDifference / 1000, $networkSigner);
+        }
+      } else {
+        await lockOcean(values.amount, timeDifference / 1000, $networkSigner);
+      }
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
@@ -77,12 +93,18 @@
 </script>
 
 <div class={`container`}>
-  <Card title="Lock OCEAN to get veOCEAN">
+  <Card
+    title={$lockedOceanAmount > 0
+      ? `Update lock values`
+      : `Lock OCEAN to get veOCEAN`}
+  >
     <form class="content" on:submit={handleSubmit}>
       <div class="item">
         <Input
           type="number"
           name="amount"
+          min={$lockedOceanAmount ? 0 : 1}
+          max={parseInt(getOceanBalance($connectedChainId))}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0}
           label="How much do you want to lock?"
@@ -93,12 +115,14 @@
       <div class="item">
         <Input
           type="date"
-          label="Lock until"
+          label={$lockedOceanAmount > 0 ? "Extend lock until" : "Lock until"}
           name="unlockDate"
           step="7"
           error={$errors.unlockDate}
           direction="column"
-          min={getThursdayDate()}
+          min={$lockedOceanAmount > 0
+            ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
+            : getThursdayDate()}
           disabled={getOceanBalance($connectedChainId) <= 0}
           max={new Date(
             maxDate.setFullYear(maxDate.getFullYear() + 4)
@@ -126,19 +150,25 @@
           tokenName={"OCEAN"}
           poolAddress={process.env.VE_OCEAN_CONTRACT}
           amount={$form.amount}
-          disabled={loading ||
-            $lockedOceanAmount > 0 ||
-            getOceanBalance($connectedChainId) <= 0}
+          disabled={loading || getOceanBalance($connectedChainId) <= 0}
           bind:loading
         >
-          <Button
-            text={loading ? "Locking..." : "Lock OCEAN"}
-            disabled={loading ||
-              $lockedOceanAmount > 0 ||
-              getOceanBalance($connectedChainId) <= 0 ||
-              $form.amount <= 0}
-            type="submit"
-          />
+          {#if $lockedOceanAmount > 0}
+            <Button
+              text={loading ? "Extending lock..." : "Extend OCEAN lock"}
+              disabled={loading ||
+                getOceanBalance($connectedChainId) <= 0 ||
+                $form.amount < 0}
+              type="submit"
+            />
+          {:else}<Button
+              text={loading ? "Locking..." : "Lock OCEAN"}
+              disabled={loading ||
+                getOceanBalance($connectedChainId) <= 0 ||
+                $form.amount <= 0}
+              type="submit"
+            />
+          {/if}
         </TokenApproval>
       </div>
     </form>

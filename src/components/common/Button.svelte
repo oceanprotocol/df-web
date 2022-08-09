@@ -12,8 +12,9 @@
 
 <button
   on:click={onclick}
-  class="button {secondary && 'buttonSecondary'} {disabled &&
-    'disabled'} {textOnly && 'textOnly'}"
+  class="button {secondary && 'buttonSecondary'} {disabled && secondary
+    ? 'disabledSecondary'
+    : 'disabled'} {textOnly && 'textOnly'}"
   {disabled}
   {type}
 >
@@ -46,6 +47,11 @@
   .disabled {
     background-color: var(--button-disabled-color);
     cursor: default;
+  }
+  .disabledSecondary {
+    cursor: default;
+    color: var(--brand-grey-light) !important;
+    background-color: var(--background-body) !important;
   }
   .buttonSecondary {
     background-color: var(--brand-white);

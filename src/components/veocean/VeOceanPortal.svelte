@@ -32,11 +32,7 @@
   <div class={`container`}>
     <VeOceanCard />
     <OceanCard />
-    {#if $lockedOceanAmount > 0}
-      <WithdrawOcean />
-    {:else}
-      <LockOcean />
-    {/if}
+    <LockOcean />
   </div>
 {:else}
   <div class={`loading`}>Loading...</div>
