@@ -18,12 +18,12 @@
 
 <div class={`container ${!$pools && "alignContentCenter"}`}>
   {#if $pools}
-    <div class="pools">
+    <div class="data">
       <Table
         colData={columnsData}
         notHidableColumns={["Action", "LP"]}
         rowData={$pools}
-        description="Explore all the pools that are eligible for staking, and stake your Ocean token to get rewards."
+        description="Explore all the datasets that are eligible for staking, and stake your Ocean token to get rewards."
       />
     </div>
   {:else}
@@ -40,7 +40,7 @@
     height: calc(100vh - 115px);
   }
 
-  .pools {
+  .data {
     width: 100%;
     background-color: var(--brand-white);
     box-shadow: var(--box-shadow);
@@ -59,7 +59,7 @@
   }
 
   @media (min-width: 640px) {
-    .pools {
+    .data {
       margin-top: var(--spacer);
     }
   }
