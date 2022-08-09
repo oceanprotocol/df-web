@@ -9,7 +9,7 @@
   import DataInfo from "./DataInfo.svelte";
   import Stake from "./Stake.svelte";
 
-  export let pool;
+  export let data;
 
   let isOpen = false;
   let networkDisabled = false;
@@ -27,7 +27,7 @@
     } else {
       isOpen = true;
 
-      console.log("Pool chain id: ", pool.chainId);
+      console.log("Pool chain id: ", data.chainId);
       console.log("Connected chain id: ", $connectedChainId);
       console.log("Network disabled: ", networkDisabled);
     }
@@ -53,12 +53,12 @@
         <Button text="X" textOnly onclick={() => close()} disabled={loading} />
       </div>
       <div>
-        {#if pool && isOpen}
+        {#if data && isOpen}
           <div class="container">
-            <DataInfo {pool} />
+            <DataInfo {data} />
           </div>
           <div class="container">
-            <Stake {pool} bind:loading />
+            <Stake pool={data} bind:loading />
           </div>
         {/if}
       </div>
