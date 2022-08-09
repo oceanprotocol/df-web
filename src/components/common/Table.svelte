@@ -111,7 +111,7 @@
                 window.open(cell.value, "_blank");
               }}
               disabled={true}
-            />{:else if cell.key === "lp"}
+            />{:else if cell.key === "allocate"}
             <StakeModal pool={cell.value} />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
         </svelte:fragment>
@@ -130,7 +130,7 @@
 
 <style>
   .datasetsWithAllocationsInputContainer {
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
   }

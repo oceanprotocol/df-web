@@ -45,7 +45,7 @@
   }
 </script>
 
-<Button text="LP" onclick={() => open()} />
+<Button text="Allocate" onclick={() => open()} />
 {#if isOpen}
   <div class="modal" on:keydown={keydown} tabindex={0}>
     <div class="content-wrapper">

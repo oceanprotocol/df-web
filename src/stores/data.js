@@ -20,11 +20,11 @@ export const columnsData = [
   },
   { key: "pooladdress", value: "PoolAddress" },
   { key: "nftaddress", value: "NFTAddress" },
-  { key: "lp", value:"LP" },
+  { key: "allocate", value:"Allocate" },
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
+export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "Allocate", "Action"]
 
 async function getDatasets(api) {
   let res;
@@ -71,7 +71,7 @@ function getRow(dataInfo, key) {
     nftaddress: dataInfo.nft_addr,
     tvl: parseFloat(dataInfo.stake_amt).toFixed(3),
     volume: parseFloat(dataInfo.vol_amt).toFixed(3),
-    lp: {
+    allocate: {
       chainId: dataInfo.chainID,
       url: dataInfo.url,
       poolAddress: dataInfo.pool_addr,

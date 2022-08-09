@@ -21,7 +21,7 @@
     <div class="data">
       <Table
         colData={columnsData}
-        notHidableColumns={["Action", "LP"]}
+        notHidableColumns={["Action", "Allocate"]}
         rowData={$datasets}
         description="Explore all the datasets that are eligible for staking, and stake your Ocean token to get rewards."
       />
