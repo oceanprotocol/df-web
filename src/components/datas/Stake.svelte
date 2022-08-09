@@ -18,7 +18,7 @@
     calculatePoolShares,
   } from "../../utils/poolShares";
   import { getRewardsForPoolUser } from "../../utils/rewards";
-  import { calcMaxAllowedStakeInput } from "../../utils/pools";
+  import { calcMaxAllowedStakeInput } from "../../utils/data";
   import { rewards } from "../../stores/airdrops";
   import { userStakes } from "../../stores/poolShares";
 

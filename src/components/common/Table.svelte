@@ -7,11 +7,11 @@
     ToolbarSearch,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
-  import StakeModal from "../pools/StakeModal.svelte";
+  import StakeModal from "../datas/StakeModal.svelte";
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
-  import { defaultColumns } from "../../stores/pools";
-  import { filterPoolsByUserShares } from "../../utils/pools";
+  import { defaultColumns } from "../../stores/data";
+  import { filterDataByUserAllocation } from "../../utils/data";
   import { userStakes } from "../../stores/poolShares";
   import Input from "./Input.svelte";
 
@@ -68,7 +68,7 @@
   }
 
   $: if (showPoolsWithShares) {
-    const newData = filterPoolsByUserShares(rowData, $userStakes);
+    const newData = filterDataByUserAllocation(rowData, $userStakes);
     poolsWithShares = newData;
   }
 

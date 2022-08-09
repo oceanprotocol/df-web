@@ -4,7 +4,7 @@ import * as networksDataArray from "../networks-metadata.json";
 
 let networksData = networksDataArray.default
 
-export let pools = writable("");
+export let datasets = writable("");
 
 export const columnsData = [
   { key: "network", value: "Network" },
@@ -26,7 +26,7 @@ export const columnsData = [
 
 export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
 
-async function getPools(api) {
+async function getDatasets(api) {
   let res;
   try {
     res = await fetch(api, {
@@ -87,20 +87,20 @@ function getRow(poolInfo, key) {
   };
 }
 
-export async function loadPools(poolsApi) {
-  const allPools = await getPools(poolsApi);
-  if (allPools.length === 0) {
-    pools.set([]);
+export async function loadDatasets(poolsApi) {
+  const allDatasets = await getDatasets(poolsApi);
+  if (allDatasets.length === 0) {
+    datasets.set([]);
     return;
   }
-  let newPools = [];
-  allPools.forEach((poolInfo, key) => {
-     poolInfo.totalPools = allPools.length;
-     poolInfo.totalTVL = allPools.reduce(
-      (total, pool) => total + parseFloat(pool.stake_amt)
+  let newDatasets = [];
+  allDatasets.forEach((datasetInfo, key) => {
+    datasetInfo.totalPools = allDatasets.length;
+    datasetInfo.totalTVL = allDatasets.reduce(
+      (total, dataset) => total + parseFloat(dataset.stake_amt)
     );
-    newPools.push(getRow(poolInfo, key));
+    newDatasets.push(getRow(datasetInfo, key));
   });
 
-  pools.set(newPools);
+  datasets.set(newDatasets);
 }

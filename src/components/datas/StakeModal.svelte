@@ -6,7 +6,7 @@
     userAddress,
     connectedChainId,
   } from "../../stores/web3";
-  import PoolInfo from "./PoolInfo.svelte";
+  import DataInfo from "./DataInfo.svelte";
   import Stake from "./Stake.svelte";
 
   export let pool;
@@ -55,7 +55,7 @@
       <div>
         {#if pool && isOpen}
           <div class="container">
-            <PoolInfo {pool} />
+            <DataInfo {pool} />
           </div>
           <div class="container">
             <Stake {pool} bind:loading />

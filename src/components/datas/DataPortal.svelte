@@ -1,12 +1,12 @@
 <script>
-  import { loadPools, pools, columnsData } from "../../stores/pools";
+  import { loadDatasets, datasets, columnsData } from "../../stores/data";
   import { getAllPoolSharesForLPAddress } from "../../utils/poolShares";
   import { userStakes } from "../../stores/poolShares";
   import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
 
-  $: if (!$pools) {
-    loadPools(`${process.env.BACKEND_API}/pools`);
+  $: if (!$datasets) {
+    loadDatasets(`${process.env.BACKEND_API}/pools`);
   }
 
   $: if ($userAddress) {
@@ -16,13 +16,13 @@
   }
 </script>
 
-<div class={`container ${!$pools && "alignContentCenter"}`}>
-  {#if $pools}
+<div class={`container ${!$datasets && "alignContentCenter"}`}>
+  {#if $datasets}
     <div class="data">
       <Table
         colData={columnsData}
         notHidableColumns={["Action", "LP"]}
-        rowData={$pools}
+        rowData={$datasets}
         description="Explore all the datasets that are eligible for staking, and stake your Ocean token to get rewards."
       />
     </div>
