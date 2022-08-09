@@ -3,7 +3,7 @@
   import BannerMessage from "./components/common/BannerMessage.svelte";
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
-  import DataPortal from "./components/datas/DataPortal.svelte";
+  import DataPortal from "./components/data/DataPortal.svelte";
   import {
     isWalletConnectModalOpen,
     userAddress,

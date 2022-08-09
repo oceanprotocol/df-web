@@ -7,7 +7,7 @@
     ToolbarSearch,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
-  import StakeModal from "../datas/StakeModal.svelte";
+  import StakeModal from "../data/StakeModal.svelte";
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
@@ -21,8 +21,8 @@
   export let colData = undefined;
   export let rowData = undefined;
   export let notHidableColumns = [];
-  let showPoolsWithShares = false;
-  let poolsWithShares = undefined;
+  let showDataWithAllocations = false;
+  let datasetsWithAllocations = undefined;
 
   let columns = {};
   let pagination = { pageSize: 13, page: 1 };
@@ -30,7 +30,7 @@
   loadVisibleColumns();
 
   function getColumnsFromLocalStorage() {
-    columns = JSON.parse(localStorage.getItem("poolsDisplayedColumns"));
+    columns = JSON.parse(localStorage.getItem("datasetsDisplayedColumns"));
     colData.forEach((col) => {
       if (!columns[col.value] && notHidableColumns.indexOf(col.value) === -1) {
         colData = colData.filter((colD) => colD.key !== col.key);
@@ -39,14 +39,14 @@
   }
 
   function loadVisibleColumns() {
-    if (localStorage.getItem("poolsDisplayedColumns")) {
+    if (localStorage.getItem("datasetsDisplayedColumns")) {
       getColumnsFromLocalStorage();
     } else {
       colData.forEach((col) => {
         columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
       });
 
-      localStorage.setItem("poolsDisplayedColumns", JSON.stringify(columns));
+      localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
 
       getColumnsFromLocalStorage();
 
@@ -64,27 +64,27 @@
     } else {
       colData = colData.filter((col) => col.value !== key);
     }
-    localStorage.setItem("poolsDisplayedColumns", JSON.stringify(columns));
+    localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
   }
 
-  $: if (showPoolsWithShares) {
+  $: if (showDataWithAllocations) {
     const newData = filterDataByUserAllocation(rowData, $dataAllocations);
-    poolsWithShares = newData;
+    datasetsWithAllocations = newData;
   }
 
-  $: if (!showPoolsWithShares && poolsWithShares !== undefined) {
-    poolsWithShares = undefined;
+  $: if (!showDataWithAllocations && datasetsWithAllocations !== undefined) {
+    datasetsWithAllocations = undefined;
   }
 </script>
 
 {#if colData && rowData}
   <div>
     <div class="tableActionsContainer">
-      <div class="poolsWithSharesInputContainer">
+      <div class="datasetsWithAllocationsInputContainer">
         <Input
           type="checkbox"
           label="Only data where I have allocations"
-          bind:value={showPoolsWithShares}
+          bind:value={showDataWithAllocations}
         />
       </div>
       <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
@@ -95,7 +95,7 @@
         headers={colData}
         pageSize={pagination.pageSize}
         page={pagination.page}
-        rows={poolsWithShares ? poolsWithShares : rowData}
+        rows={datasetsWithAllocations ? datasetsWithAllocations : rowData}
         class="customTable"
       >
         <Toolbar size="sm">
@@ -120,14 +120,16 @@
     <Pagination
       bind:pageSize={pagination.pageSize}
       bind:page={pagination.page}
-      totalItems={poolsWithShares ? poolsWithShares.length : rowData.length}
+      totalItems={datasetsWithAllocations
+        ? datasetsWithAllocations.length
+        : rowData.length}
       pageSizeInputDisabled
     />
   </div>
 {/if}
 
 <style>
-  .poolsWithSharesInputContainer {
+  .datasetsWithAllocationsInputContainer {
     display: flex;
     justify-content: center;
     align-items: center;

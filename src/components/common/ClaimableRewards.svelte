@@ -27,7 +27,7 @@
     {:else}
       0
     {/if}
-  </span> estimated rewards accross all the pools from all networks
+  </span> estimated rewards accross all the datasets from all networks
 </p>
 
 <style>
