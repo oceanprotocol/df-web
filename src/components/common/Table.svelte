@@ -83,7 +83,7 @@
       <div class="poolsWithSharesInputContainer">
         <Input
           type="checkbox"
-          label="Only pools where I have shares"
+          label="Only data where I have allocations"
           bind:value={showPoolsWithShares}
         />
       </div>
