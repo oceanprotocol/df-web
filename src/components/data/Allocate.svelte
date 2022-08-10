@@ -20,7 +20,10 @@
   import { calcMaxAllowedStakeInput } from "../../utils/data";
   import { rewards } from "../../stores/airdrops";
   import { dataAllocations } from "../../stores/dataAllocations";
-  import { allocateVeOcean } from "../../utils/dataAllocations";
+  import {
+    allocateVeOcean,
+    getAllocatedVeOcean,
+  } from "../../utils/dataAllocations";
 
   export let data;
   export let loading = false;
@@ -37,6 +40,11 @@
     allocatedAmount = await getAllocatedAmountForAddress(
       $dataAllocations,
       data.poolAddress
+    );
+    allocatedAmount = await getAllocatedVeOcean(
+      $userAddress,
+      data.basetokenAddress,
+      $connectedChainId
     );
     calcBPTOut = await calculatePoolShares(data.tvl * 2, allocatedAmount);
     if (!rewards) {
@@ -115,7 +123,7 @@
     }
   }
 
-  async function handleStakeAmount() {
+  async function handleAllocateAmountChange() {
     loading = true;
     calcBPTOut = 0.0;
     if (amountToAllocate > 0.0 && data.chainId === $connectedChainId) {
@@ -134,6 +142,11 @@
   }
 
   function updateCanAllocate() {
+    console.log(
+      amountToAllocate > 0.0,
+      amountToAllocate <= $userBalances[data.basetokenAddress],
+      amountToAllocate < maxPoolInputAllowed
+    );
     canAllocate =
       amountToAllocate > 0.0 &&
       amountToAllocate <= $userBalances[data.basetokenAddress] &&
@@ -186,13 +199,13 @@
           max={maxPoolInputAllowed > $userBalances[data.basetokenAddress]
             ? $userBalances[data.basetokenAddress]
             : maxPoolInputAllowed}
-          onChange={handleStakeAmount}
+          onChange={handleAllocateAmountChange}
         />
       </div>
       <TokenApproval
         tokenAddress={data.basetokenAddress}
-        tokenName={data.basetoken}
-        poolAddress={data.poolAddress}
+        tokenName="veOCEAN"
+        poolAddress={process.env.VE_OCEAN_CONTRACT}
         amount={amountToAllocate}
         disabled={!canAllocate}
         bind:loading
