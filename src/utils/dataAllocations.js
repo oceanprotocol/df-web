@@ -1,3 +1,7 @@
+import {ethers} from "ethers";
+import * as VeAllocateABI from "./abis/veAllocateABI";
+const veAllocateABI = VeAllocateABI.default
+
 export const getAllAllocationsForAddress = async(userAddress) => {
     let res;
     try {
@@ -24,6 +28,19 @@ export const getAllocatedAmountForAddress = async(stakes,poolAddress) => {
   let pool;
   pool = stakes.find((poolStake) =>poolStake.pool_addr === poolAddress)
     return pool ? pool.stake_amt * 2 : 0;
+}
+
+export const allocateVeOcean = async(amount, dataAddress, chainId, signer) => {
+  console.log(amount, dataAddress, chainId, signer)
+  try {
+    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, signer);
+    console.log(contract)
+    const amountToLockInEth = ethers.utils.parseEther(amount.toString())
+    await contract.setAllocation(amountToLockInEth, dataAddress, chainId)
+} catch (error) {
+  console.log(error)
+  throw error;
+}
 }
 
 export const calculatePoolShares = async(TVL, stakedAmount) => {

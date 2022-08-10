@@ -20,6 +20,7 @@
   import { calcMaxAllowedStakeInput } from "../../utils/data";
   import { rewards } from "../../stores/airdrops";
   import { dataAllocations } from "../../stores/dataAllocations";
+  import { allocateVeOcean } from "../../utils/dataAllocations";
 
   export let data;
   export let loading = false;
@@ -53,12 +54,11 @@
     updateBalance();
   }
 
-  async function allocateVeOcean() {
-    const tx = await addDTLiquidity(
-      $userAddress,
-      data.basetokenAddress,
-      data.poolAddress,
+  async function allocateVeOceanToData() {
+    const tx = await allocateVeOcean(
       amountToAllocate,
+      data.basetokenAddress,
+      $connectedChainId,
       $networkSigner
     );
 
@@ -90,7 +90,7 @@
   async function allocate() {
     try {
       loading = true;
-      const results = await allocateVeOcean();
+      const results = await allocateVeOceanToData();
       if (results && results.calcBPTOut > 0.0) {
         Swal.fire(
           "Success!",
