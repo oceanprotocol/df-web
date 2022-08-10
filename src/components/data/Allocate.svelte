@@ -21,85 +21,85 @@
   import { rewards } from "../../stores/airdrops";
   import { dataAllocations } from "../../stores/dataAllocations";
 
-  export let pool;
+  export let data;
   export let loading = false;
 
-  let stakeAmount = 0.0;
-  let stakedAmount = 0.0;
+  let amountToAllocate = 0.0;
+  let allocatedAmount = 0.0;
   let currentPoolShare = 0.0;
   let calcBPTOut = 0.0;
   let estimatedRewards = 0.0;
-  let canStake = false;
-  let maxPoolInputAllowed = calcMaxAllowedStakeInput(pool.tvl * 2);
+  let canAllocate = false;
+  let maxPoolInputAllowed = calcMaxAllowedStakeInput(data.tvl * 2);
 
   const updateBalance = async () => {
-    stakedAmount = await getAllocatedAmountForAddress(
-      dataAllocations,
-      pool.poolAddress
+    allocatedAmount = await getAllocatedAmountForAddress(
+      $dataAllocations,
+      data.poolAddress
     );
-    calcBPTOut = await calculatePoolShares(pool.tvl * 2, stakedAmount);
+    calcBPTOut = await calculatePoolShares(data.tvl * 2, allocatedAmount);
     if (!rewards) {
     }
     estimatedRewards = getRewardsForPoolUser(
       $rewards,
       $userAddress,
-      pool.poolAddress
+      data.poolAddress
     );
     currentPoolShare = calcBPTOut;
-    await addUserBalanceToBalances(pool.chainId, pool.basetokenAddress);
+    await addUserBalanceToBalances(data.chainId, data.basetokenAddress);
   };
 
-  $: if ($userAddress && pool.chainId === $connectedChainId) {
+  $: if ($userAddress && data.chainId === $connectedChainId) {
     updateBalance();
   }
 
-  async function addLiquidty() {
+  async function allocateVeOcean() {
     const tx = await addDTLiquidity(
       $userAddress,
-      pool.basetokenAddress,
-      pool.poolAddress,
-      stakeAmount,
+      data.basetokenAddress,
+      data.poolAddress,
+      amountToAllocate,
       $networkSigner
     );
 
-    console.log("addDTLiquidity tx: ", tx);
+    console.log("allocateVeOCEAN tx: ", tx);
     if (tx) {
       let receipt = await tx.wait();
-      console.log("addDTLiquidity receipt: ", receipt);
+      console.log("allocateVeOCEAN receipt: ", receipt);
 
       if (receipt.events) {
-        const stakeEvent = receipt.events.filter(
+        const allocateEvent = receipt.events.filter(
           (x) => x.event === "LOG_BPT_SS"
         );
-        if (stakeEvent[0].event === "LOG_BPT_SS") {
+        if (allocateEvent[0].event === "LOG_BPT_SS") {
           calcBPTOut = ethers.utils.formatEther(
-            BigInt(stakeEvent[0].args.bptAmount).toString(10)
+            BigInt(allocateEvent[0].args.bptAmount).toString(10)
           );
-          console.log("addLiquidity: ", calcBPTOut);
+          console.log("allocateVeOCEAN: ", calcBPTOut);
           return {
-            event: stakeEvent,
+            event: allocateEvent,
             calcBPTOut: calcBPTOut,
           };
         }
       }
     }
 
-    throw "Staking failed";
+    throw "Allocation failed";
   }
 
-  async function stake() {
+  async function allocate() {
     try {
       loading = true;
-      const results = await addLiquidty();
+      const results = await allocateVeOcean();
       if (results && results.calcBPTOut > 0.0) {
         Swal.fire(
           "Success!",
-          "You've staked " + pool.basetoken + " into pool.",
+          "You've allocate veOCEAN to data NFT.",
           "success"
         ).then(async () => {
-          stakeAmount = 0;
+          amountToAllocate = 0;
           await updateBalance();
-          updateCanStake();
+          updateCanAllocate();
           loading = false;
         });
       }
@@ -107,7 +107,7 @@
       console.log("Error: ", error);
       Swal.fire(
         "Error!",
-        "Failed to stake " + pool.basetoken + " into pool.",
+        "Failed to allocate veOCEAN to data NFT.",
         "error"
       ).then(() => {
         loading = false;
@@ -118,40 +118,40 @@
   async function handleStakeAmount() {
     loading = true;
     calcBPTOut = 0.0;
-    if (stakeAmount > 0.0 && pool.chainId === $connectedChainId) {
+    if (amountToAllocate > 0.0 && data.chainId === $connectedChainId) {
       await updateBalance();
       calcBPTOut = await calculatePoolShares(
-        pool.tvl * 2,
-        stakeAmount + stakedAmount
+        data.tvl * 2,
+        amountToAllocate + allocatedAmount
       );
-      updateCanStake();
+      updateCanAllocate();
       loading = false;
     } else {
       calcBPTOut = currentPoolShare;
-      canStake = false;
+      canAllocate = false;
       loading = false;
     }
   }
 
-  function updateCanStake() {
-    canStake =
-      stakeAmount > 0.0 &&
-      stakeAmount <= $userBalances[pool.basetokenAddress] &&
-      stakeAmount < maxPoolInputAllowed;
+  function updateCanAllocate() {
+    canAllocate =
+      amountToAllocate > 0.0 &&
+      amountToAllocate <= $userBalances[data.basetokenAddress] &&
+      amountToAllocate < maxPoolInputAllowed;
   }
 
   async function switchNetwork() {
-    await switchWalletNetwork(pool.chainId);
+    await switchWalletNetwork(data.chainId);
   }
 </script>
 
-{#if pool}
+{#if data}
   <div class="header">
-    <h4>Stake</h4>
-    <span>{pool.basetoken}</span>
+    <h4>Allocate</h4>
+    <span>veOCEAN</span>
   </div>
   <div class="components-container">
-    {#if $userAddress && pool.chainId !== $connectedChainId}
+    {#if $userAddress && data.chainId !== $connectedChainId}
       <div class="button">
         <Button
           text="Switch Network"
@@ -162,12 +162,12 @@
     {:else}
       <div class="items-container">
         <ItemWithLabel
-          title={`${pool.basetoken} Balance`}
-          value={parseFloat($userBalances[pool.basetokenAddress]).toFixed(3)}
+          title={`veOCEAN Balance`}
+          value={parseFloat($userBalances[data.basetokenAddress]).toFixed(3)}
         />
         <ItemWithLabel
-          title={`${pool.basetoken} staked`}
-          value={parseFloat(stakedAmount).toFixed(3)}
+          title={`veOCEAN allocated`}
+          value={parseFloat(allocatedAmount).toFixed(3)}
         />
         <ItemWithLabel
           title="Calc Pool Shares"
@@ -175,32 +175,32 @@
         />
         <ItemWithLabel
           title="Estimated Rewards"
-          value={`${parseFloat(estimatedRewards).toFixed(3)} ${pool.basetoken}`}
+          value={`${parseFloat(estimatedRewards).toFixed(3)} ${data.basetoken}`}
         />
       </div>
       <div class="inputContainer">
         <Input
           type="number"
-          bind:value={stakeAmount}
+          bind:value={amountToAllocate}
           min="0"
-          max={maxPoolInputAllowed > $userBalances[pool.basetokenAddress]
-            ? $userBalances[pool.basetokenAddress]
+          max={maxPoolInputAllowed > $userBalances[data.basetokenAddress]
+            ? $userBalances[data.basetokenAddress]
             : maxPoolInputAllowed}
           onChange={handleStakeAmount}
         />
       </div>
       <TokenApproval
-        tokenAddress={pool.basetokenAddress}
-        tokenName={pool.basetoken}
-        poolAddress={pool.poolAddress}
-        amount={stakeAmount}
-        disabled={!canStake}
+        tokenAddress={data.basetokenAddress}
+        tokenName={data.basetoken}
+        poolAddress={data.poolAddress}
+        amount={amountToAllocate}
+        disabled={!canAllocate}
         bind:loading
       >
         <Button
-          text={loading ? "Staking" : "Stake"}
-          onclick={() => stake()}
-          disabled={!canStake || loading}
+          text={loading ? "Allocating" : "Allocate"}
+          onclick={() => allocate()}
+          disabled={!canAllocate || loading}
         />
       </TokenApproval>
     {/if}

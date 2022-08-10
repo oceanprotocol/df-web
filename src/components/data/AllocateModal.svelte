@@ -7,7 +7,7 @@
     connectedChainId,
   } from "../../stores/web3";
   import DataInfo from "./DataInfo.svelte";
-  import Stake from "./Stake.svelte";
+  import Allocate from "./Allocate.svelte";
 
   export let data;
 
@@ -58,7 +58,7 @@
             <DataInfo {data} />
           </div>
           <div class="container">
-            <Stake pool={data} bind:loading />
+            <Allocate {data} bind:loading />
           </div>
         {/if}
       </div>
