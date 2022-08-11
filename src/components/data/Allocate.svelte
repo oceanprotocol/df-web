@@ -44,7 +44,8 @@
     allocatedAmount = await getAllocatedVeOcean(
       $userAddress,
       data.basetokenAddress,
-      $connectedChainId
+      $connectedChainId,
+      $networkSigner
     );
     calcBPTOut = await calculatePoolShares(data.tvl * 2, allocatedAmount);
     if (!rewards) {
