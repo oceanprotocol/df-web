@@ -46,7 +46,6 @@ export const getVeOceanBalance = async(userAddress) => {
     try {
         const provider = new ethers.providers.JsonRpcProvider(rpcURL);
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
-        console.log(contract)
         const lock = await contract.locked(userAddress)
         const lockAmount = ethers.utils.formatEther(BigInt(lock.amount).toString(10))
         return lockAmount
@@ -59,8 +58,6 @@ export const getVeOceanBalance = async(userAddress) => {
   export const getLockedEndTime = async(userAddress) => {
     const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
     try {
-      console.log(rpcURL, userAddress)
-    console.log(process.env.VE_OCEAN_CONTRACT)
         const provider = new ethers.providers.JsonRpcProvider(rpcURL);
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
         const lockEndTime = await contract.locked__end(userAddress)
