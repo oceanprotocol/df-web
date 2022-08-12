@@ -5,12 +5,10 @@
   import LockOcean from "./LockOcean.svelte";
   import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
+  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { userBalances } from "../../stores/tokens";
-  import WithdrawOcean from "./WithdrawOcean.svelte";
 
   let loading = !$lockedOceanAmount;
-
-  console.log(!$lockedOceanAmount);
 
   const loadValues = async () => {
     loading = true;
@@ -23,7 +21,13 @@
     loading = false;
   };
 
-  $: if ($userAddress && $userBalances && $connectedChainId) {
+  $: if (
+    $userAddress &&
+    $userBalances[
+      getOceanTokenAddressByChainId($connectedChainId).toLowerCase()
+    ] &&
+    $connectedChainId
+  ) {
     loadValues();
   }
 </script>

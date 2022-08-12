@@ -15,7 +15,10 @@
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
   import { rewards } from "./stores/airdrops";
   import { getRewards } from "./utils/rewards";
-  import { addUserOceanBalanceToBalances } from "./stores/tokens";
+  import {
+    addUserOceanBalanceToBalances,
+    addUserVeOceanBalanceToBalances,
+  } from "./stores/tokens";
 
   window.process = {
     ...window.process,
@@ -32,6 +35,7 @@
   async function initRewards() {
     const newRewards = await getRewards($userAddress);
     rewards.update(() => newRewards);
+    await addUserVeOceanBalanceToBalances($userAddress);
     await addUserOceanBalanceToBalances($connectedChainId);
   }
 

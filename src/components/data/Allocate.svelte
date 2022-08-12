@@ -5,8 +5,7 @@
     connectedChainId,
     switchWalletNetwork,
   } from "../../stores/web3";
-  import { userBalances, addUserBalanceToBalances } from "../../stores/tokens";
-  import { ethers } from "ethers";
+  import { userBalances } from "../../stores/tokens";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import Swal from "sweetalert2";
@@ -114,7 +113,7 @@
   function updateCanAllocate() {
     canAllocate =
       amountToAllocate > 0.0 &&
-      amountToAllocate <= $userBalances[data.basetokenAddress] &&
+      amountToAllocate <= $userBalances[process.env.VE_OCEAN_CONTRACT] &&
       amountToAllocate < maxPoolInputAllowed;
   }
 
@@ -141,7 +140,9 @@
       <div class="items-container">
         <ItemWithLabel
           title={`veOCEAN Balance`}
-          value={parseFloat($userBalances[data.basetokenAddress]).toFixed(3)}
+          value={parseFloat(
+            $userBalances[process.env.VE_OCEAN_CONTRACT]
+          ).toFixed(3)}
         />
         <ItemWithLabel
           title={`veOCEAN allocated`}
@@ -161,8 +162,9 @@
           type="number"
           bind:value={amountToAllocate}
           min="0"
-          max={maxPoolInputAllowed > $userBalances[data.basetokenAddress]
-            ? $userBalances[data.basetokenAddress]
+          max={maxPoolInputAllowed >
+          $userBalances[process.env.VE_OCEAN_CONTRACT]
+            ? $userBalances[process.env.VE_OCEAN_CONTRACT]
             : maxPoolInputAllowed}
           onChange={handleAllocateAmountChange}
         />

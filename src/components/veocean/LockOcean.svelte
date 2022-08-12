@@ -13,6 +13,7 @@
   import {
     getOceanBalance,
     addUserOceanBalanceToBalances,
+    addUserVeOceanBalanceToBalances,
   } from "../../stores/tokens";
   import {
     lockOcean,
@@ -86,6 +87,7 @@
     Swal.fire("Success!", "Oceans successfully locked.", "success").then(
       async () => {
         loading = false;
+        await addUserVeOceanBalanceToBalances($userAddress);
         await addUserOceanBalanceToBalances($connectedChainId);
       }
     );

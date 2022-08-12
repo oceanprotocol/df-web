@@ -9,9 +9,7 @@
 
   let balance =
     $userBalances[
-      getOceanTokenAddressByChainId($connectedChainId)
-        .toLowerCase()
-        .toLowerCase()
+      getOceanTokenAddressByChainId($connectedChainId).toLowerCase()
     ];
   let loading = false;
 </script>
