@@ -6,10 +6,6 @@ const veAllocateABI = VeAllocateABI.default
 const veOceanABI = VeOceanABI.default
 const decimals = 18;
 
-export const allocateOcean=()=>{
-
-}
-
 export const getAllocatedAmount = async(userAddress) => {
     const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
     try {
@@ -24,16 +20,13 @@ export const getAllocatedAmount = async(userAddress) => {
     }
   }
 
-export const getVeOceanBalance = async(userAddress) => {
+export const getVeOceanBalance = async(userAddress,signer) => {
     const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
     try {
         const provider = new ethers.providers.JsonRpcProvider(rpcURL);
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
-        const timestamp = await provider.getBlockNumber()
-        //const timestampInUnit256 = ethers.utils.parseEther(timestamp.toString())
-        const veOceanBalanceInEth = await contract.balanceOf(userAddress)
-        //const veOceanBalanceInEth = await contract.locked(userAddress)
-        const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth.amount).toString(10))
+        const veOceanBalanceInEth = await contract.balanceOfAt(userAddress,provider.getBlockNumber())
+        const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth).toString(10))
         return veOceanBalance
     } catch (error) {
       console.log(error);

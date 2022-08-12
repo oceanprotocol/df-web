@@ -1,5 +1,5 @@
 <script>
-  import { userAddress } from "../../stores/web3";
+  import { networkSigner, userAddress } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { oceanUnlockDate } from "../../stores/veOcean";
@@ -10,7 +10,7 @@
   let loading = true;
 
   const setValues = async () => {
-    balance = await getVeOceanBalance($userAddress);
+    balance = await getVeOceanBalance($userAddress, $networkSigner);
     loading = false;
   };
 
