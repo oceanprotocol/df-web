@@ -1,16 +1,16 @@
 <script>
-  import { networkSigner, userAddress } from "../../stores/web3";
+  import { userAddress } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
+  import { userBalances } from "../../stores/tokens";
   import { oceanUnlockDate } from "../../stores/veOcean";
-  import { getVeOceanBalance } from "../../utils/ve";
 
   let balance = 0;
   let votingPowerMultiplier = 0;
   let loading = true;
 
   const setValues = async () => {
-    balance = await getVeOceanBalance($userAddress, $networkSigner);
+    balance = $userBalances[process.env.VE_OCEAN_CONTRACT];
     loading = false;
   };
 

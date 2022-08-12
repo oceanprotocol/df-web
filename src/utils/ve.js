@@ -20,7 +20,7 @@ export const getAllocatedAmount = async(userAddress) => {
     }
   }
 
-export const getVeOceanBalance = async(userAddress,signer) => {
+export const getVeOceanBalance = async(userAddress) => {
     const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
     try {
         const provider = new ethers.providers.JsonRpcProvider(rpcURL);
