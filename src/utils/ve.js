@@ -85,7 +85,8 @@ export const getVeOceanBalance = async(userAddress) => {
   export const withdrawOcean = async(signer) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
-        await contract.withdraw()
+        const tx = await contract.withdraw()
+        tx.wait()
     } catch (error) {
       throw error;
     }
@@ -95,7 +96,8 @@ export const getVeOceanBalance = async(userAddress) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
-        await contract.increase_amount(amountToLockInEth)
+        const tx = await contract.increase_amount(amountToLockInEth)
+        tx.wait()
     } catch (error) {
       throw error;
     }
@@ -104,7 +106,8 @@ export const getVeOceanBalance = async(userAddress) => {
   export const updateLuckPeriod = async(unlockDate, signer) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
-        await contract.increase_unlock_time(unlockDate)
+        const tx = await contract.increase_unlock_time(unlockDate)
+        tx.wait()
     } catch (error) {
       throw error;
     }
