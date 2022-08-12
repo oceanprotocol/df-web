@@ -7,8 +7,10 @@
 
 {#if data}
   <div class="header">
-    <h3>Pool</h3>
-    <NetworkItem chainId={data.chainId} />
+    <h3>Data NFT</h3>
+    <div class="network-container">
+      <NetworkItem chainId={data.chainId} />
+    </div>
   </div>
   <div class="items-container">
     <ItemWithLabel title="DataToken Symbol" value={data.DTSymbol} />
@@ -19,6 +21,9 @@
 {:else}{/if}
 
 <style>
+  .network-container {
+    width: auto;
+  }
   .items-container {
     width: 100%;
     display: flex;

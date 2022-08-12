@@ -7,7 +7,7 @@
     ToolbarSearch,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
-  import StakeModal from "../data/StakeModal.svelte";
+  import AllocateModal from "../data/AllocateModal.svelte";
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
@@ -111,8 +111,8 @@
                 window.open(cell.value, "_blank");
               }}
               disabled={true}
-            />{:else if cell.key === "lp"}
-            <StakeModal pool={cell.value} />
+            />{:else if cell.key === "allocate"}
+            <AllocateModal data={cell.value} />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
         </svelte:fragment>
       </DataTable>
@@ -130,7 +130,7 @@
 
 <style>
   .datasetsWithAllocationsInputContainer {
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
   }

@@ -1,9 +1,14 @@
 <script>
-  import { userAddress, networkSigner } from "../../stores/web3";
+  import {
+    userAddress,
+    networkSigner,
+    connectedChainId,
+  } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Swal from "sweetalert2";
   import { withdrawOcean } from "../../utils/ve";
   import { oceanUnlockDate, lockedOceanAmount } from "../../stores/veOcean";
+  import { addUserOceanBalanceToBalances } from "../../stores/tokens";
 
   let loading = true;
 
@@ -23,6 +28,7 @@
     Swal.fire("Success!", "Oceans successfully withdrawn.", "success").then(
       async () => {
         loading = false;
+        await addUserOceanBalanceToBalances($connectedChainId);
       }
     );
   };

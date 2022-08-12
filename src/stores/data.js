@@ -20,11 +20,11 @@ export const columnsData = [
   },
   { key: "pooladdress", value: "PoolAddress" },
   { key: "nftaddress", value: "NFTAddress" },
-  { key: "lp", value:"LP" },
+  { key: "allocate", value:"Allocate" },
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "LP", "Action"]
+export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "Allocate", "Action"]
 
 async function getDatasets(api) {
   let res;
@@ -66,18 +66,18 @@ function getRow(dataInfo, key) {
     datatoken: dataInfo.DT_symbol,
     dtaddress: dataInfo.DT_addr,
     basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
-    basetokenaddress: dataInfo.basetoken_addr,
+    basetokenaddress: '0x2473f4F7bf40ed9310838edFCA6262C17A59DF64'.toLocaleLowerCase(),
     pooladdress: dataInfo.pool_addr,
     nftaddress: dataInfo.nft_addr,
     tvl: parseFloat(dataInfo.stake_amt).toFixed(3),
     volume: parseFloat(dataInfo.vol_amt).toFixed(3),
-    lp: {
-      chainId: dataInfo.chainID,
+    allocate: {
+      chainId: 8996,
       url: dataInfo.url,
       poolAddress: dataInfo.pool_addr,
       nftAddress: dataInfo.nft_addr,
       DTAddress: dataInfo.DT_addr,
-      basetokenAddress: dataInfo.basetoken_addr,
+      basetokenAddress: '0x2473f4F7bf40ed9310838edFCA6262C17A59DF64'.toLocaleLowerCase(),
       DTSymbol: dataInfo.DT_symbol,
       basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
       tvl: parseFloat(dataInfo.stake_amt),
