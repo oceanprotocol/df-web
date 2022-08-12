@@ -62,55 +62,25 @@
     updateBalance();
   }
 
-  async function allocateVeOceanToData() {
-    const tx = await allocateVeOcean(
-      amountToAllocate,
-      data.basetokenAddress,
-      $connectedChainId,
-      $networkSigner
-    );
-
-    console.log("allocateVeOCEAN tx: ", tx);
-    if (tx) {
-      let receipt = await tx.wait();
-      console.log("allocateVeOCEAN receipt: ", receipt);
-
-      if (receipt.events) {
-        const allocateEvent = receipt.events.filter(
-          (x) => x.event === "LOG_BPT_SS"
-        );
-        if (allocateEvent[0].event === "LOG_BPT_SS") {
-          calcBPTOut = ethers.utils.formatEther(
-            BigInt(allocateEvent[0].args.bptAmount).toString(10)
-          );
-          console.log("allocateVeOCEAN: ", calcBPTOut);
-          return {
-            event: allocateEvent,
-            calcBPTOut: calcBPTOut,
-          };
-        }
-      }
-    }
-
-    throw "Allocation failed";
-  }
-
   async function allocate() {
     try {
       loading = true;
-      const results = await allocateVeOceanToData();
-      if (results && results.calcBPTOut > 0.0) {
-        Swal.fire(
-          "Success!",
-          "You've allocate veOCEAN to data NFT.",
-          "success"
-        ).then(async () => {
-          amountToAllocate = 0;
-          await updateBalance();
-          updateCanAllocate();
-          loading = false;
-        });
-      }
+      await allocateVeOcean(
+        amountToAllocate,
+        data.basetokenAddress,
+        $connectedChainId,
+        $networkSigner
+      );
+      Swal.fire(
+        "Success!",
+        "You've allocate veOCEAN to data NFT.",
+        "success"
+      ).then(async () => {
+        amountToAllocate = 0;
+        await updateBalance();
+        updateCanAllocate();
+        loading = false;
+      });
     } catch (error) {
       console.log("Error: ", error);
       Swal.fire(
@@ -142,11 +112,6 @@
   }
 
   function updateCanAllocate() {
-    console.log(
-      amountToAllocate > 0.0,
-      amountToAllocate <= $userBalances[data.basetokenAddress],
-      amountToAllocate < maxPoolInputAllowed
-    );
     canAllocate =
       amountToAllocate > 0.0 &&
       amountToAllocate <= $userBalances[data.basetokenAddress] &&
