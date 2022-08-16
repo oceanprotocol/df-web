@@ -11,8 +11,10 @@
   let loading = true;
 
   const setValues = async () => {
-    let newAllocation = await getTotalAllocatedVeOcean($userAddress);
-    totalUserAllocation.update(() => newAllocation);
+    if (!$totalUserAllocation) {
+      let newAllocation = await getTotalAllocatedVeOcean($userAddress);
+      totalUserAllocation.update(() => newAllocation);
+    }
     balance = $userBalances[process.env.VE_OCEAN_CONTRACT];
     loading = false;
   };

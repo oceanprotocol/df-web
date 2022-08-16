@@ -13,11 +13,12 @@
   import Input from "../common/Input.svelte";
   import { getRewardsForPoolUser } from "../../utils/rewards";
   import { rewards } from "../../stores/airdrops";
-  import { dataAllocations } from "../../stores/dataAllocations";
   import {
     allocateVeOcean,
     getAllocatedVeOcean,
+    getTotalAllocatedVeOcean,
   } from "../../utils/dataAllocations";
+  import { totalUserAllocation } from "../../stores/dataAllocations";
 
   export let data;
   export let loading = false;
@@ -63,6 +64,8 @@
         amountToAllocate = 0;
         await updateBalance();
         updateCanAllocate();
+        let newAllocation = await getTotalAllocatedVeOcean($userAddress);
+        totalUserAllocation.update(() => newAllocation);
         loading = false;
       });
     } catch (error) {
