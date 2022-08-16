@@ -97,8 +97,7 @@
   function updateCanAllocate() {
     canAllocate =
       amountToAllocate > 0.0 &&
-      amountToAllocate <= $userBalances[process.env.VE_OCEAN_CONTRACT] &&
-      amountToAllocate < maxPoolInputAllowed;
+      amountToAllocate <= $userBalances[process.env.VE_OCEAN_CONTRACT];
   }
 
   async function switchNetwork() {
