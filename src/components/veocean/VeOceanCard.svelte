@@ -4,12 +4,15 @@
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { userBalances } from "../../stores/tokens";
   import { oceanUnlockDate } from "../../stores/veOcean";
+  import { totalUserAllocation } from "../../stores/dataAllocations";
+  import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
 
   let balance = 0;
-  let votingPowerMultiplier = 0;
   let loading = true;
 
   const setValues = async () => {
+    let newAllocation = await getTotalAllocatedVeOcean($userAddress);
+    totalUserAllocation.update(() => newAllocation);
     balance = $userBalances[process.env.VE_OCEAN_CONTRACT];
     loading = false;
   };
@@ -23,7 +26,7 @@
   <Card title="My veOCEAN">
     <div class="veOcean-info">
       <ItemWithLabel
-        title={`veOcean Balance`}
+        title={`veOcean balance`}
         value={`${parseFloat(balance).toFixed(3)} veOCEAN`}
         {loading}
       />
@@ -35,8 +38,8 @@
         {loading}
       />
       <ItemWithLabel
-        title={`Voting power multiplier`}
-        value={`${parseFloat(votingPowerMultiplier).toFixed(3)} X`}
+        title={`Total allocated`}
+        value={`${$totalUserAllocation} veOCEAN`}
         {loading}
       />
     </div>

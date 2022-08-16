@@ -25,12 +25,6 @@ export const getAllAllocationsForAddress = async(userAddress) => {
     return data;
   }
 
-export const getAllocatedAmountForAddress = async(stakes,poolAddress) => {
-  let pool;
-  pool = stakes.find((poolStake) =>poolStake.pool_addr === poolAddress)
-    return pool ? pool.stake_amt * 2 : 0;
-}
-
 export const allocateVeOcean = async(amount, dataAddress, chainId, signer) => {
   try {
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, signer);
@@ -47,6 +41,19 @@ export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
     const allocatedAmount = await contract.getveAllocation(userAddress, dataAddress, chainId)
+    return allocatedAmount
+} catch (error) {
+  console.log(error)
+  throw error;
+}
+}
+
+export const getTotalAllocatedVeOcean = async(userAddress) => {
+  const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
+  try {
+    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
+    const allocatedAmount = await contract.getTotalAllocation(userAddress)
     return allocatedAmount
 } catch (error) {
   console.log(error)

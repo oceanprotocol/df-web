@@ -11,7 +11,6 @@
   import Swal from "sweetalert2";
   import TokenApproval from "../common/TokenApproval.svelte";
   import Input from "../common/Input.svelte";
-  import { getAllocatedAmountForAddress } from "../../utils/dataAllocations";
   import { getRewardsForPoolUser } from "../../utils/rewards";
   import { rewards } from "../../stores/airdrops";
   import { dataAllocations } from "../../stores/dataAllocations";
@@ -29,13 +28,9 @@
   let canAllocate = false;
 
   const updateBalance = async () => {
-    allocatedAmount = await getAllocatedAmountForAddress(
-      $dataAllocations,
-      data.poolAddress
-    );
     allocatedAmount = await getAllocatedVeOcean(
       $userAddress,
-      data.basetokenAddress,
+      data.DTAddress,
       $connectedChainId
     );
     if (!rewards) {
@@ -56,7 +51,7 @@
       loading = true;
       await allocateVeOcean(
         amountToAllocate,
-        data.basetokenAddress,
+        data.DTAddress,
         $connectedChainId,
         $networkSigner
       );
