@@ -53,7 +53,3 @@ export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
   throw error;
 }
 }
-
-export const calculatePoolShares = async(TVL, stakedAmount) => {
-    return (100 * stakedAmount) / TVL
-}

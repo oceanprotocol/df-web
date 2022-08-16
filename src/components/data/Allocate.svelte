@@ -11,12 +11,8 @@
   import Swal from "sweetalert2";
   import TokenApproval from "../common/TokenApproval.svelte";
   import Input from "../common/Input.svelte";
-  import {
-    getAllocatedAmountForAddress,
-    calculatePoolShares,
-  } from "../../utils/dataAllocations";
+  import { getAllocatedAmountForAddress } from "../../utils/dataAllocations";
   import { getRewardsForPoolUser } from "../../utils/rewards";
-  import { calcMaxAllowedStakeInput } from "../../utils/data";
   import { rewards } from "../../stores/airdrops";
   import { dataAllocations } from "../../stores/dataAllocations";
   import {
@@ -29,11 +25,8 @@
 
   let amountToAllocate = 0.0;
   let allocatedAmount = 0.0;
-  let currentPoolShare = 0.0;
-  let calcBPTOut = 0.0;
   let estimatedRewards = 0.0;
   let canAllocate = false;
-  let maxPoolInputAllowed = calcMaxAllowedStakeInput(data.tvl * 2);
 
   const updateBalance = async () => {
     allocatedAmount = await getAllocatedAmountForAddress(
@@ -45,7 +38,6 @@
       data.basetokenAddress,
       $connectedChainId
     );
-    calcBPTOut = await calculatePoolShares(data.tvl * 2, allocatedAmount);
     if (!rewards) {
     }
     estimatedRewards = getRewardsForPoolUser(
@@ -53,8 +45,6 @@
       $userAddress,
       data.poolAddress
     );
-    currentPoolShare = calcBPTOut;
-    //await addUserBalanceToBalances(data.chainId, data.basetokenAddress);
   };
 
   $: if ($userAddress && data.chainId === $connectedChainId) {
@@ -94,17 +84,11 @@
 
   async function handleAllocateAmountChange() {
     loading = true;
-    calcBPTOut = 0.0;
     if (amountToAllocate > 0.0 && data.chainId === $connectedChainId) {
       await updateBalance();
-      calcBPTOut = await calculatePoolShares(
-        data.tvl * 2,
-        amountToAllocate + allocatedAmount
-      );
       updateCanAllocate();
       loading = false;
     } else {
-      calcBPTOut = currentPoolShare;
       canAllocate = false;
       loading = false;
     }
@@ -149,10 +133,6 @@
           value={parseFloat(allocatedAmount).toFixed(3)}
         />
         <ItemWithLabel
-          title="Calc Pool Shares"
-          value={`${parseFloat(calcBPTOut).toFixed(2)}%`}
-        />
-        <ItemWithLabel
           title="Estimated Rewards"
           value={`${parseFloat(estimatedRewards).toFixed(3)} ${data.basetoken}`}
         />
@@ -162,10 +142,7 @@
           type="number"
           bind:value={amountToAllocate}
           min="0"
-          max={maxPoolInputAllowed >
-          $userBalances[process.env.VE_OCEAN_CONTRACT]
-            ? $userBalances[process.env.VE_OCEAN_CONTRACT]
-            : maxPoolInputAllowed}
+          max={$userBalances[process.env.VE_OCEAN_CONTRACT]}
           onChange={handleAllocateAmountChange}
         />
       </div>
