@@ -4,6 +4,7 @@
     networkSigner,
     connectedChainId,
     switchWalletNetwork,
+    getNetworkDataById,
   } from "../../stores/web3";
   import { userBalances } from "../../stores/tokens";
   import Button from "../common/Button.svelte";
@@ -19,6 +20,9 @@
     getTotalAllocatedVeOcean,
   } from "../../utils/dataAllocations";
   import { totalUserAllocation } from "../../stores/dataAllocations";
+  import * as networksDataArray from "../../networks-metadata.json";
+
+  let networksData = networksDataArray.default;
 
   export let data;
   export let loading = false;
@@ -43,7 +47,10 @@
     );
   };
 
-  $: if ($userAddress && data.chainId === $connectedChainId) {
+  $: if (
+    $userAddress &&
+    parseInt(process.env.VE_SUPPORTED_CHAINID) === $connectedChainId
+  ) {
     updateBalance();
   }
 
@@ -82,7 +89,10 @@
 
   async function handleAllocateAmountChange() {
     loading = true;
-    if (amountToAllocate > 0.0 && data.chainId === $connectedChainId) {
+    if (
+      amountToAllocate > 0.0 &&
+      parseInt(process.env.VE_SUPPORTED_CHAINID) === $connectedChainId
+    ) {
       await updateBalance();
       updateCanAllocate();
       loading = false;
@@ -99,7 +109,7 @@
   }
 
   async function switchNetwork() {
-    await switchWalletNetwork(data.chainId);
+    await switchWalletNetwork(process.env.VE_SUPPORTED_CHAINID);
   }
 </script>
 
@@ -109,10 +119,15 @@
     <span>veOCEAN</span>
   </div>
   <div class="components-container">
-    {#if $userAddress && process.env.VE_SUPPORTED_CHAINID !== $connectedChainId}
+    {#if $userAddress && parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId}
       <div class="button">
         <Button
-          text="Switch Network"
+          text={`Switch Network to ${
+            getNetworkDataById(
+              networksData,
+              parseInt(process.env.VE_SUPPORTED_CHAINID)
+            )?.name
+          }`}
           onclick={() => switchNetwork()}
           disabled={!$userAddress}
         />
