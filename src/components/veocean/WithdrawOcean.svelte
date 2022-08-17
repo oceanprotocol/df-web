@@ -39,7 +39,10 @@
     <Button
       text={loading ? "Withdrawing..." : "Withdraw all locked"}
       secondary
-      disabled={loading || !$lockedOceanAmount || new Date() < $oceanUnlockDate}
+      disabled={loading ||
+        !$lockedOceanAmount ||
+        new Date() < $oceanUnlockDate ||
+        parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId}
       onclick={() => withdraw()}
     />
   </div>
