@@ -28,6 +28,7 @@
   let estimatedRewards = 0.0;
   let availableAllocation = undefined;
   let totalAllocationForUser = 100;
+  let allowedAllocation = 0.0;
   let canAllocate = false;
 
   const updateBalance = async () => {
@@ -48,7 +49,15 @@
       newAllocation = await getTotalAllocatedVeOcean($userAddress);
       totalUserAllocation.update(() => newAllocation);
     }
+    updateAvailableAndAllowedAllocation(newAllocation);
+  };
+
+  const updateAvailableAndAllowedAllocation = (newAllocation) => {
     availableAllocation = totalAllocationForUser - newAllocation;
+    allowedAllocation =
+      availableAllocation > allocatedAmount
+        ? availableAllocation
+        : allocatedAmount;
   };
 
   $: if ($userAddress && data.chainId === $connectedChainId) {
@@ -73,8 +82,8 @@
         await updateBalance();
         updateCanAllocate();
         let newAllocation = await getTotalAllocatedVeOcean($userAddress);
-        totalUserAllocation.update(() => newAllocation);
-        availableAllocation = totalAllocationForUser - newAllocation;
+        totalUserAllocation.update((newAllocation) => newAllocation);
+        updateAvailableAndAllowedAllocation(newAllocation);
         loading = false;
       });
     } catch (error) {
@@ -105,7 +114,7 @@
     canAllocate =
       amountToAllocate &&
       amountToAllocate >= 0.0 &&
-      amountToAllocate <= availableAllocation;
+      amountToAllocate <= allowedAllocation;
   }
 
   async function switchNetwork() {
@@ -138,8 +147,10 @@
           value={allocatedAmount ? `${allocatedAmount}%` : "loading..."}
         />
         <ItemWithLabel
-          title={`Allocation available`}
-          value={availableAllocation ? `${availableAllocation}%` : "loading..."}
+          title={`Available allocation`}
+          value={availableAllocation >= 0
+            ? `${availableAllocation}%`
+            : "loading..."}
         />
         <ItemWithLabel
           title="Estimated Rewards"

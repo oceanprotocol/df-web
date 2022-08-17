@@ -26,10 +26,6 @@
       }
     } else {
       isOpen = true;
-
-      console.log("Pool chain id: ", data.chainId);
-      console.log("Connected chain id: ", $connectedChainId);
-      console.log("Network disabled: ", networkDisabled);
     }
   }
 
