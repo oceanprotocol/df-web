@@ -24,11 +24,14 @@
   export let loading = false;
 
   let amountToAllocate = 0.0;
-  let allocatedAmount = 0.0;
+  let allocatedAmount = undefined;
   let estimatedRewards = 0.0;
+  let availableAllocation = undefined;
+  let totalAllocationForUser = 100;
   let canAllocate = false;
 
   const updateBalance = async () => {
+    let newAllocation = $totalUserAllocation;
     allocatedAmount = await getAllocatedVeOcean(
       $userAddress,
       data.DTAddress,
@@ -41,6 +44,11 @@
       $userAddress,
       data.poolAddress
     );
+    if (!$totalUserAllocation) {
+      newAllocation = await getTotalAllocatedVeOcean($userAddress);
+      totalUserAllocation.update(() => newAllocation);
+    }
+    availableAllocation = totalAllocationForUser - newAllocation;
   };
 
   $: if ($userAddress && data.chainId === $connectedChainId) {
@@ -66,6 +74,7 @@
         updateCanAllocate();
         let newAllocation = await getTotalAllocatedVeOcean($userAddress);
         totalUserAllocation.update(() => newAllocation);
+        availableAllocation = totalAllocationForUser - newAllocation;
         loading = false;
       });
     } catch (error) {
@@ -82,7 +91,7 @@
 
   async function handleAllocateAmountChange() {
     loading = true;
-    if (amountToAllocate > 0.0 && data.chainId === $connectedChainId) {
+    if (amountToAllocate >= 0.0 && data.chainId === $connectedChainId) {
       await updateBalance();
       updateCanAllocate();
       loading = false;
@@ -94,12 +103,17 @@
 
   function updateCanAllocate() {
     canAllocate =
-      amountToAllocate > 0.0 &&
-      amountToAllocate <= $userBalances[process.env.VE_OCEAN_CONTRACT];
+      amountToAllocate &&
+      amountToAllocate >= 0.0 &&
+      amountToAllocate <= availableAllocation;
   }
 
   async function switchNetwork() {
     await switchWalletNetwork(data.chainId);
+  }
+
+  $: if (availableAllocation) {
+    updateCanAllocate();
   }
 </script>
 
@@ -120,25 +134,23 @@
     {:else}
       <div class="items-container">
         <ItemWithLabel
-          title={`veOCEAN Balance`}
-          value={parseFloat(
-            $userBalances[process.env.VE_OCEAN_CONTRACT]
-          ).toFixed(3)}
+          title={`Allocated`}
+          value={allocatedAmount ? `${allocatedAmount}%` : "loading..."}
         />
         <ItemWithLabel
-          title={`veOCEAN allocated`}
-          value={parseFloat(allocatedAmount).toFixed(3)}
+          title={`Allocation available`}
+          value={availableAllocation ? `${availableAllocation}%` : "loading..."}
         />
         <ItemWithLabel
           title="Estimated Rewards"
           value={`${parseFloat(estimatedRewards).toFixed(3)} ${data.basetoken}`}
         />
       </div>
-      <div class="inputContainer">
+      <div class="inputContainer percentage">
         <Input
           type="number"
           bind:value={amountToAllocate}
-          min="0"
+          min="-1"
           max={$userBalances[process.env.VE_OCEAN_CONTRACT]}
           onChange={handleAllocateAmountChange}
         />
@@ -193,5 +205,27 @@
   }
   .inputContainer {
     margin-bottom: calc(var(--spacer) / 4);
+  }
+  .percentage {
+    width: 80px;
+    display: inline-block;
+    position: relative;
+  }
+  .percentage:hover::after,
+  .percentage:focus-within::after {
+    right: 2.5em;
+  }
+  /* handle Firefox (arrows always shown) */
+  @supports (-moz-appearance: none) {
+    .percentage::after {
+      right: 2.5em;
+    }
+  }
+  .percentage::after {
+    position: absolute;
+    top: 6px;
+    right: 0.5em;
+    transition: all 0.05s ease-in-out;
+    content: "%";
   }
 </style>
