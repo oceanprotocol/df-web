@@ -4,10 +4,7 @@
     "chain": "DEV",
     "icon": "ethereum",
     "rpc": [
-      "http://127.0.0.1:8545",
-      "wss://mainnet.infura.io/ws/v3/",
-      "https://api.mycryptoapi.com/eth",
-      "https://cloudflare-eth.com"
+      "http://127.0.0.1:8545"
     ],
     "faucets": [],
     "nativeCurrency": {

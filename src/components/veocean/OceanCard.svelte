@@ -1,5 +1,4 @@
 <script>
-  import { connectedChainId } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { userBalances } from "../../stores/tokens";
@@ -9,7 +8,9 @@
 
   let balance =
     $userBalances[
-      getOceanTokenAddressByChainId($connectedChainId).toLowerCase()
+      getOceanTokenAddressByChainId(
+        process.env.VE_SUPPORTED_CHAINID
+      ).toLowerCase()
     ];
   let loading = false;
 </script>

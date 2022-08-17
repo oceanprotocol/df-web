@@ -24,9 +24,10 @@
   $: if (
     $userAddress &&
     $userBalances[
-      getOceanTokenAddressByChainId($connectedChainId).toLowerCase()
-    ] &&
-    $connectedChainId
+      getOceanTokenAddressByChainId(
+        process.env.VE_SUPPORTED_CHAINID
+      ).toLowerCase()
+    ]
   ) {
     loadValues();
   }

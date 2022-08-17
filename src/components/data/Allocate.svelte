@@ -109,7 +109,7 @@
     <span>veOCEAN</span>
   </div>
   <div class="components-container">
-    {#if $userAddress && data.chainId !== $connectedChainId}
+    {#if $userAddress && process.env.VE_SUPPORTED_CHAINID !== $connectedChainId}
       <div class="button">
         <Button
           text="Switch Network"
