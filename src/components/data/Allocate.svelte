@@ -28,11 +28,10 @@
   let estimatedRewards = 0.0;
   let availableAllocation = undefined;
   let totalAllocationForUser = 100;
-  let allowedAllocation = 0.0;
   let canAllocate = false;
 
   const updateBalance = async () => {
-    let newAllocation = $totalUserAllocation;
+    let newTotalUserAllocation = $totalUserAllocation;
     allocatedAmount = await getAllocatedVeOcean(
       $userAddress,
       data.DTAddress,
@@ -46,18 +45,17 @@
       data.poolAddress
     );
     if (!$totalUserAllocation) {
-      newAllocation = await getTotalAllocatedVeOcean($userAddress);
-      totalUserAllocation.update(() => newAllocation);
+      newTotalUserAllocation = await getTotalAllocatedVeOcean($userAddress);
+      totalUserAllocation.update(() => newTotalUserAllocation);
     }
-    updateAvailableAndAllowedAllocation(newAllocation);
+    updateAvailableAllocation(newTotalUserAllocation);
   };
 
-  const updateAvailableAndAllowedAllocation = (newAllocation) => {
-    availableAllocation = totalAllocationForUser - newAllocation;
-    allowedAllocation =
-      availableAllocation > allocatedAmount
-        ? availableAllocation
-        : allocatedAmount;
+  const updateAvailableAllocation = (totalUserAllocation) => {
+    availableAllocation =
+      parseInt(totalAllocationForUser) -
+      parseInt(totalUserAllocation) +
+      parseInt(allocatedAmount);
   };
 
   $: if ($userAddress && data.chainId === $connectedChainId) {
@@ -81,9 +79,11 @@
         amountToAllocate = 0;
         await updateBalance();
         updateCanAllocate();
-        let newAllocation = await getTotalAllocatedVeOcean($userAddress);
-        totalUserAllocation.update((newAllocation) => newAllocation);
-        updateAvailableAndAllowedAllocation(newAllocation);
+        let newTotalUserAllocation = await getTotalAllocatedVeOcean(
+          $userAddress
+        );
+        totalUserAllocation.update(() => newTotalUserAllocation);
+        updateAvailableAllocation(newTotalUserAllocation);
         loading = false;
       });
     } catch (error) {
@@ -112,9 +112,9 @@
 
   function updateCanAllocate() {
     canAllocate =
-      amountToAllocate &&
-      amountToAllocate >= 0.0 &&
-      amountToAllocate <= allowedAllocation;
+      amountToAllocate !== null &&
+      amountToAllocate >= 0 &&
+      amountToAllocate <= availableAllocation;
   }
 
   async function switchNetwork() {
