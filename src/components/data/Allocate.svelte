@@ -5,12 +5,10 @@
     connectedChainId,
     switchWalletNetwork,
   } from "../../stores/web3";
-  import { userBalances } from "../../stores/tokens";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import Swal from "sweetalert2";
   import TokenApproval from "../common/TokenApproval.svelte";
-  import Input from "../common/Input.svelte";
   import { getRewardsForPoolUser } from "../../utils/rewards";
   import { rewards } from "../../stores/airdrops";
   import {
@@ -19,6 +17,8 @@
     getTotalAllocatedVeOcean,
   } from "../../utils/dataAllocations";
   import { totalUserAllocation } from "../../stores/dataAllocations";
+  import RangeSliderInput from "../common/RangeSliderInput.svelte";
+  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
 
   export let data;
   export let loading = false;
@@ -37,6 +37,7 @@
       data.DTAddress,
       $connectedChainId
     );
+    amountToAllocate = allocatedAmount;
     if (!rewards) {
     }
     estimatedRewards = getRewardsForPoolUser(
@@ -73,7 +74,7 @@
       );
       Swal.fire(
         "Success!",
-        "You've allocate veOCEAN to data NFT.",
+        `You've allocate ${amountToAllocate}% of total allocations to data NFT.`,
         "success"
       ).then(async () => {
         amountToAllocate = 0;
@@ -90,7 +91,7 @@
       console.log("Error: ", error);
       Swal.fire(
         "Error!",
-        "Failed to allocate veOCEAN to data NFT.",
+        "Failed to allocate ${amountToAllocate}% of total allocations to data NFT.",
         "error"
       ).then(() => {
         loading = false;
@@ -98,10 +99,11 @@
     }
   }
 
-  async function handleAllocateAmountChange() {
+  async function handleAllocateAmountChange(newValue) {
     loading = true;
+    amountToAllocate = newValue;
     if (amountToAllocate >= 0.0 && data.chainId === $connectedChainId) {
-      await updateBalance();
+      //await updateBalance();
       updateCanAllocate();
       loading = false;
     } else {
@@ -158,24 +160,25 @@
         />
       </div>
       <div class="inputContainer percentage">
-        <Input
-          type="number"
-          bind:value={amountToAllocate}
-          min="-1"
-          max={$userBalances[process.env.VE_OCEAN_CONTRACT]}
+        <RangeSliderInput
+          min={0}
+          value={[allocatedAmount]}
+          max={availableAllocation}
+          last={availableAllocation > 0 ? "label" : false}
           onChange={handleAllocateAmountChange}
+          disabled={availableAllocation === 0}
         />
       </div>
       <TokenApproval
-        tokenAddress={data.basetokenAddress}
-        tokenName="veOCEAN"
+        tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
+        tokenName="OCEAN"
         poolAddress={process.env.VE_OCEAN_CONTRACT}
-        amount={amountToAllocate}
+        amount={amountToAllocate.toString()}
         disabled={!canAllocate}
         bind:loading
       >
         <Button
-          text={loading ? "Allocating" : "Allocate"}
+          text={loading ? "Allocating" : `Allocate ${amountToAllocate}%`}
           onclick={() => allocate()}
           disabled={!canAllocate || loading}
         />
@@ -218,25 +221,6 @@
     margin-bottom: calc(var(--spacer) / 4);
   }
   .percentage {
-    width: 80px;
-    display: inline-block;
-    position: relative;
-  }
-  .percentage:hover::after,
-  .percentage:focus-within::after {
-    right: 2.5em;
-  }
-  /* handle Firefox (arrows always shown) */
-  @supports (-moz-appearance: none) {
-    .percentage::after {
-      right: 2.5em;
-    }
-  }
-  .percentage::after {
-    position: absolute;
-    top: 6px;
-    right: 0.5em;
-    transition: all 0.05s ease-in-out;
-    content: "%";
+    width: 100%;
   }
 </style>
