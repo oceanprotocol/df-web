@@ -18,7 +18,7 @@
     <ItemWithLabel title="TVL" value={(parseInt(data.tvl) * 2).toFixed(3)} />
     <ItemWithLabel title="Volume" value={parseInt(data.volume).toFixed(3)} />
   </div>
-{:else}{/if}
+{/if}
 
 <style>
   .network-container {

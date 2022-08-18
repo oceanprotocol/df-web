@@ -8,7 +8,6 @@
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import Swal from "sweetalert2";
-  import TokenApproval from "../common/TokenApproval.svelte";
   import { getRewardsForPoolUser } from "../../utils/rewards";
   import { rewards } from "../../stores/airdrops";
   import {
@@ -18,7 +17,6 @@
   } from "../../utils/dataAllocations";
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import RangeSliderInput from "../common/RangeSliderInput.svelte";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
 
   export let data;
   export let loading = false;
@@ -168,25 +166,14 @@
           disabled={availableAllocation === 0}
         />
       </div>
-      <TokenApproval
-        tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
-        tokenName="OCEAN"
-        poolAddress={process.env.VE_OCEAN_CONTRACT}
-        amount={amountToAllocate.toString()}
-        disabled={!canAllocate}
-        bind:loading
-      >
-        <Button
-          text={loading
-            ? "Allocating"
-            : `Set allocation to ${amountToAllocate}%`}
-          onclick={() => allocate()}
-          disabled={!canAllocate || loading}
-        />
-      </TokenApproval>
+      <Button
+        text={loading ? "Allocating" : `Set allocation to ${amountToAllocate}%`}
+        onclick={() => allocate()}
+        disabled={!canAllocate || loading}
+      />
     {/if}
   </div>
-{:else}{/if}
+{/if}
 
 <style>
   .components-container {
