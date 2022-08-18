@@ -131,7 +131,6 @@
 {#if data}
   <div class="header">
     <h4>Allocate</h4>
-    <span>veOCEAN</span>
   </div>
   <div class="components-container">
     {#if $userAddress && data.chainId !== $connectedChainId}
@@ -178,7 +177,9 @@
         bind:loading
       >
         <Button
-          text={loading ? "Allocating" : `Allocate ${amountToAllocate}%`}
+          text={loading
+            ? "Allocating"
+            : `Set allocation to ${amountToAllocate}%`}
           onclick={() => allocate()}
           disabled={!canAllocate || loading}
         />
