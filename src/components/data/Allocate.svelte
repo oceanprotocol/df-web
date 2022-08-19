@@ -128,7 +128,7 @@
 
 {#if data}
   <div class="header">
-    <h4>Allocate</h4>
+    <h4>Allocation</h4>
   </div>
   <div class="components-container">
     {#if $userAddress && data.chainId !== $connectedChainId}
