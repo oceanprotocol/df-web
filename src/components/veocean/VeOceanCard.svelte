@@ -3,7 +3,10 @@
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { userBalances } from "../../stores/tokens";
-  import { oceanUnlockDate } from "../../stores/veOcean";
+  import {
+    oceanUnlockDate,
+    veOceanWithDelegations,
+  } from "../../stores/veOcean";
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
 
@@ -30,6 +33,12 @@
       <ItemWithLabel
         title={`veOcean balance`}
         value={`${parseFloat(balance).toFixed(3)} veOCEAN`}
+        {loading}
+      />
+      <ItemWithLabel
+        title={`voting power`}
+        value={$veOceanWithDelegations}
+        float
         {loading}
       />
       <ItemWithLabel

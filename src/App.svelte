@@ -8,7 +8,6 @@
     isWalletConnectModalOpen,
     userAddress,
     connectWalletFromLocalStorage,
-    connectedChainId,
     selectedNetworks,
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
@@ -19,6 +18,8 @@
     addUserOceanBalanceToBalances,
     addUserVeOceanBalanceToBalances,
   } from "./stores/tokens";
+  import { veOceanWithDelegations } from "./stores/veOcean";
+  import { getUserVotingPowerWithDelegations } from "./utils/delegations";
 
   window.process = {
     ...window.process,
@@ -35,6 +36,10 @@
   async function initRewards() {
     const newRewards = await getRewards($userAddress);
     rewards.update(() => newRewards);
+    const newVeOceansWithDelegations = await getUserVotingPowerWithDelegations(
+      $userAddress
+    );
+    veOceanWithDelegations.update(() => newVeOceansWithDelegations);
     await addUserVeOceanBalanceToBalances($userAddress);
     await addUserOceanBalanceToBalances(
       parseInt(process.env.VE_SUPPORTED_CHAINID)

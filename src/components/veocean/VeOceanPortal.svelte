@@ -1,11 +1,12 @@
 <script>
-  import { userAddress, connectedChainId } from "../../stores/web3";
+  import { userAddress, networkSigner } from "../../stores/web3";
   import VeOceanCard from "./VeOceanCard.svelte";
   import OceanCard from "./OceanCard.svelte";
   import LockOcean from "./LockOcean.svelte";
   import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
+  import { delegate } from "../../utils/delegations";
   import { userBalances } from "../../stores/tokens";
 
   let loading = !$lockedOceanAmount;
@@ -18,6 +19,15 @@
     oceanUnlockDate.update(() =>
       unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
     );
+    /*await delegate(
+      "0xe08A1dAe983BC701D05E492DB80e0144f8f4b909",
+      "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
+      8000,
+      0,
+      unlockDateMilliseconds / 10000,
+      1,
+      $networkSigner
+    );*/
     loading = false;
   };
 
