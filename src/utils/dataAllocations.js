@@ -28,7 +28,7 @@ export const getAllAllocationsForAddress = async(userAddress) => {
 export const allocateVeOcean = async(amount, dataAddress, chainId, signer) => {
   try {
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, signer);
-    const tx = await contract.setAllocation(amount, dataAddress, chainId)
+    const tx = await contract.setAllocation((amount* 100), dataAddress, chainId)
     await tx.wait()
 } catch (error) {
   throw error;
@@ -41,7 +41,7 @@ export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
     const allocatedAmount = await contract.getveAllocation(userAddress, dataAddress, chainId)
-    return allocatedAmount
+    return allocatedAmount / 100
 } catch (error) {
   console.log(error)
   throw error;
@@ -54,7 +54,7 @@ export const getTotalAllocatedVeOcean = async(userAddress) => {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
     const allocatedAmount = await contract.getTotalAllocation(userAddress)
-    return allocatedAmount
+    return allocatedAmount / 100
 } catch (error) {
   console.log(error)
   throw error;

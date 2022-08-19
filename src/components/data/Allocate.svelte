@@ -5,12 +5,9 @@
     connectedChainId,
     switchWalletNetwork,
   } from "../../stores/web3";
-  import { userBalances } from "../../stores/tokens";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import Swal from "sweetalert2";
-  import TokenApproval from "../common/TokenApproval.svelte";
-  import Input from "../common/Input.svelte";
   import { getRewardsForPoolUser } from "../../utils/rewards";
   import { rewards } from "../../stores/airdrops";
   import {
@@ -19,21 +16,26 @@
     getTotalAllocatedVeOcean,
   } from "../../utils/dataAllocations";
   import { totalUserAllocation } from "../../stores/dataAllocations";
+  import RangeSliderInput from "../common/RangeSliderInput.svelte";
 
   export let data;
   export let loading = false;
 
   let amountToAllocate = 0.0;
-  let allocatedAmount = 0.0;
+  let allocatedAmount = undefined;
   let estimatedRewards = 0.0;
+  let availableAllocation = undefined;
+  let totalAllocationForUser = 100;
   let canAllocate = false;
 
   const updateBalance = async () => {
+    let newTotalUserAllocation = $totalUserAllocation;
     allocatedAmount = await getAllocatedVeOcean(
       $userAddress,
       data.DTAddress,
       $connectedChainId
     );
+    amountToAllocate = allocatedAmount;
     if (!rewards) {
     }
     estimatedRewards = getRewardsForPoolUser(
@@ -41,6 +43,18 @@
       $userAddress,
       data.poolAddress
     );
+    if (!$totalUserAllocation) {
+      newTotalUserAllocation = await getTotalAllocatedVeOcean($userAddress);
+      totalUserAllocation.update(() => newTotalUserAllocation);
+    }
+    updateAvailableAllocation(newTotalUserAllocation);
+  };
+
+  const updateAvailableAllocation = (totalUserAllocation) => {
+    availableAllocation =
+      parseInt(totalAllocationForUser) -
+      parseInt(totalUserAllocation) +
+      parseInt(allocatedAmount);
   };
 
   $: if ($userAddress && data.chainId === $connectedChainId) {
@@ -58,21 +72,24 @@
       );
       Swal.fire(
         "Success!",
-        "You've allocate veOCEAN to data NFT.",
+        `You've allocate ${amountToAllocate}% of total allocations to data NFT.`,
         "success"
       ).then(async () => {
         amountToAllocate = 0;
         await updateBalance();
         updateCanAllocate();
-        let newAllocation = await getTotalAllocatedVeOcean($userAddress);
-        totalUserAllocation.update(() => newAllocation);
+        let newTotalUserAllocation = await getTotalAllocatedVeOcean(
+          $userAddress
+        );
+        totalUserAllocation.update(() => newTotalUserAllocation);
+        updateAvailableAllocation(newTotalUserAllocation);
         loading = false;
       });
     } catch (error) {
       console.log("Error: ", error);
       Swal.fire(
         "Error!",
-        "Failed to allocate veOCEAN to data NFT.",
+        "Failed to allocate ${amountToAllocate}% of total allocations to data NFT.",
         "error"
       ).then(() => {
         loading = false;
@@ -80,10 +97,11 @@
     }
   }
 
-  async function handleAllocateAmountChange() {
+  async function handleAllocateAmountChange(newValue) {
     loading = true;
-    if (amountToAllocate > 0.0 && data.chainId === $connectedChainId) {
-      await updateBalance();
+    amountToAllocate = newValue;
+    if (amountToAllocate >= 0.0 && data.chainId === $connectedChainId) {
+      //await updateBalance();
       updateCanAllocate();
       loading = false;
     } else {
@@ -94,19 +112,23 @@
 
   function updateCanAllocate() {
     canAllocate =
-      amountToAllocate > 0.0 &&
-      amountToAllocate <= $userBalances[process.env.VE_OCEAN_CONTRACT];
+      amountToAllocate !== null &&
+      amountToAllocate >= 0 &&
+      amountToAllocate <= availableAllocation;
   }
 
   async function switchNetwork() {
     await switchWalletNetwork(data.chainId);
   }
+
+  $: if (availableAllocation) {
+    updateCanAllocate();
+  }
 </script>
 
 {#if data}
   <div class="header">
-    <h4>Allocate</h4>
-    <span>veOCEAN</span>
+    <h4>Allocation</h4>
   </div>
   <div class="components-container">
     {#if $userAddress && data.chainId !== $connectedChainId}
@@ -120,46 +142,38 @@
     {:else}
       <div class="items-container">
         <ItemWithLabel
-          title={`veOCEAN Balance`}
-          value={parseFloat(
-            $userBalances[process.env.VE_OCEAN_CONTRACT]
-          ).toFixed(3)}
+          title={`Allocated`}
+          value={allocatedAmount ? `${allocatedAmount}%` : "loading..."}
         />
         <ItemWithLabel
-          title={`veOCEAN allocated`}
-          value={parseFloat(allocatedAmount).toFixed(3)}
+          title={`Available allocation`}
+          value={availableAllocation >= 0
+            ? `${availableAllocation}%`
+            : "loading..."}
         />
         <ItemWithLabel
           title="Estimated Rewards"
           value={`${parseFloat(estimatedRewards).toFixed(3)} ${data.basetoken}`}
         />
       </div>
-      <div class="inputContainer">
-        <Input
-          type="number"
-          bind:value={amountToAllocate}
-          min="0"
-          max={$userBalances[process.env.VE_OCEAN_CONTRACT]}
+      <div class="inputContainer percentage">
+        <RangeSliderInput
+          min={0}
+          value={[allocatedAmount]}
+          max={availableAllocation}
+          last={availableAllocation > 0 ? "label" : false}
           onChange={handleAllocateAmountChange}
+          disabled={availableAllocation === 0}
         />
       </div>
-      <TokenApproval
-        tokenAddress={data.basetokenAddress}
-        tokenName="veOCEAN"
-        poolAddress={process.env.VE_OCEAN_CONTRACT}
-        amount={amountToAllocate}
-        disabled={!canAllocate}
-        bind:loading
-      >
-        <Button
-          text={loading ? "Allocating" : "Allocate"}
-          onclick={() => allocate()}
-          disabled={!canAllocate || loading}
-        />
-      </TokenApproval>
+      <Button
+        text={loading ? "Allocating" : `Set allocation to ${amountToAllocate}%`}
+        onclick={() => allocate()}
+        disabled={!canAllocate || loading}
+      />
     {/if}
   </div>
-{:else}{/if}
+{/if}
 
 <style>
   .components-container {
@@ -193,5 +207,8 @@
   }
   .inputContainer {
     margin-bottom: calc(var(--spacer) / 4);
+  }
+  .percentage {
+    width: 100%;
   }
 </style>

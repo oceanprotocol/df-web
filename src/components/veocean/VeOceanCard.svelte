@@ -41,7 +41,7 @@
       />
       <ItemWithLabel
         title={`Total allocated`}
-        value={`${$totalUserAllocation} veOCEAN`}
+        value={`${$totalUserAllocation}%`}
         {loading}
       />
     </div>
