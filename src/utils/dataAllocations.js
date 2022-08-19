@@ -36,7 +36,7 @@ export const allocateVeOcean = async(amount, dataAddress, chainId, signer) => {
 }
 
 export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
-  const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
+  const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
   try {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
@@ -49,7 +49,7 @@ export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
 }
 
 export const getTotalAllocatedVeOcean = async(userAddress) => {
-  const rpcURL = await getRpcUrlByChainId(process.env.VE_OCEAN_CHAINID);
+  const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
   try {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);

@@ -36,7 +36,9 @@
     const newRewards = await getRewards($userAddress);
     rewards.update(() => newRewards);
     await addUserVeOceanBalanceToBalances($userAddress);
-    await addUserOceanBalanceToBalances($connectedChainId);
+    await addUserOceanBalanceToBalances(
+      parseInt(process.env.VE_SUPPORTED_CHAINID)
+    );
   }
 
   $: if ($userAddress) {
@@ -63,14 +65,14 @@
   <WalletConnectModal />
   <main>
     <Header />
-    <Route path="/veOCEAN">
-      <VeOceanPortal />
-    </Route>
     <Route path="/rewards">
       <ClaimPortal />
     </Route>
     <Route path="/data">
       <DataPortal />
+    </Route>
+    <Route path="/*">
+      <VeOceanPortal />
     </Route>
   </main>
 </Router>

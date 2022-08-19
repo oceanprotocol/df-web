@@ -3,6 +3,8 @@
     userAddress,
     connectedChainId,
     networkSigner,
+    switchWalletNetwork,
+    getNetworkDataById,
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Card from "../common/Card.svelte";
@@ -24,6 +26,9 @@
   import { createForm } from "svelte-forms-lib";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
+  import * as networksDataArray from "../../networks-metadata.json";
+
+  let networksData = networksDataArray.default;
 
   let multiplier = 0;
   let apy = 0;
@@ -88,7 +93,7 @@
       async () => {
         loading = false;
         await addUserVeOceanBalanceToBalances($userAddress);
-        await addUserOceanBalanceToBalances($connectedChainId);
+        await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
       }
     );
   };
@@ -109,7 +114,9 @@
           max={parseInt(getOceanBalance($connectedChainId))}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0}
-          label="How much do you want to lock?"
+          label={`How much ${
+            $lockedOceanAmount > 0 ? "extra tokens" : ""
+          } do you want to lock?`}
           direction="column"
           bind:value={$form.amount}
         />
@@ -147,31 +154,45 @@
         </div>
       </div>
       <div class="item">
-        <TokenApproval
-          tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
-          tokenName={"OCEAN"}
-          poolAddress={process.env.VE_OCEAN_CONTRACT}
-          amount={$form.amount}
-          disabled={loading || getOceanBalance($connectedChainId) <= 0}
-          bind:loading
-        >
-          {#if $lockedOceanAmount > 0}
-            <Button
-              text={loading ? "Extending lock..." : "Extend OCEAN lock"}
-              disabled={loading ||
-                getOceanBalance($connectedChainId) <= 0 ||
-                $form.amount < 0}
-              type="submit"
-            />
-          {:else}<Button
-              text={loading ? "Locking..." : "Lock OCEAN"}
-              disabled={loading ||
-                getOceanBalance($connectedChainId) <= 0 ||
-                $form.amount <= 0}
-              type="submit"
-            />
-          {/if}
-        </TokenApproval>
+        {#if $connectedChainId !== parseInt(process.env.VE_SUPPORTED_CHAINID)}
+          <Button
+            text={`Switch Network to ${
+              getNetworkDataById(
+                networksData,
+                parseInt(process.env.VE_SUPPORTED_CHAINID)
+              )?.name
+            }`}
+            onclick={() =>
+              switchWalletNetwork(process.env.VE_SUPPORTED_CHAINID)}
+            disabled={!$userAddress}
+          />
+        {:else}
+          <TokenApproval
+            tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
+            tokenName={"OCEAN"}
+            poolAddress={process.env.VE_OCEAN_CONTRACT}
+            amount={$form.amount}
+            disabled={loading || getOceanBalance($connectedChainId) <= 0}
+            bind:loading
+          >
+            {#if $lockedOceanAmount > 0}
+              <Button
+                text={loading ? "Extending lock..." : "Extend OCEAN lock"}
+                disabled={loading ||
+                  getOceanBalance($connectedChainId) <= 0 ||
+                  $form.amount < 0}
+                type="submit"
+              />
+            {:else}<Button
+                text={loading ? "Locking..." : "Lock OCEAN"}
+                disabled={loading ||
+                  getOceanBalance($connectedChainId) <= 0 ||
+                  $form.amount <= 0}
+                type="submit"
+              />
+            {/if}
+          </TokenApproval>
+        {/if}
       </div>
     </form>
   </Card>
