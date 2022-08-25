@@ -23,6 +23,9 @@ The `.env` file is used to differentiate the staging params from the production 
 In order to get the app working create a `.env` in the root of the project directory, and add the following env variables:
 
 ```js
+// Enable when you want to debug rollup?
+// ROLLUP_WATCH = true
+
 //list of suppoerted chainIDs
 SUPPORTED_CHAIN_IDS = [3, 4, 1287, 80001]
 
@@ -31,7 +34,27 @@ BACKEND_API = https://test-df-sql.oceandao.org/pools
 
 //rewards config containing the airdrop contracts and token addresses for each network
 AIRDROP_CONFIG = {\"NETWORK_ID":{\"airdropAddress\":\"AIRDROP_CONTRACT_ADDRESS\",\"rewardAddress\":\"REWARD_CONTRACT_ADDRESS\",\"tokensData\":{\"TOKEN_ADDRESS\":{\"symbol\":\"TOKEN_SYMBOL\"}}}
+
+// your infura key
+INFURA_KEY = 01SAMPLE9234KEY
+
+// chain where ve contracts are deployed - 8996 is development
+VE_SUPPORTED_CHAINID = 8996
+
+// you can get the following addresses from barge @ address.json to develop locally
+// veOcean contract address
+VE_OCEAN_CONTRACT = 0x0000address
+
+// veAllocate contract address
+VE_ALLOCATE_CONTRACT = 0x0000address
+
+// veDelegation contract address
+VE_DELEGATION_CONTRACT = 0x0000address
 ```
+
+You may also need to update the following files in code to configure your environment.
+1. Update `oceanTokenAddressesByChain` inside `src/utils/tokens.js` w/ the OCEAN token address
+
 
 ## Get started
 
