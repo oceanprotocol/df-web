@@ -1,4 +1,5 @@
 <script>
+  import NumberInput from "./NumberInput.svelte";
   import DateInput from "./DateInput.svelte";
 
   export let label = undefined;
@@ -10,9 +11,9 @@
   export let max = undefined;
   export let onChange = undefined;
   export let error = false;
-  export let name = undefined;
   export let step = 1;
   export let direction = "row";
+  export let showMax = false;
 </script>
 
 <div class={`container ${direction === "row" ? "row" : "column"}`}>
@@ -22,16 +23,14 @@
   {/if}
   <div class={`inputContainer ${type === "checkbox" && "checkbox"}`}>
     {#if type === "number"}
-      <input
-        class="input"
-        class:invalid={error}
-        type="number"
-        {disabled}
-        {min}
-        {max}
+      <NumberInput
         bind:value
         {placeholder}
+        {min}
+        {max}
+        {disabled}
         on:input={onChange}
+        {showMax}
       />
     {:else if type === "checkbox"}
       <input

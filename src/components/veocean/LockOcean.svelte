@@ -109,7 +109,6 @@
       <div class="item">
         <Input
           type="number"
-          name="amount"
           min={$lockedOceanAmount ? 0 : 1}
           max={parseInt(getOceanBalance($connectedChainId))}
           error={$errors.amount}
@@ -119,6 +118,7 @@
           } do you want to lock?`}
           direction="column"
           bind:value={$form.amount}
+          showMax={true}
         />
       </div>
       <div class="item">
@@ -142,7 +142,7 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Votin power multiplier`}
+            title={`Voting power multiplier`}
             value={loading
               ? "loading"
               : `${parseFloat(multiplier).toFixed(1)} X`}
