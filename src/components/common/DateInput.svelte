@@ -9,20 +9,24 @@
 
   const periods = [
     {
-      label: "~2 weeks",
-      days: 14,
+      label: "~1 week",
+      days: 7,
     },
     {
       label: "~1 month",
       days: 30,
     },
     {
-      label: "~1 year",
-      days: 365,
+      label: "~6 months",
+      days: 180,
     },
     {
       label: "~2 years",
       days: 730,
+    },
+    {
+      label: "~4 years",
+      days: 1460,
     },
   ];
 
