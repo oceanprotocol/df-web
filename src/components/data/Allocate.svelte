@@ -157,7 +157,7 @@
       <div class="items-container">
         <ItemWithLabel
           title={`Allocated`}
-          value={allocatedAmount ? `${allocatedAmount}%` : "loading..."}
+          value={allocatedAmount !== undefined ? `${allocatedAmount}%` : "loading..."}
         />
         <ItemWithLabel
           title={`Available allocation`}

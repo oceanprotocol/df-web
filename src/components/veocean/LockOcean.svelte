@@ -131,6 +131,7 @@
           label="Amount OCEAN"
           direction="column"
           bind:value={$form.amount}
+          showMax={true}
         />
       </div>
       <div class="item">

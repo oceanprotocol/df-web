@@ -3,6 +3,7 @@
 
   export let onclick = () => {};
   export let text;
+  export let className = undefined;
   export let secondary = false;
   export let loading = false;
   export let disabled = false;
@@ -12,7 +13,8 @@
 
 <button
   on:click={onclick}
-  class="button {secondary && 'buttonSecondary'} {disabled && secondary
+  class="button {className && className} {secondary &&
+    'buttonSecondary'} {disabled && secondary
     ? 'disabledSecondary'
     : disabled && 'disabled'} {textOnly && 'textOnly'}"
   {disabled}
@@ -65,6 +67,9 @@
     color: var(--brand-black);
     border: 0;
     padding: 0;
+  }
+  .textOnly:hover {
+    color: var(--brand-color-primary) !important;
   }
   span {
     display: box;
