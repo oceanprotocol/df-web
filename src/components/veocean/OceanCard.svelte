@@ -30,15 +30,15 @@
 </script>
 
 <div class={`container`}>
-  <Card title="veOCEAN">
+  <Card title="My veOCEAN">
     <div class="ocean-info">
       <ItemWithLabel
-      title={`Locked`}
-      value={`${parseFloat($lockedOceanAmount).toFixed(3)} OCEAN`}
-      {loading}
-    />
+        title={`Locked`}
+        value={`${parseFloat($lockedOceanAmount).toFixed(3)} OCEAN`}
+        {loading}
+      />
       <ItemWithLabel
-        title={`veOcean Balance`}
+        title={`Balance`}
         value={`${parseFloat(balance).toFixed(3)} veOCEAN`}
         {loading}
       />
@@ -49,7 +49,7 @@
         {loading}
       />
       <ItemWithLabel
-        title={`Lock period end`}
+        title={`Lock ends`}
         value={`${
           $oceanUnlockDate ? $oceanUnlockDate.toLocaleDateString("en-CA") : "-"
         }`}
