@@ -1,21 +1,23 @@
 <script>
+  import Button from "./Button.svelte";
+
   export let value = undefined;
+  export let name = undefined;
   export let placeholder = undefined;
   export let min = undefined;
   export let max = undefined;
   export let disabled = false;
   export let onChange = undefined;
   export let showMax = false;
-  
-  const handleOnMaxClick = (period) => {
-    value = max
-  };
+
+  const handleOnMaxClick = () => (value = max);
 </script>
 
 <div class={`container`}>
   <input
     class="input"
     type="number"
+    {name}
     {disabled}
     {min}
     {max}
@@ -24,9 +26,14 @@
     on:input={onChange}
   />
 </div>
-<div class="container-right">
+<div class="actionsContainer">
   {#if showMax === true}
-    <p class="maxItem" on:click={() => handleOnMaxClick()}>max</p>
+    <Button
+      onclick={handleOnMaxClick}
+      className="maxItem"
+      text={"max"}
+      textOnly
+    />
   {/if}
 </div>
 
@@ -44,18 +51,15 @@
     border-radius: 3px;
     width: 100%;
   }
-  .container-right {
+  .actionsContainer {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     width: 100%;
   }
-  .maxItem {
+  .actionsContainer :global(.maxItem) {
+    margin-top: calc(var(--spacer) / 10);
     font-size: var(--font-size-mini);
     color: var(--brand-grey-light);
-  }
-  .maxItem:hover {
-    cursor: pointer;
-    color: var(--brand-color-primary);
   }
 </style>

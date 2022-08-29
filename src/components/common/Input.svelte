@@ -3,6 +3,7 @@
   import DateInput from "./DateInput.svelte";
 
   export let label = undefined;
+  export let name = undefined;
   export let value = undefined;
   export let placeholder = undefined;
   export let disabled = false;
@@ -25,6 +26,7 @@
     {#if type === "number"}
       <NumberInput
         bind:value
+        {name}
         {placeholder}
         {min}
         {max}

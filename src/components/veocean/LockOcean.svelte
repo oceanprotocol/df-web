@@ -109,6 +109,7 @@
       <div class="item">
         <Input
           type="number"
+          name="amount"
           min={$lockedOceanAmount ? 0 : 1}
           max={parseInt(getOceanBalance($connectedChainId))}
           error={$errors.amount}
