@@ -27,6 +27,7 @@
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
+  import { getThursdayDate } from "../../utils/functions";
 
   let networksData = networksDataArray.default;
 
@@ -34,15 +35,6 @@
   let calculatedMultiplier = 0;
   let maxDate = new Date();
   let loading = true;
-
-  const getThursdayDate = () => {
-    var curr = new Date();
-    if (curr.getDay() > 4) curr.setDate(curr.getDate() + 4); // get current date
-    var first = curr.getDate() - curr.getDay();
-    var thursday = new Date(curr.setDate(first + 4)).toLocaleDateString("en-CA");
-    console.log("Thursday is: ", thursday);
-    return thursday
-  };
 
   let schema = yup.object().shape({
     amount: yup
@@ -103,25 +95,22 @@
   };
 
   const MAXTIME = 4 * 365 * 86400 * 1000;
-  
+
   const updateMultiplier = () => {
-    if( $form.unlockDate ) {
+    if ($form.unlockDate) {
       // 4 years = 100% voting power
       var thursday = new Date(getThursdayDate());
       var msDelta = new Date($form.unlockDate) - thursday;
-      console.log("updateMultiplier", new Date($form.unlockDate), thursday, msDelta);
       calculatedMultiplier = ((msDelta / MAXTIME) * 100.0).toFixed(2);
-      
-      if( $form.amount ) {
+      if ($form.amount) {
         calculatedVotingPower = ((msDelta / MAXTIME) * $form.amount).toFixed(2);
       }
     } else {
-      calculatedMultiplier = 0
+      calculatedMultiplier = 0;
     }
   };
 
-  $: calculatedMultiplier, $form.unlockDate, updateMultiplier()
-  
+  $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
 </script>
 
 <div class={`container`}>
@@ -165,14 +154,16 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-          title={`Time Bonus`}
-          value={loading
-            ? "loading"
-            : `${parseFloat(calculatedMultiplier).toFixed(1)}%`}
-        />
+            title={`Time Bonus`}
+            value={loading
+              ? "loading"
+              : `${parseFloat(calculatedMultiplier).toFixed(1)}%`}
+          />
           <ItemWithLabel
             title={`Voting Power`}
-            value={loading ? "loading" : `${parseFloat(calculatedVotingPower)} veOCEAN`}
+            value={loading
+              ? "loading"
+              : `${parseFloat(calculatedVotingPower)} veOCEAN`}
           />
         </div>
       </div>

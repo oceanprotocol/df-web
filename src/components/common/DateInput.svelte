@@ -1,4 +1,6 @@
 <script>
+  import { getThursdayDate } from "../../utils/functions";
+
   export let value = undefined;
   export let placeholder = undefined;
   export let min = undefined;
@@ -30,8 +32,11 @@
     },
   ];
 
-  const handleOnPeriodClick = (period) => {
-    let date = new Date().setDate(new Date().getDate() + period);
+  const handleOnPeriodClick = (days) => {
+    let thursdayDate = getThursdayDate();
+    let date = new Date(thursdayDate).setDate(
+      new Date(thursdayDate).getDate() + days
+    );
     value = new Date(date).toLocaleDateString("en-CA");
   };
 </script>
