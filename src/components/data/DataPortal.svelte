@@ -6,7 +6,7 @@
   import Table from "../common/Table.svelte";
 
   $: if (!$datasets) {
-    loadDatasets(`${process.env.BACKEND_API}/pools`);
+    loadDatasets(`${process.env.BACKEND_API}/volume`);
   }
 
   $: if ($userAddress) {

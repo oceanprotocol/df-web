@@ -8,23 +8,19 @@ export let datasets = writable("");
 
 export const columnsData = [
   { key: "network", value: "Network" },
-  { key: "datatoken", value: "Datatoken" },
-  { key: "dtaddress", value: "DTAddress" },
   { key: "basetoken", value: "Basetoken" },
   { key: "basetokenaddress", value: "BasetokenAddress" },
-  { key: "tvl", value: "TVL", display: (cost) => cost * 2 },
   {
     key: "volume",
     value: "Volume",
     display: (volume) => volume,
   },
-  { key: "pooladdress", value: "PoolAddress" },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "allocate", value:"Allocate" },
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Network", "Datatoken", "TVL", "Volume", "Allocate", "Action"]
+export const defaultColumns = ["Network", "Volume", "Allocate", "Action"]
 
 async function getDatasets(api) {
   let res;
@@ -63,32 +59,25 @@ function getRow(dataInfo, key) {
   return {
     id: key,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
-    datatoken: dataInfo.DT_symbol,
-    dtaddress: dataInfo.DT_addr,
     basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
     basetokenaddress: '0x2473f4F7bf40ed9310838edFCA6262C17A59DF64'.toLocaleLowerCase(),
-    pooladdress: dataInfo.pool_addr,
     nftaddress: dataInfo.nft_addr,
-    tvl: parseFloat(dataInfo.stake_amt).toFixed(3),
     volume: parseFloat(dataInfo.vol_amt).toFixed(3),
     allocate: {
       chainId: 8996,
       url: dataInfo.url,
-      poolAddress: dataInfo.pool_addr,
       nftAddress: dataInfo.nft_addr,
-      DTAddress: dataInfo.DT_addr,
       basetokenAddress: '0x2473f4F7bf40ed9310838edFCA6262C17A59DF64'.toLocaleLowerCase(),
-      DTSymbol: dataInfo.DT_symbol,
       basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
-      tvl: parseFloat(dataInfo.stake_amt),
       volume: parseFloat(dataInfo.vol_amt),
     },
     action: dataInfo.url,
   };
 }
 
-export async function loadDatasets(poolsApi) {
-  const allDatasets = await getDatasets(poolsApi);
+export async function loadDatasets(nftsApi) {
+  const allDatasets = await getDatasets(nftsApi);
+  console.log(allDatasets)
   if (allDatasets.length === 0) {
     datasets.set([]);
     return;
