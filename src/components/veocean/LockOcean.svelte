@@ -119,6 +119,7 @@
           } do you want to lock?`}
           direction="column"
           bind:value={$form.amount}
+          showMax={true}
         />
       </div>
       <div class="item">
@@ -142,7 +143,7 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Votin power multiplier`}
+            title={`Voting power multiplier`}
             value={loading
               ? "loading"
               : `${parseFloat(multiplier).toFixed(1)} X`}
