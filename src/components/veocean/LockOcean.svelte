@@ -20,31 +20,22 @@
   import {
     lockOcean,
     updateLockedOceanAmount,
-    updateLuckPeriod,
+    updateLockPeriod,
   } from "../../utils/ve";
   import * as yup from "yup";
   import { createForm } from "svelte-forms-lib";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
+  import { getThursdayDate } from "../../utils/functions";
 
   let networksData = networksDataArray.default;
 
-  let multiplier = 0;
-  let apy = 0;
+  let calculatedVotingPower = 0;
+  let calculatedMultiplier = 0;
   let maxDate = new Date();
   let loading = true;
 
-  const getThursdayDate = () => {
-    var curr = new Date();
-    if (curr.getDay() > 4) curr.setDate(curr.getDate() + 4); // get current date
-    var first = curr.getDate() - curr.getDay();
-    return new Date(curr.setDate(first + 4)).toLocaleDateString("en-CA");
-  };
-
-  $: if ($userAddress) {
-    loading = false;
-  }
   let schema = yup.object().shape({
     amount: yup
       .number()
@@ -64,6 +55,11 @@
         ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
         : getThursdayDate(),
   };
+
+  $: if ($userAddress) {
+    loading = false;
+  }
+
   const { form, errors, handleSubmit } = createForm({
     initialValues: fields,
     validationSchema: schema,
@@ -79,7 +75,7 @@
           await updateLockedOceanAmount(values.amount, $networkSigner);
         }
         if (new Date(values.unlockDate) > new Date($oceanUnlockDate)) {
-          await updateLuckPeriod(timeDifference / 1000, $networkSigner);
+          await updateLockPeriod(timeDifference / 1000, $networkSigner);
         }
       } else {
         await lockOcean(values.amount, timeDifference / 1000, $networkSigner);
@@ -97,13 +93,31 @@
       }
     );
   };
+
+  const MAXTIME = 4 * 365 * 86400 * 1000;
+
+  const updateMultiplier = () => {
+    if ($form.unlockDate) {
+      // 4 years = 100% voting power
+      var thursday = new Date(getThursdayDate());
+      var msDelta = new Date($form.unlockDate) - thursday;
+      calculatedMultiplier = ((msDelta / MAXTIME) * 100.0).toFixed(2);
+      if ($form.amount) {
+        calculatedVotingPower = ((msDelta / MAXTIME) * $form.amount).toFixed(2);
+      }
+    } else {
+      calculatedMultiplier = 0;
+    }
+  };
+
+  $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
 </script>
 
 <div class={`container`}>
   <Card
     title={$lockedOceanAmount > 0
-      ? `Update lock values`
-      : `Lock OCEAN to get veOCEAN`}
+      ? `Update veOCEAN Lock`
+      : `Lock OCEAN, get veOCEAN`}
   >
     <form class="content" on:submit={handleSubmit}>
       <div class="item">
@@ -114,9 +128,7 @@
           max={parseInt(getOceanBalance($connectedChainId))}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0}
-          label={`How much ${
-            $lockedOceanAmount > 0 ? "extra tokens" : ""
-          } do you want to lock?`}
+          label="Amount OCEAN"
           direction="column"
           bind:value={$form.amount}
           showMax={true}
@@ -125,7 +137,7 @@
       <div class="item">
         <Input
           type="date"
-          label={$lockedOceanAmount > 0 ? "Extend lock until" : "Lock until"}
+          label="Lock End Date"
           name="unlockDate"
           step="7"
           error={$errors.unlockDate}
@@ -143,14 +155,16 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Voting power multiplier`}
+            title={`Time Bonus`}
             value={loading
               ? "loading"
-              : `${parseFloat(multiplier).toFixed(1)} X`}
+              : `${parseFloat(calculatedMultiplier).toFixed(1)}%`}
           />
           <ItemWithLabel
-            title={`APY`}
-            value={loading ? "loading" : `${parseFloat(apy)}%`}
+            title={`Voting Power`}
+            value={loading
+              ? "loading"
+              : `${parseFloat(calculatedVotingPower)} veOCEAN`}
           />
         </div>
       </div>
