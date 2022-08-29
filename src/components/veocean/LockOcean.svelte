@@ -125,13 +125,15 @@
           type="number"
           name="amount"
           min={$lockedOceanAmount ? 0 : 1}
-          max={parseInt(getOceanBalance($connectedChainId))}
+          max={parseFloat(getOceanBalance($connectedChainId)).toFixed(3)}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0}
-          label="Amount OCEAN"
+          label="OCEAN Amount"
           direction="column"
           bind:value={$form.amount}
-          showMax={true}
+          maxValueLabel="Balance: "
+          showMaxValue={true}
+          showMaxButton={true}
         />
       </div>
       <div class="item">

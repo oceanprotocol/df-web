@@ -8,11 +8,22 @@
   export let max = undefined;
   export let disabled = false;
   export let onChange = undefined;
-  export let showMax = false;
+  export let maxValueLabel = "";
+  export let showMaxValue = false;
+  export let showMaxButton = false;
 
   const handleOnMaxClick = () => (value = max);
 </script>
 
+<div class="actionsContainer">
+  {#if showMaxValue === true}
+    {#if maxValueLabel && maxValueLabel !== ""}
+      <p class="maxValueLabel">{maxValueLabel}{max}</p>  
+    {:else}
+      <p class="maxValueLabel">{max}</p>
+    {/if}
+  {/if}
+</div>
 <div class={`container`}>
   <input
     class="input"
@@ -27,7 +38,7 @@
   />
 </div>
 <div class="actionsContainer">
-  {#if showMax === true}
+  {#if showMaxButton === true}
     <Button
       onclick={handleOnMaxClick}
       className="maxItem"
@@ -61,5 +72,10 @@
     margin-top: calc(var(--spacer) / 10);
     font-size: var(--font-size-mini);
     color: var(--brand-grey-light);
+  }
+  .actionsContainer :global(.maxValueLabel) {
+    margin-top: calc(var(--spacer) / 10);
+    font-size: var(--font-size-mini);
+    color: var(--brand-black);
   }
 </style>
