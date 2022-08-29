@@ -1,5 +1,5 @@
 <script>
-  import { userAddress, connectedChainId } from "../../stores/web3";
+  import { userAddress } from "../../stores/web3";
   import VeOceanCard from "./VeOceanCard.svelte";
   import OceanCard from "./OceanCard.svelte";
   import LockOcean from "./LockOcean.svelte";

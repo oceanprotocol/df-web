@@ -1,13 +1,14 @@
 <script>
   export let title;
   export let value;
+  export let float = false;
   export let loading = false;
 </script>
 
 <div class="item">
   <span class="title">{title}</span>
   {#if !loading}
-    <span class="value">{value}</span>
+    <span class="value">{float ? parseFloat(value).toFixed(3) : value}</span>
   {:else}
     <span class="value">loading...</span>
   {/if}
