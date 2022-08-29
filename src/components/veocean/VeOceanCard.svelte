@@ -36,7 +36,7 @@
         {loading}
       />
       <ItemWithLabel
-        title={`voting power`}
+        title={`Voting power`}
         value={$veOceanWithDelegations}
         float
         {loading}
