@@ -157,7 +157,7 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Time Bonus`}
+            title={`Lock Multiplier`}
             value={loading
               ? "loading"
               : `${parseFloat(calculatedMultiplier).toFixed(1)}%`}

@@ -35,7 +35,6 @@
 
 {#if !loading}
   <div class={`container`}>
-    <VeOceanCard />
     <OceanCard />
     <LockOcean />
   </div>

@@ -13,9 +13,10 @@
   .container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
     width: 100%;
+    height: 100%;
     padding: calc(var(--spacer) / 2) calc(var(--spacer));
     background-color: var(--background-content);
     box-shadow: var(--box-shadow);

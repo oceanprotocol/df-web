@@ -1,31 +1,58 @@
 <script>
+  import { userAddress } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { userBalances } from "../../stores/tokens";
-  import { lockedOceanAmount } from "../../stores/veOcean";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
+  import { 
+    lockedOceanAmount,
+    oceanUnlockDate,
+    veOceanWithDelegations
+  } from "../../stores/veOcean";
+  import { totalUserAllocation } from "../../stores/dataAllocations";
+  import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
   import WithdrawOcean from "./WithdrawOcean.svelte";
+  
+  let balance = 0;
+  let loading = true;
 
-  let balance =
-    $userBalances[
-      getOceanTokenAddressByChainId(
-        process.env.VE_SUPPORTED_CHAINID
-      ).toLowerCase()
-    ];
-  let loading = false;
+  const setValues = async () => {
+    if (!$totalUserAllocation) {
+      let newAllocation = await getTotalAllocatedVeOcean($userAddress);
+      totalUserAllocation.update(() => newAllocation);
+    }
+    balance = $userBalances[process.env.VE_OCEAN_CONTRACT];
+    loading = false;
+  };
+
+  $: if ($userAddress) {
+    setValues();
+  }
 </script>
 
 <div class={`container`}>
-  <Card title="My OCEAN">
+  <Card title="veOCEAN">
     <div class="ocean-info">
       <ItemWithLabel
-        title={`Ocean Balance`}
-        value={`${parseFloat(balance).toFixed(3)} OCEAN`}
+      title={`Locked`}
+      value={`${parseFloat($lockedOceanAmount).toFixed(3)} OCEAN`}
+      {loading}
+    />
+      <ItemWithLabel
+        title={`veOcean Balance`}
+        value={`${parseFloat(balance).toFixed(3)} veOCEAN`}
         {loading}
       />
       <ItemWithLabel
-        title={`Locked`}
-        value={`${parseFloat($lockedOceanAmount).toFixed(3)} OCEAN`}
+        title={`Voting Power`}
+        value={$veOceanWithDelegations}
+        float
+        {loading}
+      />
+      <ItemWithLabel
+        title={`Lock period end`}
+        value={`${
+          $oceanUnlockDate ? $oceanUnlockDate.toLocaleDateString("en-CA") : "-"
+        }`}
         {loading}
       />
     </div>
@@ -41,16 +68,14 @@
   .container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    grid-column: 1 / 3;
+    align-items: flex-start;
+    grid-column: 1/3;
     width: 100%;
   }
 
   .ocean-info {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     width: 100%;
   }
 
