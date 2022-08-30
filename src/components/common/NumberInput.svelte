@@ -17,11 +17,9 @@
 
 <div class="actionsContainer">
   {#if showMaxValue === true}
-    {#if maxValueLabel && maxValueLabel !== ""}
-      <p class="maxValueLabel">{maxValueLabel}{max}</p>
-    {:else}
-      <p class="maxValueLabel">{max}</p>
-    {/if}
+    <p class="maxValueLabel">
+      {maxValueLabel && maxValueLabel !== "" && maxValueLabel}{max}
+    </p>
   {/if}
 </div>
 <div class={`container`}>
