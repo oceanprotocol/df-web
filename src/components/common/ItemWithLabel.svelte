@@ -26,5 +26,6 @@
   .value {
     font-size: var(--font-size-small);
     font-weight: bold;
+    margin-bottom: calc((var(--spacer) / 4));
   }
 </style>

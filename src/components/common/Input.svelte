@@ -14,13 +14,16 @@
   export let error = false;
   export let step = 1;
   export let direction = "row";
-  export let showMax = false;
+  export let showMaxValue = false;
+  export let maxValueLabel = "";
+  export let showMaxButton = false;
 </script>
 
 <div class={`container ${direction === "row" ? "row" : "column"}`}>
   {#if label}
-    <label class={`${direction === "column" && "margin-bottom"}`}>{label}</label
-    >
+    <label class={`${direction === "column" && "margin-bottom"}`}>
+      {label}
+    </label>
   {/if}
   <div class={`inputContainer ${type === "checkbox" && "checkbox"}`}>
     {#if type === "number"}
@@ -32,7 +35,9 @@
         {max}
         {disabled}
         on:input={onChange}
-        {showMax}
+        {showMaxValue}
+        {maxValueLabel}
+        {showMaxButton}
       />
     {:else if type === "checkbox"}
       <input
