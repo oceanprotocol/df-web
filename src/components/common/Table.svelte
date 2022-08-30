@@ -124,7 +124,7 @@
               onclick={() => {
                 window.open(cell.value, "_blank");
               }}
-              disabled={true}
+              disabled={false}
             />{:else if cell.key === "allocate"}
             <AllocateModal data={cell.value} />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
