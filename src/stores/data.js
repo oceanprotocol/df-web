@@ -16,11 +16,12 @@ export const columnsData = [
     display: (volume) => volume,
   },
   { key: "nftaddress", value: "NFTAddress" },
+  { key: "allocation", value: "Allocation" },
   { key: "allocate", value:"Allocate" },
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Network", "Volume", "Allocate", "Action"]
+export const defaultColumns = ["Network", "Volume", "Allocation" ,"Allocate", "Action"]
 
 async function getDatasets(api) {
   let res;
@@ -75,9 +76,9 @@ function getRow(dataInfo, key) {
   };
 }
 
-export async function loadDatasets(nftsApi) {
+export async function loadDatasets(nftsApi, allocations) {
   const allDatasets = await getDatasets(nftsApi);
-  console.log(allDatasets)
+  console.log(allDatasets, allocations)
   if (allDatasets.length === 0) {
     datasets.set([]);
     return;
