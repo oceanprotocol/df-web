@@ -17,7 +17,7 @@
 
 <div class="actionsContainer">
   {#if showMaxValue === true}
-    <p class="maxValueLabel">
+    <p class="maxItem maxValueLabel">
       {maxValueLabel && maxValueLabel !== "" && maxValueLabel}{max}
     </p>
   {/if}
@@ -72,8 +72,6 @@
     color: var(--brand-grey-light);
   }
   .actionsContainer :global(.maxValueLabel) {
-    margin-top: calc(var(--spacer) / 10);
-    font-size: var(--font-size-mini);
     color: var(--brand-black);
   }
 </style>
