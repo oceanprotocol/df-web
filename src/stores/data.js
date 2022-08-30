@@ -91,7 +91,7 @@ export async function loadDatasets(nftsApi, allocations) {
   did: "did:op:aee900df7379cda6a5aa1b87bd77e053906002058f649825df0bffe5d8cf17dc",
   volume: 11.103105545},{basetoken_addr: "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
   chainID: 4,
-  nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485925",
+  nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485926",
   basetoken_symbol: "OCEAN",
   did: "did:op:aee900df7379cda6a5aa1b87bd77e053906002058f649825df0bffe5d8cf17dc",
   volume: 11.103105545}]
@@ -102,7 +102,7 @@ export async function loadDatasets(nftsApi, allocations) {
   }
   let newDatasets = [];
   allDatasets.forEach((datasetInfo, key) => {
-    datasetInfo.allocation = allocations.find((allocation) => allocation.nft_addr === datasetInfo.nft_addr).percent
+    datasetInfo.allocation = allocations.find((allocation) => allocation.nft_addr === datasetInfo.nft_addr)?.percent || 0
     datasetInfo.totalPools = allDatasets.length;
     datasetInfo.totalTVL = allDatasets.reduce(
       (total, dataset) => total + parseFloat(dataset.stake_amt)

@@ -2,7 +2,7 @@ export let filterDataByUserAllocation = (datasets, allocations) => {
     let filteredDatasets = []
     allocations.forEach((allocation) => {
             datasets.forEach((dataset) => {
-            if(allocation.pool_addr === dataset.pooladdress){
+            if(allocation.nft_addr === dataset.nftaddress){
                 filteredDatasets.push(dataset)
             }
         })
