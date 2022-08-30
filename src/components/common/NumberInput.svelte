@@ -18,7 +18,7 @@
 <div class="actionsContainer">
   {#if showMaxValue === true}
     {#if maxValueLabel && maxValueLabel !== ""}
-      <p class="maxValueLabel">{maxValueLabel}{max}</p>  
+      <p class="maxValueLabel">{maxValueLabel}{max}</p>
     {:else}
       <p class="maxValueLabel">{max}</p>
     {/if}
@@ -65,7 +65,7 @@
   .actionsContainer {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: flex-start;
     width: 100%;
   }
   .actionsContainer :global(.maxItem) {
