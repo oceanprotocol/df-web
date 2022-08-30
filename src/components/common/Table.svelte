@@ -12,8 +12,12 @@
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
   import { filterDataByUserAllocation } from "../../utils/data";
-  import { dataAllocations } from "../../stores/dataAllocations";
+  import {
+    dataAllocations,
+    totalUserAllocation,
+  } from "../../stores/dataAllocations";
   import Input from "./Input.svelte";
+  import ItemWithLabel from "./ItemWithLabel.svelte";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -79,15 +83,25 @@
 
 {#if colData && rowData}
   <div>
-    <div class="tableActionsContainer">
-      <div class="datasetsWithAllocationsInputContainer">
-        <Input
-          type="checkbox"
-          label="Only data where I have allocations"
-          bind:value={showDataWithAllocations}
+    <div class="tableCustomHeader">
+      <div class="headerValuesContainer">
+        <ItemWithLabel
+          title="Available allocation"
+          value={$totalUserAllocation
+            ? `${100 - $totalUserAllocation}%`
+            : "loading..."}
         />
       </div>
-      <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
+      <div class="tableActionsContainer">
+        <div class="datasetsWithAllocationsInputContainer">
+          <Input
+            type="checkbox"
+            label="Only data where I have allocations"
+            bind:value={showDataWithAllocations}
+          />
+        </div>
+        <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
+      </div>
     </div>
     <div class="tableContainer">
       <DataTable
@@ -137,6 +151,16 @@
   .tableContainer {
     width: 100%;
     overflow-y: scroll;
+  }
+  .tableCustomHeader {
+    display: flex;
+    justify-content: space-between;
+    margin: calc(var(--spacer) / 8) 0;
+  }
+  .headerValuesContainer {
+    display: flex;
+    align-items: center;
+    margin-left: calc(var(--spacer) / 3);
   }
   :global(.tableActionsContainer) {
     display: flex !important;

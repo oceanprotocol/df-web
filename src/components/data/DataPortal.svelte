@@ -1,15 +1,29 @@
 <script>
   import { loadDatasets, datasets, columnsData } from "../../stores/data";
-  import { getAllAllocationsForAddress } from "../../utils/dataAllocations";
-  import { dataAllocations } from "../../stores/dataAllocations";
+  import {
+    getAllAllocationsForAddress,
+    getTotalAllocatedVeOcean,
+  } from "../../utils/dataAllocations";
+  import {
+    dataAllocations,
+    totalUserAllocation,
+  } from "../../stores/dataAllocations";
   import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
+
+  const loadValues = async () => {
+    if (!$totalUserAllocation) {
+      let newAllocation = await getTotalAllocatedVeOcean($userAddress);
+      totalUserAllocation.update(() => newAllocation);
+    }
+  };
 
   $: if (!$datasets) {
     loadDatasets(`${process.env.BACKEND_API}/volume`);
   }
 
   $: if ($userAddress) {
+    loadValues();
     getAllAllocationsForAddress($userAddress).then((resp) => {
       dataAllocations.update(() => resp);
     });
