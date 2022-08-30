@@ -95,7 +95,6 @@ export async function loadDatasets(nftsApi, allocations) {
   basetoken_symbol: "OCEAN",
   did: "did:op:aee900df7379cda6a5aa1b87bd77e053906002058f649825df0bffe5d8cf17dc",
   volume: 11.103105545}]
-  console.log(allDatasets, allocations)
   if (allDatasets.length === 0) {
     datasets.set([]);
     return;

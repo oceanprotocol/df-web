@@ -42,7 +42,6 @@
   };
 
   $: if (!$datasets && $dataAllocations) {
-    console.log($dataAllocations);
     loadDatasets(`${process.env.BACKEND_API}/volume`, $dataAllocations);
   }
 
