@@ -16,7 +16,7 @@
       {chainId}
       currency={getTokens()?.length > 1
         ? "$"
-        : airdropData.tokensData[getTokens()[0]].symbol}
+        : ` ${airdropData.tokensData[getTokens()[0]].symbol}`}
       estimatedRewards={airdropData.estimatedRewards}
       claimableRewards={airdropData.claimableRewards}
       claimables={airdropData}

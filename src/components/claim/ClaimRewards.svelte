@@ -73,12 +73,16 @@
 <Row
   rowObject={{
     network: chainId,
-    "estimated rewards": `${estimatedRewards}  ${currency}`,
-    "claimable rewards": `${claimableRewards}  ${currency}`,
+    "estimated rewards": `${estimatedRewards}<span class="currencyText">${currency}</span>`,
+    "claimable rewards": `${claimableRewards}<span class="currencyText">${currency}</span>`,
   }}
   {buttons}
   size="large"
 />
 
 <style>
+  :global(.currencyText) {
+    font-weight: normal;
+    font-size: var(--font-size-normal);
+  }
 </style>
