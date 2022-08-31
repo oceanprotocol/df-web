@@ -47,10 +47,17 @@
     />
   </div>
   <div class="item">
-    <p>
-      <strong>OCEAN</strong> withdrawal will be enabled as soon as the lock period
-      is over.
-    </p>
+    {#if $lockedOceanAmount > 0}
+      <p>
+        <strong>OCEAN</strong> withdrawal will be enabled as soon as the lock period
+        is over.
+      </p>
+    {:else}
+      <p>
+        No <strong>OCEAN</strong> locked. Lock your <strong>OCEAN</strong> tokens
+        first.
+      </p>
+    {/if}
   </div>
 </div>
 

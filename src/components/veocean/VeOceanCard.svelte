@@ -59,9 +59,7 @@
       />
     </div>
     <div class="veOcean-info">
-      {#if $lockedOceanAmount > 0}
-        <WithdrawOcean />
-      {/if}
+      <WithdrawOcean />
     </div>
   </Card>
 </div>
