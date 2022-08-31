@@ -5,7 +5,6 @@
     userAddress,
     networkSigner,
     selectedNetworks,
-    web3Provider,
   } from "../../stores/web3";
   import {
     airdrops,
@@ -19,6 +18,7 @@
   export let estimatedRewards;
   export let claimableRewards;
   export let claimables;
+  export let currency;
 
   let loading = false;
   let buttons = [];
@@ -73,8 +73,8 @@
 <Row
   rowObject={{
     network: chainId,
-    "estimated rewards": estimatedRewards,
-    "claimable rewards": claimableRewards,
+    "estimated rewards": `${estimatedRewards}  ${currency}`,
+    "claimable rewards": `${claimableRewards}  ${currency}`,
   }}
   {buttons}
   size="large"
