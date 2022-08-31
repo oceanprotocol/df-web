@@ -93,7 +93,7 @@ export const getVeOceanBalance = async(userAddress) => {
     }
   }
 
-  export const updateLuckPeriod = async(unlockDate, signer) => {
+  export const updateLockPeriod = async(unlockDate, signer) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const tx = await contract.increase_unlock_time(unlockDate)

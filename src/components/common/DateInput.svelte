@@ -1,4 +1,6 @@
 <script>
+  import { getThursdayDate } from "../../utils/functions";
+
   export let value = undefined;
   export let placeholder = undefined;
   export let min = undefined;
@@ -9,25 +11,32 @@
 
   const periods = [
     {
-      label: "~2 weeks",
-      days: 14,
+      label: "~1 week",
+      days: 7,
     },
     {
       label: "~1 month",
       days: 30,
     },
     {
-      label: "~1 year",
-      days: 365,
+      label: "~6 months",
+      days: 180,
     },
     {
       label: "~2 years",
       days: 730,
     },
+    {
+      label: "~4 years",
+      days: 1460,
+    },
   ];
 
-  const handleOnPeriodClick = (period) => {
-    let date = new Date().setDate(new Date().getDate() + period);
+  const handleOnPeriodClick = (days) => {
+    let thursdayDate = getThursdayDate();
+    let date = new Date(thursdayDate).setDate(
+      new Date(thursdayDate).getDate() + days
+    );
     value = new Date(date).toLocaleDateString("en-CA");
   };
 </script>

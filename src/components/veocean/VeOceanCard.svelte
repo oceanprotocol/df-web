@@ -4,11 +4,13 @@
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { userBalances } from "../../stores/tokens";
   import {
+    lockedOceanAmount,
     oceanUnlockDate,
     veOceanWithDelegations,
   } from "../../stores/veOcean";
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
+  import WithdrawOcean from "./WithdrawOcean.svelte";
 
   let balance = 0;
   let loading = true;
@@ -31,28 +33,35 @@
   <Card title="My veOCEAN">
     <div class="veOcean-info">
       <ItemWithLabel
-        title={`veOcean balance`}
+        title={`Balance`}
         value={`${parseFloat(balance).toFixed(3)} veOCEAN`}
         {loading}
       />
       <ItemWithLabel
-        title={`Voting power`}
+        title={`Voting Power`}
         value={$veOceanWithDelegations}
         float
         {loading}
       />
+    </div>
+    <div class="veOcean-info">
       <ItemWithLabel
-        title={`Lock period end`}
+        title={`Locked`}
+        value={`${parseFloat($lockedOceanAmount).toFixed(3)} OCEAN`}
+        {loading}
+      />
+      <ItemWithLabel
+        title={`Lock ends`}
         value={`${
           $oceanUnlockDate ? $oceanUnlockDate.toLocaleDateString("en-CA") : "-"
         }`}
         {loading}
       />
-      <ItemWithLabel
-        title={`Total allocated`}
-        value={`${$totalUserAllocation}%`}
-        {loading}
-      />
+    </div>
+    <div class="veOcean-info">
+      {#if $lockedOceanAmount > 0}
+        <WithdrawOcean />
+      {/if}
     </div>
   </Card>
 </div>
@@ -61,9 +70,8 @@
   .container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    grid-column: 1 / 3;
+    align-items: flex-start;
+    grid-column: 1/3;
     width: 100%;
   }
 
@@ -71,6 +79,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-height: var(--spacer);
     width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      grid-column: 1 / 2;
+    }
   }
 </style>
