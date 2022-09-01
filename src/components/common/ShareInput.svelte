@@ -4,6 +4,7 @@
   export let dataId = undefined;
   export let onChange = undefined;
   export let currentValue = 0;
+  export let showTotalAvailable = true;
 
   const increaseValueByStep = () => {
     currentValue += step;
@@ -17,10 +18,20 @@
 </script>
 
 <div class="container">
-  <span class="action" on:click={() => decreaseValueByStep()}>-</span>
-  <span class="value">{currentValue}</span>
-  <span class="action" on:click={() => increaseValueByStep()}>+</span>
-  <span class="available">{totalAvailable}</span>
+  <button
+    class="action"
+    on:click={() => decreaseValueByStep()}
+    disabled={totalAvailable === 0}>-</button
+  >
+  <span class="value">{`${currentValue} %`}</span>
+  <button
+    class="action"
+    on:click={() => increaseValueByStep()}
+    disabled={totalAvailable === 0}>+</button
+  >
+  {#if showTotalAvailable === true}
+    <span class="available">{totalAvailable}</span>
+  {/if}
 </div>
 
 <style>
@@ -32,7 +43,10 @@
   }
   .action,
   .available {
-    padding: calc(var(--spacer) / 12) calc(var(--spacer) / 6);
+    padding: 0 calc(var(--spacer) / 6);
+    background-color: transparent;
+    border: none;
+    margin: 0;
   }
   .action:hover {
     cursor: pointer;

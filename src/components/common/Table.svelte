@@ -18,6 +18,7 @@
   } from "../../stores/dataAllocations";
   import Input from "./Input.svelte";
   import ShareInput from "./ShareInput.svelte";
+  import ItemWithLabel from "./ItemWithLabel.svelte";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -88,7 +89,7 @@
     if (a.allocate < b.allocate) {
       return 1;
     }
-    return 0;
+    return 1;
   }
 
   $: if (rowData) {
@@ -107,15 +108,24 @@
 
 {#if colData && rowData}
   <div>
-    <div class="tableActionsContainer">
-      <div class="datasetsWithAllocationsInputContainer">
-        <Input
-          type="checkbox"
-          label="Only data where I have allocations"
-          bind:value={showDataWithAllocations}
+    <div class="tableCustomHeader">
+      <div class="headerValuesContainer">
+        <ItemWithLabel
+          title="Available allocation"
+          value={totalAvailable >= 0 ? `${totalAvailable}%` : "loading..."}
         />
+        <Button text="Update allocations" className="updateAllocationsBtton" />
       </div>
-      <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
+      <div class="tableActionsContainer">
+        <div class="datasetsWithAllocationsInputContainer">
+          <Input
+            type="checkbox"
+            label="Only data where I have allocations"
+            bind:value={showDataWithAllocations}
+          />
+        </div>
+        <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
+      </div>
     </div>
     <div class="tableContainer">
       <DataTable
@@ -146,6 +156,7 @@
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
               dataId={row.id}
+              showTotalAvailable={false}
             />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
         </svelte:fragment>
@@ -171,6 +182,19 @@
   .tableContainer {
     width: 100%;
     overflow-y: scroll;
+  }
+  .tableCustomHeader {
+    display: flex;
+    justify-content: space-between;
+    margin: calc(var(--spacer) / 8) 0;
+  }
+  :global(.updateAllocationsBtton) {
+    margin-left: calc(var(--spacer) / 3);
+  }
+  .headerValuesContainer {
+    display: flex;
+    align-items: center;
+    margin-left: calc(var(--spacer) / 3);
   }
   :global(.tableActionsContainer) {
     display: flex !important;
