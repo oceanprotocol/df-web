@@ -71,18 +71,7 @@ function getRow(dataInfo, key) {
     nftaddress: dataInfo.nft_addr,
     tvl: parseFloat(dataInfo.stake_amt).toFixed(3),
     volume: parseFloat(dataInfo.vol_amt).toFixed(3),
-    allocate: {
-      chainId: 8996,
-      url: dataInfo.url,
-      poolAddress: dataInfo.pool_addr,
-      nftAddress: dataInfo.nft_addr,
-      DTAddress: dataInfo.DT_addr,
-      basetokenAddress: '0x2473f4F7bf40ed9310838edFCA6262C17A59DF64'.toLocaleLowerCase(),
-      DTSymbol: dataInfo.DT_symbol,
-      basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
-      tvl: parseFloat(dataInfo.stake_amt),
-      volume: parseFloat(dataInfo.vol_amt),
-    },
+    allocate: 0,
     action: dataInfo.url,
   };
 }

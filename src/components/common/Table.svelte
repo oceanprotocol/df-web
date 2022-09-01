@@ -12,8 +12,12 @@
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
   import { filterDataByUserAllocation } from "../../utils/data";
-  import { dataAllocations } from "../../stores/dataAllocations";
+  import {
+    dataAllocations,
+    totalUserAllocation,
+  } from "../../stores/dataAllocations";
   import Input from "./Input.svelte";
+  import ShareInput from "./ShareInput.svelte";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -23,6 +27,7 @@
   export let notHidableColumns = [];
   let showDataWithAllocations = false;
   let datasetsWithAllocations = undefined;
+  let totalAvailable = 100;
 
   let columns = {};
   let pagination = { pageSize: 13, page: 1 };
@@ -75,6 +80,29 @@
   $: if (!showDataWithAllocations && datasetsWithAllocations !== undefined) {
     datasetsWithAllocations = undefined;
   }
+
+  function compare(a, b) {
+    if (a.allocate > b.allocate) {
+      return -1;
+    }
+    if (a.allocate < b.allocate) {
+      return 1;
+    }
+    return 0;
+  }
+
+  $: if (rowData) {
+    sortRowsDataByAllocations();
+  }
+
+  const sortRowsDataByAllocations = () => {
+    rowData = rowData.sort(compare);
+  };
+
+  const onTotalAvailableAllocationChange = async (id, value, step) => {
+    totalAvailable += step;
+    rowData[id].allocate = value;
+  };
 </script>
 
 {#if colData && rowData}
@@ -103,7 +131,7 @@
             <ToolbarSearch persistent shouldFilterRows />
           </ToolbarContent>
         </Toolbar>
-        <svelte:fragment slot="cell" let:cell>
+        <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "action"}
             <Button
               text="view"
@@ -112,7 +140,13 @@
               }}
               disabled={true}
             />{:else if cell.key === "allocate"}
-            <AllocateModal data={cell.value} />
+            <ShareInput
+              currentValue={cell.value}
+              {totalAvailable}
+              onChange={(id, value, step) =>
+                onTotalAvailableAllocationChange(id, value, step)}
+              dataId={row.id}
+            />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
         </svelte:fragment>
       </DataTable>
