@@ -70,13 +70,13 @@
   <WalletConnectModal />
   <main>
     <Header />
-    <Route path="/rewards">
+    <Route path="/rewards" primary={false}>
       <ClaimPortal />
     </Route>
-    <Route path="/data">
+    <Route path="/data" primary={false}>
       <DataPortal />
     </Route>
-    <Route path="/*">
+    <Route path="/*" primary={false}>
       <VeOceanPortal />
     </Route>
   </main>

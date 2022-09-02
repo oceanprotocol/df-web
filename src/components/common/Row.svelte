@@ -20,7 +20,7 @@
         {#if title === "network"}
           <NetworkItem chainId={value} fontSize="normal" />
         {:else}
-          {value}
+          {@html value}
         {/if}
       </span>
     </div>

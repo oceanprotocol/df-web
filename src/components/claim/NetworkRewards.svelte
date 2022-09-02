@@ -14,13 +14,18 @@
   <div class="networkRewardsContainer">
     <ClaimRewards
       {chainId}
+      currency={getTokens()?.length > 1
+        ? "$"
+        : ` ${airdropData.tokensData[getTokens()[0]].symbol}`}
       estimatedRewards={airdropData.estimatedRewards}
       claimableRewards={airdropData.claimableRewards}
       claimables={airdropData}
     />
-    {#each getTokens() as token}
-      <Row rowObject={airdropData.tokensData[token]} />
-    {/each}
+    {#if getTokens()?.length > 1}
+      {#each getTokens() as token}
+        <Row rowObject={airdropData.tokensData[token]} />
+      {/each}
+    {/if}
   </div>
 {/if}
 
