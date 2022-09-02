@@ -19,6 +19,7 @@
   import Input from "./Input.svelte";
   import ShareInput from "./ShareInput.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
+  import Link from "./Link.svelte";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -143,12 +144,9 @@
         </Toolbar>
         <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "action"}
-            <Button
+            <Link
               text="view"
-              onclick={() => {
-                window.open(cell.value, "_blank");
-              }}
-              disabled={false}
+              url={cell.value}
             />{:else if cell.key === "allocate"}
             <ShareInput
               currentValue={cell.value}
