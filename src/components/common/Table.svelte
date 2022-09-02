@@ -28,7 +28,7 @@
   export let notHidableColumns = [];
   let showDataWithAllocations = false;
   let datasetsWithAllocations = undefined;
-  let totalAvailable = 100;
+  let totalAvailable = 100 - $totalUserAllocation;
 
   let columns = {};
   let pagination = { pageSize: 13, page: 1 };
@@ -148,7 +148,7 @@
               onclick={() => {
                 window.open(cell.value, "_blank");
               }}
-              disabled={true}
+              disabled={false}
             />{:else if cell.key === "allocate"}
             <ShareInput
               currentValue={cell.value}

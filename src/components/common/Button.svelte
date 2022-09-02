@@ -13,10 +13,11 @@
 
 <button
   on:click={onclick}
-  class="button {className && className} {secondary &&
-    'buttonSecondary'} {disabled && secondary
+  class="button {secondary ? 'buttonSecondary' : ''} {disabled && secondary
     ? 'disabledSecondary'
-    : disabled && 'disabled'} {textOnly && 'textOnly'}"
+    : disabled
+    ? 'disabled'
+    : ''} {textOnly ? 'textOnly' : ''} {className ? className : ''}"
   {disabled}
   {type}
 >

@@ -1,18 +1,52 @@
 <script>
   import { loadDatasets, datasets, columnsData } from "../../stores/data";
-  import { getAllAllocationsForAddress } from "../../utils/dataAllocations";
-  import { dataAllocations } from "../../stores/dataAllocations";
+  import {
+    getAllAllocationsForAddress,
+    getTotalAllocatedVeOcean,
+  } from "../../utils/dataAllocations";
+  import {
+    dataAllocations,
+    totalUserAllocation,
+  } from "../../stores/dataAllocations";
   import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
 
-  $: if (!$datasets) {
-    loadDatasets(`${process.env.BACKEND_API}/pools`);
+  const loadValues = async () => {
+    if (!$totalUserAllocation) {
+      let newAllocation = await getTotalAllocatedVeOcean($userAddress);
+      totalUserAllocation.update(() => newAllocation);
+    }
+    /*getAllAllocationsForAddress($userAddress).then((resp) => {
+      dataAllocations.update(() => resp);
+    });*/
+    dataAllocations.update(() => [
+      {
+        chainId: 4,
+        nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485923",
+        LP_addr: "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
+        percent: 33.33,
+      },
+      {
+        chainId: 4,
+        nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485924",
+        LP_addr: "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
+        percent: 33.33,
+      },
+      {
+        chainId: 4,
+        nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485925",
+        LP_addr: "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
+        percent: 33.33,
+      },
+    ]);
+  };
+
+  $: if (!$datasets && $dataAllocations) {
+    loadDatasets(`${process.env.BACKEND_API}/volume`, $dataAllocations);
   }
 
   $: if ($userAddress) {
-    getAllAllocationsForAddress($userAddress).then((resp) => {
-      dataAllocations.update(() => resp);
-    });
+    loadValues();
   }
 </script>
 
