@@ -20,9 +20,9 @@ export const getRewards = async(userAddress) => {
   return data;
 }
 
-export const getRewardsForPoolUser = (rewards,  userAddress, poolAddress) => {
+export const getRewardsForDataAllocation = (rewards,  userAddress, nftAddress) => {
   let reward = rewards.find((reward) => {
-    if(reward.LP_addr === userAddress && reward.pool_addr === poolAddress){
+    if(reward.LP_addr === userAddress && reward.nft_addr === nftAddress){
       return reward
     }
   })

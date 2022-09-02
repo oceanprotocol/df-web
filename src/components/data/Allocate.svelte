@@ -9,7 +9,7 @@
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import Swal from "sweetalert2";
-  import { getRewardsForPoolUser } from "../../utils/rewards";
+  import { getRewardsForDataAllocation } from "../../utils/rewards";
   import { rewards } from "../../stores/airdrops";
   import {
     allocateVeOcean,
@@ -36,16 +36,16 @@
     let newTotalUserAllocation = $totalUserAllocation;
     allocatedAmount = await getAllocatedVeOcean(
       $userAddress,
-      data.DTAddress,
+      data.nftAddress,
       $connectedChainId
     );
     amountToAllocate = allocatedAmount;
     if (!rewards) {
     }
-    estimatedRewards = getRewardsForPoolUser(
+    estimatedRewards = getRewardsForDataAllocation(
       $rewards,
       $userAddress,
-      data.poolAddress
+      data.nftAddress
     );
     if (!$totalUserAllocation) {
       newTotalUserAllocation = await getTotalAllocatedVeOcean($userAddress);
@@ -73,7 +73,7 @@
       loading = true;
       await allocateVeOcean(
         amountToAllocate,
-        data.DTAddress,
+        data.nftAddress,
         $connectedChainId,
         $networkSigner
       );
@@ -157,7 +157,9 @@
       <div class="items-container">
         <ItemWithLabel
           title={`Allocated`}
-          value={allocatedAmount !== undefined ? `${allocatedAmount}%` : "loading..."}
+          value={allocatedAmount !== undefined
+            ? `${allocatedAmount}%`
+            : "loading..."}
         />
         <ItemWithLabel
           title={`Available allocation`}
