@@ -1,10 +1,10 @@
 <script>
-  export let totalAvailable = 100;
+  export let available = 100;
   export let step = 10;
   export let dataId = undefined;
   export let onChange = undefined;
   export let currentValue = 0;
-  export let showTotalAvailable = true;
+  export let showAvailable = true;
 
   const increaseValueByStep = () => {
     currentValue += step;
@@ -21,16 +21,16 @@
   <button
     class="action"
     on:click={() => decreaseValueByStep()}
-    disabled={totalAvailable === 0}>-</button
+    disabled={currentValue === 0}>-</button
   >
   <span class="value">{`${currentValue} %`}</span>
   <button
     class="action"
     on:click={() => increaseValueByStep()}
-    disabled={totalAvailable === 0}>+</button
+    disabled={available === 0}>+</button
   >
-  {#if showTotalAvailable === true}
-    <span class="available">{totalAvailable}</span>
+  {#if showAvailable === true}
+    <span class="available">{available}</span>
   {/if}
 </div>
 

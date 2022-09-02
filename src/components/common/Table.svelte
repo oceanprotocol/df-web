@@ -102,7 +102,7 @@
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailable += step;
-    rowData[id].allocate = value;
+    rowData[rowData.findIndex((element) => element.id === id)].allocate = value;
   };
 </script>
 
@@ -152,11 +152,11 @@
             />{:else if cell.key === "allocate"}
             <ShareInput
               currentValue={cell.value}
-              {totalAvailable}
+              available={totalAvailable}
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
               dataId={row.id}
-              showTotalAvailable={false}
+              showAvailable={false}
             />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
         </svelte:fragment>
