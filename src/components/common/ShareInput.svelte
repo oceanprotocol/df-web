@@ -1,6 +1,7 @@
 <script>
   export let available = 100;
   export let step = 10;
+  export let disabled = false;
   export let dataId = undefined;
   export let onChange = undefined;
   export let currentValue = 0;
@@ -21,13 +22,13 @@
   <button
     class="action"
     on:click={() => decreaseValueByStep()}
-    disabled={currentValue === 0}>-</button
+    disabled={currentValue === 0 || disabled}>-</button
   >
   <span class="value">{`${currentValue} %`}</span>
   <button
     class="action"
     on:click={() => increaseValueByStep()}
-    disabled={available === 0}>+</button
+    disabled={available === 0 || disabled}>+</button
   >
   {#if showAvailable === true}
     <span class="available">{available}</span>

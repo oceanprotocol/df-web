@@ -71,7 +71,7 @@ function getRow(dataInfo, key) {
 }
 
 export async function loadDatasets(nftsApi, allocations) {
-  //const allDatasets = await getDatasets(nftsApi);
+  const aldatasets = await getDatasets(nftsApi);
   const allDatasets = [{basetoken_addr: "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
   chainID: 4,
   nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485923",

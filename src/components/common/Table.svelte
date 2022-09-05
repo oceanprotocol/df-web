@@ -20,6 +20,7 @@
   import ShareInput from "./ShareInput.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
   import Link from "./Link.svelte";
+  import { userBalances } from "../../stores/tokens";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -29,7 +30,8 @@
   export let notHidableColumns = [];
   let showDataWithAllocations = false;
   let datasetsWithAllocations = undefined;
-  let totalAvailable = 100 - $totalUserAllocation;
+  let disabled = $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined;
+  let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
 
   let columns = {};
   let pagination = { pageSize: 13, page: 1 };
@@ -115,7 +117,11 @@
           title="Available allocation"
           value={totalAvailable >= 0 ? `${totalAvailable}%` : "loading..."}
         />
-        <Button text="Update allocations" className="updateAllocationsBtton" />
+        <Button
+          text="Update allocations"
+          className="updateAllocationsBtton"
+          {disabled}
+        />
       </div>
       <div class="tableActionsContainer">
         <div class="datasetsWithAllocationsInputContainer">
@@ -154,6 +160,7 @@
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
               dataId={row.id}
+              {disabled}
               showAvailable={false}
             />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
