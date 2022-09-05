@@ -52,6 +52,9 @@
   .action:hover {
     cursor: pointer;
   }
+  .action:disabled {
+    cursor: default;
+  }
   .value {
     width: 10px;
   }
