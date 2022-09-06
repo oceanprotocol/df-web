@@ -41,12 +41,12 @@
     ]);
   };
 
-  $: if (!$datasets && $dataAllocations) {
-    loadDatasets(`${process.env.BACKEND_API}/volume`, $dataAllocations);
-  }
-
   $: if ($userAddress) {
     loadValues();
+  }
+
+  $: if ($dataAllocations) {
+    loadDatasets(`${process.env.BACKEND_API}/volume`, $dataAllocations);
   }
 </script>
 
