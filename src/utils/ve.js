@@ -5,6 +5,7 @@ import {ethers} from "ethers";
 const veAllocateABI = VeAllocateABI.default
 const veOceanABI = VeOceanABI.default
 const decimals = 18;
+const gasLimit = 1000000;
 
 export const getAllocatedAmount = async(userAddress) => {
     const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
@@ -66,7 +67,9 @@ export const getVeOceanBalance = async(userAddress) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
-        const tx = await contract.create_lock(amountToLockInEth, unlockDate)
+        const tx = await contract.create_lock(amountToLockInEth, unlockDate,{
+          gasLimit: gasLimit
+      })
         const receipt = await tx.wait()
         console.log(receipt)
     } catch (error) {
@@ -78,7 +81,7 @@ export const getVeOceanBalance = async(userAddress) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const tx = await contract.withdraw()
-        tx.wait()
+        await tx.wait()
     } catch (error) {
       throw error;
     }
@@ -88,8 +91,10 @@ export const getVeOceanBalance = async(userAddress) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
-        const tx = await contract.increase_amount(amountToLockInEth)
-        tx.wait()
+        const tx = await contract.increase_amount(amountToLockInEth,{
+          gasLimit: gasLimit
+      })
+        await tx.wait()
     } catch (error) {
       throw error;
     }
@@ -98,7 +103,9 @@ export const getVeOceanBalance = async(userAddress) => {
   export const updateLockPeriod = async(unlockDate, signer) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
-        const tx = await contract.increase_unlock_time(unlockDate)
+        const tx = await contract.increase_unlock_time(unlockDate,{
+          gasLimit: gasLimit
+      })
         tx.wait()
     } catch (error) {
       throw error;
