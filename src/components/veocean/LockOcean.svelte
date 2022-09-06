@@ -78,6 +78,7 @@
           await updateLockPeriod(timeDifference / 1000, $networkSigner);
         }
       } else {
+        console.log(values.amount, timeDifference / 1000, $networkSigner);
         await lockOcean(values.amount, timeDifference / 1000, $networkSigner);
       }
     } catch (error) {
@@ -187,7 +188,7 @@
           <TokenApproval
             tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
             tokenName={"OCEAN"}
-            poolAddress={process.env.VE_OCEAN_CONTRACT}
+            spender={process.env.VE_OCEAN_CONTRACT}
             amount={$form.amount}
             disabled={loading || getOceanBalance($connectedChainId) <= 0}
             bind:loading

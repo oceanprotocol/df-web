@@ -21,6 +21,9 @@
   import ItemWithLabel from "./ItemWithLabel.svelte";
   import Link from "./Link.svelte";
   import { userBalances } from "../../stores/tokens";
+  import { allocateVeOceanToMultipleNFTs } from "../../utils/dataAllocations";
+  import Swal from "sweetalert2";
+  import { networkSigner } from "../../stores/web3";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -32,6 +35,8 @@
   let datasetsWithAllocations = undefined;
   let disabled = $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+
+  console.log($userBalances[process.env.VE_OCEAN_CONTRACT]);
 
   let columns = {};
   let pagination = { pageSize: 13, page: 1 };
@@ -107,6 +112,34 @@
     totalAvailable += step;
     rowData[rowData.findIndex((element) => element.id === id)].allocate = value;
   };
+
+  const updateAllocations = async () => {
+    const amounts = [];
+    const nftAddresses = [];
+    const chainIds = [];
+    rowData.forEach((data) => {
+      if (data.allocate > 0) {
+        amounts.push(data.allocate);
+        nftAddresses.push(data.nftaddress);
+        chainIds.push(data.chainId);
+      }
+    });
+    console.log(amounts, nftAddresses, chainIds);
+    try {
+      await allocateVeOceanToMultipleNFTs(
+        amounts,
+        nftAddresses,
+        chainIds,
+        $networkSigner
+      );
+    } catch (error) {
+      Swal.fire("Error!", error.message, "error").then(() => {});
+      return;
+    }
+    Swal.fire("Success!", "Allocation successfully updated.", "success").then(
+      async () => {}
+    );
+  };
 </script>
 
 {#if colData && rowData}
@@ -120,6 +153,7 @@
         <Button
           text="Update allocations"
           className="updateAllocationsBtton"
+          onclick={() => updateAllocations()}
           {disabled}
         />
       </div>

@@ -63,6 +63,7 @@ function getRow(dataInfo, key) {
     basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
     basetokenaddress: '0x2473f4F7bf40ed9310838edFCA6262C17A59DF64'.toLocaleLowerCase(),
     nftaddress: dataInfo.nft_addr,
+    chainId: dataInfo.chainID,
     allocate: dataInfo.allocation,
     volume: parseFloat(dataInfo.volume).toFixed(3),
     allocated: dataInfo.allocation,

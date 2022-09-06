@@ -66,7 +66,9 @@ export const getVeOceanBalance = async(userAddress) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
-        await contract.create_lock(amountToLockInEth, unlockDate)
+        const tx = await contract.create_lock(amountToLockInEth, unlockDate)
+        const receipt = await tx.wait()
+        console.log(receipt)
     } catch (error) {
       throw error;
     }

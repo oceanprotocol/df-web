@@ -21,6 +21,8 @@
   import { veOceanWithDelegations } from "./stores/veOcean";
   import { getUserVotingPowerWithDelegations } from "./utils/delegations";
 
+  let loading = true;
+
   window.process = {
     ...window.process,
   };
@@ -44,6 +46,7 @@
     await addUserOceanBalanceToBalances(
       parseInt(process.env.VE_SUPPORTED_CHAINID)
     );
+    loading = false;
   }
 
   $: if ($userAddress) {
@@ -70,15 +73,19 @@
   <WalletConnectModal />
   <main>
     <Header />
-    <Route path="/rewards" primary={false}>
-      <ClaimPortal />
-    </Route>
-    <Route path="/data" primary={false}>
-      <DataPortal />
-    </Route>
-    <Route path="/*" primary={false}>
-      <VeOceanPortal />
-    </Route>
+    {#if loading}
+      <span class="loading">Loading...</span>
+    {:else}
+      <Route path="/rewards" primary={false}>
+        <ClaimPortal />
+      </Route>
+      <Route path="/data" primary={false}>
+        <DataPortal />
+      </Route>
+      <Route path="/*" primary={false}>
+        <VeOceanPortal />
+      </Route>
+    {/if}
   </main>
 </Router>
 
@@ -88,6 +95,11 @@
     max-width: 240px;
     max-width: 1024px;
     margin: 0 auto;
+  }
+
+  .loading {
+    font-size: var(--font-size-normal);
+    color: var(--brand-grey-light);
   }
 
   @media only screen and (max-width: 640px) {

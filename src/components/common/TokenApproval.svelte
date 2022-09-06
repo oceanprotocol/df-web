@@ -12,7 +12,7 @@
   export let amount;
   export let tokenName;
   export let tokenAddress;
-  export let poolAddress;
+  export let spender;
   export let approving = false;
 
   let isAmountApproved;
@@ -23,7 +23,7 @@
     try {
       let tx = await approveToken(
         tokenAddress,
-        poolAddress,
+        spender,
         amount,
         $networkSigner
       );
@@ -49,7 +49,7 @@
       tokenAddress,
       amount,
       $userAddress,
-      poolAddress,
+      spender,
       $networkSigner
     ).then((resp) => {
       isAmountApproved = resp;

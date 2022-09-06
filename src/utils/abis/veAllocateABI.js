@@ -31,15 +31,46 @@ export default [
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "nft",
+        "type": "address[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "chainId",
+        "type": "uint256[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "amount",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "AllocationSetMultiple",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
-        "name": "_address",
+        "name": "user",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_nft",
+        "name": "nft",
         "type": "address"
       },
       {
@@ -63,7 +94,7 @@ export default [
     "inputs": [
       {
         "internalType": "address",
-        "name": "_address",
+        "name": "user",
         "type": "address"
       }
     ],
@@ -97,6 +128,29 @@ export default [
       }
     ],
     "name": "setAllocation",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "amount",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "nft",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "chainId",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "setBatchAllocation",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
