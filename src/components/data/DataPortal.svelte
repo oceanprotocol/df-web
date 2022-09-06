@@ -10,6 +10,7 @@
   } from "../../stores/dataAllocations";
   import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
+  import { isAppLoading } from "../../stores/app";
 
   const loadValues = async () => {
     if (!$totalUserAllocation) {
@@ -50,8 +51,10 @@
   }
 </script>
 
-<div class={`container ${!$datasets && "alignContentCenter"}`}>
-  {#if $datasets}
+<div
+  class={`container ${(!$datasets || $isAppLoading) && "alignContentCenter"}`}
+>
+  {#if $datasets && !$isAppLoading}
     <div class="data">
       <Table
         colData={columnsData}

@@ -124,7 +124,6 @@
         chainIds.push(data.chainId);
       }
     });
-    console.log(amounts, nftAddresses, chainIds);
     try {
       await allocateVeOceanToMultipleNFTs(
         amounts,

@@ -70,7 +70,6 @@ export const getTotalAllocatedVeOcean = async(userAddress) => {
   try {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
-    console.log(contract)
     const allocatedAmount = await contract.getTotalAllocation(userAddress)
     return allocatedAmount / 100
 } catch (error) {
