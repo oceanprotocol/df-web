@@ -57,7 +57,7 @@
 </script>
 
 {#if $selectedNetworks?.length < 2}
-  {#if $selectedNetworks[0] !== $connectedChainId}
+  {#if $connectedChainId && $selectedNetworks[0] !== $connectedChainId}
     <div class="container">
       <Button
         text={`Switch Network to ${
