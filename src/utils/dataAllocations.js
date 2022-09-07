@@ -35,6 +35,21 @@ export const allocateVeOcean = async(amount, dataAddress, chainId, signer) => {
 }
 }
 
+export const allocateVeOceanToMultipleNFTs = async(amounts, dataAddresses, chainIds, signer) => {
+  if(!amounts?.length > 0){
+    throw {message:'There are no allocations set'}
+  }
+  //convert amounts from 100 to 10000 units
+  const formatedAmounts = amounts.map((amount) => amount * 100)
+  try {
+    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, signer);
+    const tx = await contract.setBatchAllocation(formatedAmounts, dataAddresses, chainIds)
+    await tx.wait()
+} catch (error) {
+  throw error;
+}
+}
+
 export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
   const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
   try {

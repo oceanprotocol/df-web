@@ -17,7 +17,13 @@
     totalUserAllocation,
   } from "../../stores/dataAllocations";
   import Input from "./Input.svelte";
+  import ShareInput from "./ShareInput.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
+  import Link from "./Link.svelte";
+  import { userBalances } from "../../stores/tokens";
+  import { allocateVeOceanToMultipleNFTs } from "../../utils/dataAllocations";
+  import Swal from "sweetalert2";
+  import { networkSigner } from "../../stores/web3";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -27,6 +33,8 @@
   export let notHidableColumns = [];
   let showDataWithAllocations = false;
   let datasetsWithAllocations = undefined;
+  let disabled = $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined;
+  let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
 
   let columns = {};
   let pagination = { pageSize: 13, page: 1 };
@@ -79,6 +87,56 @@
   $: if (!showDataWithAllocations && datasetsWithAllocations !== undefined) {
     datasetsWithAllocations = undefined;
   }
+
+  function compare(a, b) {
+    if (a.allocate > b.allocate) {
+      return -1;
+    }
+    if (a.allocate < b.allocate) {
+      return 1;
+    }
+    return 1;
+  }
+
+  $: if (rowData) {
+    sortRowsDataByAllocations();
+  }
+
+  const sortRowsDataByAllocations = () => {
+    rowData = rowData.sort(compare);
+  };
+
+  const onTotalAvailableAllocationChange = async (id, value, step) => {
+    totalAvailable += step;
+    rowData[rowData.findIndex((element) => element.id === id)].allocate = value;
+  };
+
+  const updateAllocations = async () => {
+    const amounts = [];
+    const nftAddresses = [];
+    const chainIds = [];
+    rowData.forEach((data) => {
+      if (data.allocate > 0) {
+        amounts.push(data.allocate);
+        nftAddresses.push(data.nftaddress);
+        chainIds.push(data.chainId);
+      }
+    });
+    try {
+      await allocateVeOceanToMultipleNFTs(
+        amounts,
+        nftAddresses,
+        chainIds,
+        $networkSigner
+      );
+    } catch (error) {
+      Swal.fire("Error!", error.message, "error").then(() => {});
+      return;
+    }
+    Swal.fire("Success!", "Allocation successfully updated.", "success").then(
+      async () => {}
+    );
+  };
 </script>
 
 {#if colData && rowData}
@@ -87,9 +145,13 @@
       <div class="headerValuesContainer">
         <ItemWithLabel
           title="Available allocation"
-          value={$totalUserAllocation
-            ? `${100 - $totalUserAllocation}%`
-            : "loading..."}
+          value={totalAvailable >= 0 ? `${totalAvailable}%` : "loading..."}
+        />
+        <Button
+          text="Update allocations"
+          className="updateAllocationsBtton"
+          onclick={() => updateAllocations()}
+          {disabled}
         />
       </div>
       <div class="tableActionsContainer">
@@ -117,16 +179,21 @@
             <ToolbarSearch persistent shouldFilterRows />
           </ToolbarContent>
         </Toolbar>
-        <svelte:fragment slot="cell" let:cell>
+        <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "action"}
-            <Button
+            <Link
               text="view"
-              onclick={() => {
-                window.open(cell.value, "_blank");
-              }}
-              disabled={false}
+              url={cell.value}
             />{:else if cell.key === "allocate"}
-            <AllocateModal data={cell.value} />
+            <ShareInput
+              currentValue={cell.value}
+              available={totalAvailable}
+              onChange={(id, value, step) =>
+                onTotalAvailableAllocationChange(id, value, step)}
+              dataId={row.id}
+              {disabled}
+              showAvailable={false}
+            />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
         </svelte:fragment>
       </DataTable>
@@ -156,6 +223,9 @@
     display: flex;
     justify-content: space-between;
     margin: calc(var(--spacer) / 8) 0;
+  }
+  :global(.updateAllocationsBtton) {
+    margin-left: calc(var(--spacer) / 3);
   }
   .headerValuesContainer {
     display: flex;

@@ -100,10 +100,16 @@
     if ($form.unlockDate) {
       // 4 years = 100% voting power
       var thursday = new Date(getThursdayDate());
-      var msDelta = new Date($form.unlockDate) - thursday;
-      calculatedMultiplier = ((msDelta / MAXTIME) * 100.0).toFixed(2);
-      if ($form.amount) {
-        calculatedVotingPower = ((msDelta / MAXTIME) * $form.amount).toFixed(2);
+      const lockDateDiff = new Date($form.unlockDate) - thursday;
+      var msDelta =
+        lockDateDiff > 0
+          ? lockDateDiff
+          : new Date($form.unlockDate) - new Date();
+      calculatedMultiplier = ((msDelta / MAXTIME) * 100.0).toFixed(3);
+      if ($form.amount > 0) {
+        calculatedVotingPower = ((msDelta / MAXTIME) * $form.amount).toFixed(3);
+      } else {
+        calculatedVotingPower = 0;
       }
     } else {
       calculatedMultiplier = 0;
@@ -187,7 +193,7 @@
           <TokenApproval
             tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
             tokenName={"OCEAN"}
-            poolAddress={process.env.VE_OCEAN_CONTRACT}
+            spender={process.env.VE_OCEAN_CONTRACT}
             amount={$form.amount}
             disabled={loading || getOceanBalance($connectedChainId) <= 0}
             bind:loading

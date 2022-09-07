@@ -10,6 +10,7 @@
   } from "../../stores/dataAllocations";
   import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
+  import { isAppLoading } from "../../stores/app";
 
   const loadValues = async () => {
     if (!$totalUserAllocation) {
@@ -24,34 +25,36 @@
         chainId: 4,
         nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485923",
         LP_addr: "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
-        percent: 33.33,
+        percent: 30,
       },
       {
         chainId: 4,
         nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485924",
         LP_addr: "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
-        percent: 33.33,
+        percent: 30,
       },
       {
         chainId: 4,
         nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485925",
         LP_addr: "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
-        percent: 33.33,
+        percent: 30,
       },
     ]);
   };
 
-  $: if (!$datasets && $dataAllocations) {
-    loadDatasets(`${process.env.BACKEND_API}/volume`, $dataAllocations);
-  }
-
   $: if ($userAddress) {
     loadValues();
   }
+
+  $: if ($dataAllocations) {
+    loadDatasets(`${process.env.BACKEND_API}/volume`, $dataAllocations);
+  }
 </script>
 
-<div class={`container ${!$datasets && "alignContentCenter"}`}>
-  {#if $datasets}
+<div
+  class={`container ${(!$datasets || $isAppLoading) && "alignContentCenter"}`}
+>
+  {#if $datasets && !$isAppLoading}
     <div class="data">
       <Table
         colData={columnsData}

@@ -20,6 +20,7 @@
   } from "./stores/tokens";
   import { veOceanWithDelegations } from "./stores/veOcean";
   import { getUserVotingPowerWithDelegations } from "./utils/delegations";
+  import { isAppLoading } from "./stores/app";
 
   window.process = {
     ...window.process,
@@ -44,6 +45,7 @@
     await addUserOceanBalanceToBalances(
       parseInt(process.env.VE_SUPPORTED_CHAINID)
     );
+    isAppLoading.update(() => false);
   }
 
   $: if ($userAddress) {

@@ -33,7 +33,7 @@
   .button {
     background-color: var(--brand-color-primary);
     font-size: var(--font-size-small);
-    padding: calc(var(--spacer) / 8);
+    padding: calc(var(--spacer) / 6) calc(var(--spacer) / 4);
     color: var(--brand-white);
     font-weight: bold;
     text-transform: uppercase;
@@ -53,19 +53,18 @@
   }
   .disabledSecondary {
     cursor: default;
-    color: var(--brand-grey-light) !important;
+    color: var(--brand-grey-lighter) !important;
     background-color: var(--background-body) !important;
   }
   .buttonSecondary {
-    background-color: var(--brand-white);
-    color: var(--brand-black);
+    background-color: var(--brand-grey-dimmed);
+    color: var(--brand-grey-light);
     border-radius: var(--border-radius);
     border: 1px solid var(--brand-grey-lighter);
-    box-shadow: var(--box-shadow);
   }
   .textOnly {
     background-color: transparent;
-    color: var(--brand-black);
+    color: var(--brand-grey-light);
     border: 0;
     padding: 0;
   }
