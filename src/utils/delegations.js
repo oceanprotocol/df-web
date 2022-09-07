@@ -24,7 +24,6 @@ export const getUserVotingPowerWithDelegations = async(userAddress) => {
 export const delegate = async(delegator, receiver, percentage, cancelTime, expireTime, id, signer) => {
     try {
       const contract = new ethers.Contract(process.env.VE_DELEGATION_CONTRACT, veDelegationABI, signer);
-      console.log(contract)
       const resp = await contract.create_boost(delegator, receiver, percentage, cancelTime, expireTime, id)
       return resp
   } catch (error) {

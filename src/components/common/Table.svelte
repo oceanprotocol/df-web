@@ -36,8 +36,6 @@
   let disabled = $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
 
-  console.log($userBalances[process.env.VE_OCEAN_CONTRACT]);
-
   let columns = {};
   let pagination = { pageSize: 13, page: 1 };
 

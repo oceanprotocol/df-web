@@ -71,7 +71,6 @@ export const getVeOceanBalance = async(userAddress) => {
           gasLimit: gasLimit
       })
         const receipt = await tx.wait()
-        console.log(receipt)
     } catch (error) {
       throw error;
     }

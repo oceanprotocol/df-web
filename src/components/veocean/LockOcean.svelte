@@ -78,7 +78,6 @@
           await updateLockPeriod(timeDifference / 1000, $networkSigner);
         }
       } else {
-        console.log(values.amount, timeDifference / 1000, $networkSigner);
         await lockOcean(values.amount, timeDifference / 1000, $networkSigner);
       }
     } catch (error) {
