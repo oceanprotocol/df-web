@@ -33,7 +33,7 @@ SUPPORTED_CHAIN_IDS = [3, 4, 1287, 80001]
 BACKEND_API = https://test-df-sql.oceandao.org/pools
 
 //rewards config containing the airdrop contracts and token addresses for each network
-AIRDROP_CONFIG = {\"NETWORK_ID":{\"airdropAddress\":\"AIRDROP_CONTRACT_ADDRESS\",\"rewardAddress\":\"REWARD_CONTRACT_ADDRESS\",\"tokensData\":{\"TOKEN_ADDRESS\":{\"symbol\":\"TOKEN_SYMBOL\"}}}
+AIRDROP_CONFIG = {\"NETWORK_ID":{\"dfRewardsAddress\":\"DF_REWARDS_ADDRESS\",\"feeDistributorAddress\":\"FEE_DISTRIBUTOR_ADDRESS\",\"tokensData\":{\"TOKEN_ADDRESS\":{\"symbol\":\"TOKEN_SYMBOL\"}}}
 
 // your infura key
 INFURA_KEY = 01SAMPLE9234KEY
@@ -53,8 +53,8 @@ VE_DELEGATION_CONTRACT = 0x0000address
 ```
 
 You may also need to update the following files in code to configure your environment.
-1. Update `oceanTokenAddressesByChain` inside `src/utils/tokens.js` w/ the OCEAN token address
 
+1. Update `oceanTokenAddressesByChain` inside `src/utils/tokens.js` w/ the OCEAN token address
 
 ## Get started
 

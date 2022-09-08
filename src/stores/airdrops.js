@@ -33,7 +33,7 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address,
         if( rpcURL ) {
             tokens = Object.keys(airdropData[chainId].tokensData)
             const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-            const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropABI.default, provider);
+            const contract = new ethers.Contract(airdropData[chainId].dfRewardsAddress, airdropABI.default, provider);
             const claimableRewards = await contract.claimables(address, tokens)
             let claimableRewardsNumber = 0
             let estimatedRewardsNumber = 0
@@ -92,7 +92,7 @@ export async function claimRewards(airdropData, chainId, tokensData, userAddress
 
         if( positiveClaimables.length > 0 ) {
             const contract = new ethers.Contract(
-                airdropData[chainId].airdropAddress,
+                airdropData[chainId].dfRewardsAddress,
                 airdropABI.default,
                 signer
             );
