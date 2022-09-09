@@ -1,9 +1,10 @@
 <script>
   import NetworkRewards from "./NetworkRewards.svelte";
   import MainMessage from "../common/MainMessage.svelte";
-  import ClaimableRewards from "../common/ClaimableRewards.svelte";
+  import EstimatedRewards from "../common/EstimatedRewards.svelte";
   import { userAddress, selectedNetworks } from "../../stores/web3.js";
   import { airdrops, updateAllClaimables } from "../../stores/airdrops";
+  import Countdown from "../common/CountDown.svelte";
 
   import { rewards } from "../../stores/airdrops";
 
@@ -31,10 +32,11 @@
   }`}
 >
   {#if $userAddress && loading === false && $airdrops}
-    <div class="claimableRewardsContainer">
-      <ClaimableRewards />
+    <Countdown />
+    <div class="estimatedRewardsContainer">
+      <EstimatedRewards />
     </div>
-    <div class="datasets">
+    <div class="rewards">
       {#each $selectedNetworks as chainId}
         <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
       {/each}
@@ -67,13 +69,15 @@
     align-items: center;
     justify-content: flex-start;
     min-height: calc(100vh - 300px);
+    padding-top: var(--spacer);
   }
 
-  .datasets {
+  .rewards {
     width: 100%;
   }
 
-  .claimableRewardsContainer {
+  .estimatedRewardsContainer {
+    width: 100%;
     font-size: var(--font-size-large);
     margin: calc(var(--spacer)) 0;
   }
@@ -88,7 +92,7 @@
   }
 
   @media only screen and (min-width: 640px) {
-    .claimableRewardsContainer {
+    .estimatedRewardsContainer {
       margin: var(--spacer) 0;
     }
     .container {
