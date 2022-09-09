@@ -79,7 +79,9 @@ export const getVeOceanBalance = async(userAddress) => {
   export const withdrawOcean = async(signer) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
-        const tx = await contract.withdraw()
+        const tx = await contract.withdraw({
+          gasLimit: gasLimit
+      })
         await tx.wait()
     } catch (error) {
       throw error;

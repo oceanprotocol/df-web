@@ -32,6 +32,8 @@
       }
     );
   };
+
+  console.log($lockedOceanAmount, $oceanUnlockDate);
 </script>
 
 <div class={`container`}>
@@ -40,7 +42,7 @@
       text={loading ? "Withdrawing..." : "Withdraw all locked"}
       secondary
       disabled={loading ||
-        !$lockedOceanAmount ||
+        !$oceanUnlockDate ||
         new Date() < $oceanUnlockDate ||
         parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId}
       onclick={() => withdraw()}
