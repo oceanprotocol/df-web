@@ -32,8 +32,6 @@
       }
     );
   };
-
-  console.log($lockedOceanAmount, $oceanUnlockDate);
 </script>
 
 <div class={`container`}>

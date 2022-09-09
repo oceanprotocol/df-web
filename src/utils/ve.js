@@ -21,10 +21,8 @@ export const getAllocatedAmount = async(userAddress) => {
     }
   }
 
-export const getVeOceanBalance = async(userAddress) => {
-    const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
+export const getVeOceanBalance = async(userAddress, provider) => {
     try {
-        const provider = new ethers.providers.JsonRpcProvider(rpcURL);
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
         const veOceanBalanceInEth = await contract.balanceOfAt(userAddress,provider.getBlockNumber())
         const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth).toString(10))
@@ -35,11 +33,9 @@ export const getVeOceanBalance = async(userAddress) => {
     }
   }
 
-  export const getLockedOceanAmount = async(userAddress) => {
-    const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
+  export const getLockedOceanAmount = async(userAddress, signer) => {
     try {
-        const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
+        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const lock = await contract.locked(userAddress)
         const lockAmount = ethers.utils.formatEther(BigInt(lock.amount).toString(10))
         return lockAmount
@@ -49,11 +45,9 @@ export const getVeOceanBalance = async(userAddress) => {
     }
   }
 
-  export const getLockedEndTime = async(userAddress) => {
-    const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
+  export const getLockedEndTime = async(userAddress, signer) => {
     try {
-        const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
+        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const lockEndTime = await contract.locked__end(userAddress)
         const lockEndTimeFormated = parseInt(BigInt(lockEndTime).toString(10))*1000
         return lockEndTimeFormated > 0 ? lockEndTimeFormated : undefined
