@@ -58,8 +58,8 @@ export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
     const allocatedAmount = await contract.getveAllocation(userAddress, dataAddress, chainId)
     return allocatedAmount / 100
 } catch (error) {
-  console.log(error)
-  throw error;
+  console.log(error?.error ? error?.error?.error.message : error)
+  return 0;
 }
 }
 
@@ -71,7 +71,7 @@ export const getTotalAllocatedVeOcean = async(userAddress) => {
     const allocatedAmount = await contract.getTotalAllocation(userAddress)
     return allocatedAmount / 100
 } catch (error) {
-  console.log(error)
-  throw error;
+  console.log(error?.error ? error?.error?.error.message : error)
+  return 0;
 }
 }

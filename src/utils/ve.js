@@ -30,7 +30,7 @@ export const getVeOceanBalance = async(userAddress) => {
         const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth).toString(10))
         return veOceanBalance
     } catch (error) {
-      console.log(error);
+      console.log(error?.error ? error?.error?.error.message : error);
       return 0;
     }
   }
@@ -44,7 +44,7 @@ export const getVeOceanBalance = async(userAddress) => {
         const lockAmount = ethers.utils.formatEther(BigInt(lock.amount).toString(10))
         return lockAmount
     } catch (error) {
-      console.log(error);
+      console.log(error?.error ? error?.error?.error.message : error);
       return 0;
     }
   }
@@ -58,7 +58,7 @@ export const getVeOceanBalance = async(userAddress) => {
         const lockEndTimeFormated = parseInt(BigInt(lockEndTime).toString(10))*1000
         return lockEndTimeFormated > 0 ? lockEndTimeFormated : undefined
     } catch (error) {
-      console.log(error);
+      console.log(error?.error ? error?.error?.error.message : error);
       return undefined;
     }
   }
