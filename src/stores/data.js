@@ -65,31 +65,14 @@ function getRow(dataInfo, key) {
     nftaddress: dataInfo.nft_addr,
     chainId: dataInfo.chainID,
     allocate: dataInfo.allocation,
-    volume: parseFloat(dataInfo.volume).toFixed(3),
+    volume: parseFloat(dataInfo.vol_amt).toFixed(3),
     allocated: dataInfo.allocation,
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }
 
 export async function loadDatasets(nftsApi, allocations) {
-  const aldatasets = await getDatasets(nftsApi);
-  const allDatasets = [{basetoken_addr: "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
-  chainID: 4,
-  nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485923",
-  basetoken_symbol: "OCEAN",
-  did: "did:op:aee900df7379cda6a5aa1b87bd77e053906002058f649825df0bffe5d8cf17dc",
-  volume: 11.103105545},
-  {basetoken_addr: "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
-  chainID: 4,
-  nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485924",
-  basetoken_symbol: "OCEAN",
-  did: "did:op:aee900df7379cda6a5aa1b87bd77e053906002058f649825df0bffe5d8cf17dc",
-  volume: 11.103105545},{basetoken_addr: "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
-  chainID: 4,
-  nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485926",
-  basetoken_symbol: "OCEAN",
-  did: "did:op:aee900df7379cda6a5aa1b87bd77e053906002058f649825df0bffe5d8cf17dc",
-  volume: 11.103105545}]
+  const allDatasets = await getDatasets(nftsApi);
   if (allDatasets.length === 0) {
     datasets.set([]);
     return;

@@ -6,7 +6,7 @@ const veAllocateABI = VeAllocateABI.default
 export const getAllAllocationsForAddress = async(userAddress) => {
     let res;
     try {
-      res = await fetch(`${process.env.BACKEND_API}/stakes`, {
+      res = await fetch(`${process.env.BACKEND_API}/allocations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
