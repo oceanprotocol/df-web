@@ -1,9 +1,6 @@
 <script>
   import { loadDatasets, datasets, columnsData } from "../../stores/data";
-  import {
-    getAllAllocationsForAddress,
-    getTotalAllocatedVeOcean,
-  } from "../../utils/dataAllocations";
+  import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
   import {
     dataAllocations,
     totalUserAllocation,
@@ -12,39 +9,39 @@
   import Table from "../common/Table.svelte";
   import { isAppLoading } from "../../stores/app";
   import { query } from "svelte-apollo";
-  import { gql } from "apollo-boost";
+  import { GET_ALLOCATIONS } from "../../utils/dataAllocations";
 
-  const GET_ALLOCATIONS = gql`
-    query allocations($userAddress: String!) {
-      veAllocations(
-        where: { allocated_gt: 0 }
-        and: { allocationUser: $userAddress }
-      ) {
-        allocated
-        nftAddress
-        chainId
-      }
-    }
-  `;
   let allocations;
 
-  const loadValues = async () => {
+  const loadTotalAllocation = async () => {
     if (!$totalUserAllocation) {
       let newAllocation = await getTotalAllocatedVeOcean($userAddress);
       totalUserAllocation.update(() => newAllocation);
     }
+  };
+
+  const loadValues = async () => {
     dataAllocations.update(() => $allocations.data.veAllocations);
   };
 
   $: if ($allocations?.data) {
-    console.log($allocations);
+    console.log($allocations.data.veAllocations);
     loadValues();
   }
 
   $: if ($userAddress) {
-    allocations = query(GET_ALLOCATIONS, {
-      variables: { userAddress: $userAddress },
-    });
+    loadTotalAllocation();
+  }
+
+  $: if ($totalUserAllocation) {
+    console.log("fetch allocations");
+    if (!allocations) {
+      allocations = query(GET_ALLOCATIONS, {
+        variables: { userAddress: $userAddress },
+      });
+    } else {
+      allocations.refetch();
+    }
   }
 
   $: if ($dataAllocations) {

@@ -1,7 +1,21 @@
 import {ethers} from "ethers";
 import {getRpcUrlByChainId} from "./web3";
+import { gql } from "apollo-boost";
 import * as VeAllocateABI from "./abis/veAllocateABI";
 const veAllocateABI = VeAllocateABI.default
+
+export const GET_ALLOCATIONS = gql`
+query allocations($userAddress: String!) {
+  veAllocations(
+    where: { allocated_gt: 0 }
+    and: { allocationUser: $userAddress }
+  ) {
+    allocated
+    nftAddress
+    chainId
+  }
+}
+`;
 
 export const getAllAllocationsForAddress = async(userAddress) => {
     let res;

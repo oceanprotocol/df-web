@@ -7,7 +7,6 @@
     ToolbarSearch,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
-  import AllocateModal from "../data/AllocateModal.svelte";
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
@@ -21,9 +20,12 @@
   import ItemWithLabel from "./ItemWithLabel.svelte";
   import Link from "./Link.svelte";
   import { userBalances } from "../../stores/tokens";
-  import { allocateVeOceanToMultipleNFTs } from "../../utils/dataAllocations";
+  import {
+    allocateVeOceanToMultipleNFTs,
+    getTotalAllocatedVeOcean,
+  } from "../../utils/dataAllocations";
   import Swal from "sweetalert2";
-  import { networkSigner } from "../../stores/web3";
+  import { networkSigner, userAddress } from "../../stores/web3";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -57,11 +59,8 @@
       colData.forEach((col) => {
         columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
       });
-
       localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
-
       getColumnsFromLocalStorage();
-
       notHidableColumns.forEach((column) => {
         delete columns[column];
       });
@@ -80,7 +79,10 @@
   }
 
   $: if (showDataWithAllocations) {
-    const newData = filterDataByUserAllocation(rowData, $dataAllocations);
+    const newData = filterDataByUserAllocation(
+      rowData,
+      $dataAllocations.data.veAllocations
+    );
     datasetsWithAllocations = newData;
   }
 
@@ -116,7 +118,7 @@
     const nftAddresses = [];
     const chainIds = [];
     rowData.forEach((data) => {
-      if (data.allocate > 0) {
+      if (data.allocate !== data.allocated) {
         amounts.push(data.allocate);
         nftAddresses.push(data.nftaddress);
         chainIds.push(data.chainId);
@@ -134,9 +136,16 @@
       return;
     }
     Swal.fire("Success!", "Allocation successfully updated.", "success").then(
-      async () => {}
+      async () => {
+        let newAllocation = await getTotalAllocatedVeOcean($userAddress);
+        totalUserAllocation.update(() => newAllocation);
+      }
     );
   };
+
+  $: if ($totalUserAllocation) {
+    totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+  }
 </script>
 
 {#if colData && rowData}
