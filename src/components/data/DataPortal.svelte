@@ -11,19 +11,37 @@
   import { userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
   import { isAppLoading } from "../../stores/app";
+  import { query } from "svelte-apollo";
+  import { gql } from "apollo-boost";
+
+  const GET_ALLOCATIONS = gql`
+    query allocations($userAddress: String!) {
+      veAllocations(allocationUser: $userAddress) {
+        allocated
+        nftAddress
+        chainId
+      }
+    }
+  `;
+  let allocations;
 
   const loadValues = async () => {
     if (!$totalUserAllocation) {
       let newAllocation = await getTotalAllocatedVeOcean($userAddress);
       totalUserAllocation.update(() => newAllocation);
     }
-    getAllAllocationsForAddress($userAddress).then((resp) => {
-      dataAllocations.update(() => resp);
-    });
+    dataAllocations.update(() => $allocations.data.veAllocations);
   };
 
-  $: if ($userAddress) {
+  $: if ($allocations?.data) {
+    console.log($allocations);
     loadValues();
+  }
+
+  $: if ($userAddress) {
+    allocations = query(GET_ALLOCATIONS, {
+      variables: { userAddress: $userAddress },
+    });
   }
 
   $: if ($dataAllocations) {

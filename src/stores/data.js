@@ -61,7 +61,7 @@ function getRow(dataInfo, key) {
     id: key,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
-    basetokenaddress: '0x2473f4F7bf40ed9310838edFCA6262C17A59DF64'.toLocaleLowerCase(),
+    basetokenaddress: dataInfo.basetoken_addr.toLocaleLowerCase(),
     nftaddress: dataInfo.nft_addr,
     chainId: dataInfo.chainID,
     allocate: dataInfo.allocation,
@@ -79,7 +79,7 @@ export async function loadDatasets(nftsApi, allocations) {
   }
   let newDatasets = [];
   allDatasets.forEach((datasetInfo, key) => {
-    datasetInfo.allocation = allocations.find((allocation) => allocation.nft_addr === datasetInfo.nft_addr)?.percent || 0
+    datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     datasetInfo.totalPools = allDatasets.length;
     datasetInfo.totalTVL = allDatasets.reduce(
       (total, dataset) => total + parseFloat(dataset.stake_amt)

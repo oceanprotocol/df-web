@@ -21,7 +21,16 @@
   import { veOceanWithDelegations } from "./stores/veOcean";
   import { getUserVotingPowerWithDelegations } from "./utils/delegations";
   import { isAppLoading } from "./stores/app";
+  import ApolloClient from "apollo-boost";
+  import { setClient } from "svelte-apollo";
 
+  const client = new ApolloClient({
+    uri: "https://v4.subgraph.rinkeby.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph",
+    fetchOptions: {
+      credentials: "include",
+    },
+  });
+  setClient(client);
   window.process = {
     ...window.process,
   };
