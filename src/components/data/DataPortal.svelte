@@ -16,7 +16,10 @@
 
   const GET_ALLOCATIONS = gql`
     query allocations($userAddress: String!) {
-      veAllocations(allocationUser: $userAddress) {
+      veAllocations(
+        where: { allocated_gt: 0 }
+        and: { allocationUser: $userAddress }
+      ) {
         allocated
         nftAddress
         chainId
