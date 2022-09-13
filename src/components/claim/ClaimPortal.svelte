@@ -2,15 +2,22 @@
   import NetworkRewards from "./NetworkRewards.svelte";
   import MainMessage from "../common/MainMessage.svelte";
   import EstimatedRewards from "../common/EstimatedRewards.svelte";
-  import { userAddress, selectedNetworks } from "../../stores/web3.js";
+  import ClaimRewards from "./ClaimRewardsVeDF.svelte";
+  import { 
+    userAddress, 
+    connectedChainId, 
+    selectedNetworks 
+  } from "../../stores/web3.js";
   import { airdrops, updateAllClaimables } from "../../stores/airdrops";
+  import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import Countdown from "../common/CountDown.svelte";
 
   import { rewards } from "../../stores/airdrops";
+  import { veClaimables, dfClaimables } from "../../stores/claimables";
 
   let loading = true;
 
-  async function initAirdrops() {
+  async function initClaimables() {
     loading = true;
     await updateAllClaimables(
       JSON.parse(process.env.AIRDROP_CONFIG),
@@ -18,11 +25,20 @@
       $userAddress,
       $rewards
     );
+    const estimateReward = await getRewardsFeeEstimate(
+      $userAddress
+    );
+    veClaimables.set(estimateReward);
+    dfClaimables.set($airdrops[$connectedChainId].claimableRewards)
+    
+    console.log("$airdrops:", $airdrops);
+    console.log("$connectedChainId:", $connectedChainId);
+
     loading = false;
   }
 
   $: if ($rewards) {
-    initAirdrops();
+    initClaimables();
   }
 </script>
 
@@ -36,11 +52,7 @@
     <div class="estimatedRewardsContainer">
       <EstimatedRewards />
     </div>
-    <div class="rewards">
-      {#each $selectedNetworks as chainId}
-        <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
-      {/each}
-    </div>
+    <ClaimRewards />
   {:else if $selectedNetworks.length > 0 && $userAddress}
     <span class="loading">Loading...</span>
   {/if}
