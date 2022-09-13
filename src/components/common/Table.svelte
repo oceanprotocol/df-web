@@ -109,7 +109,7 @@
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailable += step;
     rowData[rowData.findIndex((element) => element.id === id)].allocate = value;
-    pagination.page = 1;
+    if (pagination.page > 1) pagination.page = 1;
   };
 
   const updateAllocations = async () => {
