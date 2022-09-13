@@ -37,6 +37,7 @@
   let datasetsWithAllocations = undefined;
   let disabled = $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+  let loading = false;
 
   let columns = {};
   let pagination = { pageSize: 13, page: 1 };
@@ -114,6 +115,7 @@
   };
 
   const updateAllocations = async () => {
+    loading = true;
     const amounts = [];
     const nftAddresses = [];
     const chainIds = [];
@@ -133,12 +135,14 @@
       );
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
+      loading = false;
       return;
     }
     Swal.fire("Success!", "Allocation successfully updated.", "success").then(
       async () => {
         let newAllocation = await getTotalAllocatedVeOcean($userAddress);
         totalUserAllocation.update(() => newAllocation);
+        loading = false;
       }
     );
   };
@@ -157,10 +161,10 @@
           value={totalAvailable >= 0 ? `${totalAvailable}%` : "loading..."}
         />
         <Button
-          text="Update allocations"
+          text={loading ? "Updating..." : "Update allocations"}
           className="updateAllocationsBtton"
           onclick={() => updateAllocations()}
-          {disabled}
+          disabled={disabled || loading}
         />
       </div>
       <div class="tableActionsContainer">
