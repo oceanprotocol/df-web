@@ -137,7 +137,10 @@
     }
     Swal.fire("Success!", "Allocation successfully updated.", "success").then(
       async () => {
-        let newAllocation = await getTotalAllocatedVeOcean($userAddress);
+        let newAllocation = await getTotalAllocatedVeOcean(
+          $userAddress,
+          $networkSigner
+        );
         totalUserAllocation.update(() => newAllocation);
         loading = false;
       }
