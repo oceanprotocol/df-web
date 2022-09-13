@@ -28,7 +28,6 @@
   };
 
   $: if ($allocations?.data) {
-    console.log($allocations.data.veAllocations);
     loadValues();
   }
 
@@ -37,7 +36,6 @@
   }
 
   $: if ($totalUserAllocation) {
-    console.log("fetch allocations");
     if (!allocations) {
       allocations = query(GET_ALLOCATIONS, {
         variables: { userAddress: $userAddress },
