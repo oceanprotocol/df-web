@@ -80,10 +80,7 @@
   }
 
   $: if (showDataWithAllocations) {
-    const newData = filterDataByUserAllocation(
-      rowData,
-      $dataAllocations.data.veAllocations
-    );
+    const newData = filterDataByUserAllocation(rowData, $dataAllocations);
     datasetsWithAllocations = newData;
   }
 
