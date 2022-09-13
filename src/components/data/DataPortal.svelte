@@ -5,7 +5,7 @@
     dataAllocations,
     totalUserAllocation,
   } from "../../stores/dataAllocations";
-  import { userAddress } from "../../stores/web3";
+  import { networkSigner, userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
   import { isAppLoading } from "../../stores/app";
   import { query } from "svelte-apollo";
@@ -15,7 +15,10 @@
 
   const loadTotalAllocation = async () => {
     if (!$totalUserAllocation) {
-      let newAllocation = await getTotalAllocatedVeOcean($userAddress);
+      let newAllocation = await getTotalAllocatedVeOcean(
+        $userAddress,
+        $networkSigner
+      );
       totalUserAllocation.update(() => newAllocation);
     }
   };

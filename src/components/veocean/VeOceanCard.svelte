@@ -1,5 +1,5 @@
 <script>
-  import { userAddress } from "../../stores/web3";
+  import { networkSigner, userAddress } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { userBalances } from "../../stores/tokens";
@@ -17,7 +17,10 @@
 
   const setValues = async () => {
     if (!$totalUserAllocation) {
-      let newAllocation = await getTotalAllocatedVeOcean($userAddress);
+      let newAllocation = await getTotalAllocatedVeOcean(
+        $userAddress,
+        $networkSigner
+      );
       totalUserAllocation.update(() => newAllocation);
     }
     balance = $userBalances[process.env.VE_OCEAN_CONTRACT];

@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import {userAddress}from "./web3"
+import {networkSigner, userAddress, web3Provider}from "./web3"
 import {balanceOf,getOceanTokenAddressByChainId} from "../utils/tokens"
 import {getVeOceanBalance} from "../utils/ve"
 import {ethers} from "ethers"
@@ -18,7 +18,8 @@ export const addUserBalanceToBalances = async (chainId, tokenAddress) => {
       get(userBalances),
       chainId,
       tokenAddress,
-      get(userAddress)
+      get(userAddress),
+      get(networkSigner)
     );
     const balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
     updateUserBalances(tokenAddress, balance)
@@ -30,7 +31,7 @@ export const addUserOceanBalanceToBalances = async (chainId) => {
 }
 
 export const addUserVeOceanBalanceToBalances = async (userAddress) => {
-  const veOceanBalance = await getVeOceanBalance(userAddress)
+  const veOceanBalance = await getVeOceanBalance(userAddress, get(web3Provider))
   updateUserBalances(process.env.VE_OCEAN_CONTRACT, veOceanBalance)
 }
 

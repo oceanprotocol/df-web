@@ -48,7 +48,10 @@
       data.nftAddress
     );
     if (!$totalUserAllocation) {
-      newTotalUserAllocation = await getTotalAllocatedVeOcean($userAddress);
+      newTotalUserAllocation = await getTotalAllocatedVeOcean(
+        $userAddress,
+        $networkSigner
+      );
       totalUserAllocation.update(() => newTotalUserAllocation);
     }
     updateAvailableAllocation(newTotalUserAllocation);
@@ -86,7 +89,8 @@
         await updateBalance();
         updateCanAllocate();
         let newTotalUserAllocation = await getTotalAllocatedVeOcean(
-          $userAddress
+          $userAddress,
+          $networkSigner
         );
         totalUserAllocation.update(() => newTotalUserAllocation);
         updateAvailableAllocation(newTotalUserAllocation);

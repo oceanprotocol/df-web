@@ -50,7 +50,7 @@ export async function getJsonRpcProvider(chainId) {
   try {
     const rpcURL = await getRpcUrlByChainId(chainId);
     if (rpcURL) {
-      return new ethers.providers.JsonRpcProvider(rpcURL);
+      return new ethers.providers.InfuraProvider(rpcURL);
     }
     return null;
   } catch(err) {
