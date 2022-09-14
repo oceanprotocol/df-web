@@ -1,8 +1,8 @@
 export let filterDataByUserAllocation = (datasets, allocations) => {
     let filteredDatasets = []
-    allocations.forEach((allocation) => {
-            datasets.forEach((dataset) => {
-            if(allocation.nft_addr === dataset.nftaddress){
+    datasets.forEach((dataset) => {
+        allocations.forEach((allocation) => {
+            if(allocation.nftAddress === dataset.nftaddress){
                 filteredDatasets.push(dataset)
             }
         })

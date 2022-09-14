@@ -8,7 +8,7 @@
   } from "../../stores/web3";
   import {
     airdrops,
-    claimRewards,
+    claimDFRewards,
     updateAllClaimables,
   } from "../../stores/airdrops";
   import Row from "../common/Row.svelte";
@@ -26,7 +26,7 @@
   async function claim() {
     loading = true;
 
-    const result = await claimRewards(
+    const result = await claimDFRewards(
       $airdrops,
       $connectedChainId,
       claimables.tokensData,

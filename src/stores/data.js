@@ -36,7 +36,7 @@ async function getDatasets(api) {
         "query":{
         },
         "sort":{
-          "vol_amt":-1
+          "volume":-1
         }
       })
     });
@@ -60,8 +60,8 @@ function getRow(dataInfo, key) {
   return {
     id: key,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
-    basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
-    basetokenaddress: '0x2473f4F7bf40ed9310838edFCA6262C17A59DF64'.toLocaleLowerCase(),
+    basetoken: dataInfo.symbol,
+    basetokenaddress: dataInfo.basetoken_addr.toLocaleLowerCase(),
     nftaddress: dataInfo.nft_addr,
     chainId: dataInfo.chainID,
     allocate: dataInfo.allocation,
@@ -72,35 +72,14 @@ function getRow(dataInfo, key) {
 }
 
 export async function loadDatasets(nftsApi, allocations) {
-  const aldatasets = await getDatasets(nftsApi);
-  const allDatasets = [{basetoken_addr: "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
-  chainID: 4,
-  nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485923",
-  basetoken_symbol: "OCEAN",
-  did: "did:op:aee900df7379cda6a5aa1b87bd77e053906002058f649825df0bffe5d8cf17dc",
-  volume: 11.103105545},
-  {basetoken_addr: "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
-  chainID: 4,
-  nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485924",
-  basetoken_symbol: "OCEAN",
-  did: "did:op:aee900df7379cda6a5aa1b87bd77e053906002058f649825df0bffe5d8cf17dc",
-  volume: 11.103105545},{basetoken_addr: "0x8967bcf84170c91b0d24d4302c2376283b0b3a07",
-  chainID: 4,
-  nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485926",
-  basetoken_symbol: "OCEAN",
-  did: "did:op:aee900df7379cda6a5aa1b87bd77e053906002058f649825df0bffe5d8cf17dc",
-  volume: 11.103105545}]
+  const allDatasets = await getDatasets(nftsApi);
   if (allDatasets.length === 0) {
     datasets.set([]);
     return;
   }
   let newDatasets = [];
   allDatasets.forEach((datasetInfo, key) => {
-    datasetInfo.allocation = allocations.find((allocation) => allocation.nft_addr === datasetInfo.nft_addr)?.percent || 0
-    datasetInfo.totalPools = allDatasets.length;
-    datasetInfo.totalTVL = allDatasets.reduce(
-      (total, dataset) => total + parseFloat(dataset.stake_amt)
-    );
+    datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     newDatasets.push(getRow(datasetInfo, key));
   });
 

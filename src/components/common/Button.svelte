@@ -71,6 +71,10 @@
   .textOnly:hover {
     color: var(--brand-color-primary) !important;
   }
+  .textOnly:disabled,
+  .textOnly[disabled]:hover {
+    color: var(--brand-grey-lighter) !important;
+  }
   span {
     display: box;
     line-height: 100%;

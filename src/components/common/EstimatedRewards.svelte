@@ -1,30 +1,31 @@
 <script>
   import { rewards } from "../../stores/airdrops";
-  import TokenReward from "../common/TokenReward.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
-  let estimatedRewards;
+  let estimatedVE = 0.0;
   let estimatedDF = 0;
 
   function getEstimatedRewards() {
-    estimatedRewards = {};
-    $rewards.forEach((reward) => {
-      if (!estimatedRewards[reward.token]) {
-        estimatedRewards[reward.token] = 0;
-      }
-      estimatedDF += reward.amt;
-      estimatedRewards[reward.token] += reward.amt;
-    });
+    estimatedDF = $rewards.map((reward) => reward.balance);
   }
 
-  $: if ($rewards && !estimatedRewards) {
+  $: if ($rewards) {
     getEstimatedRewards();
   }
 </script>
 
 <div class="container">
-  <ItemWithLabel value={estimatedDF} title="Total Estimated" />
-  <ItemWithLabel value={estimatedDF} title="Estimated Fee" />
-  <ItemWithLabel value={estimatedDF} title="Estimated DF" />
+  <ItemWithLabel
+    value={parseFloat(estimatedDF + estimatedVE).toFixed(3)}
+    title="Total Estimated"
+  />
+  <ItemWithLabel
+    value={parseFloat(estimatedVE).toFixed(3)}
+    title="Estimated Fee"
+  />
+  <ItemWithLabel
+    value={parseFloat(estimatedDF).toFixed(3)}
+    title="Estimated DF"
+  />
 </div>
 
 <style>
@@ -32,6 +33,6 @@
     display: flex;
     width: 100%;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
   }
 </style>
