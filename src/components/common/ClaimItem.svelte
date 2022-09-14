@@ -1,62 +1,49 @@
 <script>
+  import Button from "./Button.svelte";
+  import ItemWithLabel from "./ItemWithLabel.svelte";
+
   export let title;
   export let amount;
   export let loading = false;
   export let onClick;
 
-  const onClaimClicked = () => {
+  const onClaimClicked = async () => {
     loading = true;
-    onClick()
-  }
+    await onClick();
+    loading = false;
+  };
 </script>
 
-{#if loading === false}
-  <div class="container" on:click={() => onClaimClicked()}>
-    <div class="description">
-      <span class="title">{title}</span>
-      <span class="value">${amount}</span>
-    </div>
-    <div class="description">
-      <span class="claim">Claim</span>
-    </div>
+<div class="container">
+  <ItemWithLabel {title} value={amount} />
+  <div class="actionContainer">
+    <Button
+      text={loading ? "Loading..." : "Claim"}
+      onClick={() => onClaimClicked()}
+      textOnly
+      disabled={loading}
+    />
   </div>
-{:else}
-  <div class="container">
-    <div class="description">
-      <span class="value">Loading</span>
-    </div>
-  </div>
-{/if}
-
+</div>
 
 <style>
   .container {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    width: 200px;
+    justify-content: space-around;
+    padding: calc(var(--spacer) / 4) calc(var(--spacer) / 1.5) !important;
     margin-bottom: calc(var(--spacer) / 4);
-    border: 2px solid;
+    border: 1px solid var(--brand-grey-lighter);
     padding: 20px;
-    margin: 10px;
+    margin: 0 calc(var(--spacer) / 4);
   }
-  .description {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  .actionContainer {
+    margin-left: calc(var(--spacer) / 4);
   }
-  .title {
-    font-size: var(--font-size-mini);
-    margin-bottom: calc((var(--spacer) / 8));
-  }
-  .value {
-    font-size: var(--font-size-small);
-    font-weight: bold;
-  }
-  .claim {
-    font-size: var(--font-size-large);
-    font-weight: bold;
-    color: palevioletred
+
+  @media (min-width: 640px) {
+    .container {
+      margin: 0 calc(var(--spacer) / 2);
+    }
   }
 </style>
