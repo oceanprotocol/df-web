@@ -50,7 +50,6 @@
       $userAddress
     );
 
-    console.log("newVeOceansWithDelegations:", newVeOceansWithDelegations);
     veOceanWithDelegations.update(() => newVeOceansWithDelegations);
     await addUserVeOceanBalanceToBalances($userAddress);
     await addUserOceanBalanceToBalances(

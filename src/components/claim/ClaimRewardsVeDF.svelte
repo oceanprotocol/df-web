@@ -65,17 +65,17 @@
 <div class={`container`}>
   <ClaimItem
     title="VE Claimable"
-    amount={$veClaimables}
+    amount={parseFloat($veClaimables).toFixed(3)}
     loading={claiming === "VE_REWARDS"}
     onClick={onClaimVeRewards}
     disabled={claiming !== undefined}
   />
   <ClaimItem
     title="DF Claimable"
-    amount={$dfClaimables}
+    amount={parseFloat($dfClaimables).toFixed(3)}
     loading={claiming === "DF_REWARDS"}
     onClick={onClaimDfRewards}
-    disabled={claiming !== undefined}
+    disabled={claiming !== undefined || $dfClaimables <= 0}
   />
 </div>
 

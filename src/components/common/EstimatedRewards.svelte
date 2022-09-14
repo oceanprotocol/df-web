@@ -14,9 +14,18 @@
 </script>
 
 <div class="container">
-  <ItemWithLabel value={estimatedDF + estimatedVE} title="Total Estimated" />
-  <ItemWithLabel value={estimatedVE} title="Estimated Fee" />
-  <ItemWithLabel value={estimatedDF} title="Estimated DF" />
+  <ItemWithLabel
+    value={parseFloat(estimatedDF + estimatedVE).toFixed(3)}
+    title="Total Estimated"
+  />
+  <ItemWithLabel
+    value={parseFloat(estimatedVE).toFixed(3)}
+    title="Estimated Fee"
+  />
+  <ItemWithLabel
+    value={parseFloat(estimatedDF).toFixed(3)}
+    title="Estimated DF"
+  />
 </div>
 
 <style>

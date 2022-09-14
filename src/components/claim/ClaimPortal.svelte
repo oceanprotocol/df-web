@@ -32,9 +32,6 @@
     veClaimables.set(estimateReward);
     dfClaimables.set($airdrops[$connectedChainId].claimableRewards);
 
-    console.log("$airdrops:", $airdrops);
-    console.log("$connectedChainId:", $connectedChainId);
-
     loading = false;
   }
 
