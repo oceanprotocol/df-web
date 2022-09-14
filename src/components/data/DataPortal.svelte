@@ -1,9 +1,6 @@
 <script>
   import { loadDatasets, datasets, columnsData } from "../../stores/data";
-  import {
-    getAllAllocationsForAddress,
-    getTotalAllocatedVeOcean,
-  } from "../../utils/dataAllocations";
+  import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
   import {
     dataAllocations,
     totalUserAllocation,
@@ -11,8 +8,12 @@
   import { networkSigner, userAddress } from "../../stores/web3";
   import Table from "../common/Table.svelte";
   import { isAppLoading } from "../../stores/app";
+  import { query } from "svelte-apollo";
+  import { GET_ALLOCATIONS } from "../../utils/dataAllocations";
 
-  const loadValues = async () => {
+  let allocations;
+
+  const loadTotalAllocation = async () => {
     if (!$totalUserAllocation) {
       let newAllocation = await getTotalAllocatedVeOcean(
         $userAddress,
@@ -20,33 +21,28 @@
       );
       totalUserAllocation.update(() => newAllocation);
     }
-    /*getAllAllocationsForAddress($userAddress).then((resp) => {
-      dataAllocations.update(() => resp);
-    });*/
-    dataAllocations.update(() => [
-      {
-        chainId: 4,
-        nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485923",
-        LP_addr: "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
-        percent: 30,
-      },
-      {
-        chainId: 4,
-        nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485924",
-        LP_addr: "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
-        percent: 30,
-      },
-      {
-        chainId: 4,
-        nft_addr: "0x537e625c1d722fef6a6e793ac226e5f22e485925",
-        LP_addr: "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
-        percent: 30,
-      },
-    ]);
   };
 
-  $: if ($userAddress) {
+  const loadValues = async () => {
+    dataAllocations.update(() => $allocations.data.veAllocations);
+  };
+
+  $: if ($allocations?.data) {
     loadValues();
+  }
+
+  $: if ($userAddress) {
+    loadTotalAllocation();
+  }
+
+  $: if ($totalUserAllocation) {
+    if (!allocations) {
+      allocations = query(GET_ALLOCATIONS, {
+        variables: { userAddress: $userAddress },
+      });
+    } else {
+      allocations.refetch();
+    }
   }
 
   $: if ($dataAllocations) {
