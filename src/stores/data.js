@@ -73,7 +73,6 @@ function getRow(dataInfo, key) {
 
 export async function loadDatasets(nftsApi, allocations) {
   const allDatasets = await getDatasets(nftsApi);
-  console.log(allDatasets)
   if (allDatasets.length === 0) {
     datasets.set([]);
     return;
