@@ -2,10 +2,17 @@ import { writable } from "svelte/store";
 import {getRpcUrlByChainId} from "../utils/web3";
 import {ethers} from "ethers";
 import * as airdropABI from "../utils/abis/airdropABI";
+import * as feeDistributorABI from "../utils/abis/airdropABI";
 
 export let contracts = writable({});
 export let airdrops = writable({});
 export let rewards = writable();
+export let veEstimate = writable(undefined);
+export let veClaimables = writable(undefined);
+export let dfEstimate = writable(undefined);
+export let dfClaimables = writable(undefined);
+
+const gasLimit = 1000000;
 
 export const getTokenAddress = (chainId, tokenName, airdropsConfig) => {
     if (!chainId || !tokenName) return null;
@@ -80,30 +87,45 @@ export const updateAllClaimables = async (airdropData, selectedNetworks, userAdd
     airdrops.set(airdropData);
 }
 
-export async function claimRewards(airdropData, chainId, tokensData, userAddress, signer) {
+export async function claimDFRewards(airdropData, chainId, userAddress, signer) {
     try {
-        const tokenAddresses = Object.keys(tokensData);
+        const tokenAddresses = Object.keys(airdropData[chainId].tokensData);
         let positiveClaimables = [];
         // TODO - Make sure that claim is only done on non-zero tokens
         for (let i = 0; i < tokenAddresses.length; i++) {
-            if (Number(tokensData[tokenAddresses[i]]['claimable amount']) > 0)
+            if (Number(airdropData[chainId].tokensData[tokenAddresses[i]]['claimable amount']) > 0)
                 positiveClaimables.push(tokenAddresses[i]);
         }
 
-        if( positiveClaimables.length > 0 ) {
+        if( positiveClaimables.length >= 0 ) {
             const contract = new ethers.Contract(
-                airdropData[chainId].airdropAddress,
+                airdropData[chainId].dfRewardsAddress,
                 airdropABI.default,
                 signer
             );
             const resp = await contract.claimMultiple(userAddress, positiveClaimables);
             await resp.wait();
             console.log("Success claiming rewards, txReceipt here");
-            return positiveClaimables.length;
         }
-        return 0;
     } catch (error) {
         console.log("Error claiming rewards :", error);
-        return false;
+        throw error;
+    }
+}
+
+export async function claimVERewards(userAddress, signer) {
+    try {
+        const contract = new ethers.Contract(
+            process.env.FEE_DISTRIBUTOR_CONTRACT,
+            feeDistributorABI.default,
+            signer
+        );
+        console.log(contract)
+        const resp = await contract.claim([userAddress],{gasLimit: gasLimit});
+        await resp.wait();
+        console.log("Success claiming rewards, txReceipt here");
+    }catch (error) {
+        console.log("Error claiming rewards :", error);
+        throw error;
     }
 }

@@ -1,17 +1,17 @@
 import * as VeAllocateABI from "./abis/veAllocateABI";
 import * as VeOceanABI from "./abis/veOceanABI";
+import {get} from "svelte/store"
 import {getRpcUrlByChainId} from "./web3";
 import {ethers} from "ethers";
+import { networkSigner } from "../stores/web3";
 const veAllocateABI = VeAllocateABI.default
 const veOceanABI = VeOceanABI.default
 const decimals = 18;
 const gasLimit = 1000000;
 
 export const getAllocatedAmount = async(userAddress) => {
-    const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
     try {
-        const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-        const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
+        const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, get(networkSigner));
         const allocatedAmountInEth = await contract.getTotalAllocation(userAddress)
         const allocatedAmount = ethers.utils.parseUnits(allocatedAmountInEth, decimals)
         return allocatedAmount

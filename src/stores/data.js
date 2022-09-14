@@ -36,7 +36,7 @@ async function getDatasets(api) {
         "query":{
         },
         "sort":{
-          "vol_amt":-1
+          "volume":-1
         }
       })
     });
@@ -60,12 +60,12 @@ function getRow(dataInfo, key) {
   return {
     id: key,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
-    basetoken: getTokenSymbolByAddress(dataInfo.basetoken),
+    basetoken: dataInfo.symbol,
     basetokenaddress: dataInfo.basetoken_addr.toLocaleLowerCase(),
     nftaddress: dataInfo.nft_addr,
     chainId: dataInfo.chainID,
     allocate: dataInfo.allocation,
-    volume: parseFloat(dataInfo.vol_amt).toFixed(3),
+    volume: parseFloat(dataInfo.volume).toFixed(3),
     allocated: dataInfo.allocation,
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
@@ -80,10 +80,6 @@ export async function loadDatasets(nftsApi, allocations) {
   let newDatasets = [];
   allDatasets.forEach((datasetInfo, key) => {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
-    datasetInfo.totalPools = allDatasets.length;
-    datasetInfo.totalTVL = allDatasets.reduce(
-      (total, dataset) => total + parseFloat(dataset.stake_amt)
-    );
     newDatasets.push(getRow(datasetInfo, key));
   });
 

@@ -10,7 +10,7 @@ const bpoolABI = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"a
 
 const airdrops = {
     3: {
-        airdropAddress: "0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16",
+        dfRewardsAddress: "0x8FD70a9E20DAcDff6ab5905E94742afE5AE40f16",
         tokensData:{
             "0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9": {
                 symbol: 'OCEAN',
@@ -24,7 +24,7 @@ const airdrops = {
         abi: airdropABI
     },
     4: {
-        airdropAddress: "0x4751774A124D02f1611dFe17f4d697dDdF932Fd5",
+        dfRewardsAddress: "0x4751774A124D02f1611dFe17f4d697dDdF932Fd5",
         tokensData:{
             "0x8967BCF84170c91B0d24D4302C2376283b0B3a07": {
                 symbol: 'OCEAN',
@@ -55,7 +55,7 @@ web3.eth.accounts.wallet.add(process.env.ETH_PRIVATE_KEY);
 // dfrewards
 const getAllClaimables = async () => {
     // const
-    const ropContract = new ethers.Contract(airdrops[3].airdropAddress, airdrops[3].abi, ropProvider);
+    const ropContract = new ethers.Contract(airdrops[3].dfRewardsAddress, airdrops[3].abi, ropProvider);
     const ropClaimables = await ropContract.claimables(dfRewardsAddress, airdrops[3].tokens);
     console.log("Ropsten Claimables 0 are: ", ropClaimables[0]);
     console.log("Ropsten Claimables 1 are: ", ropClaimables[1]);
@@ -64,7 +64,7 @@ const getAllClaimables = async () => {
     console.log("Ropsten BigNumber Ether Format 0 is: ", ethers.utils.formatEther(BigInt(ropClaimables[0]).toString(10)));
     console.log("Ropsten BigNumber Ether Format 1 is: ", ethers.utils.formatEther(BigInt(ropClaimables[1]).toString(10)));
 
-    const rinContract = new ethers.Contract(airdrops[4].airdropAddress, airdrops[4].abi, rinProvider);
+    const rinContract = new ethers.Contract(airdrops[4].dfRewardsAddress, airdrops[4].abi, rinProvider);
     const rinClaimables = await rinContract.claimables(dfRewardsAddress, airdrops[4].tokens);
     console.log("Rinkeby Claimables 0 are: ", rinClaimables[0]);
     console.log("Rinkeby Claimables 1 are: ", rinClaimables[1]);

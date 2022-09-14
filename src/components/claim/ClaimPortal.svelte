@@ -1,15 +1,26 @@
 <script>
   import NetworkRewards from "./NetworkRewards.svelte";
   import MainMessage from "../common/MainMessage.svelte";
-  import ClaimableRewards from "../common/ClaimableRewards.svelte";
-  import { userAddress, selectedNetworks } from "../../stores/web3.js";
-  import { airdrops, updateAllClaimables } from "../../stores/airdrops";
-
-  import { rewards } from "../../stores/airdrops";
+  import EstimatedRewards from "../common/EstimatedRewards.svelte";
+  import ClaimRewards from "./ClaimRewardsVeDF.svelte";
+  import {
+    userAddress,
+    connectedChainId,
+    selectedNetworks,
+  } from "../../stores/web3.js";
+  import {
+    airdrops,
+    rewards,
+    veClaimables,
+    dfClaimables,
+    updateAllClaimables,
+  } from "../../stores/airdrops";
+  import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
+  import Countdown from "../common/CountDown.svelte";
 
   let loading = true;
 
-  async function initAirdrops() {
+  async function initClaimables() {
     loading = true;
     await updateAllClaimables(
       JSON.parse(process.env.AIRDROP_CONFIG),
@@ -17,11 +28,15 @@
       $userAddress,
       $rewards
     );
+    const estimateReward = await getRewardsFeeEstimate($userAddress);
+    veClaimables.set(estimateReward);
+    dfClaimables.set($airdrops[$connectedChainId].claimableRewards);
+
     loading = false;
   }
 
   $: if ($rewards) {
-    initAirdrops();
+    initClaimables();
   }
 </script>
 
@@ -31,14 +46,11 @@
   }`}
 >
   {#if $userAddress && loading === false && $airdrops}
-    <div class="claimableRewardsContainer">
-      <ClaimableRewards />
-    </div>
-    <div class="datasets">
-      {#each $selectedNetworks as chainId}
-        <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
-      {/each}
-    </div>
+    <Countdown />
+    <!-- <div class="estimatedRewardsContainer">
+      <EstimatedRewards />
+    </div> -->
+    <ClaimRewards />
   {:else if $selectedNetworks.length > 0 && $userAddress}
     <span class="loading">Loading...</span>
   {/if}
@@ -67,13 +79,15 @@
     align-items: center;
     justify-content: flex-start;
     min-height: calc(100vh - 300px);
+    padding-top: var(--spacer);
   }
 
-  .datasets {
+  .rewards {
     width: 100%;
   }
 
-  .claimableRewardsContainer {
+  .estimatedRewardsContainer {
+    width: 100%;
     font-size: var(--font-size-large);
     margin: calc(var(--spacer)) 0;
   }
@@ -88,7 +102,7 @@
   }
 
   @media only screen and (min-width: 640px) {
-    .claimableRewardsContainer {
+    .estimatedRewardsContainer {
       margin: var(--spacer) 0;
     }
     .container {

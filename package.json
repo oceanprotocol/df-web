@@ -32,6 +32,7 @@
     "carbon-icons-svelte": "^11.0.1",
     "ethers": "^5.6.5",
     "sirv-cli": "^2.0.0",
+    "svelte-countdown": "^1.1.2",
     "svelte-apollo": "^0.5.0",
     "svelte-forms-lib": "^2.0.1",
     "svelte-loading-spinners": "^0.1.7",
