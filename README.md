@@ -42,14 +42,11 @@ INFURA_KEY = 01SAMPLE9234KEY
 VE_SUPPORTED_CHAINID = 8996
 
 // you can get the following addresses from barge @ address.json to develop locally
-// veOcean contract address
-VE_OCEAN_CONTRACT = 0x0000address
-
-// veAllocate contract address
-VE_ALLOCATE_CONTRACT = 0x0000address
-
-// veDelegation contract address
-VE_DELEGATION_CONTRACT = 0x0000address
+VE_OCEAN_CONTRACT = 0x...
+VE_ALLOCATE_CONTRACT = 0x...
+VE_DELEGATION_CONTRACT = 0x...
+VE_FEE_DISTRIBUTOR_CONTRACT = 0x...
+VE_FEE_ESTIMATE_CONTRACT = 0x...
 ```
 
 You may also need to update the following files in code to configure your environment.

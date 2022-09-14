@@ -68,7 +68,7 @@
     amount={parseFloat($veClaimables).toFixed(3)}
     loading={claiming === "VE_REWARDS"}
     onClick={onClaimVeRewards}
-    disabled={claiming !== undefined}
+    disabled={claiming !== undefined || $veClaimables <= 0}
   />
   <ClaimItem
     title="DF Claimable"
@@ -85,5 +85,6 @@
     justify-content: center;
     align-items: center;
     overflow-y: hidden;
+    padding-top: 40px;
   }
 </style>

@@ -47,9 +47,9 @@
 >
   {#if $userAddress && loading === false && $airdrops}
     <Countdown />
-    <div class="estimatedRewardsContainer">
+    <!-- <div class="estimatedRewardsContainer">
       <EstimatedRewards />
-    </div>
+    </div> -->
     <ClaimRewards />
   {:else if $selectedNetworks.length > 0 && $userAddress}
     <span class="loading">Loading...</span>
