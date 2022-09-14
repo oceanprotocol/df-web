@@ -46,7 +46,7 @@
   }
 
   $: if ($dataAllocations) {
-    loadDatasets(`${process.env.BACKEND_API}/volume`, $dataAllocations);
+    loadDatasets(`${process.env.BACKEND_API}/nftinfo`, $dataAllocations);
   }
 </script>
 

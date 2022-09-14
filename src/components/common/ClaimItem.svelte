@@ -5,13 +5,8 @@
   export let title;
   export let amount;
   export let loading = false;
+  export let disabled = false;
   export let onClick;
-
-  const onClaimClicked = async () => {
-    loading = true;
-    await onClick();
-    loading = false;
-  };
 </script>
 
 <div class="container">
@@ -19,9 +14,9 @@
   <div class="actionContainer">
     <Button
       text={loading ? "Loading..." : "Claim"}
-      onClick={() => onClaimClicked()}
+      onclick={() => onClick()}
       textOnly
-      disabled={loading}
+      disabled={loading || disabled}
     />
   </div>
 </div>
@@ -33,9 +28,11 @@
     justify-content: space-around;
     padding: calc(var(--spacer) / 4) calc(var(--spacer) / 1.5) !important;
     margin-bottom: calc(var(--spacer) / 4);
-    border: 1px solid var(--brand-grey-lighter);
+    background-color: var(--background-content);
+    box-shadow: var(--box-shadow);
     padding: 20px;
-    margin: 0 calc(var(--spacer) / 4);
+    margin: calc(var(--spacer) / 12) calc(var(--spacer) / 4) var(--spacer)
+      calc(var(--spacer) / 4);
   }
   .actionContainer {
     margin-left: calc(var(--spacer) / 4);
@@ -43,7 +40,8 @@
 
   @media (min-width: 640px) {
     .container {
-      margin: 0 calc(var(--spacer) / 2);
+      margin: calc(var(--spacer) / 12) calc(var(--spacer) / 2)
+        calc(var(--spacer) / 2) calc(var(--spacer) / 2);
     }
   }
 </style>

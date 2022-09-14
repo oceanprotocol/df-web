@@ -7,46 +7,58 @@
   } from "../../stores/web3";
   import {
     airdrops,
-    claimRewards,
+    veClaimables,
+    dfClaimables,
+    claimDFRewards,
+    claimVERewards,
     updateAllClaimables,
   } from "../../stores/airdrops";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
-  import { veClaimables, dfClaimables } from "../../stores/claimables";
+  import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
 
-  async function claimDfRewards() {
-    loading = true;
+  let claiming;
 
-    const result = await claimRewards(
-      $airdrops,
-      $connectedChainId,
-      claimables.tokensData,
-      $userAddress,
-      $networkSigner
-    );
-
-    if (result > 0) {
+  async function onClaimDfRewards() {
+    claiming = "DF_REWARDS";
+    try {
+      await claimDFRewards(
+        $airdrops,
+        $connectedChainId,
+        $userAddress,
+        $networkSigner
+      );
       Swal.fire(
         "Success!",
         `You've claimed your Data Farming rewards!`,
         "success"
-      ).then(async (result) => {
+      ).then(async () => {
         await updateAllClaimables(
           JSON.parse(process.env.AIRDROP_CONFIG),
           $selectedNetworks,
           $userAddress
         );
       });
-    } else if (result === false) {
-      Swal.fire("Error!", "Failed to claim Data Farming rewards!", "error");
+    } catch (error) {
+      Swal.fire("Error!", error.message, "error");
     }
-
-    loading = false;
+    claiming = undefined;
   }
 
   // Todo
-  async function claimVeRewards() {
-    loading = true;
+  async function onClaimVeRewards() {
+    claiming = "VE_REWARDS";
+    try {
+      await claimVERewards($userAddress, $networkSigner);
+      Swal.fire("Success!", `You've claimed your VE rewards!`, "success").then(
+        async () => {
+          veClaimables.set(await getRewardsFeeEstimate($userAddress));
+        }
+      );
+    } catch (error) {
+      Swal.fire("Error!", error.message, "error");
+    }
+    claiming = undefined;
   }
 </script>
 
@@ -54,19 +66,22 @@
   <ClaimItem
     title="VE Claimable"
     amount={$veClaimables}
-    onClick={claimVeRewards}
+    loading={claiming === "VE_REWARDS"}
+    onClick={onClaimVeRewards}
+    disabled={claiming !== undefined}
   />
   <ClaimItem
     title="DF Claimable"
     amount={$dfClaimables}
-    onClick={claimDfRewards}
+    loading={claiming === "DF_REWARDS"}
+    onClick={onClaimDfRewards}
+    disabled={claiming !== undefined}
   />
 </div>
 
 <style>
   .container {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     overflow-y: hidden;

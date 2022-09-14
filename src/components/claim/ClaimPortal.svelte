@@ -3,17 +3,20 @@
   import MainMessage from "../common/MainMessage.svelte";
   import EstimatedRewards from "../common/EstimatedRewards.svelte";
   import ClaimRewards from "./ClaimRewardsVeDF.svelte";
-  import { 
-    userAddress, 
-    connectedChainId, 
-    selectedNetworks 
+  import {
+    userAddress,
+    connectedChainId,
+    selectedNetworks,
   } from "../../stores/web3.js";
-  import { airdrops, updateAllClaimables } from "../../stores/airdrops";
+  import {
+    airdrops,
+    rewards,
+    veClaimables,
+    dfClaimables,
+    updateAllClaimables,
+  } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import Countdown from "../common/CountDown.svelte";
-
-  import { rewards } from "../../stores/airdrops";
-  import { veClaimables, dfClaimables } from "../../stores/claimables";
 
   let loading = true;
 
@@ -25,12 +28,10 @@
       $userAddress,
       $rewards
     );
-    const estimateReward = await getRewardsFeeEstimate(
-      $userAddress
-    );
+    const estimateReward = await getRewardsFeeEstimate($userAddress);
     veClaimables.set(estimateReward);
-    dfClaimables.set($airdrops[$connectedChainId].claimableRewards)
-    
+    dfClaimables.set($airdrops[$connectedChainId].claimableRewards);
+
     console.log("$airdrops:", $airdrops);
     console.log("$connectedChainId:", $connectedChainId);
 
