@@ -7,7 +7,6 @@
     ToolbarSearch,
   } from "carbon-components-svelte";
   import "carbon-components-svelte/css/white.css";
-  import AllocateModal from "../data/AllocateModal.svelte";
   import Button from "./Button.svelte";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
@@ -21,9 +20,12 @@
   import ItemWithLabel from "./ItemWithLabel.svelte";
   import Link from "./Link.svelte";
   import { userBalances } from "../../stores/tokens";
-  import { allocateVeOceanToMultipleNFTs } from "../../utils/dataAllocations";
+  import {
+    allocateVeOceanToMultipleNFTs,
+    getTotalAllocatedVeOcean,
+  } from "../../utils/dataAllocations";
   import Swal from "sweetalert2";
-  import { networkSigner } from "../../stores/web3";
+  import { networkSigner, userAddress } from "../../stores/web3";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -35,6 +37,7 @@
   let datasetsWithAllocations = undefined;
   let disabled = $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+  let loading = false;
 
   let columns = {};
   let pagination = { pageSize: 13, page: 1 };
@@ -57,11 +60,8 @@
       colData.forEach((col) => {
         columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
       });
-
       localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
-
       getColumnsFromLocalStorage();
-
       notHidableColumns.forEach((column) => {
         delete columns[column];
       });
@@ -109,14 +109,16 @@
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailable += step;
     rowData[rowData.findIndex((element) => element.id === id)].allocate = value;
+    if (pagination.page > 1) pagination.page = 1;
   };
 
   const updateAllocations = async () => {
+    loading = true;
     const amounts = [];
     const nftAddresses = [];
     const chainIds = [];
     rowData.forEach((data) => {
-      if (data.allocate > 0) {
+      if (data.allocate !== data.allocated) {
         amounts.push(data.allocate);
         nftAddresses.push(data.nftaddress);
         chainIds.push(data.chainId);
@@ -131,12 +133,24 @@
       );
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
+      loading = false;
       return;
     }
     Swal.fire("Success!", "Allocation successfully updated.", "success").then(
-      async () => {}
+      async () => {
+        let newAllocation = await getTotalAllocatedVeOcean(
+          $userAddress,
+          $networkSigner
+        );
+        totalUserAllocation.update(() => newAllocation);
+        loading = false;
+      }
     );
   };
+
+  $: if ($totalUserAllocation) {
+    totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+  }
 </script>
 
 {#if colData && rowData}
@@ -148,10 +162,10 @@
           value={totalAvailable >= 0 ? `${totalAvailable}%` : "loading..."}
         />
         <Button
-          text="Update allocations"
+          text={loading ? "Updating..." : "Update allocations"}
           className="updateAllocationsBtton"
           onclick={() => updateAllocations()}
-          {disabled}
+          disabled={disabled || loading}
         />
       </div>
       <div class="tableActionsContainer">

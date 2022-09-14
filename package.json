@@ -27,10 +27,12 @@
   },
   "dependencies": {
     "@rollup/plugin-replace": "^4.0.0",
+    "apollo-boost": "^0.4.9",
     "carbon-components-svelte": "^0.63.8",
     "carbon-icons-svelte": "^11.0.1",
     "ethers": "^5.6.5",
     "sirv-cli": "^2.0.0",
+    "svelte-apollo": "^0.5.0",
     "svelte-forms-lib": "^2.0.1",
     "svelte-loading-spinners": "^0.1.7",
     "svelte-markdown": "^0.2.2",
