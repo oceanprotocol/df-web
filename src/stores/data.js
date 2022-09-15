@@ -16,12 +16,12 @@ export const columnsData = [
     display: (volume) => '$' + volume,
   },
   { key: "nftaddress", value: "NFTAddress" },
-  { key: "allocated", value: "Allocated", display: (allocated) => allocated + '%' },
-  { key: "allocate", value:"Allocate" },
+  { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN' },
+  { key: "myallocation", value:"MyAllocation" },
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Network", "Volume", "Allocated" ,"Allocate", "Action"]
+export const defaultColumns = ["Network", "Volume", "TotalAllocated" ,"MyAllocation", "Action"]
 
 async function getDatasets(api) {
   let res;
@@ -48,14 +48,6 @@ async function getDatasets(api) {
   return data;
 }
 
-const getTokenSymbolByAddress = (address) => {
-  if(address==='0x282d8efce846a88b159800bd4130ad77443fa1a1'){
-    return 'mOCEAN'
-  }else{
-    return 'OCEAN'
-  }
-}
-
 function getRow(dataInfo, key) {
   return {
     id: key,
@@ -64,9 +56,10 @@ function getRow(dataInfo, key) {
     basetokenaddress: dataInfo.basetoken_addr.toLocaleLowerCase(),
     nftaddress: dataInfo.nft_addr,
     chainId: dataInfo.chainID,
-    allocate: dataInfo.allocation,
-    volume: parseFloat(dataInfo.volume).toFixed(3),
+    totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
+    myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
+    volume: parseFloat(dataInfo.volume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }

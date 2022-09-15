@@ -89,10 +89,10 @@
   }
 
   function compare(a, b) {
-    if (a.allocate > b.allocate) {
+    if (a.myallocation > b.myallocation) {
       return -1;
     }
-    if (a.allocate < b.allocate) {
+    if (a.myallocation < b.myallocation) {
       return 1;
     }
     return 1;
@@ -108,7 +108,8 @@
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailable += step;
-    rowData[rowData.findIndex((element) => element.id === id)].allocate = value;
+    rowData[rowData.findIndex((element) => element.id === id)].myallocation =
+      value;
     if (pagination.page > 1) pagination.page = 1;
   };
 
@@ -118,8 +119,8 @@
     const nftAddresses = [];
     const chainIds = [];
     rowData.forEach((data) => {
-      if (data.allocate !== data.allocated) {
-        amounts.push(data.allocate);
+      if (data.myallocation !== data.allocated) {
+        amounts.push(data.myallocation);
         nftAddresses.push(data.nftaddress);
         chainIds.push(data.chainId);
       }
@@ -198,7 +199,7 @@
             <Link
               text="view"
               url={cell.value}
-            />{:else if cell.key === "allocate"}
+            />{:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
               available={totalAvailable}
