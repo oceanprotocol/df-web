@@ -41,9 +41,8 @@
         {loading}
       />
       <ItemWithLabel
-        title={`Voting Power`}
-        value={$veOceanWithDelegations}
-        float
+        title={`Allocation Power`}
+        value={`${parseFloat($veOceanWithDelegations).toFixed(3)} veOCEAN`}
         {loading}
       />
     </div>

@@ -1,4 +1,6 @@
 <script>
+  import { oceanUnlockDate } from "../../stores/veOcean";
+
   import { getThursdayDate } from "../../utils/functions";
 
   export let value = undefined;
@@ -33,11 +35,16 @@
   ];
 
   const handleOnPeriodClick = (days) => {
-    let thursdayDate = getThursdayDate();
-    let date = new Date(thursdayDate).setDate(
-      new Date(thursdayDate).getDate() + days
+    let date = new Date().setDate(
+      $oceanUnlockDate || new Date($oceanUnlockDate).getDay() === 4
+        ? new Date($oceanUnlockDate).getDate() + days
+        : new Date(getThursdayDate($oceanUnlockDate)).getDate() + days
     );
-    value = new Date(date).toLocaleDateString("en-CA");
+    console.log(new Date(date));
+    value =
+      days % 7 === 0
+        ? new Date(date).toLocaleDateString("en-CA")
+        : new Date(getThursdayDate(new Date(date))).toLocaleDateString("en-CA");
   };
 </script>
 

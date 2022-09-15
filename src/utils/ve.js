@@ -101,7 +101,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
         const tx = await contract.increase_unlock_time(unlockDate,{
           gasLimit: gasLimit
       })
-        tx.wait()
+        await tx.wait()
     } catch (error) {
       throw error;
     }

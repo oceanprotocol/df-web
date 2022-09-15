@@ -33,7 +33,7 @@
 
   let calculatedVotingPower = 0;
   let calculatedMultiplier = 0;
-  let maxDate = new Date();
+  let maxDate = new Date(getThursdayDate());
   let loading = true;
 
   let schema = yup.object().shape({
@@ -94,7 +94,19 @@
     );
   };
 
-  const MAXTIME = 4 * 365 * 86400 * 1000;
+  const getMaxTime = () => {
+    let thursdayDate = getThursdayDate();
+    let date = new Date().setDate(
+      $oceanUnlockDate || new Date($oceanUnlockDate).getDay === 4
+        ? new Date($oceanUnlockDate).getDate() + 4 * 365
+        : new Date(thursdayDate).getDate() + 4 * 365
+    );
+    return new Date(date).getDay === 4
+      ? new Date(date) - new Date(thursdayDate)
+      : new Date(getThursdayDate(new Date(date))) - new Date(thursdayDate);
+  };
+
+  const MAXTIME = getMaxTime();
 
   const updateMultiplier = () => {
     if ($form.unlockDate) {
