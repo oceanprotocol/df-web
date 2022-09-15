@@ -133,7 +133,8 @@
           min={$lockedOceanAmount ? 0 : 1}
           max={parseFloat(getOceanBalance($connectedChainId)).toFixed(3)}
           error={$errors.amount}
-          disabled={getOceanBalance($connectedChainId) <= 0}
+          disabled={getOceanBalance($connectedChainId) <= 0 ||
+            new Date() > $oceanUnlockDate}
           label="OCEAN Amount"
           direction="column"
           bind:value={$form.amount}
