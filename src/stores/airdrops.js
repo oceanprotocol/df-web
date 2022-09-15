@@ -2,7 +2,8 @@ import { writable } from "svelte/store";
 import {getRpcUrlByChainId} from "../utils/web3";
 import {ethers} from "ethers";
 import * as airdropABI from "../utils/abis/airdropABI";
-import * as feeDistributorABI from "../utils/abis/airdropABI";
+import * as feeDistributorABI from "../utils/abis/feeDistributorABI";
+import * as dfRewardsABI from "../utils/abis/DFRewardsABI";
 
 export let contracts = writable({});
 export let airdrops = writable({});
@@ -85,6 +86,21 @@ export const updateAllClaimables = async (airdropData, selectedNetworks, userAdd
     }));
 
     airdrops.set(airdropData);
+}
+
+export const getDFRewards = async(userAddress, tokenAddress) => {
+    try {
+        const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
+        const provider = new ethers.providers.InfuraProvider(rpcURL);
+        const contract = new ethers.Contract(process.env.DF_REWARDS_CONTRACT, dfRewardsABI, provider);
+        //   const estimateClaim = await contract.claimable(userAddress, tokenAddress);
+        //   const estimateClaimFormatted = ethers.utils.formatEther(BigInt(estimateClaim).toString(10));
+        //   return estimateClaimFormatted
+        return 0
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
 }
 
 export async function claimDFRewards(airdropData, chainId, userAddress, signer) {
