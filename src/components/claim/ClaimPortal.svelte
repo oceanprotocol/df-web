@@ -29,13 +29,13 @@
       $userAddress,
       $rewards
     );
-    const veEstimateReward = await getRewardsFeeEstimate($userAddress);
-    console.log("veEstimateReward:", veEstimateReward);
-    veClaimables.set(veEstimateReward);
-    
-    const dfEstimateReward = await getDFRewards($userAddress, process.env.OCEAN_ADDRESS);
-    console.log("dfEstimateReward:", dfEstimateReward);
-    dfClaimables.set(dfEstimateReward);
+    const veRewards = await getRewardsFeeEstimate($userAddress);
+    console.log("veRewards:", veRewards)
+    veClaimables.set(veRewards);
+
+    const dfRewards = await getDFRewards($userAddress, process.env.OCEAN_ADDRESS);
+    console.log("dfRewards:", dfRewards)
+    dfClaimables.set(dfRewards);
 
     loading = false;
   }
