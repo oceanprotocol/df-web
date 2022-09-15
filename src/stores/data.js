@@ -16,12 +16,13 @@ export const columnsData = [
     display: (volume) => '$' + volume,
   },
   { key: "nftaddress", value: "NFTAddress" },
+  { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN' },
   { key: "allocated", value: "Allocated", display: (allocated) => allocated + '%' },
   { key: "allocate", value:"Allocate" },
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Network", "Volume", "Allocated" ,"Allocate", "Action"]
+export const defaultColumns = ["Network", "Volume", "TotalAllocated" ,"Allocated" ,"Allocate", "Action"]
 
 async function getDatasets(api) {
   let res;
@@ -64,6 +65,7 @@ function getRow(dataInfo, key) {
     basetokenaddress: dataInfo.basetoken_addr.toLocaleLowerCase(),
     nftaddress: dataInfo.nft_addr,
     chainId: dataInfo.chainID,
+    totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
     allocate: dataInfo.allocation,
     volume: parseFloat(dataInfo.volume).toFixed(3),
     allocated: dataInfo.allocation,
