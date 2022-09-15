@@ -58,6 +58,7 @@ function getRow(dataInfo, key) {
     chainId: dataInfo.chainID,
     totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
     myallocation: dataInfo.allocation,
+    allocated: dataInfo.allocation,
     volume: parseFloat(dataInfo.volume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
