@@ -198,7 +198,7 @@
             <Link
               text="view"
               url={cell.value}
-            />{:else if cell.key === "allocate"}
+            />{:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
               available={totalAvailable}
