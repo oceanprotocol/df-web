@@ -1,43 +1,33 @@
 <script>
   import {
-    connectedChainId,
     userAddress,
-    networkSigner,
-    selectedNetworks,
+    networkSigner
   } from "../../stores/web3";
   import {
-    airdrops,
     veClaimables,
     dfClaimables,
-    claimDFRewards,
-    claimVERewards,
-    updateAllClaimables,
+    claimDFReward,
+    getDFRewards
   } from "../../stores/airdrops";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
-  import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
+  import { 
+    getRewardsFeeEstimate, 
+    claimVERewards,
+  } from "../../utils/feeEstimate";
 
   let claiming;
 
   async function onClaimDfRewards() {
     claiming = "DF_REWARDS";
     try {
-      await claimDFRewards(
-        $airdrops,
-        $connectedChainId,
-        $userAddress,
-        $networkSigner
-      );
+      await claimDFReward($userAddress,process.env.OCEAN_ADDRESS);
       Swal.fire(
         "Success!",
         `You've claimed your Data Farming rewards!`,
         "success"
       ).then(async () => {
-        await updateAllClaimables(
-          JSON.parse(process.env.AIRDROP_CONFIG),
-          $selectedNetworks,
-          $userAddress
-        );
+        dfClaimables.set(await getDFRewards($userAddress, process.env.OCEAN_ADDRESS));
       });
     } catch (error) {
       Swal.fire("Error!", error.message, "error");
@@ -50,11 +40,13 @@
     claiming = "VE_REWARDS";
     try {
       await claimVERewards($userAddress, $networkSigner);
-      Swal.fire("Success!", `You've claimed your VE rewards!`, "success").then(
-        async () => {
-          veClaimables.set(await getRewardsFeeEstimate($userAddress));
-        }
-      );
+      Swal.fire(
+        "Success!", 
+        `You've claimed your VE rewards!`, 
+        "success"
+      ).then(async () => {
+        veClaimables.set(await getRewardsFeeEstimate($userAddress));
+      });
     } catch (error) {
       Swal.fire("Error!", error.message, "error");
     }

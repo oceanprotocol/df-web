@@ -13,24 +13,6 @@ export default [
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "internalType": "address[]",
-        "name": "tokenAddresses",
-        "type": "address[]"
-      }
-    ],
-    "name": "claimMultiple",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address[]",
         "name": "tokenAddresses",
         "type": "address[]"
@@ -60,6 +42,24 @@ export default [
         "type": "address[]"
       }
     ],
+    "name": "claimMultiple",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_to",
+        "type": "address"
+      },
+      {
+        "internalType": "address[]",
+        "name": "tokenAddresses",
+        "type": "address[]"
+      }
+    ],
     "name": "claimables",
     "outputs": [
       {
@@ -69,36 +69,19 @@ export default [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address[]",
-        "name": "poolAddress",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "amount",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "claimAndStake",
+    "inputs": [],
+    "name": "id",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint8",
         "name": "",
-        "type": "bool"
+        "type": "uint8"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   }
 ]

@@ -16,3 +16,20 @@ export const getRewardsFeeEstimate = async(userAddress) => {
     throw error;
   }
 }
+
+export async function claimVERewards(userAddress, signer) {
+  try {
+    // ABI function is overriden, specify which fn to use to avoid crashing
+    const contract = new ethers.Contract(
+          process.env.VE_FEE_DISTRIBUTOR_CONTRACT,
+          ["function claim(address _addr) returns (uint 256)"],
+          get(networkSigner)
+      );
+      const resp = await contract.claim(userAddress);
+      await resp.wait();
+      console.log("Success claiming rewards, txReceipt here", resp);
+  }catch (error) {
+      console.log("Error claiming rewards :", error);
+      throw error;
+  }
+}

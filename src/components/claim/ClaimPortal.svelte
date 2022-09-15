@@ -13,6 +13,7 @@
     rewards,
     veClaimables,
     dfClaimables,
+    getDFRewards,
     updateAllClaimables,
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
@@ -28,9 +29,13 @@
       $userAddress,
       $rewards
     );
-    const estimateReward = await getRewardsFeeEstimate($userAddress);
-    veClaimables.set(estimateReward);
-    dfClaimables.set($airdrops[$connectedChainId].claimableRewards);
+    const veRewards = await getRewardsFeeEstimate($userAddress);
+    console.log("veRewards:", veRewards)
+    veClaimables.set(veRewards);
+
+    const dfRewards = await getDFRewards($userAddress, process.env.OCEAN_ADDRESS);
+    console.log("dfRewards:", dfRewards)
+    dfClaimables.set(dfRewards);
 
     loading = false;
   }

@@ -2,7 +2,9 @@ import { writable } from "svelte/store";
 import {getRpcUrlByChainId} from "../utils/web3";
 import {ethers} from "ethers";
 import * as airdropABI from "../utils/abis/airdropABI";
-import * as feeDistributorABI from "../utils/abis/airdropABI";
+import * as dfRewardsABI from "../utils/abis/DFRewardsABI";
+import {get} from "svelte/store";
+import { networkSigner } from "../stores/web3";
 
 export let contracts = writable({});
 export let airdrops = writable({});
@@ -87,6 +89,34 @@ export const updateAllClaimables = async (airdropData, selectedNetworks, userAdd
     airdrops.set(airdropData);
 }
 
+export const getDFRewards = async(userAddress, tokenAddress) => {
+    try {
+        const contract = new ethers.Contract(process.env.DF_REWARDS_CONTRACT, dfRewardsABI.default, get(networkSigner));
+        const estimateClaim = await contract.claimable(userAddress, tokenAddress);
+        const estimateClaimFormatted = ethers.utils.formatEther(BigInt(estimateClaim).toString(10));
+        return estimateClaimFormatted
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
+export async function claimDFReward(userAddress, tokenAddress) {
+    try {
+        const contract = new ethers.Contract(process.env.DF_REWARDS_CONTRACT, dfRewardsABI.default, get(networkSigner));
+        console.log("dfRewards", contract)
+        console.log("userAddress", userAddress)
+        console.log("tokenAddress", tokenAddress)
+        const resp = await contract.claimFor(userAddress, tokenAddress);
+        await resp.wait();
+        console.log("Success claiming rewards, txReceipt here", resp);
+        return resp;
+    } catch (error) {
+        console.log("Error claiming rewards :", error);
+        throw error;
+    }
+}
+
 export async function claimDFRewards(airdropData, chainId, userAddress, signer) {
     try {
         const tokenAddresses = Object.keys(airdropData[chainId].tokensData);
@@ -103,28 +133,11 @@ export async function claimDFRewards(airdropData, chainId, userAddress, signer) 
                 airdropABI.default,
                 signer
             );
-            const resp = await contract.claimMultiple(userAddress, positiveClaimables);
+            const resp = await contract.claimMultiple(userAddress, positiveClaimables,{"gasLimit": gasLimit});
             await resp.wait();
             console.log("Success claiming rewards, txReceipt here");
         }
     } catch (error) {
-        console.log("Error claiming rewards :", error);
-        throw error;
-    }
-}
-
-export async function claimVERewards(userAddress, signer) {
-    try {
-        const contract = new ethers.Contract(
-            process.env.FEE_DISTRIBUTOR_CONTRACT,
-            feeDistributorABI.default,
-            signer
-        );
-        console.log(contract)
-        const resp = await contract.claim([userAddress],{gasLimit: gasLimit});
-        await resp.wait();
-        console.log("Success claiming rewards, txReceipt here");
-    }catch (error) {
         console.log("Error claiming rewards :", error);
         throw error;
     }
