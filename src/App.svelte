@@ -9,6 +9,7 @@
     userAddress,
     connectWalletFromLocalStorage,
     selectedNetworks,
+    web3Provider,
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
@@ -58,7 +59,7 @@
     isAppLoading.update(() => false);
   }
 
-  $: if ($userAddress) {
+  $: if ($userAddress && $web3Provider) {
     initRewards();
   }
 

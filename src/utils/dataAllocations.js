@@ -5,14 +5,16 @@ import * as VeAllocateABI from "./abis/veAllocateABI";
 const veAllocateABI = VeAllocateABI.default
 
 export const GET_ALLOCATIONS = gql`
-query allocations($userAddress: String!) {
-  veAllocations(
-    where: { allocated_gt: 0 }
-    and: { allocationUser: $userAddress }
+query userAllocations($userAddress: String!) {
+  veAllocateUser(
+    id: $userAddress
   ) {
-    allocated
-    nftAddress
-    chainId
+    id
+    veAllocation(where: {allocated_gt: 0}) {
+      allocated
+    	nftAddress
+    	chainId
+    }
   }
 }
 `;
@@ -67,23 +69,25 @@ export const allocateVeOceanToMultipleNFTs = async(amounts, dataAddresses, chain
 export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
   const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
   try {
-    const provider = new ethers.providers.InfuraProvider(rpcURL);
+    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
     const allocatedAmount = await contract.getveAllocation(userAddress, dataAddress, chainId)
     return allocatedAmount / 100
 } catch (error) {
-  console.log(error?.error ? error?.error?.error.message : error)
-  return 0;
+  console.log(error)
+  throw error;
 }
 }
 
-export const getTotalAllocatedVeOcean = async(userAddress, signer) => {
+export const getTotalAllocatedVeOcean = async(userAddress) => {
+  const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
   try {
-    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, signer);
+    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
     const allocatedAmount = await contract.getTotalAllocation(userAddress)
     return allocatedAmount / 100
 } catch (error) {
-  console.log(error?.error ? error?.error?.error.message : error)
-  return 0;
+  console.log(error)
+  throw error;
 }
 }

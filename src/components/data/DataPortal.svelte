@@ -24,7 +24,11 @@
   };
 
   const loadValues = async () => {
-    dataAllocations.update(() => $allocations.data.veAllocations);
+    dataAllocations.update(() =>
+      $allocations.data.veAllocateUser
+        ? $allocations.data.veAllocateUser.veAllocation
+        : []
+    );
   };
 
   $: if ($allocations?.data) {
@@ -35,10 +39,10 @@
     loadTotalAllocation();
   }
 
-  $: if ($totalUserAllocation) {
+  $: if ($totalUserAllocation !== undefined) {
     if (!allocations) {
       allocations = query(GET_ALLOCATIONS, {
-        variables: { userAddress: $userAddress },
+        variables: { userAddress: $userAddress.toLowerCase() },
       });
     } else {
       allocations.refetch();
