@@ -5,6 +5,7 @@
     networkSigner,
     switchWalletNetwork,
     getNetworkDataById,
+    web3Provider,
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Card from "../common/Card.svelte";
@@ -88,7 +89,7 @@
     Swal.fire("Success!", "Oceans successfully locked.", "success").then(
       async () => {
         loading = false;
-        await addUserVeOceanBalanceToBalances($userAddress);
+        await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
         await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
       }
     );
