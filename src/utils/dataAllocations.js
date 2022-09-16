@@ -2,6 +2,8 @@ import {ethers} from "ethers";
 import {getRpcUrlByChainId} from "./web3";
 import { gql } from "apollo-boost";
 import * as VeAllocateABI from "./abis/veAllocateABI";
+import { web3Provider } from "../stores/web3";
+import { get } from "svelte/store"
 const veAllocateABI = VeAllocateABI.default
 
 export const GET_ALLOCATIONS = gql`
@@ -67,10 +69,8 @@ export const allocateVeOceanToMultipleNFTs = async(amounts, dataAddresses, chain
 }
 
 export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
-  const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
   try {
-    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
+    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, get(web3Provider));
     const allocatedAmount = await contract.getveAllocation(userAddress, dataAddress, chainId)
     return allocatedAmount / 100
 } catch (error) {
@@ -80,10 +80,8 @@ export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
 }
 
 export const getTotalAllocatedVeOcean = async(userAddress) => {
-  const rpcURL = await getRpcUrlByChainId(process.env.VE_SUPPORTED_CHAINID);
   try {
-    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, provider);
+    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, get(web3Provider));
     const allocatedAmount = await contract.getTotalAllocation(userAddress)
     return allocatedAmount / 100
 } catch (error) {

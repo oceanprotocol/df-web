@@ -14,13 +14,11 @@
   let allocations;
 
   const loadTotalAllocation = async () => {
-    if (!$totalUserAllocation) {
-      let newAllocation = await getTotalAllocatedVeOcean(
-        $userAddress,
-        $networkSigner
-      );
-      totalUserAllocation.update(() => newAllocation);
-    }
+    let newAllocation = await getTotalAllocatedVeOcean(
+      $userAddress,
+      $networkSigner
+    );
+    totalUserAllocation.update(() => newAllocation);
   };
 
   const loadValues = async () => {
@@ -36,6 +34,9 @@
   }
 
   $: if ($userAddress) {
+    allocations = query(GET_ALLOCATIONS, {
+      variables: { userAddress: $userAddress.toLowerCase() },
+    });
     loadTotalAllocation();
   }
 
