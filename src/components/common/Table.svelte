@@ -149,7 +149,7 @@
     );
   };
 
-  $: if ($totalUserAllocation) {
+  $: if ($totalUserAllocation !== undefined) {
     totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   }
 </script>

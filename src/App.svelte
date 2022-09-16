@@ -9,6 +9,7 @@
     userAddress,
     connectWalletFromLocalStorage,
     selectedNetworks,
+    web3Provider,
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
@@ -51,14 +52,14 @@
     );
 
     veOceanWithDelegations.update(() => newVeOceansWithDelegations);
-    await addUserVeOceanBalanceToBalances($userAddress);
+    await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
     await addUserOceanBalanceToBalances(
       parseInt(process.env.VE_SUPPORTED_CHAINID)
     );
     isAppLoading.update(() => false);
   }
 
-  $: if ($userAddress) {
+  $: if ($userAddress && $web3Provider) {
     initRewards();
   }
 

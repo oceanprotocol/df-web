@@ -30,8 +30,8 @@ export const addUserOceanBalanceToBalances = async (chainId) => {
     await addUserBalanceToBalances(chainId, oceanContractAddress.toLowerCase())
 }
 
-export const addUserVeOceanBalanceToBalances = async (userAddress) => {
-  const veOceanBalance = await getVeOceanBalance(userAddress, get(web3Provider))
+export const addUserVeOceanBalanceToBalances = async (userAddress, provider) => {
+  const veOceanBalance = await getVeOceanBalance(userAddress, provider)
   updateUserBalances(process.env.VE_OCEAN_CONTRACT, veOceanBalance)
 }
 
