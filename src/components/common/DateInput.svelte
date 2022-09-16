@@ -35,12 +35,12 @@
   ];
 
   const handleOnPeriodClick = (days) => {
-    let date = new Date().setDate(
+    let date = new Date($oceanUnlockDate).setDate(
       $oceanUnlockDate || new Date($oceanUnlockDate).getDay() === 4
         ? new Date($oceanUnlockDate).getDate() + days
         : new Date(getThursdayDate($oceanUnlockDate)).getDate() + days
     );
-    console.log(new Date(date));
+    if (new Date(date) > new Date(max)) return;
     value =
       days % 7 === 0
         ? new Date(date).toLocaleDateString("en-CA")
