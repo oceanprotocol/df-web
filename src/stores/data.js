@@ -32,14 +32,19 @@ async function getDatasets(api) {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        "query":{
-        },
+      body: JSON.stringify(
+        {
+          "join": [
+              {
+                "table":"nft_vols",
+                "on":{"nft_info.nft_addr":"nft_vols.nft_addr"}
+              }
+            ],
         "sort":{
-          "volume":-1
+          vol_amt: -1
         }
-      })
-    });
+        })
+      });
   } catch (error) {
     console.log(error);
     return [];
@@ -59,7 +64,7 @@ function getRow(dataInfo, key) {
     totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
-    volume: parseFloat(dataInfo.volume).toFixed(3),
+    volume: parseFloat(dataInfo.vol_amt).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }
