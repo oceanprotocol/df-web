@@ -18,27 +18,30 @@
     },
     {
       label: "~1 month",
-      days: 30,
+      days: 30 - 7,
     },
     {
       label: "~6 months",
-      days: 180,
+      days: 180 - 7,
     },
     {
       label: "~2 years",
-      days: 730,
+      days: 730 - 7,
     },
     {
       label: "~4 years",
-      days: 1460,
+      days: 1460 - 7,
     },
   ];
 
   const handleOnPeriodClick = (days) => {
-    let date = new Date($oceanUnlockDate).setDate(
-      $oceanUnlockDate || new Date($oceanUnlockDate).getDay() === 4
-        ? new Date($oceanUnlockDate).getDate() + days
-        : new Date(getThursdayDate($oceanUnlockDate)).getDate() + days
+    const currentDate = $oceanUnlockDate
+      ? $oceanUnlockDate
+      : new Date(getThursdayDate());
+    let date = new Date(currentDate).setDate(
+      currentDate || new Date(currentDate).getDay() === 4
+        ? new Date(currentDate).getDate() + days
+        : new Date(getThursdayDate(currentDate)).getDate() + days
     );
     if (new Date(date) > new Date(max)) return;
     value =

@@ -7,6 +7,7 @@
     userAddress,
     connectedChainId,
     selectedNetworks,
+    networkSigner,
   } from "../../stores/web3.js";
   import {
     airdrops,
@@ -18,6 +19,7 @@
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import Countdown from "../common/CountDown.svelte";
+  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
 
   let loading = true;
 
@@ -30,11 +32,14 @@
       $rewards
     );
     const veRewards = await getRewardsFeeEstimate($userAddress);
-    console.log("veRewards:", veRewards)
+    console.log("veRewards:", veRewards);
     veClaimables.set(veRewards);
 
-    const dfRewards = await getDFRewards($userAddress, process.env.OCEAN_ADDRESS);
-    console.log("dfRewards:", dfRewards)
+    const dfRewards = await getDFRewards(
+      $userAddress,
+      getOceanTokenAddressByChainId($connectedChainId)
+    );
+    console.log("dfRewards:", dfRewards);
     dfClaimables.set(dfRewards);
 
     loading = false;

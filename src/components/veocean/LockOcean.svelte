@@ -96,15 +96,17 @@
   };
 
   const getMaxTime = () => {
-    let thursdayDate = getThursdayDate();
-    let date = new Date().setDate(
-      $oceanUnlockDate || new Date($oceanUnlockDate).getDay === 4
-        ? new Date($oceanUnlockDate).getDate() + 4 * 365
-        : new Date(thursdayDate).getDate() + 4 * 365
+    let thursdayDate = new Date(getThursdayDate());
+    let date = new Date(
+      getThursdayDate(
+        new Date(
+          new Date(thursdayDate).setDate(thursdayDate.getDate() + 4 * 365 - 7)
+        )
+      )
     );
-    return new Date(date).getDay === 4
-      ? new Date(date) - new Date(thursdayDate)
-      : new Date(getThursdayDate(new Date(date))) - new Date(thursdayDate);
+    return date.getDay() === 4
+      ? date - thursdayDate
+      : new Date(getThursdayDate(date)) - thursdayDate;
   };
 
   const MAXTIME = getMaxTime();
@@ -168,7 +170,9 @@
             : getThursdayDate()}
           disabled={getOceanBalance($connectedChainId) <= 0}
           max={new Date(
-            maxDate.setFullYear(maxDate.getFullYear() + 4)
+            getThursdayDate(
+              new Date(maxDate.setDate(maxDate.getDate() + 4 * 365 - 7))
+            )
           ).toLocaleDateString("en-CA")}
           bind:value={$form.unlockDate}
         />
