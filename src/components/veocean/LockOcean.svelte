@@ -36,6 +36,7 @@
   let calculatedMultiplier = 0;
   let maxDate = new Date(getThursdayDate());
   let loading = true;
+  let updateLockButtonText = "UPDATE LOCK";
 
   let schema = yup.object().shape({
     amount: yup
@@ -94,6 +95,24 @@
       }
     );
   };
+
+  const getUpdateLockButtonText = () => {
+    let unlockDate = new Date($form.unlockDate);
+    if (loading) return "LOADING...";
+    if ($form.amount > 0 && unlockDate > $oceanUnlockDate)
+      return "UPDATE LOCKED AMOUNT AND LOCK END DATE";
+    if ($form.amount > 0) {
+      return "UPDATE LOCKED AMOUNT";
+    } else if (unlockDate > $oceanUnlockDate) {
+      return "UPDATE LOCK END DATE";
+    } else {
+      return "UPDATE LOCK";
+    }
+  };
+
+  $: if ($form) {
+    updateLockButtonText = getUpdateLockButtonText();
+  }
 
   const getMaxTime = () => {
     let thursdayDate = new Date(getThursdayDate());
@@ -186,7 +205,7 @@
               : `${parseFloat(calculatedMultiplier).toFixed(1)}%`}
           />
           <ItemWithLabel
-            title={`Voting Power`}
+            title={`Allocation Power`}
             value={loading
               ? "loading"
               : `${parseFloat(calculatedVotingPower)} veOCEAN`}
@@ -217,10 +236,11 @@
           >
             {#if $lockedOceanAmount > 0}
               <Button
-                text={loading ? "Extending lock..." : "Extend OCEAN lock"}
+                text={updateLockButtonText}
                 disabled={loading ||
                   getOceanBalance($connectedChainId) <= 0 ||
-                  $form.amount < 0}
+                  ($form.amount <= 0 &&
+                    new Date($form.unlockDate) <= $oceanUnlockDate)}
                 type="submit"
               />
             {:else}<Button
