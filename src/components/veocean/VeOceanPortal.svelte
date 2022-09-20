@@ -6,8 +6,9 @@
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { userBalances } from "../../stores/tokens";
+  import MainMessage from "../common/MainMessage.svelte";
 
-  let loading = !$lockedOceanAmount;
+  let loading = false;
 
   const loadValues = async () => {
     loading = true;

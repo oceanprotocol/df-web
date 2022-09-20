@@ -13,7 +13,7 @@
   import WithdrawOcean from "./WithdrawOcean.svelte";
 
   let balance = 0;
-  let loading = true;
+  let loading = false;
 
   const setValues = async () => {
     if (!$totalUserAllocation) {

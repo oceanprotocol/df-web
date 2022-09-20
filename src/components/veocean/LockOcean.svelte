@@ -35,7 +35,7 @@
   let calculatedVotingPower = 0;
   let calculatedMultiplier = 0;
   let maxDate = new Date(getThursdayDate());
-  let loading = true;
+  let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
 
   let schema = yup.object().shape({
@@ -165,7 +165,9 @@
           type="number"
           name="amount"
           min={$lockedOceanAmount ? 0 : 1}
-          max={parseFloat(getOceanBalance($connectedChainId)).toFixed(3)}
+          max={$userAddress
+            ? parseFloat(getOceanBalance($connectedChainId)).toFixed(3)
+            : 0}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0 ||
             new Date() > $oceanUnlockDate}
@@ -216,12 +218,14 @@
       <div class="item">
         {#if $connectedChainId !== parseInt(process.env.VE_SUPPORTED_CHAINID)}
           <Button
-            text={`Switch Network to ${
-              getNetworkDataById(
-                networksData,
-                parseInt(process.env.VE_SUPPORTED_CHAINID)
-              )?.name
-            }`}
+            text={!$userAddress
+              ? "Connect Wallet"
+              : `Switch Network to ${
+                  getNetworkDataById(
+                    networksData,
+                    parseInt(process.env.VE_SUPPORTED_CHAINID)
+                  )?.name
+                }`}
             onclick={() =>
               switchWalletNetwork(process.env.VE_SUPPORTED_CHAINID)}
             disabled={!$userAddress}
