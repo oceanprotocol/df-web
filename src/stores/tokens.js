@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import {networkSigner, userAddress, web3Provider}from "./web3"
+import {networkSigner, userAddress}from "./web3"
 import {balanceOf,getOceanTokenAddressByChainId} from "../utils/tokens"
 import {getVeOceanBalance} from "../utils/ve"
 import {ethers} from "ethers"
