@@ -203,15 +203,11 @@
         <div class="output-container">
           <ItemWithLabel
             title={`Lock Multiplier`}
-            value={loading
-              ? "loading"
-              : `${parseFloat(calculatedMultiplier).toFixed(1)}%`}
+            value={parseFloat(calculatedMultiplier).toFixed(1)}
           />
           <ItemWithLabel
             title={`Allocation Power`}
-            value={loading
-              ? "loading"
-              : `${parseFloat(calculatedVotingPower)} veOCEAN`}
+            value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
           />
         </div>
       </div>
