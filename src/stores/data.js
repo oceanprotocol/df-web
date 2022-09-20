@@ -8,8 +8,7 @@ export let datasets = writable("");
 
 export const columnsData = [
   { key: "network", value: "Network" },
-  { key: "basetoken", value: "Basetoken" },
-  { key: "basetokenaddress", value: "BasetokenAddress" },
+  { key: "symbol", value: "Symbol" },
   {
     key: "volume",
     value: "Volume",
@@ -52,8 +51,7 @@ function getRow(dataInfo, key) {
   return {
     id: key,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
-    basetoken: dataInfo.symbol,
-    basetokenaddress: dataInfo.basetoken_addr.toLocaleLowerCase(),
+    symbol: dataInfo.symbol,
     nftaddress: dataInfo.nft_addr,
     chainId: dataInfo.chainID,
     totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),

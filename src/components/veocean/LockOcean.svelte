@@ -36,6 +36,7 @@
   let calculatedMultiplier = 0;
   let maxDate = new Date(getThursdayDate());
   let loading = true;
+  let updateLockButtonText = "UPDATE LOCK";
 
   let schema = yup.object().shape({
     amount: yup
@@ -95,16 +96,36 @@
     );
   };
 
+  const getUpdateLockButtonText = () => {
+    let unlockDate = new Date($form.unlockDate);
+    if (loading) return "LOADING...";
+    if ($form.amount > 0 && unlockDate > $oceanUnlockDate)
+      return "UPDATE LOCKED AMOUNT AND LOCK END DATE";
+    if ($form.amount > 0) {
+      return "UPDATE LOCKED AMOUNT";
+    } else if (unlockDate > $oceanUnlockDate) {
+      return "UPDATE LOCK END DATE";
+    } else {
+      return "UPDATE LOCK";
+    }
+  };
+
+  $: if ($form) {
+    updateLockButtonText = getUpdateLockButtonText();
+  }
+
   const getMaxTime = () => {
-    let thursdayDate = getThursdayDate();
-    let date = new Date().setDate(
-      $oceanUnlockDate || new Date($oceanUnlockDate).getDay === 4
-        ? new Date($oceanUnlockDate).getDate() + 4 * 365
-        : new Date(thursdayDate).getDate() + 4 * 365
+    let thursdayDate = new Date(getThursdayDate());
+    let date = new Date(
+      getThursdayDate(
+        new Date(
+          new Date(thursdayDate).setDate(thursdayDate.getDate() + 4 * 365 - 7)
+        )
+      )
     );
-    return new Date(date).getDay === 4
-      ? new Date(date) - new Date(thursdayDate)
-      : new Date(getThursdayDate(new Date(date))) - new Date(thursdayDate);
+    return date.getDay() === 4
+      ? date - thursdayDate
+      : new Date(getThursdayDate(date)) - thursdayDate;
   };
 
   const MAXTIME = getMaxTime();
@@ -169,7 +190,9 @@
             : getThursdayDate()}
           disabled={getOceanBalance($connectedChainId) <= 0}
           max={new Date(
-            maxDate.setFullYear(maxDate.getFullYear() + 4)
+            getThursdayDate(
+              new Date(maxDate.setDate(maxDate.getDate() + 4 * 365 - 7))
+            )
           ).toLocaleDateString("en-CA")}
           bind:value={$form.unlockDate}
         />
@@ -183,7 +206,7 @@
               : `${parseFloat(calculatedMultiplier).toFixed(1)}%`}
           />
           <ItemWithLabel
-            title={`Voting Power`}
+            title={`Allocation Power`}
             value={loading
               ? "loading"
               : `${parseFloat(calculatedVotingPower)} veOCEAN`}
@@ -214,10 +237,11 @@
           >
             {#if $lockedOceanAmount > 0}
               <Button
-                text={loading ? "Extending lock..." : "Extend OCEAN lock"}
+                text={updateLockButtonText}
                 disabled={loading ||
                   getOceanBalance($connectedChainId) <= 0 ||
-                  $form.amount < 0}
+                  ($form.amount <= 0 &&
+                    new Date($form.unlockDate) <= $oceanUnlockDate)}
                 type="submit"
               />
             {:else}<Button
