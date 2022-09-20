@@ -35,7 +35,8 @@
   export let notHidableColumns = [];
   let showDataWithAllocations = false;
   let datasetsWithAllocations = undefined;
-  let disabled = $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined;
+  let disabled =
+    $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined || !$userAddress;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   let loading = false;
 
@@ -160,6 +161,12 @@
 
   $: if ($totalUserAllocation !== undefined) {
     totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+  }
+
+  $: if ($userAddress) {
+    disabled =
+      $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
+      !$userAddress;
   }
 </script>
 

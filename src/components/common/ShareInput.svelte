@@ -25,7 +25,11 @@
     disabled={currentValue === 0 || disabled}>-</button
   >
   <span class="value">{`${currentValue} %`}</span>
-  <button class="action" on:click={() => increaseValueByStep()}>+</button>
+  <button
+    class="action"
+    on:click={() => increaseValueByStep()}
+    disabled={disabled || available === 0}>+</button
+  >
   {#if showAvailable === true}
     <span class="available">{available}</span>
   {/if}

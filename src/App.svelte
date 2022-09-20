@@ -24,6 +24,7 @@
   import { isAppLoading } from "./stores/app";
   import ApolloClient from "apollo-boost";
   import { setClient } from "svelte-apollo";
+  import { onMount } from "svelte";
 
   const client = new ApolloClient({
     uri: "https://v4.subgraph.rinkeby.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph",
@@ -73,6 +74,12 @@
   } else {
     selectedNetworks.update(() => JSON.parse(process.env.SUPPORTED_CHAIN_IDS));
   }
+
+  onMount(async () => {
+    if (!$userAddress) {
+      isAppLoading.update(() => false);
+    }
+  });
 </script>
 
 <Router>
