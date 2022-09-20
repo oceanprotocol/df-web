@@ -53,10 +53,19 @@
     });
   }
 
+  function checkLocalColumnsEqualLocalStorageColumns() {
+    if (!localStorage.getItem("allColumns")) return false;
+    return localStorage.getItem("allColumns") === JSON.stringify(colData);
+  }
+
   function loadVisibleColumns() {
-    if (localStorage.getItem("datasetsDisplayedColumns")) {
+    if (
+      localStorage.getItem("datasetsDisplayedColumns") &&
+      checkLocalColumnsEqualLocalStorageColumns()
+    ) {
       getColumnsFromLocalStorage();
     } else {
+      localStorage.setItem("allColumns", JSON.stringify(colData));
       colData.forEach((col) => {
         columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
       });
