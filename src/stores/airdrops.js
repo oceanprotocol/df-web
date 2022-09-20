@@ -9,10 +9,10 @@ import { networkSigner } from "../stores/web3";
 export let contracts = writable({});
 export let airdrops = writable({});
 export let rewards = writable();
-export let veEstimate = writable(undefined);
-export let veClaimables = writable(undefined);
-export let dfEstimate = writable(undefined);
-export let dfClaimables = writable(undefined);
+export let veEstimate = writable(0);
+export let veClaimables = writable(0);
+export let dfEstimate = writable(0);
+export let dfClaimables = writable(0);
 
 const gasLimit = 1000000;
 

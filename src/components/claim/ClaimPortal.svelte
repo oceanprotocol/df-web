@@ -48,14 +48,18 @@
   $: if ($rewards) {
     initClaimables();
   }
+
+  $: if (!$userAddress) {
+    loading = false;
+  }
 </script>
 
 <div
   class={`container ${
-    (!$userAddress || loading === true || !$airdrops) && "alignContentCenter"
+    (loading === true || !$airdrops) && "alignContentCenter"
   }`}
 >
-  {#if $userAddress && loading === false && $airdrops}
+  {#if loading === false}
     <Countdown />
     <!-- <div class="estimatedRewardsContainer">
       <EstimatedRewards />
@@ -63,12 +67,6 @@
     <ClaimRewards />
   {:else if $selectedNetworks.length > 0 && $userAddress}
     <span class="loading">Loading...</span>
-  {/if}
-  {#if !$userAddress}
-    <MainMessage
-      title="No wallet connected"
-      message={`Connect your wallet to see the rewards`}
-    />
   {/if}
   {#if $selectedNetworks.length === 0 && $userAddress}
     <MainMessage
