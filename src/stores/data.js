@@ -8,8 +8,7 @@ export let datasets = writable("");
 
 export const columnsData = [
   { key: "network", value: "Network" },
-  { key: "basetoken", value: "Basetoken" },
-  { key: "basetokenaddress", value: "BasetokenAddress" },
+  { key: "symbol", value: "Symbol" },
   {
     key: "volume",
     value: "Volume",
@@ -32,19 +31,14 @@ async function getDatasets(api) {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(
-        {
-          "join": [
-              {
-                "table":"nft_vols",
-                "on":{"nft_info.nft_addr":"nft_vols.nft_addr"}
-              }
-            ],
+      body: JSON.stringify({
+        "query":{
+        },
         "sort":{
-          vol_amt: -1
+          "volume":-1
         }
-        })
-      });
+      })
+    });
   } catch (error) {
     console.log(error);
     return [];
@@ -57,14 +51,13 @@ function getRow(dataInfo, key) {
   return {
     id: key,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
-    basetoken: dataInfo.symbol,
-    basetokenaddress: dataInfo.basetoken_addr.toLocaleLowerCase(),
+    symbol: dataInfo.symbol,
     nftaddress: dataInfo.nft_addr,
     chainId: dataInfo.chainID,
     totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
-    volume: parseFloat(dataInfo.vol_amt).toFixed(3),
+    volume: parseFloat(dataInfo.volume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }
