@@ -5,7 +5,11 @@
     dataAllocations,
     totalUserAllocation,
   } from "../../stores/dataAllocations";
-  import { networkSigner, userAddress } from "../../stores/web3";
+  import {
+    connectedChainId,
+    networkSigner,
+    userAddress,
+  } from "../../stores/web3";
   import Table from "../common/Table.svelte";
   import { isAppLoading } from "../../stores/app";
   import { query } from "svelte-apollo";
@@ -34,7 +38,7 @@
     loadValues();
   }
 
-  $: if ($userAddress) {
+  $: if ($userAddress && $connectedChainId) {
     allocations = query(GET_ALLOCATIONS, {
       variables: { userAddress: $userAddress.toLowerCase() },
     });

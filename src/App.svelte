@@ -10,21 +10,34 @@
     connectWalletFromLocalStorage,
     selectedNetworks,
     web3Provider,
+    connectedChainId,
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
-  import { rewards } from "./stores/airdrops";
+  import {
+    dfClaimables,
+    dfEstimate,
+    rewards,
+    veClaimables,
+    veEstimate,
+  } from "./stores/airdrops";
   import { getRewards } from "./utils/rewards";
   import {
     addUserOceanBalanceToBalances,
     addUserVeOceanBalanceToBalances,
+    userBalances,
   } from "./stores/tokens";
-  import { veOceanWithDelegations } from "./stores/veOcean";
+  import {
+    lockedOceanAmount,
+    oceanUnlockDate,
+    veOceanWithDelegations,
+  } from "./stores/veOcean";
   import { getUserVotingPowerWithDelegations } from "./utils/delegations";
   import { isAppLoading } from "./stores/app";
   import ApolloClient from "apollo-boost";
   import { setClient } from "svelte-apollo";
   import { onMount } from "svelte";
+  import { getOceanTokenAddressByChainId } from "./utils/tokens";
 
   const client = new ApolloClient({
     uri: "https://v4.subgraph.rinkeby.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph",
@@ -60,10 +73,26 @@
     isAppLoading.update(() => false);
   }
 
-  $: if ($userAddress && $web3Provider) {
-    initRewards();
+  $: if ($userAddress && $web3Provider && $connectedChainId) {
+    if ($connectedChainId != process.env.VE_SUPPORTED_CHAINID) {
+      veOceanWithDelegations.update(() => 0);
+      let emptyUserBalances = {};
+      emptyUserBalances[process.env.VE_OCEAN_CONTRACT] = 0;
+      emptyUserBalances[
+        getOceanTokenAddressByChainId(process.env.VE_SUPPORTED_CHAINID)
+      ] = 0;
+      userBalances.update(() => emptyUserBalances);
+      isAppLoading.update(() => false);
+      oceanUnlockDate.update(() => undefined);
+      lockedOceanAmount.update(() => 0);
+      veClaimables.update(() => 0);
+      dfClaimables.update(() => 0);
+      veEstimate.update(() => 0);
+      dfEstimate.update(() => 0);
+    } else {
+      initRewards();
+    }
   }
-
   let selectedNetworksFromLocalStorage =
     localStorage.getItem("selectedNetworks");
   if (selectedNetworksFromLocalStorage) {

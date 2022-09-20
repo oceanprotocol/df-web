@@ -25,7 +25,11 @@
     getTotalAllocatedVeOcean,
   } from "../../utils/dataAllocations";
   import Swal from "sweetalert2";
-  import { networkSigner, userAddress } from "../../stores/web3";
+  import {
+    connectedChainId,
+    networkSigner,
+    userAddress,
+  } from "../../stores/web3";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -163,10 +167,11 @@
     totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   }
 
-  $: if ($userAddress) {
+  $: if ($userAddress && $connectedChainId) {
     disabled =
       $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
-      !$userAddress;
+      !$userAddress ||
+      $connectedChainId != process.env.VE_SUPPORTED_CHAINID;
   }
 </script>
 

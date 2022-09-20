@@ -27,7 +27,7 @@
     loading = false;
   };
 
-  $: if ($userAddress) {
+  $: if ($userAddress && $userBalances) {
     setValues();
   }
 </script>

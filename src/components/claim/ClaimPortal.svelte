@@ -49,6 +49,10 @@
     initClaimables();
   }
 
+  $: if ($connectedChainId !== process.env.VE_SUPPORTED_CHAINID) {
+    loading = false;
+  }
+
   $: if (!$userAddress) {
     loading = false;
   }
@@ -74,9 +78,6 @@
       message={`Select one or more networks from the **Selected networks** dropdown in
     order to see rewards from those networks.`}
     />
-  {/if}
-  {#if $userAddress && loading === false && $selectedNetworks.length > 0 && Object.keys($airdrops).length === 0}
-    <MainMessage title="Coming Soon" />
   {/if}
 </div>
 
