@@ -88,8 +88,9 @@ export const connectWalletFromLocalStorage = async () => {
   // Subscribe to chainId change
   instance.on("chainChanged", (chainId) => {
     connectedChainId.set(Number(chainId))
-    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
-    networkSigner.set(signer)
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+    networkSigner.set(provider.getSigner())
+    web3Provider.set(provider)
   });
 
   // Subscribe to networkId change
@@ -122,7 +123,10 @@ export const connectWalletToSpecificProvider = async (provider) => {
 
   // Subscribe to networkId change
   instance.on("chainChanged", (chainId) => {
-    connectedChainId.set(parseInt(chainId, 16))
+    connectedChainId.set(Number(chainId))
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+    networkSigner.set(provider.getSigner())
+    web3Provider.set(provider)
   });
 
   // Subscribe to networkId change
@@ -150,7 +154,10 @@ export const connectWallet = async () => {
 
   // Subscribe to chainChanged change
   instance.on("chainChanged", (chainId) => {
-    connectedChainId.set(parseInt(chainId, 16))
+    connectedChainId.set(Number(chainId))
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+    networkSigner.set(provider.getSigner())
+    web3Provider.set(provider)
   });
 
   // Subscribe to networkId change
