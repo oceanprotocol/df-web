@@ -30,6 +30,7 @@
     networkSigner,
     userAddress,
   } from "../../stores/web3";
+  import { oceanUnlockDate } from "../../stores/veOcean";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -40,7 +41,9 @@
   let showDataWithAllocations = false;
   let datasetsWithAllocations = undefined;
   let disabled =
-    $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined || !$userAddress;
+    $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
+    !$userAddress ||
+    !$totalUserAllocation;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   let loading = false;
 
@@ -163,7 +166,12 @@
     );
   };
 
-  $: if ($totalUserAllocation !== undefined) {
+  $: if ($totalUserAllocation >= 0) {
+    disabled =
+      $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
+      !$userAddress ||
+      $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
+      !$totalUserAllocation;
     totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   }
 
@@ -171,7 +179,8 @@
     disabled =
       $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
       !$userAddress ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID;
+      $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
+      !$totalUserAllocation;
   }
 </script>
 
