@@ -17,6 +17,10 @@
     claimVERewards,
   } from "../../utils/feeEstimate";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
+  import {
+    addUserOceanBalanceToBalances,
+    addUserVeOceanBalanceToBalances,
+  } from "../../stores/tokens";
 
   let claiming;
 
@@ -38,6 +42,9 @@
             getOceanTokenAddressByChainId($connectedChainId)
           )
         );
+        await addUserOceanBalanceToBalances(
+          parseInt(process.env.VE_SUPPORTED_CHAINID)
+        );
       });
     } catch (error) {
       Swal.fire("Error!", error.message, "error");
@@ -53,6 +60,9 @@
       Swal.fire("Success!", `You've claimed your VE rewards!`, "success").then(
         async () => {
           veClaimables.set(await getRewardsFeeEstimate($userAddress));
+          await addUserOceanBalanceToBalances(
+            parseInt(process.env.VE_SUPPORTED_CHAINID)
+          );
         }
       );
     } catch (error) {
@@ -65,14 +75,14 @@
 <div class={`container`}>
   <ClaimItem
     title="VE Claimable"
-    amount={parseFloat($veClaimables).toFixed(3)}
+    amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
     loading={claiming === "VE_REWARDS"}
     onClick={onClaimVeRewards}
     disabled={claiming !== undefined || $veClaimables <= 0}
   />
   <ClaimItem
     title="DF Claimable"
-    amount={parseFloat($dfClaimables).toFixed(3)}
+    amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     loading={claiming === "DF_REWARDS"}
     onClick={onClaimDfRewards}
     disabled={claiming !== undefined || $dfClaimables <= 0}
