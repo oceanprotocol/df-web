@@ -32,13 +32,13 @@ export const getTokenContract = async (chainId, address, signer) => {
 }
 
 //TODO - Standardize function calls & Params to follow ocean.js
-export const balanceOf = async (balances, chainId, tokenAddress, account, signer) => {
+export const balanceOf = async (balances, chainId, tokenAddress, account, provider) => {
   let balance
   try {
     if (balances[tokenAddress] === undefined) {
       balances[tokenAddress] = {};
     }
-    const tokenContract = await getTokenContract(chainId, tokenAddress,signer);
+    const tokenContract = await getTokenContract(chainId, tokenAddress, provider);
     balance = await tokenContract.balanceOf(account);
     return balance
   } catch(err) {

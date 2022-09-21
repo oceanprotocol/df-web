@@ -14,13 +14,15 @@
     loading = true;
     let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
     lockedOceanAmount.update(() => lockedOceans);
-    let unlockDateMilliseconds = await getLockedEndTime(
-      $userAddress,
-      $networkSigner
-    );
-    oceanUnlockDate.update(() =>
-      unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
-    );
+    if (!oceanUnlockDate) {
+      let unlockDateMilliseconds = await getLockedEndTime(
+        $userAddress,
+        $networkSigner
+      );
+      await oceanUnlockDate.update(() =>
+        unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+      );
+    }
     loading = false;
   };
 

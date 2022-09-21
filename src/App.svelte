@@ -11,6 +11,7 @@
     selectedNetworks,
     web3Provider,
     connectedChainId,
+    networkSigner,
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
@@ -38,6 +39,7 @@
   import { setClient } from "svelte-apollo";
   import { onMount } from "svelte";
   import { getOceanTokenAddressByChainId } from "./utils/tokens";
+  import { getLockedEndTime } from "./utils/ve";
 
   const client = new ApolloClient({
     uri: "https://v4.subgraph.rinkeby.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph",
@@ -59,6 +61,13 @@
   }
 
   async function initRewards() {
+    let unlockDateMilliseconds = await getLockedEndTime(
+      $userAddress,
+      $networkSigner
+    );
+    await oceanUnlockDate.update(() =>
+      unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+    );
     const newRewards = await getRewards($userAddress);
     rewards.update(() => newRewards);
     const newVeOceansWithDelegations = await getUserVotingPowerWithDelegations(

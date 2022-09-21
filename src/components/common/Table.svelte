@@ -43,7 +43,7 @@
   let disabled =
     $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
     !$userAddress ||
-    !$totalUserAllocation;
+    !$oceanUnlockDate;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   let loading = false;
 
@@ -171,8 +171,24 @@
       $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
       !$userAddress ||
       $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
-      !$totalUserAllocation;
+      !$oceanUnlockDate;
     totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+  }
+
+  $: if ($oceanUnlockDate) {
+    updateDisable();
+  }
+
+  $: if (!$oceanUnlockDate) {
+    updateDisable();
+  }
+
+  function updateDisable() {
+    disabled =
+      $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
+      !$userAddress ||
+      $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
+      !$oceanUnlockDate;
   }
 
   $: if ($userAddress && $connectedChainId) {
@@ -180,7 +196,7 @@
       $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
       !$userAddress ||
       $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
-      !$totalUserAllocation;
+      !$oceanUnlockDate;
   }
 </script>
 
