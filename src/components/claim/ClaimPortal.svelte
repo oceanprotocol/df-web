@@ -48,14 +48,22 @@
   $: if ($rewards) {
     initClaimables();
   }
+
+  $: if ($connectedChainId !== process.env.VE_SUPPORTED_CHAINID) {
+    loading = false;
+  }
+
+  $: if (!$userAddress) {
+    loading = false;
+  }
 </script>
 
 <div
   class={`container ${
-    (!$userAddress || loading === true || !$airdrops) && "alignContentCenter"
+    (loading === true || !$airdrops) && "alignContentCenter"
   }`}
 >
-  {#if $userAddress && loading === false && $airdrops}
+  {#if loading === false}
     <Countdown />
     <!-- <div class="estimatedRewardsContainer">
       <EstimatedRewards />
@@ -64,21 +72,12 @@
   {:else if $selectedNetworks.length > 0 && $userAddress}
     <span class="loading">Loading...</span>
   {/if}
-  {#if !$userAddress}
-    <MainMessage
-      title="No wallet connected"
-      message={`Connect your wallet to see the rewards`}
-    />
-  {/if}
   {#if $selectedNetworks.length === 0 && $userAddress}
     <MainMessage
       title="No network selected"
       message={`Select one or more networks from the **Selected networks** dropdown in
     order to see rewards from those networks.`}
     />
-  {/if}
-  {#if $userAddress && loading === false && $selectedNetworks.length > 0 && Object.keys($airdrops).length === 0}
-    <MainMessage title="Coming Soon" />
   {/if}
 </div>
 

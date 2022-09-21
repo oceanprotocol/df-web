@@ -63,7 +63,7 @@
         text={`Switch Network to ${
           getNetworkDataById(networksData, parseInt($selectedNetworks[0]))?.name
         }`}
-        onclick={() => switchWalletNetwork($selectedNetworks[0])}
+        onclick={() => switchWalletNetwork(parseInt($selectedNetworks[0]))}
         className="switchNetworkHeaderButton"
         textOnly
         disabled={!$userAddress}
