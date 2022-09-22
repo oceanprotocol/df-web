@@ -202,7 +202,7 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Used Period Potential`}
+            title={`Used Lock Period Potential`}
             value={`${parseInt(calculatedMultiplier)}%`}
           />
           <ItemWithLabel
