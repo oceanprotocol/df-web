@@ -202,11 +202,11 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Lock Multiplier`}
-            value={parseFloat(calculatedMultiplier).toFixed(1)}
+            title={`Used Lock Period Potential`}
+            value={`${parseInt(calculatedMultiplier)}%`}
           />
           <ItemWithLabel
-            title={`Allocation Power`}
+            title={`veOCEAN Received`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
           />
         </div>
