@@ -11,7 +11,7 @@
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
   import WithdrawOcean from "./WithdrawOcean.svelte";
-  import { getAddressByChainIdKey } from "../utils/address/address";
+  import { getAddressByChainIdKey } from "../../utils/address/address";
 
   let balance = 0;
   let loading = false;
@@ -24,7 +24,10 @@
       );
       totalUserAllocation.update(() => newAllocation);
     }
-    balance = $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")];
+    balance =
+      $userBalances[
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+      ];
     loading = false;
   };
 

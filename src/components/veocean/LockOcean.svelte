@@ -28,7 +28,7 @@
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
   import { getThursdayDate } from "../../utils/functions";
-  import { getAddressByChainIdKey } from "../utils/address/address";
+  import { getAddressByChainIdKey } from "../../utils/address/address";
 
   let networksData = networksDataArray.default;
 
@@ -230,7 +230,10 @@
           <TokenApproval
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
-            spender={getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")}
+            spender={getAddressByChainIdKey(
+              process.env.VE_SUPPORTED_CHAINID,
+              "veOCEAN"
+            )}
             amount={$form.amount}
             disabled={loading || getOceanBalance($connectedChainId) <= 0}
             bind:loading

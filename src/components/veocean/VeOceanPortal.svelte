@@ -5,7 +5,7 @@
   import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import { userBalances } from "../../stores/tokens";
-  import {getAddressByChainIdKey} from "../utils/address/address";
+  import { getAddressByChainIdKey } from "../../utils/address/address";
 
   let loading = false;
 

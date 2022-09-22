@@ -19,7 +19,7 @@
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import Countdown from "../common/CountDown.svelte";
-  import {getAddressByChainIdKey} from "../utils/address/address";
+  import { getAddressByChainIdKey } from "../../utils/address/address";
 
   let loading = true;
 
