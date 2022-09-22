@@ -74,5 +74,6 @@ export async function loadDatasets(nftsApi, allocations) {
     newDatasets.push(getRow(datasetInfo, key));
   });
 
+  console.log("newDatasets", newDatasets);
   datasets.set(newDatasets);
 }

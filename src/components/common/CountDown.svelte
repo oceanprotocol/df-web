@@ -40,6 +40,7 @@
     height: fit-content;
     font-size: bold;
     font-size: var(--font-size-large);
+    margin-bottom: calc(var(--spacer));
   }
   .countdownTitle {
     font-size: var(--font-size-normal);
