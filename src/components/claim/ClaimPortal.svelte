@@ -19,7 +19,7 @@
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import Countdown from "../common/CountDown.svelte";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
+  import {getAddressByChainIdKey} from "../utils/address/address";
 
   let loading = true;
 
@@ -37,7 +37,7 @@
 
     const dfRewards = await getDFRewards(
       $userAddress,
-      getOceanTokenAddressByChainId($connectedChainId)
+      getAddressByChainIdKey($connectedChainId, "Ocean")
     );
     console.log("dfRewards:", dfRewards);
     dfClaimables.set(dfRewards);

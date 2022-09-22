@@ -4,9 +4,8 @@
   import LockOcean from "./LockOcean.svelte";
   import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { userBalances } from "../../stores/tokens";
-  import MainMessage from "../common/MainMessage.svelte";
+  import {getAddressByChainIdKey} from "../utils/address/address";
 
   let loading = false;
 
@@ -29,8 +28,9 @@
   $: if (
     $userAddress &&
     $userBalances[
-      getOceanTokenAddressByChainId(
-        process.env.VE_SUPPORTED_CHAINID
+      getAddressByChainIdKey(
+        process.env.VE_SUPPORTED_CHAINID,
+        "Ocean"
       ).toLowerCase()
     ]
   ) {

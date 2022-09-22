@@ -1,15 +1,16 @@
 import { writable, get } from "svelte/store";
 import {userAddress, web3Provider}from "./web3"
-import {balanceOf,getOceanTokenAddressByChainId} from "../utils/tokens"
+import {balanceOf} from "../utils/tokens"
 import {getVeOceanBalance} from "../utils/ve"
 import {ethers} from "ethers"
+import {getAddressByChainIdKey} from "../utils/address/address";
 
 export let userBalances = writable({});
 export let tokenContracts = writable({});
 
-const updateUserBalances = (tokenAddress, newBalane) => {
+const updateUserBalances = (tokenAddress, newBalance) => {
   let newUserBalances = get(userBalances);
-    newUserBalances[tokenAddress] = newBalane;
+    newUserBalances[tokenAddress] = newBalance;
     userBalances.update(() => newUserBalances);
 }
 
@@ -26,19 +27,22 @@ export const addUserBalanceToBalances = async (chainId, tokenAddress) => {
 };
 
 export const addUserOceanBalanceToBalances = async (chainId) => {
-    const oceanContractAddress = getOceanTokenAddressByChainId(chainId)
+    const oceanContractAddress = getAddressByChainIdKey(chainId, "Ocean")
     await addUserBalanceToBalances(chainId, oceanContractAddress.toLowerCase())
 }
 
 export const addUserVeOceanBalanceToBalances = async (userAddress, provider) => {
   const veOceanBalance = await getVeOceanBalance(userAddress, provider)
-  updateUserBalances(process.env.VE_OCEAN_CONTRACT, veOceanBalance)
+  updateUserBalances(
+    getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"),
+    veOceanBalance
+  )
 }
 
 export const getOceanBalance = (chainId) => {
-  if(!getOceanTokenAddressByChainId(chainId)) return undefined
+  if(!getAddressByChainIdKey(chainId, "Ocean")) return undefined
   return get(userBalances)[
-    getOceanTokenAddressByChainId(chainId).toLowerCase()
+    getAddressByChainIdKey(chainId, "Ocean").toLowerCase()
   ]
 }
   

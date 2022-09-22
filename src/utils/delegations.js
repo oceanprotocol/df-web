@@ -1,14 +1,18 @@
 import {ethers} from "ethers";
-import {getRpcUrlByChainId} from "./web3";
 import {get} from "svelte/store"
 import * as VeDelegationABI from "./abis/veDelegationABI";
-import { networkSigner } from "../stores/web3";
+import {networkSigner} from "../stores/web3";
+import {getAddressByChainIdKey} from "../utils/address/address";
 
 const veDelegationABI = VeDelegationABI.default
 
 export const getUserVotingPowerWithDelegations = async(userAddress) => {
     try {
-      const contract = new ethers.Contract(process.env.VE_DELEGATION_CONTRACT, veDelegationABI, get(networkSigner));
+      const contract = new ethers.Contract(
+        getAddressByChainIdKey(process.env.CHAIN_ID, "veDelegation"),
+        veDelegationABI, 
+        get(networkSigner)
+      );
       const balanceWithDelegations = await contract.adjusted_balance_of(userAddress)
       const balanceWithDelegationsFormatted = ethers.utils.formatEther(BigInt(balanceWithDelegations).toString(10))
       return balanceWithDelegationsFormatted
@@ -20,7 +24,11 @@ export const getUserVotingPowerWithDelegations = async(userAddress) => {
 
 export const delegate = async(delegator, receiver, percentage, cancelTime, expireTime, id, signer) => {
     try {
-      const contract = new ethers.Contract(process.env.VE_DELEGATION_CONTRACT, veDelegationABI, signer);
+      const contract = new ethers.Contract(
+        getAddressByChainIdKey(process.env.CHAIN_ID, "veDelegation"),
+        veDelegationABI, 
+        signer
+      );
       const resp = await contract.create_boost(delegator, receiver, percentage, cancelTime, expireTime, id)
       return resp
   } catch (error) {

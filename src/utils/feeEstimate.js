@@ -1,13 +1,18 @@
 import {ethers} from "ethers";
 import {get} from "svelte/store";
 import * as VeFeeEstimateABI from "./abis/veFeeEstimateABI";
-import { networkSigner } from "../stores/web3";
+import {networkSigner} from "../stores/web3";
+import {getAddressByChainIdKey} from "../utils/address/address";
 
 const veFeeEstimateABI = VeFeeEstimateABI.default
 
 export const getRewardsFeeEstimate = async(userAddress) => {
     try {
-      const contract = new ethers.Contract(process.env.VE_FEE_ESTIMATE_CONTRACT, veFeeEstimateABI, get(networkSigner));
+      const contract = new ethers.Contract(
+        getAddressByChainIdKey(process.env.CHAIN_ID, "veFeeEstimate"),
+        veFeeEstimateABI, 
+        get(networkSigner)
+      );
       const estimateClaim = await contract.estimateClaim(userAddress)
       const estimateClaimFormatted = ethers.utils.formatEther(BigInt(estimateClaim).toString(10))
       return estimateClaimFormatted
@@ -21,9 +26,9 @@ export async function claimVERewards(userAddress, signer) {
   try {
     // ABI function is overriden, specify which fn to use to avoid crashing
     const contract = new ethers.Contract(
-          process.env.VE_FEE_DISTRIBUTOR_CONTRACT,
-          ["function claim(address _addr) returns (uint 256)"],
-          get(networkSigner)
+        getAddressByChainIdKey(process.env.CHAIN_ID, "veFeeDistributor"),
+        ["function claim(address _addr) returns (uint 256)"],
+        get(networkSigner)
       );
       const resp = await contract.claim(userAddress);
       await resp.wait();

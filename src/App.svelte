@@ -38,7 +38,7 @@
   import ApolloClient from "apollo-boost";
   import { setClient } from "svelte-apollo";
   import { onMount } from "svelte";
-  import { getOceanTokenAddressByChainId } from "./utils/tokens";
+  import { getAddressByChainIdKey } from "../utils/address/address";  
   import { getLockedEndTime } from "./utils/ve";
 
   const client = new ApolloClient({
@@ -86,10 +86,10 @@
     if ($connectedChainId != process.env.VE_SUPPORTED_CHAINID) {
       veOceanWithDelegations.update(() => 0);
       let emptyUserBalances = {};
-      emptyUserBalances[process.env.VE_OCEAN_CONTRACT] = 0;
-      emptyUserBalances[
-        getOceanTokenAddressByChainId(process.env.VE_SUPPORTED_CHAINID)
-      ] = 0;
+      let veOceanAddress = getAddressByChainIdKey($connectedChainId, "veOCEAN")
+      if(veOceanAddress) emptyUserBalances[veOceanAddress] = 0;
+      let oceanAddress = getAddressByChainIdKey($connectedChainId, "Ocean")
+      if(oceanAddress) emptyUserBalances[oceanAddress] = 0;
       userBalances.update(() => emptyUserBalances);
       isAppLoading.update(() => false);
       oceanUnlockDate.update(() => undefined);

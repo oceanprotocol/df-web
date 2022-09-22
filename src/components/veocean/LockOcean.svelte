@@ -25,10 +25,10 @@
   } from "../../utils/ve";
   import * as yup from "yup";
   import { createForm } from "svelte-forms-lib";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
   import { getThursdayDate } from "../../utils/functions";
+  import { getAddressByChainIdKey } from "../utils/address/address";
 
   let networksData = networksDataArray.default;
 
@@ -228,9 +228,9 @@
           />
         {:else}
           <TokenApproval
-            tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
+            tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
-            spender={process.env.VE_OCEAN_CONTRACT}
+            spender={getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")}
             amount={$form.amount}
             disabled={loading || getOceanBalance($connectedChainId) <= 0}
             bind:loading

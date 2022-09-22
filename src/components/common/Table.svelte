@@ -31,6 +31,7 @@
     userAddress,
   } from "../../stores/web3";
   import { oceanUnlockDate } from "../../stores/veOcean";
+  import { getAddressByChainIdKey } from "../utils/address/address";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -41,7 +42,7 @@
   let showDataWithAllocations = false;
   let datasetsWithAllocations = undefined;
   let disabled =
-    $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
+    $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] === undefined ||
     !$userAddress ||
     !$oceanUnlockDate;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
@@ -168,7 +169,7 @@
 
   $: if ($totalUserAllocation >= 0) {
     disabled =
-      $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
+      $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] === undefined ||
       !$userAddress ||
       $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
       !$oceanUnlockDate;
@@ -185,7 +186,7 @@
 
   function updateDisable() {
     disabled =
-      $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
+      $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] === undefined ||
       !$userAddress ||
       $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
       !$oceanUnlockDate;
@@ -193,7 +194,7 @@
 
   $: if ($userAddress && $connectedChainId) {
     disabled =
-      $userBalances[process.env.VE_OCEAN_CONTRACT] === undefined ||
+      $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] === undefined ||
       !$userAddress ||
       $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
       !$oceanUnlockDate;

@@ -16,12 +16,12 @@
     getRewardsFeeEstimate,
     claimVERewards,
   } from "../../utils/feeEstimate";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import {
     addUserOceanBalanceToBalances,
     addUserVeOceanBalanceToBalances,
   } from "../../stores/tokens";
-
+  import {getAddressByChainIdKey} from "../utils/address/address";
+  
   let claiming;
 
   async function onClaimDfRewards() {
@@ -29,7 +29,7 @@
     try {
       await claimDFReward(
         $userAddress,
-        getOceanTokenAddressByChainId($connectedChainId)
+        getAddressByChainIdKey($connectedChainId, "Ocean")
       );
       Swal.fire(
         "Success!",
@@ -39,7 +39,7 @@
         dfClaimables.set(
           await getDFRewards(
             $userAddress,
-            getOceanTokenAddressByChainId($connectedChainId)
+            getAddressByChainIdKey($connectedChainId, "Ocean")
           )
         );
         await addUserOceanBalanceToBalances(

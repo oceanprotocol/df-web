@@ -1,9 +1,10 @@
 import * as VeAllocateABI from "./abis/veAllocateABI";
 import * as VeOceanABI from "./abis/veOceanABI";
 import {get} from "svelte/store"
-import {getRpcUrlByChainId} from "./web3";
 import {ethers} from "ethers";
-import { networkSigner } from "../stores/web3";
+import {networkSigner} from "../stores/web3";
+import {getAddressByChainIdKey} from "../utils/address/address";
+
 const veAllocateABI = VeAllocateABI.default
 const veOceanABI = VeOceanABI.default
 const decimals = 18;
@@ -11,7 +12,11 @@ const gasLimit = 1000000;
 
 export const getAllocatedAmount = async(userAddress) => {
     try {
-        const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, get(networkSigner));
+        const contract = new ethers.Contract(
+          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veAllocate"), 
+          veAllocateABI, 
+          get(networkSigner)
+        );
         const allocatedAmountInEth = await contract.getTotalAllocation(userAddress)
         const allocatedAmount = ethers.utils.parseUnits(allocatedAmountInEth, decimals)
         return allocatedAmount
@@ -24,7 +29,11 @@ export const getAllocatedAmount = async(userAddress) => {
 export const getVeOceanBalance = async(userAddress, provider) => {
     const blockNumber = await provider.getBlockNumber()
     try {
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
+        const contract = new ethers.Contract(
+          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          veOceanABI, 
+          provider
+        );
         const veOceanBalanceInEth = await contract.balanceOfAt(userAddress,blockNumber - 2)
         const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth).toString(10))
         return veOceanBalance
@@ -36,7 +45,11 @@ export const getVeOceanBalance = async(userAddress, provider) => {
 
   export const getLockedOceanAmount = async(userAddress, signer) => {
     try {
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
+        const contract = new ethers.Contract(
+          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          veOceanABI, 
+          signer
+        );
         const lock = await contract.locked(userAddress)
         const lockAmount = ethers.utils.formatEther(BigInt(lock.amount).toString(10))
         return lockAmount
@@ -48,7 +61,11 @@ export const getVeOceanBalance = async(userAddress, provider) => {
 
   export const getLockedEndTime = async(userAddress, signer) => {
     try {
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
+        const contract = new ethers.Contract(
+          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          veOceanABI, 
+          signer
+        );
         const lockEndTime = await contract.locked__end(userAddress)
         const lockEndTimeFormated = parseInt(BigInt(lockEndTime).toString(10))*1000
         return lockEndTimeFormated > 0 ? lockEndTimeFormated : undefined
@@ -60,7 +77,11 @@ export const getVeOceanBalance = async(userAddress, provider) => {
 
   export const lockOcean = async(amount, unlockDate, signer) => {
     try {
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
+        const contract = new ethers.Contract(
+          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          veOceanABI, 
+          signer
+        );
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
         const tx = await contract.create_lock(amountToLockInEth, unlockDate,{
           gasLimit: gasLimit
@@ -73,7 +94,11 @@ export const getVeOceanBalance = async(userAddress, provider) => {
 
   export const withdrawOcean = async(signer) => {
     try {
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
+        const contract = new ethers.Contract(
+          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          veOceanABI, 
+          signer
+        );
         const tx = await contract.withdraw({
           gasLimit: gasLimit
       })
@@ -85,7 +110,11 @@ export const getVeOceanBalance = async(userAddress, provider) => {
 
   export const updateLockedOceanAmount = async(amount, signer) => {
     try {
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
+        const contract = new ethers.Contract(
+          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          veOceanABI, 
+          signer
+        );
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
         const tx = await contract.increase_amount(amountToLockInEth,{
           gasLimit: gasLimit
@@ -98,7 +127,11 @@ export const getVeOceanBalance = async(userAddress, provider) => {
 
   export const updateLockPeriod = async(unlockDate, signer) => {
     try {
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
+        const contract = new ethers.Contract(
+          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          veOceanABI, 
+          signer
+        );
         const tx = await contract.increase_unlock_time(unlockDate,{
           gasLimit: gasLimit
       })
