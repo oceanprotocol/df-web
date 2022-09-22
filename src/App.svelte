@@ -24,8 +24,8 @@
   } from "./stores/airdrops";
   import { getRewards } from "./utils/rewards";
   import {
-    addUserOceanBalanceToBalances,
-    addUserVeOceanBalanceToBalances,
+    updateUserBalanceOcean,
+    updateUserBalanceVeOcean,
     userBalances,
   } from "./stores/tokens";
   import {
@@ -75,10 +75,8 @@
     );
 
     veOceanWithDelegations.update(() => newVeOceansWithDelegations);
-    await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
-    await addUserOceanBalanceToBalances(
-      parseInt(process.env.VE_SUPPORTED_CHAINID)
-    );
+    await updateUserBalanceVeOcean($userAddress, $web3Provider);
+    await updateUserBalanceOcean($userAddress, $web3Provider);
     isAppLoading.update(() => false);
   }
 

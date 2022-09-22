@@ -15,8 +15,8 @@
   import TokenApproval from "../common/TokenApproval.svelte";
   import {
     getOceanBalance,
-    addUserOceanBalanceToBalances,
-    addUserVeOceanBalanceToBalances,
+    updateUserBalanceOcean,
+    updateUserBalanceVeOcean,
   } from "../../stores/tokens";
   import {
     lockOcean,
@@ -32,6 +32,7 @@
 
   let networksData = networksDataArray.default;
 
+  export let oceanBalance = 0;
   let calculatedVotingPower = 0;
   let calculatedMultiplier = 0;
   let maxDate = new Date(getThursdayDate());
@@ -90,8 +91,8 @@
     Swal.fire("Success!", "Oceans successfully locked.", "success").then(
       async () => {
         loading = false;
-        await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
-        await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
+        await updateUserBalanceVeOcean($userAddress, $web3Provider);
+        await updateUserBalanceOcean($userAddress, $web3Provider);
       }
     );
   };
@@ -166,10 +167,10 @@
           name="amount"
           min={$lockedOceanAmount ? 0 : 1}
           max={$userAddress
-            ? parseFloat(getOceanBalance($connectedChainId)).toFixed(3)
+            ? oceanBalance
             : 0}
           error={$errors.amount}
-          disabled={getOceanBalance($connectedChainId) <= 0 ||
+          disabled={oceanBalance <= 0 ||
             new Date() > $oceanUnlockDate}
           label="OCEAN Amount"
           direction="column"
@@ -190,7 +191,7 @@
           min={$lockedOceanAmount > 0
             ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
             : getThursdayDate()}
-          disabled={getOceanBalance($connectedChainId) <= 0}
+          disabled={oceanBalance <= 0}
           max={new Date(
             getThursdayDate(
               new Date(maxDate.setDate(maxDate.getDate() + 4 * 365 - 7))
@@ -235,14 +236,14 @@
               "veOCEAN"
             )}
             amount={$form.amount}
-            disabled={loading || getOceanBalance($connectedChainId) <= 0}
+            disabled={loading || oceanBalance <= 0}
             bind:loading
           >
             {#if $lockedOceanAmount > 0}
               <Button
                 text={updateLockButtonText}
                 disabled={loading ||
-                  getOceanBalance($connectedChainId) <= 0 ||
+                  oceanBalance <= 0 ||
                   ($form.amount <= 0 &&
                     new Date($form.unlockDate) <= $oceanUnlockDate)}
                 type="submit"
@@ -250,7 +251,7 @@
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
                 disabled={loading ||
-                  getOceanBalance($connectedChainId) <= 0 ||
+                  oceanBalance <= 0 ||
                   $form.amount <= 0}
                 type="submit"
               />

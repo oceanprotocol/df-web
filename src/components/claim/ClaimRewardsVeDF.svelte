@@ -3,6 +3,7 @@
     userAddress,
     networkSigner,
     connectedChainId,
+    web3Provider
   } from "../../stores/web3";
   import {
     veClaimables,
@@ -17,8 +18,7 @@
     claimVERewards,
   } from "../../utils/feeEstimate";
   import {
-    addUserOceanBalanceToBalances,
-    addUserVeOceanBalanceToBalances,
+    updateUserBalanceOcean
   } from "../../stores/tokens";
   import { getAddressByChainIdKey } from "../../utils/address/address";
 
@@ -42,9 +42,7 @@
             getAddressByChainIdKey($connectedChainId, "Ocean")
           )
         );
-        await addUserOceanBalanceToBalances(
-          parseInt(process.env.VE_SUPPORTED_CHAINID)
-        );
+        await updateUserBalanceOcean($userAddress, $web3Provider);
       });
     } catch (error) {
       Swal.fire("Error!", error.message, "error");
@@ -60,9 +58,7 @@
       Swal.fire("Success!", `You've claimed your VE rewards!`, "success").then(
         async () => {
           veClaimables.set(await getRewardsFeeEstimate($userAddress));
-          await addUserOceanBalanceToBalances(
-            parseInt(process.env.VE_SUPPORTED_CHAINID)
-          );
+          await updateUserBalanceOcean($userAddress, $web3Provider);
         }
       );
     } catch (error) {

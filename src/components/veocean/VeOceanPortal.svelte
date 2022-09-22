@@ -8,6 +8,7 @@
   import { getAddressByChainIdKey } from "../../utils/address/address";
 
   let loading = false;
+  let oceanBalance = 0;
 
   const loadValues = async () => {
     loading = true;
@@ -22,6 +23,10 @@
         unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
       );
     }
+
+    oceanBalance = $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean")];
+    if(oceanBalance == undefined) oceanBalance = 0;
+
     loading = false;
   };
 
@@ -41,7 +46,7 @@
 {#if !loading}
   <div class={`container`}>
     <VeOceanCard />
-    <LockOcean />
+    <LockOcean oceanBalance={oceanBalance}/>
   </div>
 {:else}
   <div class="loading">Loading...</div>

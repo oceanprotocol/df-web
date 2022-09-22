@@ -3,12 +3,13 @@
     userAddress,
     networkSigner,
     connectedChainId,
+    web3Provider
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Swal from "sweetalert2";
   import { withdrawOcean } from "../../utils/ve";
   import { oceanUnlockDate, lockedOceanAmount } from "../../stores/veOcean";
-  import { addUserOceanBalanceToBalances } from "../../stores/tokens";
+  import { updateUserBalanceOcean } from "../../stores/tokens";
 
   let loading = true;
 
@@ -28,7 +29,7 @@
     Swal.fire("Success!", "Oceans successfully withdrawn.", "success").then(
       async () => {
         loading = false;
-        await addUserOceanBalanceToBalances($connectedChainId);
+        await updateUserBalanceOcean($userAddress, $web3Provider);
       }
     );
   };

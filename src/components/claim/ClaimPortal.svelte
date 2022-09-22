@@ -25,12 +25,7 @@
 
   async function initClaimables() {
     loading = true;
-    await updateAllClaimables(
-      JSON.parse(process.env.AIRDROP_CONFIG),
-      $selectedNetworks,
-      $userAddress,
-      $rewards
-    );
+    
     const veRewards = await getRewardsFeeEstimate($userAddress);
     console.log("veRewards:", veRewards);
     veClaimables.set(veRewards);
