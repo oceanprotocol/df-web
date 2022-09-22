@@ -9,7 +9,7 @@ const veDelegationABI = VeDelegationABI.default
 export const getUserVotingPowerWithDelegations = async(userAddress) => {
     try {
       const contract = new ethers.Contract(
-        getAddressByChainIdKey(process.env.CHAIN_ID, "veDelegation"),
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
         veDelegationABI, 
         get(networkSigner)
       );
@@ -25,7 +25,7 @@ export const getUserVotingPowerWithDelegations = async(userAddress) => {
 export const delegate = async(delegator, receiver, percentage, cancelTime, expireTime, id, signer) => {
     try {
       const contract = new ethers.Contract(
-        getAddressByChainIdKey(process.env.CHAIN_ID, "veDelegation"),
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
         veDelegationABI, 
         signer
       );

@@ -9,7 +9,7 @@ const veFeeEstimateABI = VeFeeEstimateABI.default
 export const getRewardsFeeEstimate = async(userAddress) => {
     try {
       const contract = new ethers.Contract(
-        getAddressByChainIdKey(process.env.CHAIN_ID, "veFeeEstimate"),
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veFeeEstimate"),
         veFeeEstimateABI, 
         get(networkSigner)
       );
@@ -26,7 +26,7 @@ export async function claimVERewards(userAddress, signer) {
   try {
     // ABI function is overriden, specify which fn to use to avoid crashing
     const contract = new ethers.Contract(
-        getAddressByChainIdKey(process.env.CHAIN_ID, "veFeeDistributor"),
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veFeeDistributor"),
         ["function claim(address _addr) returns (uint 256)"],
         get(networkSigner)
       );
