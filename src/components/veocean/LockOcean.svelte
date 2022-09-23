@@ -14,6 +14,7 @@
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
   import {
+    userBalances,
     getOceanBalance,
     updateUserBalanceOcean,
     updateUserBalanceVeOcean,
@@ -32,12 +33,16 @@
 
   let networksData = networksDataArray.default;
 
-  export let oceanBalance = 0;
+  let oceanBalance = 0;
   let calculatedVotingPower = 0;
   let calculatedMultiplier = 0;
   let maxDate = new Date(getThursdayDate());
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
+
+  console.log("userBalance", $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean")]);
+  console.log(".min($lockedOceanAmount ? 0 : 1)", parseInt(getOceanBalance($connectedChainId)));
+  console.log("parseInt(getOceanBalance($connectedChainId))", parseInt(getOceanBalance($connectedChainId)));
 
   let schema = yup.object().shape({
     amount: yup
@@ -59,15 +64,24 @@
         : getThursdayDate(),
   };
 
-  $: if ($userAddress) {
-    loading = false;
-  }
-
   const { form, errors, handleSubmit } = createForm({
     initialValues: fields,
     validationSchema: schema,
     onSubmit: (values) => onFormSubmit(values),
   });
+
+  async function init() {
+    await updateUserBalanceOcean($userAddress, $web3Provider);
+    oceanBalance = getOceanBalance($connectedChainId);
+    console.log("oceanBalance", oceanBalance);
+    console.log("form", $form);
+    form.validationSchema.max = oceanBalance;
+  }
+
+  $: if ($userAddress) {
+    loading = false;
+    init();
+  }
 
   const onFormSubmit = async (values) => {
     loading = true;

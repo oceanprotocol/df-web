@@ -9,8 +9,8 @@ export let tokenContracts = writable({});
 
 const updateBalanceStore = (tokenAddress, newBalance) => {
   let newUserBalances = get(userBalances);
-    newUserBalances[tokenAddress] = newBalance;
-    userBalances.update(() => newUserBalances);
+  newUserBalances[tokenAddress] = newBalance;
+  userBalances.update(() => newUserBalances);
 }
 
 export const updateUserBalanceOcean = async (userAddress, provider) => {
@@ -31,7 +31,7 @@ export const updateUserBalanceOcean = async (userAddress, provider) => {
   console.log("User account OCEAN balance is", balance);
 
   updateBalanceStore(
-    oceanContractAddress, 
+    oceanContractAddress,
     balance
   );
 }
@@ -45,12 +45,18 @@ export const updateUserBalanceVeOcean = async (userAddress, provider) => {
 }
 
 export const getOceanBalance = (chainId) => {
+  if(
+    !chainId ||
+    !getAddressByChainIdKey(chainId, "Ocean")
+  ) return undefined
+  
   console.log("getOceanBalance chainId", chainId)
   console.log("getOceanBalance userBalances", get(userBalances))
   console.log("getOceanBalance getAddressByChainIdKey", getAddressByChainIdKey(chainId, "Ocean"))
-  if(!getAddressByChainIdKey(chainId, "Ocean")) return undefined
+  console.log("getOceanBalance oceanBalance", get(userBalances)[getAddressByChainIdKey(chainId, "Ocean")])
+  
   return get(userBalances)[
-    getAddressByChainIdKey(chainId, "Ocean").toLowerCase()
+    getAddressByChainIdKey(chainId, "Ocean")
   ]
 }
   
