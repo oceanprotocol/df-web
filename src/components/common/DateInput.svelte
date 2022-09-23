@@ -1,7 +1,10 @@
 <script>
   import { oceanUnlockDate } from "../../stores/veOcean";
 
-  import { getThursdayDate } from "../../utils/functions";
+  import {
+    getThursdayDate,
+    getThursdayDateRoundingDown,
+  } from "../../utils/functions";
 
   export let value = undefined;
   export let placeholder = undefined;
@@ -18,36 +21,30 @@
     },
     {
       label: "~1 month",
-      days: 30 - 7,
+      days: 30,
     },
     {
       label: "~6 months",
-      days: 180 - 7,
+      days: 180,
     },
     {
       label: "~2 years",
-      days: 730 - 7,
+      days: 730,
     },
     {
       label: "~4 years",
-      days: 1460 - 7,
+      days: 1460,
     },
   ];
 
   const handleOnPeriodClick = (days) => {
-    const currentDate = $oceanUnlockDate
-      ? $oceanUnlockDate
-      : new Date(getThursdayDate());
+    const currentDate = $oceanUnlockDate ? $oceanUnlockDate : new Date();
     let date = new Date(currentDate).setDate(
-      currentDate || new Date(currentDate).getDay() === 4
-        ? new Date(currentDate).getDate() + days
-        : new Date(getThursdayDate(currentDate)).getDate() + days
+      new Date(currentDate).getDate() + days
     );
-    if (new Date(date) > new Date(max)) return;
-    value =
-      days % 7 === 0
-        ? new Date(date).toLocaleDateString("en-CA")
-        : new Date(getThursdayDate(new Date(date))).toLocaleDateString("en-CA");
+    const thursdayDate = new Date(getThursdayDateRoundingDown(new Date(date)));
+    if (thursdayDate > new Date(max)) return;
+    value = thursdayDate.toLocaleDateString("en-CA");
   };
 </script>
 

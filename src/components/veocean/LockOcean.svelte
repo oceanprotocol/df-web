@@ -28,7 +28,10 @@
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
-  import { getThursdayDate } from "../../utils/functions";
+  import {
+    getThursdayDate,
+    getThursdayDateRoundingDown,
+  } from "../../utils/functions";
 
   let networksData = networksDataArray.default;
 
@@ -115,17 +118,13 @@
   }
 
   const getMaxTime = () => {
-    let thursdayDate = new Date(getThursdayDate());
-    let date = new Date(
-      getThursdayDate(
-        new Date(
-          new Date(thursdayDate).setDate(thursdayDate.getDate() + 4 * 365 - 7)
+    return (
+      new Date(
+        getThursdayDateRoundingDown(
+          new Date(new Date().getTime() + 4 * 365 * 86400 * 1000)
         )
-      )
+      ).getTime() - new Date().getTime()
     );
-    return date.getDay() === 4
-      ? date - thursdayDate
-      : new Date(getThursdayDate(date)) - thursdayDate;
   };
 
   const MAXTIME = getMaxTime();
@@ -133,12 +132,7 @@
   const updateMultiplier = () => {
     if ($form.unlockDate) {
       // 4 years = 100% voting power
-      var thursday = new Date(getThursdayDate());
-      const lockDateDiff = new Date($form.unlockDate) - thursday;
-      var msDelta =
-        lockDateDiff > 0
-          ? lockDateDiff
-          : new Date($form.unlockDate) - new Date();
+      const msDelta = new Date($form.unlockDate) - new Date();
       calculatedMultiplier = ((msDelta / MAXTIME) * 100.0).toFixed(3);
       if ($form.amount > 0) {
         calculatedVotingPower = ((msDelta / MAXTIME) * $form.amount).toFixed(3);
@@ -192,9 +186,7 @@
             : getThursdayDate()}
           disabled={getOceanBalance($connectedChainId) <= 0}
           max={new Date(
-            getThursdayDate(
-              new Date(maxDate.setDate(maxDate.getDate() + 4 * 365 - 7))
-            )
+            new Date().getTime() + 4 * 365 * 86400 * 1000
           ).toLocaleDateString("en-CA")}
           bind:value={$form.unlockDate}
         />
