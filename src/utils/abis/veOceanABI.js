@@ -314,28 +314,6 @@ export default [
   {
     "stateMutability": "view",
     "type": "function",
-    "name": "balanceOf",
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      },
-      {
-        "name": "_t",
-        "type": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "gas": 12660
-  },
-  {
-    "stateMutability": "view",
-    "type": "function",
     "name": "balanceOfAt",
     "inputs": [
       {

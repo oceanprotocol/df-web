@@ -10,7 +10,7 @@ const oceanTokenAddressesByChain = {
   3:"0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9",
   80001: "0xd8992Ed72C445c35Cb4A2be468568Ed1079357c8",
   1287: "0xF6410bf5d773C7a41ebFf972f38e7463FA242477",
-  8996: "0x726baA2f854A3BEC2378a707AeB38c9d933Ebad6"
+  8996: "0x90988436A75c308fBfc52D27fca65d28D5A3b919"
 }
 
 export const getOceanTokenAddressByChainId = (chainId) => {
@@ -21,7 +21,6 @@ export const getOceanTokenAddressByChainId = (chainId) => {
 export const getTokenContract = async (chainId, address, signer) => {
   try {
     const rpcURL = await getRpcUrlByChainId(chainId);
-
     if( rpcURL ) {
       return new ethers.Contract(address, TokenABI.default, signer);
     }

@@ -19,6 +19,7 @@
     addUserVeOceanBalanceToBalances,
   } from "../../stores/tokens";
   import {
+    getLockedEndTime,
     lockOcean,
     updateLockedOceanAmount,
     updateLockPeriod,
@@ -26,9 +27,14 @@
   import * as yup from "yup";
   import { createForm } from "svelte-forms-lib";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
-  import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
+  import {
+    lockedOceanAmount,
+    oceanUnlockDate,
+    veOceanWithDelegations,
+  } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
   import { getThursdayDate } from "../../utils/functions";
+  import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
 
   let networksData = networksDataArray.default;
 
@@ -42,7 +48,7 @@
     amount: yup
       .number()
       .required("Amount is requred")
-      .min($lockedOceanAmount ? 0 : 1)
+      .min($oceanUnlockDate ? 0 : 1)
       .max(parseInt(getOceanBalance($connectedChainId)))
       .label("Amount"),
     unlockDate: yup
@@ -53,7 +59,7 @@
   let fields = {
     amount: 0,
     unlockDate:
-      $lockedOceanAmount > 0
+      $oceanUnlockDate > 0
         ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
         : getThursdayDate(),
   };
@@ -72,7 +78,7 @@
     loading = true;
     const timeDifference = new Date(values.unlockDate).getTime();
     try {
-      if ($lockedOceanAmount > 0) {
+      if ($oceanUnlockDate > 0) {
         if (values.amount > 0) {
           await updateLockedOceanAmount(values.amount, $networkSigner);
         }
@@ -89,9 +95,19 @@
     }
     Swal.fire("Success!", "Oceans successfully locked.", "success").then(
       async () => {
-        loading = false;
         await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
         await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
+        let unlockDateMilliseconds = await getLockedEndTime(
+          $userAddress,
+          $networkSigner
+        );
+        await oceanUnlockDate.update(() =>
+          unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+        );
+        const newVeOceansWithDelegations =
+          await getUserVotingPowerWithDelegations($userAddress);
+        veOceanWithDelegations.update(() => newVeOceansWithDelegations);
+        loading = false;
       }
     );
   };
@@ -155,7 +171,7 @@
 
 <div class={`container`}>
   <Card
-    title={$lockedOceanAmount > 0
+    title={$oceanUnlockDate > 0
       ? `Update veOCEAN Lock`
       : `Lock OCEAN, get veOCEAN`}
   >
@@ -164,7 +180,7 @@
         <Input
           type="number"
           name="amount"
-          min={$lockedOceanAmount ? 0 : 1}
+          min={$oceanUnlockDate ? 0 : 1}
           max={$userAddress
             ? parseFloat(getOceanBalance($connectedChainId)).toFixed(3)
             : 0}
@@ -187,7 +203,7 @@
           step="7"
           error={$errors.unlockDate}
           direction="column"
-          min={$lockedOceanAmount > 0
+          min={$oceanUnlockDate > 0
             ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
             : getThursdayDate()}
           disabled={getOceanBalance($connectedChainId) <= 0}
@@ -235,7 +251,7 @@
             disabled={loading || getOceanBalance($connectedChainId) <= 0}
             bind:loading
           >
-            {#if $lockedOceanAmount > 0}
+            {#if $oceanUnlockDate > 0}
               <Button
                 text={updateLockButtonText}
                 disabled={loading ||

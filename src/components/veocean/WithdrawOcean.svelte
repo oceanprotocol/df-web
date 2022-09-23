@@ -6,9 +6,14 @@
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Swal from "sweetalert2";
-  import { withdrawOcean } from "../../utils/ve";
-  import { oceanUnlockDate, lockedOceanAmount } from "../../stores/veOcean";
+  import { getLockedEndTime, withdrawOcean } from "../../utils/ve";
+  import {
+    oceanUnlockDate,
+    lockedOceanAmount,
+    veOceanWithDelegations,
+  } from "../../stores/veOcean";
   import { addUserOceanBalanceToBalances } from "../../stores/tokens";
+  import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
 
   let loading = true;
 
@@ -29,6 +34,16 @@
       async () => {
         loading = false;
         await addUserOceanBalanceToBalances($connectedChainId);
+        const newVeOceansWithDelegations =
+          await getUserVotingPowerWithDelegations($userAddress);
+        veOceanWithDelegations.update(() => newVeOceansWithDelegations);
+        let unlockDateMilliseconds = await getLockedEndTime(
+          $userAddress,
+          $networkSigner
+        );
+        await oceanUnlockDate.update(() =>
+          unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+        );
       }
     );
   };
@@ -41,7 +56,6 @@
       secondary
       disabled={loading ||
         !$oceanUnlockDate ||
-        new Date() < $oceanUnlockDate ||
         parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId}
       onclick={() => withdraw()}
     />
