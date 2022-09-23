@@ -37,6 +37,7 @@
   let maxDate = new Date(getThursdayDate());
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
+  let userAgreed = false;
 
   let schema = yup.object().shape({
     amount: yup
@@ -232,7 +233,9 @@
             tokenName={"OCEAN"}
             spender={process.env.VE_OCEAN_CONTRACT}
             amount={$form.amount}
-            disabled={loading || getOceanBalance($connectedChainId) <= 0}
+            disabled={loading ||
+              getOceanBalance($connectedChainId) <= 0 ||
+              !userAgreed}
             bind:loading
           >
             {#if $lockedOceanAmount > 0}
@@ -248,13 +251,19 @@
                 text={loading ? "Locking..." : "Lock OCEAN"}
                 disabled={loading ||
                   getOceanBalance($connectedChainId) <= 0 ||
-                  $form.amount <= 0}
+                  $form.amount <= 0 ||
+                  !userAgreed}
                 type="submit"
               />
             {/if}
           </TokenApproval>
         {/if}
       </div>
+      <Input
+        type="checkbox"
+        label="I am aware that I won't be able to unlock my tokens until the end of the lock period"
+        value={userAgreed}
+      />
     </form>
   </Card>
 </div>
