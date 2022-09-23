@@ -56,6 +56,7 @@
       secondary
       disabled={loading ||
         !$oceanUnlockDate ||
+        new Date() < $oceanUnlockDate ||
         parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId}
       onclick={() => withdraw()}
     />
