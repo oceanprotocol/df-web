@@ -13,6 +13,7 @@
   import Input from "../common/Input.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
+  import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
   import {
     getOceanBalance,
     addUserOceanBalanceToBalances,
@@ -37,7 +38,6 @@
   let maxDate = new Date(getThursdayDate());
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
-  let userAgreed = false;
 
   let schema = yup.object().shape({
     amount: yup
@@ -50,6 +50,10 @@
       .date()
       .required("Unlock date is requred")
       .label("Unlock Date"),
+    ageement: yup
+      .boolean()
+      .required("Agree with the terms of token lock")
+      .label("User Agreement"),
   });
   let fields = {
     amount: 0,
@@ -57,6 +61,7 @@
       $lockedOceanAmount > 0
         ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
         : getThursdayDate(),
+    ageement: false,
   };
 
   $: if ($userAddress) {
@@ -91,6 +96,7 @@
     Swal.fire("Success!", "Oceans successfully locked.", "success").then(
       async () => {
         loading = false;
+        $form.ageement = false;
         await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
         await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
       }
@@ -233,9 +239,7 @@
             tokenName={"OCEAN"}
             spender={process.env.VE_OCEAN_CONTRACT}
             amount={$form.amount}
-            disabled={loading ||
-              getOceanBalance($connectedChainId) <= 0 ||
-              !userAgreed}
+            disabled={loading || getOceanBalance($connectedChainId) <= 0}
             bind:loading
           >
             {#if $lockedOceanAmount > 0}
@@ -244,7 +248,8 @@
                 disabled={loading ||
                   getOceanBalance($connectedChainId) <= 0 ||
                   ($form.amount <= 0 &&
-                    new Date($form.unlockDate) <= $oceanUnlockDate)}
+                    new Date($form.unlockDate) <= $oceanUnlockDate) ||
+                  !$form.ageement}
                 type="submit"
               />
             {:else}<Button
@@ -252,17 +257,16 @@
                 disabled={loading ||
                   getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount <= 0 ||
-                  !userAgreed}
+                  !$form.ageement}
                 type="submit"
               />
             {/if}
           </TokenApproval>
         {/if}
       </div>
-      <Input
-        type="checkbox"
-        label="I am aware that I won't be able to unlock my tokens until the end of the lock period"
-        value={userAgreed}
+      <AgreementCheckbox
+        text="I am aware that I won't be able to unlock my tokens until the end of the lock period"
+        bind:value={$form.ageement}
       />
     </form>
   </Card>
