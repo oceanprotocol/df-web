@@ -22,7 +22,6 @@ export const getAllocatedAmount = async(userAddress) => {
   }
 
 export const getVeOceanBalance = async(userAddress, provider) => {
-    const blockNumber = await provider.getBlockNumber()
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
         const veOceanBalanceInEth = await contract.balanceOf(userAddress)
@@ -75,9 +74,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
   export const withdrawOcean = async(signer) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
-        const tx = await contract.withdraw({
-          gasLimit: gasLimit
-      })
+        const tx = await contract.withdraw()
         await tx.wait()
     } catch (error) {
       throw error;
