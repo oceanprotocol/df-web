@@ -23,7 +23,8 @@
 
   const updateBlockTimestamp = async () => {
     const blockNumber = await $web3Provider.getBlockNumber();
-    blockTimestamp = (await $web3Provider.getBlock(blockNumber)).timestamp;
+    blockTimestamp =
+      (await $web3Provider.getBlock(blockNumber)).timestamp * 1000;
   };
 
   const updateLockEndDate = async () => {
@@ -55,18 +56,20 @@
       withdrawing = false;
       return;
     }
-    Swal.fire("Success!", "Oceans successfully withdrawn.", "success").then(
-      async () => {
-        withdrawing = false;
-        await addUserOceanBalanceToBalances($connectedChainId);
-        const newVeOceansWithDelegations =
-          await getUserVotingPowerWithDelegations($userAddress);
-        veOceanWithDelegations.update(() => newVeOceansWithDelegations);
+    Swal.fire(
+      "Success!",
+      "OCEAN tokens successfully withdrawn.",
+      "success"
+    ).then(async () => {
+      withdrawing = false;
+      await addUserOceanBalanceToBalances($connectedChainId);
+      const newVeOceansWithDelegations =
+        await getUserVotingPowerWithDelegations($userAddress);
+      veOceanWithDelegations.update(() => newVeOceansWithDelegations);
 
-        await updateBlockTimestamp();
-        await updateLockEndDate();
-      }
-    );
+      await updateBlockTimestamp();
+      await updateLockEndDate();
+    });
   };
 </script>
 
@@ -77,7 +80,7 @@
         ? "Withdraw all locked"
         : withdrawing
         ? "Withdrawing..."
-        : "Withdraw"}
+        : "Withdraw all locked"}
       secondary
       disabled={loading ||
         withdrawing ||
