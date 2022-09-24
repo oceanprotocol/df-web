@@ -17,7 +17,7 @@
   }
   .text {
     font-size: var(--font-size-mini);
-    color: var(--brand-alert-yellow);
+    color: var(--brand-alert-black);
     text-align: left;
     margin-left: calc(var(--spacer) / 10);
   }

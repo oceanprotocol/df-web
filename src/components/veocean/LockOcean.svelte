@@ -52,7 +52,7 @@
       .label("Unlock Date"),
     ageement: yup
       .boolean()
-      .required("Agree with the terms of token lock")
+      .required("Agreement is requirement.")
       .label("User Agreement"),
   });
   let fields = {
@@ -239,25 +239,33 @@
             tokenName={"OCEAN"}
             spender={process.env.VE_OCEAN_CONTRACT}
             amount={$form.amount}
-            disabled={loading || getOceanBalance($connectedChainId) <= 0}
+            disabled={
+              loading || 
+              getOceanBalance($connectedChainId) <= 0
+            }
+            formAgreement={$form.ageement}
             bind:loading
           >
             {#if $lockedOceanAmount > 0}
               <Button
                 text={updateLockButtonText}
-                disabled={loading ||
+                disabled={
+                  loading ||
+                  !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
-                  ($form.amount <= 0 &&
-                    new Date($form.unlockDate) <= $oceanUnlockDate) ||
-                  !$form.ageement}
+                  $form.amount <= 0 ||
+                  new Date($form.unlockDate) <= $oceanUnlockDate
+                }
                 type="submit"
               />
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
-                disabled={loading ||
+                disabled={
+                  loading ||
+                  !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
-                  $form.amount <= 0 ||
-                  !$form.ageement}
+                  $form.amount <= 0
+                }
                 type="submit"
               />
             {/if}
@@ -265,7 +273,7 @@
         {/if}
       </div>
       <AgreementCheckbox
-        text="I am aware that I won't be able to unlock my tokens until the end of the lock period"
+        text="I have familiarized myself with veOCEAN, wave all rights, and assume all risks from using this software."
         bind:value={$form.ageement}
       />
     </form>
