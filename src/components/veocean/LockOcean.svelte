@@ -13,6 +13,7 @@
   import Input from "../common/Input.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
+  import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
   import {
     getOceanBalance,
     addUserOceanBalanceToBalances,
@@ -49,6 +50,10 @@
       .date()
       .required("Unlock date is requred")
       .label("Unlock Date"),
+    ageement: yup
+      .boolean()
+      .required("Agreement is requirement.")
+      .label("User Agreement"),
   });
   let fields = {
     amount: 0,
@@ -56,6 +61,7 @@
       $lockedOceanAmount > 0
         ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
         : getThursdayDate(),
+    ageement: false,
   };
 
   $: if ($userAddress) {
@@ -87,9 +93,10 @@
       loading = false;
       return;
     }
-    Swal.fire("Success!", "Oceans successfully locked.", "success").then(
+    Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
       async () => {
         loading = false;
+        $form.ageement = false;
         await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
         await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
       }
@@ -202,11 +209,11 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Used Lock Period Potential`}
-            value={`${parseInt(calculatedMultiplier)}%`}
+            title={`Lock Multiplier`}
+            value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
           />
           <ItemWithLabel
-            title={`veOCEAN Received`}
+            title={`Receive`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
           />
         </div>
@@ -232,15 +239,18 @@
             tokenName={"OCEAN"}
             spender={process.env.VE_OCEAN_CONTRACT}
             amount={$form.amount}
-            disabled={loading ||
+            disabled={
+              loading || 
               getOceanBalance($connectedChainId) <= 0 ||
-              $form.amount > getOceanBalance($connectedChainId)}
-            bind:loading
+              $form.amount > getOceanBalance($connectedChainId)
+            }
+            bind:agreed={$form.ageement}
           >
             {#if $lockedOceanAmount > 0}
               <Button
                 text={updateLockButtonText}
                 disabled={loading ||
+                  !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount > getOceanBalance($connectedChainId) ||
                   ($form.amount <= 0 &&
@@ -250,6 +260,7 @@
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
                 disabled={loading ||
+                  !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount > getOceanBalance($connectedChainId) ||
                   $form.amount <= 0}
@@ -259,6 +270,10 @@
           </TokenApproval>
         {/if}
       </div>
+      <AgreementCheckbox
+        text="I have familiarized myself with veOCEAN, wave all rights, and assume all risks from using this software."
+        bind:value={$form.ageement}
+      />
     </form>
   </Card>
 </div>

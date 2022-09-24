@@ -25,12 +25,14 @@
       loading = false;
       return;
     }
-    Swal.fire("Success!", "Oceans successfully withdrawn.", "success").then(
-      async () => {
-        loading = false;
-        await addUserOceanBalanceToBalances($connectedChainId);
-      }
-    );
+    Swal.fire(
+      "Success!",
+      "OCEAN tokens successfully withdrawn.",
+      "success"
+    ).then(async () => {
+      loading = false;
+      await addUserOceanBalanceToBalances($connectedChainId);
+    });
   };
 </script>
 
