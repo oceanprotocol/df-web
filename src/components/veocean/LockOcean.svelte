@@ -239,9 +239,12 @@
             tokenName={"OCEAN"}
             spender={process.env.VE_OCEAN_CONTRACT}
             amount={$form.amount}
-            disabled={loading || getOceanBalance($connectedChainId) <= 0}
+            disabled={
+              loading || 
+              getOceanBalance($connectedChainId) <= 0 ||
+              $form.amount > getOceanBalance($connectedChainId)
+            }
             bind:agreed={$form.ageement}
-            bind:loading
           >
             {#if $lockedOceanAmount > 0}
               <Button
@@ -249,6 +252,7 @@
                 disabled={loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
+                  $form.amount > getOceanBalance($connectedChainId) ||
                   ($form.amount <= 0 &&
                     new Date($form.unlockDate) <= $oceanUnlockDate)}
                 type="submit"
@@ -258,6 +262,7 @@
                 disabled={loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
+                  $form.amount > getOceanBalance($connectedChainId) ||
                   $form.amount <= 0}
                 type="submit"
               />
