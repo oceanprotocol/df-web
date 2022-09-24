@@ -14,7 +14,6 @@
   import { isAppLoading } from "../../stores/app";
   import { query } from "svelte-apollo";
   import { GET_ALLOCATIONS } from "../../utils/dataAllocations";
-  import { onMount } from "svelte";
 
   let allocations;
 
@@ -56,17 +55,9 @@
   }
 
   $: if ($dataAllocations) {
+    console.log($dataAllocations);
     loadDatasets(`${process.env.BACKEND_API}/nftinfo`, $dataAllocations);
   }
-
-  onMount(async () => {
-    if (!$userAddress) {
-      if (!$totalUserAllocation) {
-        await totalUserAllocation.update(() => 0);
-      }
-      dataAllocations.update(() => []);
-    }
-  });
 </script>
 
 <div
