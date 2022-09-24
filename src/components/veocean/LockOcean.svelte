@@ -93,7 +93,7 @@
       loading = false;
       return;
     }
-    Swal.fire("Success!", "Oceans successfully locked.", "success").then(
+    Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
       async () => {
         loading = false;
         $form.ageement = false;
@@ -209,11 +209,11 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Used Lock Period Potential`}
-            value={`${parseInt(calculatedMultiplier)}%`}
+            title={`Lock Multiplier`}
+            value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
           />
           <ItemWithLabel
-            title={`veOCEAN Received`}
+            title={`Receive`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
           />
         </div>
