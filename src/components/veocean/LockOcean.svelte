@@ -13,6 +13,7 @@
   import Input from "../common/Input.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
+  import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
   import {
     getOceanBalance,
     addUserOceanBalanceToBalances,
@@ -49,6 +50,10 @@
       .date()
       .required("Unlock date is requred")
       .label("Unlock Date"),
+    ageement: yup
+      .boolean()
+      .required("Agreement is requirement.")
+      .label("User Agreement"),
   });
   let fields = {
     amount: 0,
@@ -56,6 +61,7 @@
       $lockedOceanAmount > 0
         ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
         : getThursdayDate(),
+    ageement: false,
   };
 
   $: if ($userAddress) {
@@ -90,6 +96,7 @@
     Swal.fire("Success!", "Oceans successfully locked.", "success").then(
       async () => {
         loading = false;
+        $form.ageement = false;
         await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
         await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
       }
@@ -233,12 +240,14 @@
             spender={process.env.VE_OCEAN_CONTRACT}
             amount={$form.amount}
             disabled={loading || getOceanBalance($connectedChainId) <= 0}
+            bind:agreed={$form.ageement}
             bind:loading
           >
             {#if $lockedOceanAmount > 0}
               <Button
                 text={updateLockButtonText}
                 disabled={loading ||
+                  !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
                   ($form.amount <= 0 &&
                     new Date($form.unlockDate) <= $oceanUnlockDate)}
@@ -247,6 +256,7 @@
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
                 disabled={loading ||
+                  !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount <= 0}
                 type="submit"
@@ -255,6 +265,10 @@
           </TokenApproval>
         {/if}
       </div>
+      <AgreementCheckbox
+        text="I have familiarized myself with veOCEAN, wave all rights, and assume all risks from using this software."
+        bind:value={$form.ageement}
+      />
     </form>
   </Card>
 </div>
