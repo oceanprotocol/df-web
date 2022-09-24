@@ -3,7 +3,7 @@
     userAddress,
     networkSigner,
     connectedChainId,
-    web3Provider
+    web3Provider,
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Swal from "sweetalert2";
@@ -20,37 +20,27 @@
   let withdrawing = false;
   let blockTimestamp = 0;
   let unlockTimestamp = 0;
-  
+
   const updateBlockTimestamp = async () => {
     const blockNumber = await $web3Provider.getBlockNumber();
     blockTimestamp = (await $web3Provider.getBlock(blockNumber)).timestamp;
-    
-    // console.log("blockNumber", blockNumber);
-    // console.log("blockTimestamp", blockTimestamp);
-  }
+  };
 
   const updateLockEndDate = async () => {
-    unlockTimestamp = await getLockedEndTime(
-      $userAddress,
-      $networkSigner
-    );
+    unlockTimestamp = await getLockedEndTime($userAddress, $networkSigner);
     await oceanUnlockDate.update(() =>
       unlockTimestamp ? new Date(unlockTimestamp) : undefined
     );
-    
-    // console.log("oceanUnlockDate", $oceanUnlockDate);
-    // console.log("unlockTimestamp", unlockTimestamp);
-  }
+  };
 
   const init = async () => {
     loading = true;
 
     await updateBlockTimestamp();
     await updateLockEndDate();
-    // console.log("blockTimestamp > oceanUnlockDate", blockTimestamp > $oceanUnlockDate)
-    
+
     loading = false;
-  }
+  };
 
   $: if ($userAddress && $web3Provider) {
     init();
@@ -83,12 +73,17 @@
 <div class={`container`}>
   <div class="item">
     <Button
-      text={blockTimestamp <= unlockTimestamp ? "Withdraw all locked" : withdrawing ? "Withdrawing..." : "Withdraw"}
+      text={blockTimestamp <= unlockTimestamp
+        ? "Withdraw all locked"
+        : withdrawing
+        ? "Withdrawing..."
+        : "Withdraw"}
       secondary
-      disabled={((loading || withdrawing) ||
+      disabled={loading ||
+        withdrawing ||
         !$oceanUnlockDate ||
-        parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId) ||
-        ( new Date() < $oceanUnlockDate && blockTimestamp <= unlockTimestamp )}
+        parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId ||
+        (new Date() < $oceanUnlockDate && blockTimestamp <= unlockTimestamp)}
       onclick={() => withdraw()}
     />
   </div>
