@@ -172,7 +172,7 @@
           type="number"
           name="amount"
           min={$lockedOceanAmount ? 0 : 1}
-          max={$userAddress
+          max={$userAddress && getOceanBalance($connectedChainId)
             ? parseFloat(getOceanBalance($connectedChainId)).toFixed(3)
             : 0}
           error={$errors.amount}
