@@ -87,7 +87,7 @@
       loading = false;
       return;
     }
-    Swal.fire("Success!", "Oceans successfully locked.", "success").then(
+    Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
       async () => {
         loading = false;
         await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
