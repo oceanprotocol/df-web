@@ -37,29 +37,51 @@
     },
   ];
 
+  // TODO - Off by 7 days.
   const handleOnPeriodClick = (days) => {
-    const currentDate = $oceanUnlockDate ? $oceanUnlockDate : new Date();
-    let date = new Date(currentDate).setDate(
-      new Date(currentDate).getDate() + days
-    );
-    const thursdayDate = new Date(getThursdayDateRoundingDown(new Date(date)));
-    if (thursdayDate > new Date(max)) return;
-    value = thursdayDate.toLocaleDateString("en-CA");
+    let targetDate = new Date(getThursdayDate());
+    targetDate = new Date(targetDate.setDate(targetDate.getDate() + (days)));
+    
+    if(targetDate.getDay() !== 3) {
+      targetDate = new Date(getThursdayDateRoundingDown(targetDate));
+      targetDate.setDate(targetDate.getDate());
+    }
+    if(targetDate > new Date(max)) {
+      targetDate = new Date(getThursdayDateRoundingDown(new Date(max)));
+      targetDate.setDate(targetDate.getDate())
+    }
+
+    if (targetDate > new Date(max)) return;
+    value = targetDate.toLocaleDateString("en-CA");
   };
 </script>
 
 <div class={`container`}>
-  <input
-    class="input"
-    type="date"
-    {step}
-    {min}
-    {max}
-    bind:value
-    {placeholder}
-    on:input={onChange}
-    {disabled}
-  />
+  {#if value <= min}
+    <input
+      class="inputError"
+      type="date"
+      {step}
+      {min}
+      {max}
+      bind:value
+      {placeholder}
+      on:input={onChange}
+      {disabled}
+    />
+  {:else}
+    <input
+      class="input"
+      type="date"
+      {step}
+      {min}
+      {max}
+      bind:value
+      {placeholder}
+      on:input={onChange}
+      {disabled}
+    />
+  {/if}
   <ul class="periodList">
     {#each periods as period, index}
       <li class="periodItem" on:click={() => handleOnPeriodClick(period.days)}>
@@ -82,6 +104,13 @@
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
     width: 100%;
+  }
+  .inputError {
+    border: 1px solid var(--brand-grey-lighter);
+    padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
+    border-radius: 3px;
+    width: 100%;
+    color: var(--brand-alert-red);
   }
   .periodList {
     width: 100%;
