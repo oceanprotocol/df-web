@@ -76,9 +76,7 @@
 
     veOceanWithDelegations.update(() => newVeOceansWithDelegations);
     await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
-    await addUserOceanBalanceToBalances(
-      parseInt(process.env.VE_SUPPORTED_CHAINID)
-    );
+    await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
     isAppLoading.update(() => false);
   }
 

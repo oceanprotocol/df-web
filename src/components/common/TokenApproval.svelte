@@ -15,6 +15,8 @@
   export let spender;
   export let approving = false;
 
+  export let agreed = false;
+
   let isAmountApproved;
 
   const onClick = async () => {
@@ -64,7 +66,11 @@
         ? "Approving"
         : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
       onclick={() => onClick()}
-      disabled={disabled || loading}
+      disabled={
+        disabled || 
+        loading || 
+        !agreed
+      }
     />
   {:else}
     <slot />

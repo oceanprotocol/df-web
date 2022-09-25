@@ -12,7 +12,6 @@
   import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
   import WithdrawOcean from "./WithdrawOcean.svelte";
 
-  let balance = 0;
   let loading = false;
 
   const setValues = async () => {
@@ -23,11 +22,10 @@
       );
       totalUserAllocation.update(() => newAllocation);
     }
-    balance = $userBalances[process.env.VE_OCEAN_CONTRACT];
     loading = false;
   };
 
-  $: if ($userAddress && $userBalances) {
+  $: if ($userAddress) {
     setValues();
   }
 </script>
@@ -37,7 +35,9 @@
     <div class="veOcean-info">
       <ItemWithLabel
         title={`Balance`}
-        value={`${parseFloat(balance).toFixed(3)} veOCEAN`}
+        value={`${parseFloat(
+          $userBalances[process.env.VE_OCEAN_CONTRACT]
+        ).toFixed(3)} veOCEAN`}
         {loading}
       />
       <ItemWithLabel

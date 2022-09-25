@@ -4,16 +4,17 @@
   import { Link, useLocation, useNavigate } from "svelte-navigator";
 
   const aboutURL =
-    "https://blog.oceanprotocol.com/ocean-data-farming-series-c7922f1d0e45";
+    "https://blog.oceanprotocol.com/veocean-is-launching-data-farming-is-resuming-abed779211e3";
   const location = useLocation();
-  const navigate = useNavigate();
 </script>
 
 <svelte:head>
   <title>
-    {`${$location.pathname
-      .charAt(1)
-      .toUpperCase()}${$location.pathname.substring(2)} - Ocean Farm`}
+    {`${
+      $location.pathname.substring(1) === "veocean"
+        ? "veOCEAN"
+        : $location.pathname.substring(1)
+    } - Ocean Farm`}
   </title>
 </svelte:head>
 <header>
@@ -24,8 +25,8 @@
   </div>
   <nav>
     <ul>
-      <li class:active={$location.pathname === "/veOCEAN"}>
-        <Link to="/veOCEAN" class="link">veOCEAN</Link>
+      <li class:active={$location.pathname === "/veocean"}>
+        <Link to="/veocean" class="link">veOCEAN</Link>
       </li>
       <li class:active={$location.pathname === "/rewards"}>
         <Link to="/rewards" class="link">CLAIM PORTAL</Link>
@@ -104,7 +105,6 @@
     font-weight: 700;
     text-decoration: none;
     font-size: var(--font-size-small);
-    text-transform: uppercase;
     letter-spacing: 0.1em;
     text-decoration: none;
     transition: color 0.2s linear;
