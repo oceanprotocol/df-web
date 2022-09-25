@@ -69,6 +69,7 @@
 
       await updateBlockTimestamp();
       await updateLockEndDate();
+      loading = false;
     });
   };
 </script>
