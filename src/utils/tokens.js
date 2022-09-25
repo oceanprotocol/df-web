@@ -21,7 +21,6 @@ export const getOceanTokenAddressByChainId = (chainId) => {
 export const getTokenContract = async (chainId, address, signer) => {
   try {
     const rpcURL = await getRpcUrlByChainId(chainId);
-
     if( rpcURL ) {
       return new ethers.Contract(address, TokenABI.default, signer);
     }
