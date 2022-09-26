@@ -11,6 +11,7 @@
     let summary = query(TOTAL_LOCKED);
     
     let totalLocked;
+    let totalUsers;
     // TODO - Implement avg lock time
     
     let loading = true;
@@ -32,6 +33,7 @@
         totalLocked = data.reduce(function(total, user) {
             return total + parseInt(user.lockedAmount)
         }, 0);
+        totalUsers = data.length;
     }
 
     $: if ($summary) {
@@ -47,9 +49,14 @@
       <div class="veOcean-info">
         {#if loading === false}
             <ItemWithLabel
-            title={`Total Locked`}
-            value={`${convertToInternationalCurrencySystem(totalLocked)} OCEAN`}
-            {loading}
+                title={`Total Users`}
+                value={`${totalUsers}`}
+                {loading}
+            />
+            <ItemWithLabel
+                title={`Total Locked`}
+                value={`${convertToInternationalCurrencySystem(totalLocked)} OCEAN`}
+                {loading}
             />
         {/if}
       </div>
@@ -61,14 +68,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         grid-column: 1 / 3;
         width: 100%;
     }
 
     .veOcean-info {
         display: flex;
-        justify-content: center;
+        justify-content: space-evenly;
         align-items: center;
         width: 100%;
     }
