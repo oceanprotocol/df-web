@@ -1,9 +1,6 @@
 <script>
     import Card from "../common/Card.svelte";
     import ItemWithLabel from "../common/ItemWithLabel.svelte";
-    import {
-        userAddress,
-    } from "../../stores/web3";
     import { query } from "svelte-apollo";
     import { TOTAL_LOCKED } from "../../utils/dataVeOCEAN";
     import { veOceanSummary } from "../../stores/subgraph";
@@ -43,7 +40,7 @@
 </script>
 
 <div class={`container`}>
-    <Card title="veOCEAN">
+    <Card title="veOCEAN Metrics">
       <div class="veOcean-info">
         {#if loading === false}
             <ItemWithLabel
