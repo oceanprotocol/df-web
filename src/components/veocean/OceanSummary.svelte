@@ -34,7 +34,7 @@
         }, 0);
     }
 
-    $: if ($userAddress && $summary) {
+    $: if ($summary) {
         if($summary.loading === false) {
             loadSummary();
             loading = false;
