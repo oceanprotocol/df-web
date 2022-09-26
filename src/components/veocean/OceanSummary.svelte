@@ -36,7 +36,7 @@
         totalUsers = data.length;
     }
 
-    $: if ($summary) {
+    $: if ($summary?.data) {
         if($summary.loading === false) {
             loadSummary();
             loading = false;
