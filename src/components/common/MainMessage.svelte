@@ -20,7 +20,7 @@
     flex-direction: column;
     align-items: center;
     margin-bottom: calc(var(--spacer) / 4);
-    color: var(--brand-grey-light);
+    color: var(--brand-black);
   }
   span {
     font-weight: bold;

@@ -15,6 +15,7 @@
   import { query } from "svelte-apollo";
   import { GET_ALLOCATIONS } from "../../utils/dataAllocations";
   import { onMount } from "svelte";
+  import MainMessage from "../common/MainMessage.svelte";
 
   let allocations;
 
@@ -73,13 +74,18 @@
   class={`container ${(!$datasets || $isAppLoading) && "alignContentCenter"}`}
 >
   {#if $datasets && !$isAppLoading}
-    <div class="data">
-      <Table
-        colData={columnsData}
-        notHidableColumns={["Action", "Allocate"]}
-        rowData={$datasets}
-        description="Explore all the datasets that are eligible for staking, and stake your Ocean token to get rewards."
+    <div class="wrapper">
+      <MainMessage
+        message={`**Your allocations will be counted for rewards calculation starting from Thursday, as soon as Data Farming goes live.**`}
       />
+      <div class="data">
+        <Table
+          colData={columnsData}
+          notHidableColumns={["Action", "Allocate"]}
+          rowData={$datasets}
+          description="Explore all the datasets that are eligible for staking, and stake your Ocean token to get rewards."
+        />
+      </div>
     </div>
   {:else}
     <span class="loading">Loading...</span>
@@ -87,6 +93,11 @@
 </div>
 
 <style>
+  .wrapper {
+    margin-top: var(--spacer);
+    width: 100%;
+  }
+
   .container {
     display: flex;
     flex-direction: column;
@@ -101,7 +112,7 @@
     box-shadow: var(--box-shadow);
     transform: translate3d(0, -0.05rem, 0);
     border-radius: var(--border-radius);
-    margin-top: calc(var(--spacer) * 2);
+    margin-top: var(--spacer);
   }
 
   .loading {
