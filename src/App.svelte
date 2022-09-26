@@ -42,7 +42,7 @@
   import { getLockedEndTime } from "./utils/ve";
 
   const client = new ApolloClient({
-    uri: "https://v4.subgraph.rinkeby.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph",
+    uri: "https://v4.subgraph.mainnet.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph",
     fetchOptions: {
       credentials: "include",
     },
