@@ -11,7 +11,6 @@
     let summary = query(TOTAL_LOCKED);
     
     let totalLocked;
-    let totalUsers;
     // TODO - Implement avg lock time
     
     let loading = true;
@@ -33,7 +32,6 @@
         totalLocked = data.reduce(function(total, user) {
             return total + parseInt(user.lockedAmount)
         }, 0);
-        totalUsers = data.length;
     }
 
     $: if ($summary?.data) {
@@ -48,11 +46,6 @@
     <Card title="veOCEAN">
       <div class="veOcean-info">
         {#if loading === false}
-            <ItemWithLabel
-                title={`Total Users`}
-                value={`${totalUsers}`}
-                {loading}
-            />
             <ItemWithLabel
                 title={`Total Locked`}
                 value={`${convertToInternationalCurrencySystem(totalLocked)} OCEAN`}
