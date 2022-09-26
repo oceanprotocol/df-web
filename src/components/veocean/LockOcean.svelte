@@ -86,14 +86,7 @@
 
   const onFormSubmit = async (values) => {
     loading = true;
-
-    console.log("values.unlockDate:", values.unlockDate);
-    console.log(
-      "new Date(values.unlockDate).getTime():",
-      new Date(values.unlockDate).getTime()
-    );
     const unlockTimestamp = new Date(values.unlockDate).getTime();
-    console.log("unlockTimestamp", unlockTimestamp);
     try {
       if ($oceanUnlockDate > 0) {
         if (values.amount > 0) {

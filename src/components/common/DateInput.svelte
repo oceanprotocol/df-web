@@ -1,9 +1,7 @@
 <script>
-  import { oceanUnlockDate } from "../../stores/veOcean";
-
+  import moment from 'moment';
   import {
-    getThursdayDate,
-    getThursdayDateRoundingDown,
+    getOffsetThursday
   } from "../../utils/functions";
 
   export let value = undefined;
@@ -37,26 +35,13 @@
     },
   ];
 
-  // TODO - Off by 7 days.
   const handleOnPeriodClick = (days) => {
-    let targetDate = new Date(getThursdayDate());
-    targetDate = new Date(targetDate.setDate(targetDate.getDate() + (days)));
-    console.log("targetDate:", targetDate);
-    console.log("targetDate.getUTCDay()", targetDate.getUTCDay());
-
-    if(targetDate.getUTCDay() < 4) {
-      targetDate = new Date(getThursdayDateRoundingDown(targetDate));
-    } else if(targetDate.getUTCDay() != 4){
-      targetDate = new Date(getThursdayDate(targetDate));
-    }
-    if(targetDate > new Date(max)) {
-      targetDate = new Date(getThursdayDateRoundingDown(new Date(max)));
-    }
-
-    if (targetDate > new Date(max)) return;
-    
-    console.log("final targetDate:", targetDate);
-    value = targetDate.toLocaleDateString("en-CA");
+    let targetDate = getOffsetThursday(
+      moment(),
+      days,
+      max
+    )
+    value = new Date(targetDate).toLocaleDateString("en-CA");
   };
 </script>
 
