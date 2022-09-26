@@ -1,6 +1,5 @@
 <script>
   import { networkSigner, userAddress } from "../../stores/web3";
-  import OceanSummary from "./OceanSummary.svelte";
   import VeOceanCard from "./VeOceanCard.svelte";
   import LockOcean from "./LockOcean.svelte";
   import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
@@ -42,7 +41,6 @@
   <div class={`container`}>
     <VeOceanCard />
     <LockOcean />
-    <OceanSummary />
   </div>
 {:else}
   <div class="loading">Loading...</div>
