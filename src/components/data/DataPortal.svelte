@@ -75,9 +75,7 @@
 >
   {#if $datasets && !$isAppLoading}
     <div class="wrapper">
-      <MainMessage
-        message={`**Your allocations will be counted for rewards calculation starting from Thursday, as soon as Data Farming goes live.**`}
-      />
+      <MainMessage message={`**Test test test.**`} />
       <div class="data">
         <Table
           colData={columnsData}
