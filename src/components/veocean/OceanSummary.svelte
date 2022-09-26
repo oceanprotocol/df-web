@@ -5,10 +5,10 @@
         userAddress,
     } from "../../stores/web3";
     import { query } from "svelte-apollo";
-    import { VEOCEAN_SUMMARY } from "../../utils/dataVeOCEAN";
+    import { TOTAL_LOCKED } from "../../utils/dataVeOCEAN";
     import { veOceanSummary } from "../../stores/subgraph";
     
-    let summary = query(VEOCEAN_SUMMARY);
+    let summary = query(TOTAL_LOCKED);
     
     let totalLocked;
     // TODO - Implement avg lock time
@@ -16,9 +16,6 @@
     let loading = true;
 
     const convertToInternationalCurrencySystem = (value) => {
-        console.log("value", value);
-        console.log("Math.abs(Number(value))", Math.abs(Number(value)));
-
         return Math.abs(Number(value)) >= 1.0e+9
         ? (Math.abs(Number(value)) / 1.0e+9).toFixed(2) + "B"
         : Math.abs(Number(value)) >= 1.0e+6
@@ -33,17 +30,13 @@
         let data = $summary.data.veOCEANs;
         
         totalLocked = data.reduce(function(total, user) {
-            console.log("parseInt(user.lockedAmount)", parseInt(user.lockedAmount));
             return total + parseInt(user.lockedAmount)
         }, 0);
-        console.log("totalLocked", totalLocked);
     }
 
     $: if ($userAddress && $summary) {
         if($summary.loading === false) {
-            console.log("summary", $summary);
             loadSummary();
-
             loading = false;
         }
     }
