@@ -37,7 +37,7 @@
 
   const handleOnPeriodClick = (days) => {
     let targetDate = getThursdayOffset(
-      moment(),
+      moment().utc(),
       days,
       max
     )
