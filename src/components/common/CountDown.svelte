@@ -4,8 +4,9 @@
   import { getThursdayDate } from "../../utils/functions";
 </script>
 
+//from={getThursdayDate(moment())}
 <Countdown
-  from={getThursdayDate(moment())}
+  from={"2022-10-06"}
   dateFormat="YYYY-MM-DD"
   zone="Europe/Athens"
   let:remaining
