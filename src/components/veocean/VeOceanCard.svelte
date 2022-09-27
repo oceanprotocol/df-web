@@ -55,7 +55,7 @@
       <ItemWithLabel
         title={`Lock ends`}
         value={`${
-          $oceanUnlockDate ? $oceanUnlockDate.format("MM-DD-YYYY") : "-"
+          $oceanUnlockDate ? $oceanUnlockDate.format("DD-MM-YYYY") : "-"
         }`}
         {loading}
       />
