@@ -35,16 +35,15 @@
   } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
   import {
-    getThursdayDate,
-    getThursdayDateRoundingDown,
+    getThursdayDate
   } from "../../utils/functions";
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
+  import moment from "moment";
 
   let networksData = networksDataArray.default;
 
   let calculatedVotingPower = 0;
   let calculatedMultiplier = 0;
-  let maxDate = new Date(getThursdayDate());
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
 
@@ -68,9 +67,9 @@
   let fields = {
     amount: 0,
     unlockDate:
-      $oceanUnlockDate > 0
-        ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
-        : getThursdayDate(),
+      $oceanUnlockDate
+        ? $oceanUnlockDate.format("YYYY-MM-DD")
+        : moment.utc(getThursdayDate(moment.utc())).format("YYYY-MM-DD"),
     ageement: false,
   };
 
@@ -86,23 +85,24 @@
 
   const onFormSubmit = async (values) => {
     loading = true;
-    const unlockTimestamp = new Date(values.unlockDate).getTime();
+    const unlockTimestamp = moment.utc(values.unlockDate).unix();
+
     try {
-      if ($oceanUnlockDate > 0) {
+      if ($oceanUnlockDate) {
         if (values.amount > 0) {
           await updateLockedOceanAmount(values.amount, $networkSigner);
         }
-        if (new Date(values.unlockDate) > new Date($oceanUnlockDate)) {
-          await updateLockPeriod(unlockTimestamp / 1000, $networkSigner);
+        if (moment.utc(values.unlockDate).isAfter($oceanUnlockDate)) {
+          await updateLockPeriod(unlockTimestamp, $networkSigner);
         }
       } else {
-        await lockOcean(values.amount, unlockTimestamp / 1000, $networkSigner);
+        await lockOcean(values.amount, unlockTimestamp, $networkSigner);
       }
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
       return;
-    }
+    }oceanUnlockDate
     Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
       async () => {
         loading = false;
@@ -114,7 +114,7 @@
           $networkSigner
         );
         await oceanUnlockDate.update(() =>
-          unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+          unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
         );
         const newVeOceansWithDelegations =
           await getUserVotingPowerWithDelegations($userAddress);
@@ -125,13 +125,13 @@
   };
 
   const getUpdateLockButtonText = () => {
-    let unlockDate = new Date($form.unlockDate);
+    let unlockDate = moment.utc($form.unlockDate);
     if (loading) return "LOADING...";
-    if ($form.amount > 0 && unlockDate > $oceanUnlockDate)
+    if ($form.amount > 0 && unlockDate.isAfter($oceanUnlockDate))
       return "UPDATE LOCKED AMOUNT AND LOCK END DATE";
     if ($form.amount > 0) {
       return "UPDATE LOCKED AMOUNT";
-    } else if (unlockDate > $oceanUnlockDate) {
+    } else if (unlockDate.isAfter($oceanUnlockDate)) {
       return "UPDATE LOCK END DATE";
     } else {
       return "UPDATE LOCK";
@@ -142,45 +142,34 @@
     updateLockButtonText = getUpdateLockButtonText();
   }
 
+  const DAY = 60 * 60 * 24;
   const MAXDAYS = 4 * 365;
-  const getMaxDate = () => {
-    let curDate = new Date();
-    let maxDate = new Date(curDate.setDate(curDate.getDate() + MAXDAYS));
-    return maxDate;
-  };
+  const MAX_MS = MAXDAYS * DAY * 1000;
 
-  const getMaxTime = () => {
-    const maxDate = getMaxDate();
-    return maxDate.getTime();
+  const getMaxDate = () => {
+    let max = moment.utc().add(MAXDAYS, 'days');
+    return max;
   };
-  const MAXTIME = getMaxTime();
 
   const updateMultiplier = () => {
-    if ($form.unlockDate) {
+    if ($form.unlockDate && $form.amount > 0) {
       // 4 years = 100% voting power
-      var thursday = new Date(getThursdayDate());
-      const lockDateDiff = new Date($form.unlockDate) - thursday;
-      var msDelta =
-        lockDateDiff > 0
-          ? lockDateDiff
-          : new Date($form.unlockDate) - new Date();
-      calculatedMultiplier = ((msDelta / MAXTIME) * 100.0).toFixed(3);
-      if ($form.amount > 0) {
-        calculatedVotingPower = ((msDelta / MAXTIME) * $form.amount).toFixed(3);
-      } else {
-        calculatedVotingPower = 0;
-      }
+      var today = moment.utc();
+      var unlockDate = moment.utc($form.unlockDate);
+      const msDelta = unlockDate.diff(today);
+      calculatedMultiplier = ((msDelta / MAX_MS) * 100.0).toFixed(3);
+      calculatedVotingPower = ((msDelta / MAX_MS) * $form.amount).toFixed(3);
     } else {
-      calculatedMultiplier = 0;
+      calculatedVotingPower = 0;
     }
   };
-
+  
   $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
 </script>
 
 <div class={`container`}>
   <Card
-    title={$oceanUnlockDate > 0
+    title={$oceanUnlockDate
       ? `Update veOCEAN Lock`
       : `Lock OCEAN, get veOCEAN`}
   >
@@ -195,7 +184,7 @@
             : 0}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0 ||
-            new Date() > $oceanUnlockDate}
+            moment().isAfter($oceanUnlockDate)}
           label="OCEAN Amount"
           direction="column"
           bind:value={$form.amount}
@@ -212,11 +201,11 @@
           step="7"
           error={$errors.unlockDate}
           direction="column"
-          min={$oceanUnlockDate > 0
-            ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
-            : getThursdayDate()}
+          min={$oceanUnlockDate
+            ? $oceanUnlockDate.format("YYYY-MM-DD")
+            : getThursdayDate(moment())}
           disabled={getOceanBalance($connectedChainId) <= 0}
-          max={new Date(getMaxTime()).toLocaleDateString("en-CA")}
+          max={getMaxDate().format("YYYY-MM-DD")}
           bind:value={$form.unlockDate}
         />
       </div>
@@ -258,7 +247,7 @@
               $form.amount > getOceanBalance($connectedChainId)}
             bind:agreed={$form.ageement}
           >
-            {#if $oceanUnlockDate > 0}
+            {#if $oceanUnlockDate}
               <Button
                 text={updateLockButtonText}
                 disabled={loading ||
@@ -266,7 +255,7 @@
                   getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount > getOceanBalance($connectedChainId) ||
                   ($form.amount <= 0 &&
-                    new Date($form.unlockDate) <= $oceanUnlockDate)}
+                    moment($form.unlockDate).isBefore($oceanUnlockDate))}
                 type="submit"
               />
             {:else}<Button

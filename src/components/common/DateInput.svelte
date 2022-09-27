@@ -1,7 +1,7 @@
 <script>
   import moment from 'moment';
   import {
-    getOffsetThursday
+    getThursdayOffset
   } from "../../utils/functions";
 
   export let value = undefined;
@@ -36,12 +36,12 @@
   ];
 
   const handleOnPeriodClick = (days) => {
-    let targetDate = getOffsetThursday(
+    let targetDate = getThursdayOffset(
       moment(),
       days,
       max
     )
-    value = new Date(targetDate).toLocaleDateString("en-CA");
+    value = moment(targetDate).format("YYYY-MM-DD");
   };
 </script>
 

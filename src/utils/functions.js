@@ -1,25 +1,20 @@
 export const getThursdayDate = (date) => {
-  var curr = date || new Date();
-  if (curr.getUTCDay() >= 4) curr.setDate(curr.getDate() + 4); // get current date
-  var first = curr.getDate() - curr.getUTCDay();
-  var thursday = new Date(curr.setDate(first + 4)).toLocaleDateString(
-    "en-CA"
-  );
-  return thursday;
+  // returns: nearest, forward looking thursday from the specified date
+  // params: moment(date)
+  
+  if(date.day() < 4) {
+      date.day(4);
+  } else if(date.day() > 4) {
+      date.day(11);
+  }
+
+  return date.format("YYYY-MM-DD");
 };
 
-export const getThursdayDateRoundingDown = (date) => {
-  var curr = date || new Date();
-  if (curr.getUTCDay() < 4) curr.setDate(curr.getDate() - 7); // get current date
-  var first = curr.getDate() - curr.getUTCDay();
-  var thursday = new Date(curr.setDate(first + 4)).toLocaleDateString(
-    "en-CA"
-  );
-  return thursday;
-};
+export const getThursdayOffset = (day, days, max) => {
+  // returns: nearest, forward looking thursday from specified date, and day offset
+  // returns: nearest thursday below the maximum date
 
-// Use this
-export const getOffsetThursday = (day, days, max) => {
   let target = day;
   target.add(days, 'days');
   
