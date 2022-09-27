@@ -88,7 +88,7 @@
         withdrawing ||
         !$oceanUnlockDate ||
         parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId ||
-        (moment().isBefore($oceanUnlockDate) && blockTimestamp <= unlockTimestamp)}
+        (moment().utc().isBefore($oceanUnlockDate) && blockTimestamp <= unlockTimestamp)}
       onclick={() => withdraw()}
     />
   </div>

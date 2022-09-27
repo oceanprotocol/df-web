@@ -184,7 +184,7 @@
             : 0}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0 ||
-            moment().isAfter($oceanUnlockDate)}
+            moment().utc().isAfter($oceanUnlockDate)}
           label="OCEAN Amount"
           direction="column"
           bind:value={$form.amount}
@@ -203,7 +203,7 @@
           direction="column"
           min={$oceanUnlockDate
             ? $oceanUnlockDate.format("YYYY-MM-DD")
-            : getThursdayDate(moment())}
+            : getThursdayDate(moment().utc())}
           disabled={getOceanBalance($connectedChainId) <= 0}
           max={getMaxDate().format("YYYY-MM-DD")}
           bind:value={$form.unlockDate}

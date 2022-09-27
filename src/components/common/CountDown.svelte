@@ -5,7 +5,7 @@
 </script>
 
 <Countdown
-  from={getThursdayDate(moment())}
+  from={getThursdayDate(moment().utc())}
   dateFormat="YYYY-MM-DD"
   zone="Europe/Athens"
   let:remaining
