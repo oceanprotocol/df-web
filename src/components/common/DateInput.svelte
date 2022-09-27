@@ -41,33 +41,18 @@
 </script>
 
 <div class={`container`}>
-  {#if value <= min}
-    <input
-      class="inputError"
-      type="date"
-      {step}
-      {min}
-      {max}
-      onkeydown={disableKeyboardInput ? disableKeyboardInput : undefined}
-      bind:value
-      {placeholder}
-      on:input={onChange}
-      {disabled}
-    />
-  {:else}
-    <input
-      class="input"
-      type="date"
-      {step}
-      {min}
-      {max}
-      onkeydown={disableKeyboardInput ? disableKeyboardInput : undefined}
-      bind:value
-      {placeholder}
-      on:input={onChange}
-      {disabled}
-    />
-  {/if}
+  <input
+    class={`input ${value <= min ? "inputError" : ""}`}
+    type="date"
+    {step}
+    {min}
+    {max}
+    onkeydown={disableKeyboardInput ? disableKeyboardInput : undefined}
+    bind:value
+    {placeholder}
+    on:input={onChange}
+    {disabled}
+  />
   <ul class="periodList">
     {#each periods as period, index}
       <li class="periodItem" on:click={() => handleOnPeriodClick(period.days)}>
@@ -92,10 +77,6 @@
     width: 100%;
   }
   .inputError {
-    border: 1px solid var(--brand-grey-lighter);
-    padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
-    border-radius: 3px;
-    width: 100%;
     color: var(--brand-alert-red);
   }
   .periodList {
