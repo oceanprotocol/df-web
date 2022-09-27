@@ -45,6 +45,15 @@
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
 
+  const DAY = 60 * 60 * 24;
+  const MAXDAYS = 4 * 365;
+  const MAX_MS = MAXDAYS * DAY * 1000;
+
+  const getMaxDate = () => {
+    let max = moment.utc().add(MAXDAYS, "days");
+    return max;
+  };
+
   let schema = yup.object().shape({
     amount: yup
       .number()
@@ -54,6 +63,12 @@
       .label("Amount"),
     unlockDate: yup
       .date()
+      .min(
+        $oceanUnlockDate
+          ? $oceanUnlockDate.format("YYYY-MM-DD")
+          : getThursdayDate(moment().utc())
+      )
+      .max(getMaxDate().format("YYYY-MM-DD"))
       .required("Unlock date is requred")
       .label("Unlock Date"),
     ageement: yup
@@ -141,15 +156,6 @@
     updateLockButtonText = getUpdateLockButtonText();
   }
 
-  const DAY = 60 * 60 * 24;
-  const MAXDAYS = 4 * 365;
-  const MAX_MS = MAXDAYS * DAY * 1000;
-
-  const getMaxDate = () => {
-    let max = moment.utc().add(MAXDAYS, "days");
-    return max;
-  };
-
   const updateMultiplier = () => {
     if ($form.unlockDate && $form.amount > 0) {
       // 4 years = 100% voting power
@@ -197,8 +203,8 @@
           name="unlockDate"
           step="7"
           error={$errors.unlockDate}
-          disableKeyboardInput="return false"
           direction="column"
+          disableKeyboardInput="return false"
           min={$oceanUnlockDate
             ? $oceanUnlockDate.format("YYYY-MM-DD")
             : getThursdayDate(moment().utc())}
