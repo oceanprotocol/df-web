@@ -102,7 +102,7 @@
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
       return;
-    }oceanUnlockDate
+    }
     Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
       async () => {
         loading = false;
