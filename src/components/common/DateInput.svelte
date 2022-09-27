@@ -42,7 +42,12 @@
 
 <div class={`container`}>
   <input
-    class={`input ${value <= min ? "inputError" : ""}`}
+    class={`input ${
+      (value === min && moment.utc().format("YYYY-MM-DD") === min) ||
+      (value < min && moment.utc().format("YYYY-MM-DD") < min)
+        ? "inputError"
+        : ""
+    }`}
     type="date"
     {step}
     {min}
