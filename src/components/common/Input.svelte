@@ -17,6 +17,7 @@
   export let showMaxValue = false;
   export let maxValueLabel = "";
   export let showMaxButton = false;
+  export let disableKeyboardInput = undefined;
   export let className;
 </script>
 
@@ -58,6 +59,7 @@
         {min}
         {max}
         {step}
+        {disableKeyboardInput}
         bind:value
         {placeholder}
         on:input={onChange}

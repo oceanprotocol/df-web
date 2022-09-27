@@ -34,9 +34,7 @@
     veOceanWithDelegations,
   } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
-  import {
-    getThursdayDate
-  } from "../../utils/functions";
+  import { getThursdayDate } from "../../utils/functions";
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
   import moment from "moment";
 
@@ -66,10 +64,9 @@
 
   let fields = {
     amount: 0,
-    unlockDate:
-      $oceanUnlockDate
-        ? $oceanUnlockDate.format("YYYY-MM-DD")
-        : moment.utc(getThursdayDate(moment.utc())).format("YYYY-MM-DD"),
+    unlockDate: $oceanUnlockDate
+      ? $oceanUnlockDate.format("YYYY-MM-DD")
+      : moment.utc(getThursdayDate(moment.utc())).format("YYYY-MM-DD"),
     ageement: false,
   };
 
@@ -114,7 +111,9 @@
           $networkSigner
         );
         await oceanUnlockDate.update(() =>
-          unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
+          unlockDateMilliseconds
+            ? moment.utc(unlockDateMilliseconds)
+            : undefined
         );
         const newVeOceansWithDelegations =
           await getUserVotingPowerWithDelegations($userAddress);
@@ -147,7 +146,7 @@
   const MAX_MS = MAXDAYS * DAY * 1000;
 
   const getMaxDate = () => {
-    let max = moment.utc().add(MAXDAYS, 'days');
+    let max = moment.utc().add(MAXDAYS, "days");
     return max;
   };
 
@@ -163,15 +162,13 @@
       calculatedVotingPower = 0;
     }
   };
-  
+
   $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
 </script>
 
 <div class={`container`}>
   <Card
-    title={$oceanUnlockDate
-      ? `Update veOCEAN Lock`
-      : `Lock OCEAN, get veOCEAN`}
+    title={$oceanUnlockDate ? `Update veOCEAN Lock` : `Lock OCEAN, get veOCEAN`}
   >
     <form class="content" on:submit={handleSubmit}>
       <div class="item">
@@ -200,6 +197,7 @@
           name="unlockDate"
           step="7"
           error={$errors.unlockDate}
+          disableKeyboardInput="return false"
           direction="column"
           min={$oceanUnlockDate
             ? $oceanUnlockDate.format("YYYY-MM-DD")

@@ -1,8 +1,6 @@
 <script>
-  import moment from 'moment';
-  import {
-    getThursdayOffset
-  } from "../../utils/functions";
+  import moment from "moment";
+  import { getThursdayOffset } from "../../utils/functions";
 
   export let value = undefined;
   export let placeholder = undefined;
@@ -10,6 +8,7 @@
   export let max = undefined;
   export let disabled = false;
   export let onChange = undefined;
+  export let disableKeyboardInput = undefined;
   export let step = 1;
 
   const periods = [
@@ -36,11 +35,7 @@
   ];
 
   const handleOnPeriodClick = (days) => {
-    let targetDate = getThursdayOffset(
-      moment().utc(),
-      days,
-      max
-    )
+    let targetDate = getThursdayOffset(moment().utc(), days, max);
     value = moment(targetDate).format("YYYY-MM-DD");
   };
 </script>
@@ -53,6 +48,7 @@
       {step}
       {min}
       {max}
+      onkeydown={disableKeyboardInput ? disableKeyboardInput : undefined}
       bind:value
       {placeholder}
       on:input={onChange}
@@ -65,6 +61,7 @@
       {step}
       {min}
       {max}
+      onkeydown={disableKeyboardInput ? disableKeyboardInput : undefined}
       bind:value
       {placeholder}
       on:input={onChange}
