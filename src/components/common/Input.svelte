@@ -17,9 +17,14 @@
   export let showMaxValue = false;
   export let maxValueLabel = "";
   export let showMaxButton = false;
+  export let className;
 </script>
 
-<div class={`container ${direction === "row" ? "row" : "column"}`}>
+<div
+  class={`container ${direction === "row" ? "row" : "column"} ${
+    className ? className : ""
+  }`}
+>
   {#if label}
     <label class={`${direction === "column" && "margin-bottom"}`}>
       {label}

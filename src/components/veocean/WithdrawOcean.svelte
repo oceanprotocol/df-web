@@ -3,46 +3,91 @@
     userAddress,
     networkSigner,
     connectedChainId,
+    web3Provider,
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Swal from "sweetalert2";
-  import { withdrawOcean } from "../../utils/ve";
-  import { oceanUnlockDate, lockedOceanAmount } from "../../stores/veOcean";
+  import { getLockedEndTime, withdrawOcean } from "../../utils/ve";
+  import {
+    oceanUnlockDate,
+    lockedOceanAmount,
+    veOceanWithDelegations,
+  } from "../../stores/veOcean";
   import { addUserOceanBalanceToBalances } from "../../stores/tokens";
+  import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
 
   let loading = true;
+  let withdrawing = false;
+  let blockTimestamp = 0;
+  let unlockTimestamp = 0;
 
-  $: if ($userAddress) {
+  const updateBlockTimestamp = async () => {
+    const blockNumber = await $web3Provider.getBlockNumber();
+    blockTimestamp =
+      (await $web3Provider.getBlock(blockNumber)).timestamp * 1000;
+  };
+
+  const updateLockEndDate = async () => {
+    unlockTimestamp = await getLockedEndTime($userAddress, $networkSigner);
+    await oceanUnlockDate.update(() =>
+      unlockTimestamp ? new Date(unlockTimestamp) : undefined
+    );
+  };
+
+  const init = async () => {
+    loading = true;
+
+    await updateBlockTimestamp();
+    await updateLockEndDate();
+
     loading = false;
+  };
+
+  $: if ($userAddress && $web3Provider) {
+    init();
   }
 
   const withdraw = async () => {
-    loading = true;
+    withdrawing = true;
     try {
       await withdrawOcean($networkSigner);
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
-      loading = false;
+      withdrawing = false;
       return;
     }
-    Swal.fire("Success!", "Oceans successfully withdrawn.", "success").then(
-      async () => {
-        loading = false;
-        await addUserOceanBalanceToBalances($connectedChainId);
-      }
-    );
+    Swal.fire(
+      "Success!",
+      "OCEAN tokens successfully withdrawn.",
+      "success"
+    ).then(async () => {
+      withdrawing = false;
+      await addUserOceanBalanceToBalances($connectedChainId);
+      const newVeOceansWithDelegations =
+        await getUserVotingPowerWithDelegations($userAddress);
+      veOceanWithDelegations.update(() => newVeOceansWithDelegations);
+
+      await updateBlockTimestamp();
+      await updateLockEndDate();
+      loading = false;
+    });
   };
 </script>
 
 <div class={`container`}>
   <div class="item">
     <Button
-      text={loading ? "Withdrawing..." : "Withdraw all locked"}
+      text={blockTimestamp <= unlockTimestamp
+        ? "Withdraw all locked"
+        : withdrawing
+        ? "Withdrawing..."
+        : "Withdraw all locked"}
       secondary
       disabled={loading ||
+        withdrawing ||
         !$oceanUnlockDate ||
-        new Date() < $oceanUnlockDate ||
-        parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId}
+        parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId ||
+        (new Date() < $oceanUnlockDate && blockTimestamp <= unlockTimestamp)}
       onclick={() => withdraw()}
     />
   </div>

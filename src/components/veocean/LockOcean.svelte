@@ -13,12 +13,14 @@
   import Input from "../common/Input.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
+  import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
   import {
     getOceanBalance,
     addUserOceanBalanceToBalances,
     addUserVeOceanBalanceToBalances,
   } from "../../stores/tokens";
   import {
+    getLockedEndTime,
     lockOcean,
     updateLockedOceanAmount,
     updateLockPeriod,
@@ -26,9 +28,14 @@
   import * as yup from "yup";
   import { createForm } from "svelte-forms-lib";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
-  import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
+  import {
+    lockedOceanAmount,
+    oceanUnlockDate,
+    veOceanWithDelegations,
+  } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
   import { getThursdayDate } from "../../utils/functions";
+  import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
 
   let networksData = networksDataArray.default;
 
@@ -42,20 +49,25 @@
     amount: yup
       .number()
       .required("Amount is requred")
-      .min($lockedOceanAmount ? 0 : 1)
+      .min($oceanUnlockDate ? 0 : 1)
       .max(parseInt(getOceanBalance($connectedChainId)))
       .label("Amount"),
     unlockDate: yup
       .date()
       .required("Unlock date is requred")
       .label("Unlock Date"),
+    ageement: yup
+      .boolean()
+      .required("Agreement is requirement.")
+      .label("User Agreement"),
   });
   let fields = {
     amount: 0,
     unlockDate:
-      $lockedOceanAmount > 0
+      $oceanUnlockDate > 0
         ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
         : getThursdayDate(),
+    ageement: false,
   };
 
   $: if ($userAddress) {
@@ -72,7 +84,7 @@
     loading = true;
     const timeDifference = new Date(values.unlockDate).getTime();
     try {
-      if ($lockedOceanAmount > 0) {
+      if ($oceanUnlockDate > 0) {
         if (values.amount > 0) {
           await updateLockedOceanAmount(values.amount, $networkSigner);
         }
@@ -87,11 +99,23 @@
       loading = false;
       return;
     }
-    Swal.fire("Success!", "Oceans successfully locked.", "success").then(
+    Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
       async () => {
         loading = false;
+        $form.ageement = false;
         await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
         await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
+        let unlockDateMilliseconds = await getLockedEndTime(
+          $userAddress,
+          $networkSigner
+        );
+        await oceanUnlockDate.update(() =>
+          unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+        );
+        const newVeOceansWithDelegations =
+          await getUserVotingPowerWithDelegations($userAddress);
+        veOceanWithDelegations.update(() => newVeOceansWithDelegations);
+        loading = false;
       }
     );
   };
@@ -155,7 +179,7 @@
 
 <div class={`container`}>
   <Card
-    title={$lockedOceanAmount > 0
+    title={$oceanUnlockDate > 0
       ? `Update veOCEAN Lock`
       : `Lock OCEAN, get veOCEAN`}
   >
@@ -165,7 +189,7 @@
           type="number"
           name="amount"
           min={$lockedOceanAmount ? 0 : 1}
-          max={$userAddress
+          max={$userAddress && getOceanBalance($connectedChainId)
             ? parseFloat(getOceanBalance($connectedChainId)).toFixed(3)
             : 0}
           error={$errors.amount}
@@ -187,7 +211,7 @@
           step="7"
           error={$errors.unlockDate}
           direction="column"
-          min={$lockedOceanAmount > 0
+          min={$oceanUnlockDate > 0
             ? new Date($oceanUnlockDate).toLocaleDateString("en-CA")
             : getThursdayDate()}
           disabled={getOceanBalance($connectedChainId) <= 0}
@@ -202,11 +226,11 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Used Lock Period Potential`}
-            value={`${parseInt(calculatedMultiplier)}%`}
+            title={`Lock Multiplier`}
+            value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
           />
           <ItemWithLabel
-            title={`veOCEAN Received`}
+            title={`Receive`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
           />
         </div>
@@ -232,14 +256,20 @@
             tokenName={"OCEAN"}
             spender={process.env.VE_OCEAN_CONTRACT}
             amount={$form.amount}
-            disabled={loading || getOceanBalance($connectedChainId) <= 0}
-            bind:loading
+            disabled={
+              loading || 
+              getOceanBalance($connectedChainId) <= 0 ||
+              $form.amount > getOceanBalance($connectedChainId)
+            }
+            bind:agreed={$form.ageement}
           >
-            {#if $lockedOceanAmount > 0}
+            {#if $oceanUnlockDate > 0}
               <Button
                 text={updateLockButtonText}
                 disabled={loading ||
+                  !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
+                  $form.amount > getOceanBalance($connectedChainId) ||
                   ($form.amount <= 0 &&
                     new Date($form.unlockDate) <= $oceanUnlockDate)}
                 type="submit"
@@ -247,7 +277,9 @@
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
                 disabled={loading ||
+                  !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
+                  $form.amount > getOceanBalance($connectedChainId) ||
                   $form.amount <= 0}
                 type="submit"
               />
@@ -255,6 +287,10 @@
           </TokenApproval>
         {/if}
       </div>
+      <AgreementCheckbox
+        text="I have familiarized myself with veOCEAN, wave all rights, and assume all risks from using this software."
+        bind:value={$form.ageement}
+      />
     </form>
   </Card>
 </div>

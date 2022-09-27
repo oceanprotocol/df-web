@@ -74,7 +74,7 @@
 
 <div class={`container`}>
   <ClaimItem
-    title="VE Claimable"
+    title="veOCEAN Claimable"
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
     loading={claiming === "VE_REWARDS"}
     onClick={onClaimVeRewards}

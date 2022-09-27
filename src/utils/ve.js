@@ -22,11 +22,11 @@ export const getAllocatedAmount = async(userAddress) => {
   }
 
 export const getVeOceanBalance = async(userAddress, provider) => {
-    const blockNumber = await provider.getBlockNumber()
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
-        const veOceanBalanceInEth = await contract.balanceOfAt(userAddress,blockNumber - 2)
+        const veOceanBalanceInEth = await contract.balanceOf(userAddress)
         const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth).toString(10))
+
         return veOceanBalance
     } catch (error) {
       console.log(error?.error?.error ? error?.error?.error.message : error);
@@ -74,9 +74,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
   export const withdrawOcean = async(signer) => {
     try {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
-        const tx = await contract.withdraw({
-          gasLimit: gasLimit
-      })
+        const tx = await contract.withdraw()
         await tx.wait()
     } catch (error) {
       throw error;
