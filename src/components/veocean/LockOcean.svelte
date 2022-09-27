@@ -34,7 +34,7 @@
     veOceanWithDelegations,
   } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
-  import { getThursdayDate } from "../../utils/functions";
+  import { getThursdayDate, getThursdayOffset } from "../../utils/functions";
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
   import moment from "moment";
 
@@ -47,11 +47,10 @@
 
   const DAY = 60 * 60 * 24;
   const MAXDAYS = 4 * 365;
-  const MAX_MS = MAXDAYS * DAY * 1000;
 
   const getMaxDate = () => {
     let max = moment.utc().add(MAXDAYS, "days");
-    return max;
+    return moment.utc(getThursdayOffset(moment().utc(), MAXDAYS, max));
   };
 
   let schema = yup.object().shape({
@@ -162,8 +161,14 @@
       var today = moment.utc();
       var unlockDate = moment.utc($form.unlockDate);
       const msDelta = unlockDate.diff(today);
-      calculatedMultiplier = ((msDelta / MAX_MS) * 100.0).toFixed(3);
-      calculatedVotingPower = ((msDelta / MAX_MS) * $form.amount).toFixed(3);
+      calculatedMultiplier = (
+        (msDelta / getMaxDate().diff(today)) *
+        100
+      ).toFixed(3);
+      calculatedVotingPower = (
+        (msDelta / getMaxDate().diff(today)) *
+        $form.amount
+      ).toFixed(3);
     } else {
       calculatedVotingPower = 0;
     }

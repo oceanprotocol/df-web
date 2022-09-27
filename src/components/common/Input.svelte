@@ -18,7 +18,7 @@
   export let maxValueLabel = "";
   export let showMaxButton = false;
   export let disableKeyboardInput = undefined;
-  export let className;
+  export let className = undefined;
 </script>
 
 <div
