@@ -1,7 +1,6 @@
 <script>
-  import { oceanUnlockDate } from "../../stores/veOcean";
-
-  import { getThursdayDate } from "../../utils/functions";
+  import moment from "moment";
+  import { getThursdayOffset } from "../../utils/functions";
 
   export let value = undefined;
   export let placeholder = undefined;
@@ -9,6 +8,7 @@
   export let max = undefined;
   export let disabled = false;
   export let onChange = undefined;
+  export let disableKeyboardInput = undefined;
   export let step = 1;
 
   const periods = [
@@ -18,46 +18,41 @@
     },
     {
       label: "~1 month",
-      days: 30 - 7,
+      days: 30,
     },
     {
       label: "~6 months",
-      days: 180 - 7,
+      days: 180,
     },
     {
       label: "~2 years",
-      days: 730 - 7,
+      days: 730,
     },
     {
       label: "~4 years",
-      days: 1460 - 7,
+      days: 1460,
     },
   ];
 
   const handleOnPeriodClick = (days) => {
-    const currentDate = $oceanUnlockDate
-      ? $oceanUnlockDate
-      : new Date(getThursdayDate());
-    let date = new Date(currentDate).setDate(
-      currentDate || new Date(currentDate).getDay() === 4
-        ? new Date(currentDate).getDate() + days
-        : new Date(getThursdayDate(currentDate)).getDate() + days
-    );
-    if (new Date(date) > new Date(max)) return;
-    value =
-      days % 7 === 0
-        ? new Date(date).toLocaleDateString("en-CA")
-        : new Date(getThursdayDate(new Date(date))).toLocaleDateString("en-CA");
+    let targetDate = getThursdayOffset(moment().utc(), days, max);
+    value = moment(targetDate).format("YYYY-MM-DD");
   };
 </script>
 
 <div class={`container`}>
   <input
-    class="input"
+    class={`input ${
+      (value === min && moment.utc().format("YYYY-MM-DD") === min) ||
+      (value < min && moment.utc().format("YYYY-MM-DD") < min)
+        ? "inputError"
+        : ""
+    }`}
     type="date"
     {step}
     {min}
     {max}
+    onkeydown={disableKeyboardInput ? disableKeyboardInput : undefined}
     bind:value
     {placeholder}
     on:input={onChange}
@@ -85,6 +80,9 @@
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
     width: 100%;
+  }
+  .inputError {
+    color: var(--brand-alert-red);
   }
   .periodList {
     width: 100%;

@@ -15,6 +15,7 @@
   } from "../../stores/veOcean";
   import { addUserOceanBalanceToBalances } from "../../stores/tokens";
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
+  import moment from "moment";
 
   let loading = true;
   let withdrawing = false;
@@ -30,7 +31,7 @@
   const updateLockEndDate = async () => {
     unlockTimestamp = await getLockedEndTime($userAddress, $networkSigner);
     await oceanUnlockDate.update(() =>
-      unlockTimestamp ? new Date(unlockTimestamp) : undefined
+      unlockTimestamp ? moment.utc(unlockTimestamp) : undefined
     );
   };
 
@@ -87,7 +88,7 @@
         withdrawing ||
         !$oceanUnlockDate ||
         parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId ||
-        (new Date() < $oceanUnlockDate && blockTimestamp <= unlockTimestamp)}
+        (moment().utc().isBefore($oceanUnlockDate) && blockTimestamp <= unlockTimestamp)}
       onclick={() => withdraw()}
     />
   </div>

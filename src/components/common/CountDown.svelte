@@ -1,8 +1,10 @@
 <script>
+  import moment from "moment";
   import Countdown from "svelte-countdown/src/index";
   import { getThursdayDate } from "../../utils/functions";
 </script>
 
+//from={getThursdayDate(moment().utc())}
 <Countdown
   from={"2022-10-06"}
   dateFormat="YYYY-MM-DD"

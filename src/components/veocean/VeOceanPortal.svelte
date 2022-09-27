@@ -7,6 +7,7 @@
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { userBalances } from "../../stores/tokens";
+  import moment from "moment";
 
   let loading = false;
 
@@ -20,7 +21,7 @@
         $networkSigner
       );
       await oceanUnlockDate.update(() =>
-        unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+        unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
       );
     }
     loading = false;
