@@ -17,6 +17,7 @@
   import {
     getOceanBalance,
     updateUserBalanceOcean,
+    updateUserBalanceVeOcean,
     userBalances,
   } from "../../stores/tokens";
   import {
@@ -125,8 +126,8 @@
       async () => {
         loading = false;
         $form.ageement = false;
-        await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
-        await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
+        await updateUserBalanceVeOcean($userAddress, $web3Provider);
+        await updateUserBalanceOcean($userAddress, $web3Provider);
         let unlockDateMilliseconds = await getLockedEndTime(
           $userAddress,
           $networkSigner
