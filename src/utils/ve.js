@@ -27,14 +27,13 @@ export const getAllocatedAmount = async(userAddress) => {
   }
 
 export const getVeOceanBalance = async(userAddress, provider) => {
-    const blockNumber = await provider.getBlockNumber()
     try {
         const contract = new ethers.Contract(
           getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
           veOceanABI, 
           provider
         );
-        const veOceanBalanceInEth = await contract.balanceOfAt(userAddress,blockNumber - 2)
+        const veOceanBalanceInEth = await contract.balanceOf(userAddress)
         const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth).toString(10))
         return veOceanBalance
     } catch (error) {
@@ -45,12 +44,15 @@ export const getVeOceanBalance = async(userAddress, provider) => {
 
   export const getLockedOceanAmount = async(userAddress, signer) => {
     try {
+      console.log(userAddress)
         const contract = new ethers.Contract(
           getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
           veOceanABI, 
           signer
         );
+        console.log(contract, userAddress)
         const lock = await contract.locked(userAddress)
+        console.log(lock)
         const lockAmount = ethers.utils.formatEther(BigInt(lock.amount).toString(10))
         return lockAmount
     } catch (error) {
@@ -134,7 +136,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
         );
         const tx = await contract.increase_unlock_time(unlockDate,{
           gasLimit: gasLimit
-      })
+        })
         await tx.wait()
     } catch (error) {
       throw error;

@@ -7,7 +7,6 @@ import * as TokenABI from "./abis/tokenABI";
 export const getTokenContract = async (chainId, address, signer) => {
   try {
     const rpcURL = await getRpcUrlByChainId(chainId);
-
     if( rpcURL ) {
       return new ethers.Contract(address, TokenABI.default, signer);
     }
@@ -73,7 +72,6 @@ export const approve = async (
   const datatoken = new ethers.Contract(datatokenAddress, TokenABI.default, signer);
   const gasLimitDefault = GASLIMIT_DEFAULT
   let estGas
-  console.log("Spender is: ", spender);
   try {
     estGas = await datatoken.estimateGas.approve(spender, ethers.utils.parseEther(amount.toString()))
     console.log("Esimated gas is: ", estGas);

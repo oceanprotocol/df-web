@@ -25,10 +25,6 @@ export const updateUserBalanceOcean = async (userAddress, provider) => {
   );
 
   const balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
-  console.log("chainId", process.env.VE_SUPPORTED_CHAINID);
-  console.log("OCEAN address", oceanContractAddress);
-  console.log("User address", userAddress);
-  console.log("User account OCEAN balance is", balance);
 
   updateBalanceStore(
     oceanContractAddress,
@@ -49,11 +45,6 @@ export const getOceanBalance = (chainId) => {
     !chainId ||
     !getAddressByChainIdKey(chainId, "Ocean")
   ) return undefined
-  
-  console.log("getOceanBalance chainId", chainId)
-  console.log("getOceanBalance userBalances", get(userBalances))
-  console.log("getOceanBalance getAddressByChainIdKey", getAddressByChainIdKey(chainId, "Ocean"))
-  console.log("getOceanBalance oceanBalance", get(userBalances)[getAddressByChainIdKey(chainId, "Ocean")])
   
   return get(userBalances)[
     getAddressByChainIdKey(chainId, "Ocean")

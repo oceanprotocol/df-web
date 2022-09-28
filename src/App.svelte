@@ -40,9 +40,10 @@
   import { onMount } from "svelte";
   import { getAddressByChainIdKey } from "./utils/address/address";
   import { getLockedEndTime } from "./utils/ve";
+  import moment from "moment";
 
   const client = new ApolloClient({
-    uri: "https://v4.subgraph.rinkeby.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph",
+    uri: process.env.SUBGRAPH_API,
     fetchOptions: {
       credentials: "include",
     },
@@ -65,9 +66,11 @@
       $userAddress,
       $networkSigner
     );
+
     await oceanUnlockDate.update(() =>
-      unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+      unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
     );
+
     const newRewards = await getRewards($userAddress);
     rewards.update(() => newRewards);
     const newVeOceansWithDelegations = await getUserVotingPowerWithDelegations(

@@ -13,7 +13,6 @@
   import WithdrawOcean from "./WithdrawOcean.svelte";
   import { getAddressByChainIdKey } from "../../utils/address/address";
 
-  let balance = 0;
   let loading = false;
 
   const setValues = async () => {
@@ -24,14 +23,10 @@
       );
       totalUserAllocation.update(() => newAllocation);
     }
-    balance =
-      $userBalances[
-        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
-      ];
     loading = false;
   };
 
-  $: if ($userAddress && $userBalances) {
+  $: if ($userAddress) {
     setValues();
   }
 </script>
@@ -41,7 +36,20 @@
     <div class="veOcean-info">
       <ItemWithLabel
         title={`Balance`}
-        value={`${parseFloat(balance).toFixed(3)} veOCEAN`}
+        value={`${
+          $userBalances[
+            getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+          ]
+            ? parseFloat(
+                $userBalances[
+                  getAddressByChainIdKey(
+                    process.env.VE_SUPPORTED_CHAINID,
+                    "veOCEAN"
+                  )
+                ]
+              ).toFixed(3)
+            : 0
+        } veOCEAN`}
         {loading}
       />
       <ItemWithLabel
@@ -59,7 +67,7 @@
       <ItemWithLabel
         title={`Lock ends`}
         value={`${
-          $oceanUnlockDate ? $oceanUnlockDate.toLocaleDateString("ro-RO") : "-"
+          $oceanUnlockDate ? $oceanUnlockDate.format("DD-MM-YYYY") : "-"
         }`}
         {loading}
       />

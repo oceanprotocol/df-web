@@ -1,14 +1,13 @@
 <script>
   import { networkSigner, userAddress } from "../../stores/web3";
+  import OceanSummary from "./OceanSummary.svelte";
   import VeOceanCard from "./VeOceanCard.svelte";
   import LockOcean from "./LockOcean.svelte";
   import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
-  import { userBalances } from "../../stores/tokens";
-  import { getAddressByChainIdKey } from "../../utils/address/address";
+  import moment from "moment";
 
   let loading = false;
-  let oceanBalance = 0;
 
   const loadValues = async () => {
     loading = true;
@@ -20,25 +19,14 @@
         $networkSigner
       );
       await oceanUnlockDate.update(() =>
-        unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+        unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
       );
     }
-
-    oceanBalance = $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean")];
-    if(oceanBalance == undefined) oceanBalance = 0;
 
     loading = false;
   };
 
-  $: if (
-    $userAddress &&
-    $userBalances[
-      getAddressByChainIdKey(
-        process.env.VE_SUPPORTED_CHAINID,
-        "Ocean"
-      ).toLowerCase()
-    ]
-  ) {
+  $: if ($userAddress) {
     loadValues();
   }
 </script>
@@ -46,7 +34,8 @@
 {#if !loading}
   <div class={`container`}>
     <VeOceanCard />
-    <LockOcean oceanBalance={oceanBalance}/>
+    <LockOcean />
+    <OceanSummary />
   </div>
 {:else}
   <div class="loading">Loading...</div>
