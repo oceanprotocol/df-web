@@ -22,6 +22,7 @@
   } from "../../stores/tokens";
   import {
     getLockedEndTime,
+    getLockedOceanAmount,
     lockOcean,
     updateLockedOceanAmount,
     updateLockPeriod,
@@ -132,6 +133,11 @@
           $userAddress,
           $networkSigner
         );
+        let lockedOceans = await getLockedOceanAmount(
+          $userAddress,
+          $networkSigner
+        );
+        lockedOceanAmount.update(() => lockedOceans);
         await oceanUnlockDate.update(() =>
           unlockDateMilliseconds
             ? moment.utc(unlockDateMilliseconds)

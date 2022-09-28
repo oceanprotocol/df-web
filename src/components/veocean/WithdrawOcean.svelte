@@ -8,7 +8,11 @@
   import { updateUserBalanceOcean } from "../../stores/tokens";
   import Button from "../common/Button.svelte";
   import Swal from "sweetalert2";
-  import { getLockedEndTime, withdrawOcean } from "../../utils/ve";
+  import {
+    getLockedEndTime,
+    getLockedOceanAmount,
+    withdrawOcean,
+  } from "../../utils/ve";
   import {
     oceanUnlockDate,
     lockedOceanAmount,
@@ -64,6 +68,11 @@
     ).then(async () => {
       withdrawing = false;
       await updateUserBalanceOcean($userAddress, $web3Provider);
+      let lockedOceans = await getLockedOceanAmount(
+        $userAddress,
+        $networkSigner
+      );
+      lockedOceanAmount.update(() => lockedOceans);
       const newVeOceansWithDelegations =
         await getUserVotingPowerWithDelegations($userAddress);
       veOceanWithDelegations.update(() => newVeOceansWithDelegations);
