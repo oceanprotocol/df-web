@@ -94,8 +94,6 @@
   async function init() {
     await updateUserBalanceOcean($userAddress, $web3Provider);
     oceanBalance = getOceanBalance($connectedChainId);
-    console.log("oceanBalance", oceanBalance);
-    console.log("form", $form);
   }
 
   $: if ($userAddress) {

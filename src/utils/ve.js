@@ -44,15 +44,12 @@ export const getVeOceanBalance = async(userAddress, provider) => {
 
   export const getLockedOceanAmount = async(userAddress, signer) => {
     try {
-      console.log(userAddress)
         const contract = new ethers.Contract(
           getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
           veOceanABI, 
           signer
         );
-        console.log(contract, userAddress)
         const lock = await contract.locked(userAddress)
-        console.log(lock)
         const lockAmount = ethers.utils.formatEther(BigInt(lock.amount).toString(10))
         return lockAmount
     } catch (error) {
