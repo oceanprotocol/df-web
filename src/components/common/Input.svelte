@@ -17,9 +17,15 @@
   export let showMaxValue = false;
   export let maxValueLabel = "";
   export let showMaxButton = false;
+  export let disableKeyboardInput = undefined;
+  export let className = undefined;
 </script>
 
-<div class={`container ${direction === "row" ? "row" : "column"}`}>
+<div
+  class={`container ${direction === "row" ? "row" : "column"} ${
+    className ? className : ""
+  }`}
+>
   {#if label}
     <label class={`${direction === "column" && "margin-bottom"}`}>
       {label}
@@ -53,6 +59,7 @@
         {min}
         {max}
         {step}
+        {disableKeyboardInput}
         bind:value
         {placeholder}
         on:input={onChange}

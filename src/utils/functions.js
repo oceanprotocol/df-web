@@ -1,9 +1,32 @@
 export const getThursdayDate = (date) => {
-    var curr = date || new Date();
-    if (curr.getDay() >= 4) curr.setDate(curr.getDate() + 4); // get current date
-    var first = curr.getDate() - curr.getDay();
-    var thursday = new Date(curr.setDate(first + 4)).toLocaleDateString(
-      "en-CA"
-    );
-    return thursday;
-  };
+  // returns: nearest, forward looking thursday from the specified date
+  // params: moment(date)
+  
+  if(date.day() < 4) {
+      date.day(4);
+  } else if(date.day() > 4) {
+      date.day(11);
+  }
+
+  return date.format("YYYY-MM-DD");
+};
+
+export const getThursdayOffset = (day, days, max) => {
+  // returns: nearest, forward looking thursday from specified date, and day offset
+  // returns: nearest thursday below the maximum date
+
+  let target = day;
+  target.add(days, 'days');
+  
+  if(target.day() < 4) {
+      target.day(4);
+  } else if(target.day() > 4) {
+      target.day(11);
+  }
+
+  if(target.isAfter(max)) {
+      target.day(-3); // rollback to previous thursday
+  }
+
+  return target.format("YYYY-MM-DD");
+}

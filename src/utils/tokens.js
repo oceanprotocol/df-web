@@ -6,12 +6,11 @@ import * as TokenABI from "./abis/tokenABI";
 const tokenABI = TokenABI.default
 
 const oceanTokenAddressesByChain = {
-  4:"0x8967BCF84170c91B0d24D4302C2376283b0B3a07",
-  3:"0x5e8DCB2AfA23844bcc311B00Ad1A0C30025aADE9",
-  80001: "0xd8992Ed72C445c35Cb4A2be468568Ed1079357c8",
-  1287: "0xF6410bf5d773C7a41ebFf972f38e7463FA242477",
-  8996: "0x726baA2f854A3BEC2378a707AeB38c9d933Ebad6"
+  1: "0x967da4048cD07aB37855c090aAF366e4ce1b9F48",
+  4: "0x8967BCF84170c91B0d24D4302C2376283b0B3a07",
+  8996: "0x067008a4045f7CF6222291D85cb143e35acA2f40"
 }
+
 
 export const getOceanTokenAddressByChainId = (chainId) => {
   return oceanTokenAddressesByChain[chainId]
@@ -21,7 +20,6 @@ export const getOceanTokenAddressByChainId = (chainId) => {
 export const getTokenContract = async (chainId, address, signer) => {
   try {
     const rpcURL = await getRpcUrlByChainId(chainId);
-
     if( rpcURL ) {
       return new ethers.Contract(address, TokenABI.default, signer);
     }
@@ -86,7 +84,6 @@ export const approve = async (
   const datatoken = new ethers.Contract(datatokenAddress, tokenABI, signer);
   const gasLimitDefault = GASLIMIT_DEFAULT
   let estGas
-  console.log("Spender is: ", spender);
   try {
     estGas = await datatoken.estimateGas.approve(spender, ethers.utils.parseEther(amount.toString()))
     console.log("Esimated gas is: ", estGas);

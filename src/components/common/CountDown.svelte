@@ -1,10 +1,11 @@
 <script>
+  import moment from "moment";
   import Countdown from "svelte-countdown/src/index";
   import { getThursdayDate } from "../../utils/functions";
 </script>
 
 <Countdown
-  from={getThursdayDate()}
+  from={"2022-10-06"}
   dateFormat="YYYY-MM-DD"
   zone="Europe/Athens"
   let:remaining
