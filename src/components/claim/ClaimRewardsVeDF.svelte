@@ -2,7 +2,6 @@
   import {
     userAddress,
     networkSigner,
-    connectedChainId,
     web3Provider
   } from "../../stores/web3";
   import {
@@ -12,17 +11,13 @@
     getDFRewards,
   } from "../../stores/airdrops";
   import {
-    addUserOceanBalanceToBalances,
-    addUserVeOceanBalanceToBalances
+    addUserOceanBalanceToBalances
   } from "../../stores/tokens";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
   import { 
     getRewardsFeeEstimate
   } from "../../utils/feeEstimate";
-  import { 
-    getOceanTokenAddressByChainId
-  } from "../../utils/tokens";
   import {
     claim as claimVERewards
   } from "../../utils/feeDistributor";
@@ -40,13 +35,9 @@
         `You've claimed your Data Farming rewards!`,
         "success"
       ).then(async () => {
-        dfClaimables.set(
-          await getDFRewards(
-            $userAddress,
-            getOceanTokenAddressByChainId($connectedChainId)
-          )
-        );
-        // dfClaimables.set(await getDFRewards($userAddress, process.env.OCEAN_ADDRESS, $web3Provider));
+        const dfRewards = await getDFRewards($userAddress, process.env.OCEAN_ADDRESS, $web3Provider);
+        dfClaimables.set(dfRewards);
+        
         await addUserOceanBalanceToBalances(
           parseInt(process.env.VE_SUPPORTED_CHAINID)
         );
@@ -66,7 +57,9 @@
         `You've claimed your VE rewards!`, 
         "success"
       ).then(async () => {
-        veClaimables.set(await getRewardsFeeEstimate($userAddress, $web3Provider));
+        const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
+        veClaimables.set(veRewards);
+
         await addUserOceanBalanceToBalances(
           parseInt(process.env.VE_SUPPORTED_CHAINID)
         );

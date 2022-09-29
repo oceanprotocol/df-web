@@ -30,8 +30,7 @@
     getTimeCursor 
   } from "../../utils/feeDistributor";
   import Countdown from "../common/CountDown.svelte";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
-
+  
   let loading = true;
   let veBalance = 0.0;
   let maxUserEpoch = 0;
@@ -43,8 +42,6 @@
   let canClaimVE = true;
   let canClaimDF = true;
   
-  const WEEK = 7 * 86400;
-
   async function initClaimables() {
     loading = true;
     await updateAllClaimables(
@@ -60,18 +57,10 @@
     lastTokenTime = await getLastTokenTime($web3Provider);
     timeCursor = await getTimeCursor($userAddress, $web3Provider);
     
-    console.log("veBalance", veBalance);
-    console.log("curUserEpoch", curUserEpoch);
-    console.log("maxUserEpoch", maxUserEpoch);
-    console.log("lastTokenTime", lastTokenTime);
-    console.log("timeCursor", timeCursor);
-    
     const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
-    console.log("veRewards:", veRewards)
     veClaimables.set(veRewards);
 
     const dfRewards = await getDFRewards($userAddress, process.env.OCEAN_ADDRESS, $web3Provider);
-    console.log("dfRewards:", dfRewards)
     dfClaimables.set(dfRewards);
 
     if( 
@@ -86,10 +75,6 @@
     if( dfRewards <= 0 ) {
       canClaimDF = false;
     }
-
-    console.log("canClaimVE", canClaimVE);
-    console.log("canClaimDF", canClaimDF);
-
     loading = false;
   }
 
