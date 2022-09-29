@@ -41,6 +41,8 @@ INFURA_KEY = 01SAMPLE9234KEY
 // chain where ve contracts are deployed - 8996 is development
 VE_SUPPORTED_CHAINID = 8996
 
+SUBGRAPH_API = https://v4.subgraph.rinkeby.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph
+
 // you can get the following addresses from barge @ address.json to develop locally
 VE_OCEAN_CONTRACT = 0x...
 VE_ALLOCATE_CONTRACT = 0x...
