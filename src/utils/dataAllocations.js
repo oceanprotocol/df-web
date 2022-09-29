@@ -63,9 +63,9 @@ export const allocateVeOceanToMultipleNFTs = async(amounts, dataAddresses, chain
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, signer);
     const tx = await contract.setBatchAllocation(formatedAmounts, dataAddresses, chainIds)
     await tx.wait()
-  } catch (error) {
-    throw error;
-  }
+} catch (error) {
+  throw error;
+}
 }
 
 export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
@@ -73,10 +73,10 @@ export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, get(web3Provider));
     const allocatedAmount = await contract.getveAllocation(userAddress, dataAddress, chainId)
     return allocatedAmount / 100
-  } catch (error) {
-    console.log(error)
-    throw error;
-  }
+} catch (error) {
+  console.log(error)
+  throw error;
+}
 }
 
 export const getTotalAllocatedVeOcean = async(userAddress) => {
@@ -84,8 +84,8 @@ export const getTotalAllocatedVeOcean = async(userAddress) => {
     const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, get(web3Provider));
     const allocatedAmount = await contract.getTotalAllocation(userAddress)
     return allocatedAmount / 100
-  } catch (error) {
-    console.log(error)
-    throw error;
-  }
+} catch (error) {
+  console.log(error)
+  throw error;
+}
 }
