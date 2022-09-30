@@ -57,17 +57,9 @@
   }
 
   $: if ($dataAllocations) {
+    console.log($dataAllocations);
     loadDatasets(`${process.env.BACKEND_API}/nftinfo`, $dataAllocations);
   }
-
-  onMount(async () => {
-    if (!$userAddress) {
-      if (!$totalUserAllocation) {
-        await totalUserAllocation.update(() => 0);
-      }
-      dataAllocations.update(() => []);
-    }
-  });
 </script>
 
 <div
