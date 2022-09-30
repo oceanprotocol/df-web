@@ -2,7 +2,7 @@
   import {
     userAddress,
     networkSigner,
-    connectedChainId,
+    web3Provider
   } from "../../stores/web3";
   import {
     veClaimables,
@@ -10,38 +10,34 @@
     claimDFReward,
     getDFRewards,
   } from "../../stores/airdrops";
+  import {
+    addUserOceanBalanceToBalances
+  } from "../../stores/tokens";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
-  import {
-    getRewardsFeeEstimate,
-    claimVERewards,
+  import { 
+    getRewardsFeeEstimate
   } from "../../utils/feeEstimate";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import {
-    addUserOceanBalanceToBalances,
-    addUserVeOceanBalanceToBalances,
-  } from "../../stores/tokens";
+    claim as claimVERewards
+  } from "../../utils/feeDistributor";
 
+  export let canClaimVE = true;
+  export let canClaimDF = true;
   let claiming;
 
   async function onClaimDfRewards() {
     claiming = "DF_REWARDS";
     try {
-      await claimDFReward(
-        $userAddress,
-        getOceanTokenAddressByChainId($connectedChainId)
-      );
+      await claimDFReward($userAddress,process.env.OCEAN_ADDRESS, $networkSigner);
       Swal.fire(
         "Success!",
         `You've claimed your Data Farming rewards!`,
         "success"
       ).then(async () => {
-        dfClaimables.set(
-          await getDFRewards(
-            $userAddress,
-            getOceanTokenAddressByChainId($connectedChainId)
-          )
-        );
+        const dfRewards = await getDFRewards($userAddress, process.env.OCEAN_ADDRESS, $web3Provider);
+        dfClaimables.set(dfRewards);
+        
         await addUserOceanBalanceToBalances(
           parseInt(process.env.VE_SUPPORTED_CHAINID)
         );
@@ -52,19 +48,22 @@
     claiming = undefined;
   }
 
-  // Todo
   async function onClaimVeRewards() {
     claiming = "VE_REWARDS";
     try {
       await claimVERewards($userAddress, $networkSigner);
-      Swal.fire("Success!", `You've claimed your VE rewards!`, "success").then(
-        async () => {
-          veClaimables.set(await getRewardsFeeEstimate($userAddress));
-          await addUserOceanBalanceToBalances(
-            parseInt(process.env.VE_SUPPORTED_CHAINID)
-          );
-        }
-      );
+      Swal.fire(
+        "Success!", 
+        `You've claimed your VE rewards!`, 
+        "success"
+      ).then(async () => {
+        const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
+        veClaimables.set(veRewards);
+
+        await addUserOceanBalanceToBalances(
+          parseInt(process.env.VE_SUPPORTED_CHAINID)
+        );
+      });
     } catch (error) {
       Swal.fire("Error!", error.message, "error");
     }
@@ -78,14 +77,14 @@
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
     loading={claiming === "VE_REWARDS"}
     onClick={onClaimVeRewards}
-    disabled={claiming !== undefined || $veClaimables <= 0}
+    disabled={canClaimVE === false || claiming !== undefined || $veClaimables <= 0}
   />
   <ClaimItem
     title="DF Claimable"
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     loading={claiming === "DF_REWARDS"}
     onClick={onClaimDfRewards}
-    disabled={claiming !== undefined || $dfClaimables <= 0}
+    disabled={canClaimDF === false || claiming !== undefined || $dfClaimables <= 0}
   />
 </div>
 

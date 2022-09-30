@@ -73,6 +73,5 @@ export async function loadDatasets(nftsApi, allocations) {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     newDatasets.push(getRow(datasetInfo, key));
   });
-
   datasets.set(newDatasets);
 }
