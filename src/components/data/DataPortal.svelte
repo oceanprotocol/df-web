@@ -75,7 +75,9 @@
 >
   {#if $datasets && !$isAppLoading}
     <div class="wrapper">
-      <MainMessage message={`**Test test test.**`} />
+      <MainMessage
+        message={`Distribute your available allocation across datasets to earn active rewards.`}
+      />
       <div class="data">
         <Table
           colData={columnsData}
