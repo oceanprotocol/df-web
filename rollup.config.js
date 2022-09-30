@@ -7,6 +7,7 @@ import css from 'rollup-plugin-css-only';
 import json from '@rollup/plugin-json';
 import dsv from '@rollup/plugin-dsv';
 import {config} from 'dotenv';
+import copy from 'rollup-plugin-copy'
 import replace from '@rollup/plugin-replace';
 import html from "@rollup/plugin-html";
 
@@ -22,13 +23,13 @@ const htmlOptions = {
   template: async ({ attributes, files, meta, publicPath, title }) => {
     const script = (files.js || [])
       .map(({ fileName }) => {
-        return `<script defer src='${fileName}'></script>`;
+        return `<script defer src='/build/${fileName}'></script>`;
       })
       .join("\n");
 
     const css = (files.css || [])
       .map(({ fileName }) => {
-        return `<link rel='stylesheet' href='${fileName}'>`;
+        return `<link rel='stylesheet' href='/build/${fileName}'>`;
       })
       .join("\n");
     return`<!DOCTYPE html>
@@ -108,6 +109,7 @@ export default {
 		css({ 
 			output: production ? `bundle.${randomHash()}.css` : 'bundle.css'
 		}),
+		html(htmlOptions),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
@@ -122,8 +124,13 @@ export default {
 		json({
 			compact: true
 		}),
-		html(htmlOptions),
 		dsv(),
+		copy({
+			targets: [
+				{ src: 'public/build/index.html', dest: 'public' }
+			],
+			hook: 'writeBundle'
+		}),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
