@@ -1,11 +1,13 @@
 <script>
   import { networkSigner, userAddress } from "../../stores/web3";
+  import OceanSummary from "./OceanSummary.svelte";
   import VeOceanCard from "./VeOceanCard.svelte";
   import LockOcean from "./LockOcean.svelte";
   import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import { userBalances } from "../../stores/tokens";
+  import moment from "moment";
 
   let loading = false;
 
@@ -19,7 +21,7 @@
         $networkSigner
       );
       await oceanUnlockDate.update(() =>
-        unlockDateMilliseconds ? new Date(unlockDateMilliseconds) : undefined
+        unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
       );
     }
     loading = false;
@@ -41,6 +43,7 @@
   <div class={`container`}>
     <VeOceanCard />
     <LockOcean />
+    <OceanSummary />
   </div>
 {:else}
   <div class="loading">Loading...</div>

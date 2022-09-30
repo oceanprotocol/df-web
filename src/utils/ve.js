@@ -99,7 +99,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
         const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, signer);
         const tx = await contract.increase_unlock_time(unlockDate,{
           gasLimit: gasLimit
-      })
+        })
         await tx.wait()
     } catch (error) {
       throw error;

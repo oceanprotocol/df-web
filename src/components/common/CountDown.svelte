@@ -1,4 +1,5 @@
 <script>
+  import moment from "moment";
   import Countdown from "svelte-countdown/src/index";
   import { getThursdayDate } from "../../utils/functions";
 </script>
