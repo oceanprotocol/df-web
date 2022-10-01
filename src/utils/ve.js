@@ -2,7 +2,9 @@ import * as VeAllocateABI from "./abis/veAllocateABI";
 import * as VeOceanABI from "./abis/veOceanABI";
 import {get} from "svelte/store"
 import {ethers} from "ethers";
-import { networkSigner } from "../stores/web3";
+import {networkSigner} from "../stores/web3";
+import {getAddressByChainIdKey} from "../utils/address/address";
+
 const veAllocateABI = VeAllocateABI.default
 const veOceanABI = VeOceanABI.default
 const decimals = 18;
@@ -10,7 +12,11 @@ const gasLimit = 1000000;
 
 export const getAllocatedAmount = async(userAddress) => {
     try {
-        const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, get(networkSigner));
+        const contract = new ethers.Contract(
+          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veAllocate"), 
+          veAllocateABI, 
+          get(networkSigner)
+        );
         const allocatedAmountInEth = await contract.getTotalAllocation(userAddress)
         const allocatedAmount = ethers.utils.parseUnits(allocatedAmountInEth, decimals)
         return allocatedAmount
@@ -22,10 +28,13 @@ export const getAllocatedAmount = async(userAddress) => {
 
 export const getVeOceanBalance = async(userAddress, provider) => {
     try {
-        const contract = new ethers.Contract(process.env.VE_OCEAN_CONTRACT, veOceanABI, provider);
+        const contract = new ethers.Contract(
+          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          veOceanABI, 
+          provider
+        );
         const veOceanBalanceInEth = await contract.balanceOf(userAddress)
         const veOceanBalance = ethers.utils.formatEther(BigInt(veOceanBalanceInEth).toString(10))
-
         return veOceanBalance
     } catch (error) {
       console.log(error?.error?.error ? error?.error?.error.message : error);

@@ -30,7 +30,6 @@
     getTimeCursor 
   } from "../../utils/feeDistributor";
   import Countdown from "../common/CountDown.svelte";
-  
   let loading = true;
   let veBalance = 0.0;
   let maxUserEpoch = 0;
