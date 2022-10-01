@@ -68,7 +68,7 @@
   {#if $datasets && !$isAppLoading}
     <div class="wrapper">
       <MainMessage
-        message={`Distribute your available allocation across datasets to earn active rewards.`}
+        message={`**Your allocations will be counted for rewards calculation starting from Thursday, as soon as Data Farming goes live.**`}
       />
       <div class="data">
         <Table
