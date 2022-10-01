@@ -68,14 +68,14 @@
   {#if $datasets && !$isAppLoading}
     <div class="wrapper">
       <MainMessage
-        message={`**Your allocations will be counted for rewards calculation starting from Thursday, as soon as Data Farming goes live.**`}
+        message={`**Allocate your veOCEAN across datasets with consume volume to earn Data Farming Rewards.**`}
       />
       <div class="data">
         <Table
           colData={columnsData}
           notHidableColumns={["Action", "Allocate"]}
           rowData={$datasets}
-          description="Explore all the datasets that are eligible for staking, and stake your Ocean token to get rewards."
+          description="Explore elligible datasets and allocate your veOCEAN to earn Active Rewards."
         />
       </div>
     </div>
