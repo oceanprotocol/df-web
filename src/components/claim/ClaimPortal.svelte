@@ -62,9 +62,6 @@
     const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
     veClaimables.set(veRewards);
 
-    console.log("userAddress", $userAddress);
-    console.log("OCEAN_ADDRESS", process.env.OCEAN_ADDRESS);
-    console.log("web3Provider", $web3Provider);
     const dfRewards = await getDFRewards($userAddress, process.env.OCEAN_ADDRESS, $web3Provider);
     dfClaimables.set(dfRewards);
 
