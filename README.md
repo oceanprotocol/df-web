@@ -22,6 +22,12 @@ _Note that you will need to have [Node.js](https://nodejs.org) installed._
 The `.env` file is used to differentiate the staging params from the production params.
 In order to get the app working create a `.env` in the root of the project directory, and add the following env variables:
 
+**Subgraph URLs:**
+Dev = http://172.15.0.15:8000/subgraphs/name/oceanprotocol/ocean-subgraph
+Staging = https://v4.subgraph.rinkeby.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph
+Production = https://v4.subgraph.mainnet.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph
+
+
 ```js
 // Enable when you want to debug rollup?
 // ROLLUP_WATCH = true
@@ -41,7 +47,8 @@ INFURA_KEY = 01SAMPLE9234KEY
 // chain where ve contracts are deployed - 8996 is development
 VE_SUPPORTED_CHAINID = 8996
 
-SUBGRAPH_API = https://v4.subgraph.rinkeby.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph
+// choose one of the following local subgraph (dev), rinkeby (staging), and mainnet (prod)
+SUBGRAPH_API = subgraph_url
 
 // you can get the following addresses from barge @ address.json to develop locally
 VE_OCEAN_CONTRACT = 0x...

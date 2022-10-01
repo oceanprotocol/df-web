@@ -14,8 +14,8 @@
     let summary = query(TOTAL_LOCKED);
     let deposits = query(DEPOSITS);
     
-    let totalLocked;
-    let averageLock;
+    let totalLocked = 0;
+    let averageLock = 0;
     
     let loading = true;
 
@@ -51,7 +51,7 @@
             return total + amount
         }, 0);
 
-        const averageLockDays = totalDaysLocked / deltaDaysArr.length;
+        const averageLockDays = totalDaysLocked / deltaDaysArr.length ? totalDaysLocked / deltaDaysArr.length : 0;
         averageLock = parseFloat(averageLockDays/365).toFixed(3);
     }
 
