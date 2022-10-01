@@ -43,6 +43,8 @@
   let canClaimDF = true;
   
   async function initClaimables() {
+    console.log("initClaimables")
+    
     loading = true;
     await updateAllClaimables(
       JSON.parse(process.env.AIRDROP_CONFIG),
@@ -78,32 +80,20 @@
     loading = false;
   }
 
-  $: if ($rewards) {
+  $: if ($userAddress && $connectedChainId) {
     initClaimables();
-  }
-
-  $: if ($connectedChainId !== process.env.VE_SUPPORTED_CHAINID) {
-    loading = true;
-  }
-
-  $: if (!$userAddress) {
-    loading = true;
   }
 </script>
 
-<div
-  class={`container ${
-    (loading === true || !$airdrops) && "alignContentCenter"
-  }`}
->
+<div class={`container`}>
+  <Countdown />
+      
   {#if $userAddress && loading === false && $airdrops && veBalance > 0}
-    <Countdown />
     <!-- <div class="estimatedRewardsContainer">
       <EstimatedRewards />
     </div> -->
     <ClaimRewards canClaimVE={canClaimVE} canClaimDF={canClaimDF}/>
   {:else if $userAddress && loading === false}
-    <Countdown />  
     {#if !$userAddress}
       <MainMessage
         title="No wallet connected"
@@ -142,12 +132,12 @@
   .estimatedRewardsContainer {
     width: 100%;
     font-size: var(--font-size-large);
-    margin: calc(var(--spacer)) 0;
   }
 
   .loading {
     font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
+    margin: calc(var(--spacer)) 0;
   }
 
   .alignContentCenter {
