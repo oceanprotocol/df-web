@@ -29,7 +29,7 @@
         <Link to="/veocean" class="link">veOCEAN</Link>
       </li>
       <li class:active={$location.pathname === "/data"}>
-        <Link to="/data" class="link">DATA FARMING</Link>
+        <Link to="/data" class="link">DATA EXPLORER</Link>
       </li>
       <li class:active={$location.pathname === "/rewards"}>
         <Link to="/rewards" class="link">REWARDS</Link>
