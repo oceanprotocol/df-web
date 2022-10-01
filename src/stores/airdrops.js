@@ -93,6 +93,7 @@ export const getDFRewards = async(userAddress, tokenAddress, provider) => {
     try {
         const contract = new ethers.Contract(process.env.DF_REWARDS_CONTRACT, dfRewardsABI.default, provider);
         const estimateClaim = await contract.claimable(userAddress, tokenAddress);
+        console.log("estimateClaim", estimateClaim);
         const estimateClaimFormatted = ethers.utils.formatEther(BigInt(estimateClaim).toString(10));
         return estimateClaimFormatted
     } catch (error) {
