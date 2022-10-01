@@ -89,10 +89,9 @@ export const updateAllClaimables = async (airdropData, selectedNetworks, userAdd
     airdrops.set(airdropData);
 }
 
-export const getDFRewards = async(userAddress, tokenAddress) => {
+export const getDFRewards = async(userAddress, tokenAddress, provider) => {
     try {
-        const contract = new ethers.Contract(process.env.DF_REWARDS_CONTRACT, dfRewardsABI.default, get(networkSigner));
-        console.log("contract", contract);
+        const contract = new ethers.Contract(process.env.DF_REWARDS_CONTRACT, dfRewardsABI.default, provider);
         const estimateClaim = await contract.claimable(userAddress, tokenAddress);
         console.log("estimateClaim", estimateClaim);
         const estimateClaimFormatted = ethers.utils.formatEther(BigInt(estimateClaim).toString(10));
