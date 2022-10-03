@@ -41,7 +41,7 @@ const htmlOptions = {
 					<meta http-equiv="Pragma" content="no-cache">
 					<link rel='icon' type='image/png' href='/logo-ocean-svg.svg'>
 					<link rel='stylesheet' href='/global.css'>
-					${css}
+					${css ? css : "<link rel='stylesheet' href='/build/bundle.css'>"}
 					<script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
 					<script type="text/javascript" src="https://unpkg.com/web3modal"></script>
 					<script type="text/javascript" src="https://unpkg.com/evm-chains@0.2.0/dist/umd/index.min.js"></script>
