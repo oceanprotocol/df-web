@@ -10,6 +10,7 @@
   export let disabled = false;
   export let loading = false;
   export let amount;
+  export let infiniteAmount = false;
   export let tokenName;
   export let tokenAddress;
   export let spender;
@@ -26,7 +27,7 @@
       let tx = await approveToken(
         tokenAddress,
         spender,
-        amount,
+        infiniteAmount ? 2 ** 53 - 1 : amount,
         $networkSigner
       );
       const receipt = await tx.wait();
@@ -62,15 +63,12 @@
 <div>
   {#if isAmountApproved === false}
     <Button
-      text={approving
-        ? "Approving"
+      loading={approving}
+      text={infiniteAmount
+        ? `Allow the Ocean Protocol to use your ${tokenName}`
         : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
       onclick={() => onClick()}
-      disabled={
-        disabled || 
-        loading || 
-        !agreed
-      }
+      disabled={disabled || loading || !agreed}
     />
   {:else}
     <slot />

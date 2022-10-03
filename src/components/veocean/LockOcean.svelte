@@ -249,6 +249,7 @@
           <TokenApproval
             tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
             tokenName={"OCEAN"}
+            infiniteAmount={true}
             spender={process.env.VE_OCEAN_CONTRACT}
             amount={$form.amount}
             disabled={loading ||
