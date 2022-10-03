@@ -11,6 +11,7 @@
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
   import WithdrawOcean from "./WithdrawOcean.svelte";
+  import { getAddressByChainIdKey } from "../../utils/address/address";
 
   let loading = false;
 
@@ -35,9 +36,20 @@
     <div class="veOcean-info">
       <ItemWithLabel
         title={`Balance`}
-        value={`${parseFloat(
-          $userBalances[process.env.VE_OCEAN_CONTRACT]
-        ).toFixed(3)} veOCEAN`}
+        value={`${
+          $userBalances[
+            getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+          ]
+            ? parseFloat(
+                $userBalances[
+                  getAddressByChainIdKey(
+                    process.env.VE_SUPPORTED_CHAINID,
+                    "veOCEAN"
+                  )
+                ]
+              ).toFixed(3)
+            : 0
+        } veOCEAN`}
         {loading}
       />
       <ItemWithLabel

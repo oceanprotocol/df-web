@@ -65,7 +65,7 @@ export const setValuesAfterConnection = async (instance) => {
   const signerAddress = await signer.getAddress();
   const chainId= (await provider.getNetwork()).chainId;
 
-  connectedChainId.set(chainId)
+  connectedChainId.set(chainId);
   userAddress.set(signerAddress);
   web3Provider.set(provider)
   web3.set(new Web3(instance));

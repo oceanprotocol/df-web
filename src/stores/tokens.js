@@ -1,44 +1,53 @@
 import { writable, get } from "svelte/store";
-import {userAddress, web3Provider}from "./web3"
-import {balanceOf,getOceanTokenAddressByChainId} from "../utils/tokens"
+import {balanceOf} from "../utils/tokens"
 import {getVeOceanBalance} from "../utils/ve"
 import {ethers} from "ethers"
+import {getAddressByChainIdKey} from "../utils/address/address";
 
 export let userBalances = writable({});
 export let tokenContracts = writable({});
 
-const updateUserBalances = (tokenAddress, newBalane) => {
+const updateBalanceStore = (tokenAddress, newBalance) => {
   let newUserBalances = get(userBalances);
-    newUserBalances[tokenAddress] = newBalane;
-    userBalances.update(() => newUserBalances);
+  newUserBalances[tokenAddress] = newBalance;
+  userBalances.update(() => newUserBalances);
 }
 
-export const addUserBalanceToBalances = async (chainId, tokenAddress) => {
-    const balanceInWei = await balanceOf(
-      get(userBalances),
-      chainId,
-      tokenAddress,
-      get(userAddress),
-      get(web3Provider)
-    );
-    const balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
-    updateUserBalances(tokenAddress, balance)
-};
+export const updateUserBalanceOcean = async (userAddress, provider) => {
+  const oceanContractAddress = getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean");
 
-export const addUserOceanBalanceToBalances = async (chainId) => {
-    const oceanContractAddress = getOceanTokenAddressByChainId(chainId)
-    await addUserBalanceToBalances(chainId, oceanContractAddress.toLowerCase())
+  const balanceInWei = await balanceOf(
+    get(userBalances),
+    process.env.VE_SUPPORTED_CHAINID,
+    oceanContractAddress,
+    userAddress,
+    provider,
+  );
+
+  const balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
+
+  updateBalanceStore(
+    oceanContractAddress,
+    balance
+  );
 }
 
-export const addUserVeOceanBalanceToBalances = async (userAddress, provider) => {
+export const updateUserBalanceVeOcean = async (userAddress, provider) => {
   const veOceanBalance = await getVeOceanBalance(userAddress, provider)
-  updateUserBalances(process.env.VE_OCEAN_CONTRACT, veOceanBalance)
+  updateBalanceStore(
+    getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"),
+    veOceanBalance
+  )
 }
 
 export const getOceanBalance = (chainId) => {
-  if(!getOceanTokenAddressByChainId(chainId)) return undefined
+  if(
+    !chainId ||
+    !getAddressByChainIdKey(chainId, "Ocean")
+  ) return undefined
+  
   return get(userBalances)[
-    getOceanTokenAddressByChainId(chainId).toLowerCase()
+    getAddressByChainIdKey(chainId, "Ocean")
   ]
 }
   

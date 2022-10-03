@@ -1,9 +1,10 @@
 import {ethers} from "ethers";
-import {getRpcUrlByChainId} from "./web3";
-import { gql } from "apollo-boost";
+import {gql} from "apollo-boost";
 import * as VeAllocateABI from "./abis/veAllocateABI";
-import { web3Provider } from "../stores/web3";
-import { get } from "svelte/store"
+import {web3Provider} from "../stores/web3";
+import {get} from "svelte/store"
+import {getAddressByChainIdKey} from "../utils/address/address";
+
 const veAllocateABI = VeAllocateABI.default
 
 export const GET_ALLOCATIONS = gql`
@@ -45,7 +46,11 @@ export const getAllAllocationsForAddress = async(userAddress) => {
 
 export const allocateVeOcean = async(amount, dataAddress, chainId, signer) => {
   try {
-    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, signer);
+    const contract = new ethers.Contract(
+      getAddressByChainIdKey(chainId, "veAllocate"),
+      veAllocateABI, 
+      signer
+    );
     const tx = await contract.setAllocation((amount* 100), dataAddress, chainId)
     await tx.wait()
 } catch (error) {
@@ -60,7 +65,11 @@ export const allocateVeOceanToMultipleNFTs = async(amounts, dataAddresses, chain
   //convert amounts from 100 to 10000 units
   const formatedAmounts = amounts.map((amount) => amount * 100)
   try {
-    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, signer);
+    const contract = new ethers.Contract(
+      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veAllocate"),
+      veAllocateABI, 
+      signer
+    );
     const tx = await contract.setBatchAllocation(formatedAmounts, dataAddresses, chainIds)
     await tx.wait()
   } catch (error) {
@@ -70,7 +79,11 @@ export const allocateVeOceanToMultipleNFTs = async(amounts, dataAddresses, chain
 
 export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
   try {
-    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, get(web3Provider));
+    const contract = new ethers.Contract(
+      getAddressByChainIdKey(chainId, "veAllocate"),
+      veAllocateABI, 
+      get(web3Provider)
+    );
     const allocatedAmount = await contract.getveAllocation(userAddress, dataAddress, chainId)
     return allocatedAmount / 100
   } catch (error) {
@@ -81,7 +94,11 @@ export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
 
 export const getTotalAllocatedVeOcean = async(userAddress) => {
   try {
-    const contract = new ethers.Contract(process.env.VE_ALLOCATE_CONTRACT, veAllocateABI, get(web3Provider));
+    const contract = new ethers.Contract(
+      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veAllocate"),
+      veAllocateABI, 
+      get(web3Provider)
+    );
     const allocatedAmount = await contract.getTotalAllocation(userAddress)
     return allocatedAmount / 100
   } catch (error) {

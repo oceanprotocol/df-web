@@ -16,18 +16,19 @@
   import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
   import {
     getOceanBalance,
-    addUserOceanBalanceToBalances,
-    addUserVeOceanBalanceToBalances,
+    updateUserBalanceOcean,
+    updateUserBalanceVeOcean,
+    userBalances,
   } from "../../stores/tokens";
   import {
     getLockedEndTime,
+    getLockedOceanAmount,
     lockOcean,
     updateLockedOceanAmount,
     updateLockPeriod,
   } from "../../utils/ve";
   import * as yup from "yup";
   import { createForm } from "svelte-forms-lib";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
   import {
     lockedOceanAmount,
     oceanUnlockDate,
@@ -36,10 +37,12 @@
   import * as networksDataArray from "../../networks-metadata.json";
   import { getThursdayDate, getThursdayOffset } from "../../utils/functions";
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
+  import { getAddressByChainIdKey } from "../../utils/address/address";
   import moment from "moment";
 
   let networksData = networksDataArray.default;
 
+  let oceanBalance = 0;
   let calculatedVotingPower = 0;
   let calculatedMultiplier = 0;
   let loading = false;
@@ -84,15 +87,21 @@
     ageement: false,
   };
 
-  $: if ($userAddress) {
-    loading = false;
-  }
-
   const { form, errors, handleSubmit } = createForm({
     initialValues: fields,
     validationSchema: schema,
     onSubmit: (values) => onFormSubmit(values),
   });
+
+  async function init() {
+    await updateUserBalanceOcean($userAddress, $web3Provider);
+    oceanBalance = getOceanBalance($connectedChainId);
+  }
+
+  $: if ($userAddress) {
+    loading = false;
+    init();
+  }
 
   const onFormSubmit = async (values) => {
     loading = true;
@@ -118,12 +127,17 @@
       async () => {
         loading = false;
         $form.ageement = false;
-        await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
-        await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
+        await updateUserBalanceVeOcean($userAddress, $web3Provider);
+        await updateUserBalanceOcean($userAddress, $web3Provider);
         let unlockDateMilliseconds = await getLockedEndTime(
           $userAddress,
           $networkSigner
         );
+        let lockedOceans = await getLockedOceanAmount(
+          $userAddress,
+          $networkSigner
+        );
+        lockedOceanAmount.update(() => lockedOceans);
         await oceanUnlockDate.update(() =>
           unlockDateMilliseconds
             ? moment.utc(unlockDateMilliseconds)
@@ -187,8 +201,17 @@
           type="number"
           name="amount"
           min={$lockedOceanAmount ? 0 : 1}
-          max={$userAddress && getOceanBalance($connectedChainId)
-            ? parseFloat(getOceanBalance($connectedChainId)).toFixed(3)
+          max={$userBalances[
+            getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean")
+          ]
+            ? parseFloat(
+                $userBalances[
+                  getAddressByChainIdKey(
+                    process.env.VE_SUPPORTED_CHAINID,
+                    "Ocean"
+                  )
+                ]
+              ).toFixed(3)
             : 0}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0 ||
@@ -247,9 +270,12 @@
           />
         {:else}
           <TokenApproval
-            tokenAddress={getOceanTokenAddressByChainId($connectedChainId)}
+            tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
-            spender={process.env.VE_OCEAN_CONTRACT}
+            spender={getAddressByChainIdKey(
+              process.env.VE_SUPPORTED_CHAINID,
+              "veOCEAN"
+            )}
             amount={$form.amount}
             disabled={loading ||
               getOceanBalance($connectedChainId) <= 0 ||
