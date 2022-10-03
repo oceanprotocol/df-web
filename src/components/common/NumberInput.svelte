@@ -18,7 +18,7 @@
 <div class="actionsContainer">
   {#if showMaxValue === true}
     <p class="maxItem maxValueLabel">
-      {maxValueLabel && maxValueLabel !== "" && maxValueLabel}{max}
+      {maxValueLabel && maxValueLabel !== "" && maxValueLabel}{parseFloat(max).toFixed(3)}
     </p>
   {/if}
 </div>

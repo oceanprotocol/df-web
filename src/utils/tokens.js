@@ -3,19 +3,6 @@ import { ethers } from "ethers";
 import { getRpcUrlByChainId, GASLIMIT_DEFAULT } from "./web3";
 import * as TokenABI from "./abis/tokenABI";
 
-const tokenABI = TokenABI.default
-
-const oceanTokenAddressesByChain = {
-  1: "0x967da4048cD07aB37855c090aAF366e4ce1b9F48",
-  4: "0x8967BCF84170c91B0d24D4302C2376283b0B3a07",
-  8996: "0x067008a4045f7CF6222291D85cb143e35acA2f40"
-}
-
-
-export const getOceanTokenAddressByChainId = (chainId) => {
-  return oceanTokenAddressesByChain[chainId]
-}
-
 //TODO - Standardize function calls & Params to follow ocean.js
 export const getTokenContract = async (chainId, address, signer) => {
   try {
@@ -38,7 +25,8 @@ export const balanceOf = async (balances, chainId, tokenAddress, account, provid
     }
     const tokenContract = await getTokenContract(chainId, tokenAddress, provider);
     balance = await tokenContract.balanceOf(account);
-    return balance
+
+    return balance;
   } catch(err) {
     console.error(err);
   }
@@ -66,7 +54,7 @@ export const allowance = async (
   spender,
   signer
 ) => {
-  const datatoken = new ethers.Contract(datatokenAdress, tokenABI, signer);
+  const datatoken = new ethers.Contract(datatokenAdress, TokenABI.default, signer);
 
   return datatoken.allowance(owner, spender);
 }
@@ -81,7 +69,7 @@ export const approve = async (
   signer,
   force = false
 ) => {
-  const datatoken = new ethers.Contract(datatokenAddress, tokenABI, signer);
+  const datatoken = new ethers.Contract(datatokenAddress, TokenABI.default, signer);
   const gasLimitDefault = GASLIMIT_DEFAULT
   let estGas
   try {

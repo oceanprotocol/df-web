@@ -1,10 +1,11 @@
-import { writable } from "svelte/store";
+import {writable} from "svelte/store";
 import {getRpcUrlByChainId} from "../utils/web3";
 import {ethers} from "ethers";
 import * as airdropABI from "../utils/abis/airdropABI";
 import * as dfRewardsABI from "../utils/abis/DFRewardsABI";
 import {get} from "svelte/store";
-import { networkSigner } from "../stores/web3";
+import {networkSigner} from "../stores/web3";
+import {getAddressByChainIdKey} from "../utils/address/address";
 
 export let contracts = writable({});
 export let airdrops = writable({});
@@ -89,11 +90,10 @@ export const updateAllClaimables = async (airdropData, selectedNetworks, userAdd
     airdrops.set(airdropData);
 }
 
-export const getDFRewards = async(userAddress, tokenAddress, provider) => {
+export const getDFRewards = async(userAddress, tokenAddress) => {
     try {
-        const contract = new ethers.Contract(process.env.DF_REWARDS_CONTRACT, dfRewardsABI.default, provider);
+        const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "DFRewards"), dfRewardsABI.default, get(networkSigner));
         const estimateClaim = await contract.claimable(userAddress, tokenAddress);
-        console.log("estimateClaim", estimateClaim);
         const estimateClaimFormatted = ethers.utils.formatEther(BigInt(estimateClaim).toString(10));
         return estimateClaimFormatted
     } catch (error) {
@@ -104,7 +104,7 @@ export const getDFRewards = async(userAddress, tokenAddress, provider) => {
 
 export async function claimDFReward(userAddress, tokenAddress) {
     try {
-        const contract = new ethers.Contract(process.env.DF_REWARDS_CONTRACT, dfRewardsABI.default, get(networkSigner));
+        const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "DFRewards"), dfRewardsABI.default, get(networkSigner));
         console.log("dfRewards", contract)
         console.log("userAddress", userAddress)
         console.log("tokenAddress", tokenAddress)

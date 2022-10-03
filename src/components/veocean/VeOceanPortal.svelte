@@ -5,8 +5,6 @@
   import LockOcean from "./LockOcean.svelte";
   import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
-  import { getOceanTokenAddressByChainId } from "../../utils/tokens";
-  import { userBalances } from "../../stores/tokens";
   import moment from "moment";
 
   let loading = false;
@@ -24,17 +22,11 @@
         unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
       );
     }
+
     loading = false;
   };
 
-  $: if (
-    $userAddress &&
-    $userBalances[
-      getOceanTokenAddressByChainId(
-        process.env.VE_SUPPORTED_CHAINID
-      ).toLowerCase()
-    ]
-  ) {
+  $: if ($userAddress) {
     loadValues();
   }
 </script>

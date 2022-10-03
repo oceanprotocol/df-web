@@ -24,8 +24,8 @@
   } from "./stores/airdrops";
   import { getRewards } from "./utils/rewards";
   import {
-    addUserOceanBalanceToBalances,
-    addUserVeOceanBalanceToBalances,
+    updateUserBalanceOcean,
+    updateUserBalanceVeOcean,
     userBalances,
   } from "./stores/tokens";
   import {
@@ -38,7 +38,7 @@
   import ApolloClient from "apollo-boost";
   import { setClient } from "svelte-apollo";
   import { onMount } from "svelte";
-  import { getOceanTokenAddressByChainId } from "./utils/tokens";
+  import { getAddressByChainIdKey } from "./utils/address/address";
   import { getLockedEndTime } from "./utils/ve";
   import moment from "moment";
 
@@ -78,17 +78,15 @@
     );
 
     veOceanWithDelegations.update(() => newVeOceansWithDelegations);
-    await addUserVeOceanBalanceToBalances($userAddress, $web3Provider);
-    await addUserOceanBalanceToBalances(process.env.VE_SUPPORTED_CHAINID);
+    await updateUserBalanceVeOcean($userAddress, $web3Provider);
+    await updateUserBalanceOcean($userAddress, $web3Provider);
     isAppLoading.update(() => false);
   }
 
   function initStore() {
     let emptyUserBalances = {};
     emptyUserBalances[process.env.VE_OCEAN_CONTRACT] = 0;
-    emptyUserBalances[
-      getOceanTokenAddressByChainId(process.env.VE_SUPPORTED_CHAINID)
-    ] = 0;
+    emptyUserBalances[getAddressByChainIdKey($connectedChainId, "veOCEAN")] = 0;
     userBalances.update(() => emptyUserBalances);
     veOceanWithDelegations.update(() => 0);
     oceanUnlockDate.update(() => undefined);
@@ -99,6 +97,15 @@
 
   $: if ($userAddress && $web3Provider && $connectedChainId) {
     if ($connectedChainId != process.env.VE_SUPPORTED_CHAINID) {
+      veOceanWithDelegations.update(() => 0);
+      let emptyUserBalances = {};
+      let veOceanAddress = getAddressByChainIdKey($connectedChainId, "veOCEAN");
+      if (veOceanAddress) emptyUserBalances[veOceanAddress] = 0;
+      let oceanAddress = getAddressByChainIdKey($connectedChainId, "Ocean");
+      if (oceanAddress) emptyUserBalances[oceanAddress] = 0;
+      userBalances.update(() => emptyUserBalances);
+      oceanUnlockDate.update(() => undefined);
+      lockedOceanAmount.update(() => 0);
       veClaimables.update(() => 0);
       dfClaimables.update(() => 0);
       veEstimate.update(() => 0);
