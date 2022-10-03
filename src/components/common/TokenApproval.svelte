@@ -66,7 +66,7 @@
     {fullWidth}
     loading={approving}
     text={infiniteAmount
-      ? `Allow the Ocean Protocol to use your ${tokenName}`
+      ? `Allow the OceanDAO to use your ${tokenName}`
       : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
     onclick={() => onClick()}
     disabled={disabled || loading || !agreed}

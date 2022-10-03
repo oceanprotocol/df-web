@@ -243,6 +243,7 @@
                 }`}
             onclick={() =>
               switchWalletNetwork(process.env.VE_SUPPORTED_CHAINID)}
+            fullWidth={true}
             disabled={!$userAddress}
           />
         {:else}
