@@ -260,6 +260,7 @@
             {#if $oceanUnlockDate}
               <Button
                 text={updateLockButtonText}
+                fullWidth={true}
                 disabled={loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
@@ -270,6 +271,7 @@
               />
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
+                fullWidth={true}
                 disabled={loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||

@@ -9,6 +9,7 @@
 
   export let disabled = false;
   export let loading = false;
+  export let fullWidth = undefined;
   export let amount;
   export let infiniteAmount = false;
   export let tokenName;
@@ -60,20 +61,19 @@
     });
 </script>
 
-<div>
-  {#if isAmountApproved === false}
-    <Button
-      loading={approving}
-      text={infiniteAmount
-        ? `Allow the Ocean Protocol to use your ${tokenName}`
-        : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
-      onclick={() => onClick()}
-      disabled={disabled || loading || !agreed}
-    />
-  {:else}
-    <slot />
-  {/if}
-</div>
+{#if isAmountApproved === false}
+  <Button
+    {fullWidth}
+    loading={approving}
+    text={infiniteAmount
+      ? `Allow the Ocean Protocol to use your ${tokenName}`
+      : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
+    onclick={() => onClick()}
+    disabled={disabled || loading || !agreed}
+  />
+{:else}
+  <slot />
+{/if}
 
 <style>
 </style>
