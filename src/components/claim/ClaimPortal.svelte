@@ -3,11 +3,13 @@
   import MainMessage from "../common/MainMessage.svelte";
   import EstimatedRewards from "../common/EstimatedRewards.svelte";
   import ClaimRewards from "./ClaimRewardsVeDF.svelte";
+  import { get } from "svelte/store";
   import {
     userAddress,
     connectedChainId,
     selectedNetworks,
     networkSigner,
+    web3Provider,
   } from "../../stores/web3.js";
   import {
     airdrops,
@@ -18,61 +20,99 @@
     updateAllClaimables,
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
+  import { getVeOceanBalance, getMaxUserEpoch } from "../../utils/ve";
+  import {
+    getLastTokenTime,
+    getUserEpoch,
+    getTimeCursor,
+  } from "../../utils/feeDistributor";
   import Countdown from "../common/CountDown.svelte";
   import { getAddressByChainIdKey } from "../../utils/address/address";
 
   let loading = true;
+  let veBalance = 0.0;
+  let maxUserEpoch = 0;
+  let curUserEpoch = 0;
+  let timeCursor = 0;
+  let timeCursorWeeks = 0;
+  let lastTokenTime = 0;
+  let lastTokenTimeWeeks = 0;
+  let canClaimVE = true;
+  let canClaimDF = true;
 
   async function initClaimables() {
+    console.log("initClaimables");
+
     loading = true;
-    
-    const veRewards = await getRewardsFeeEstimate($userAddress);
-    console.log("veRewards:", veRewards);
+    await updateAllClaimables(
+      JSON.parse(process.env.AIRDROP_CONFIG),
+      $selectedNetworks,
+      $userAddress,
+      $rewards
+    );
+
+    veBalance = await getVeOceanBalance($userAddress, $web3Provider);
+    maxUserEpoch = await getMaxUserEpoch($userAddress, $web3Provider);
+    curUserEpoch = await getUserEpoch($userAddress, $web3Provider);
+    lastTokenTime = await getLastTokenTime($web3Provider);
+    timeCursor = await getTimeCursor($userAddress, $web3Provider);
+
+    const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
     veClaimables.set(veRewards);
 
     const dfRewards = await getDFRewards(
       $userAddress,
       getAddressByChainIdKey($connectedChainId, "Ocean")
     );
-    console.log("dfRewards:", dfRewards);
     dfClaimables.set(dfRewards);
 
+    if (
+      maxUserEpoch === 0 ||
+      curUserEpoch >= maxUserEpoch ||
+      timeCursor >= lastTokenTime ||
+      veRewards <= 0
+    ) {
+      canClaimVE = false;
+    }
+
+    if (dfRewards <= 0) {
+      canClaimDF = false;
+    }
     loading = false;
   }
 
-  $: if ($rewards) {
+  $: if ($userAddress && $connectedChainId) {
     initClaimables();
-  }
-
-  $: if ($connectedChainId !== process.env.VE_SUPPORTED_CHAINID) {
-    loading = false;
-  }
-
-  $: if (!$userAddress) {
-    loading = false;
   }
 </script>
 
-<div
-  class={`container ${
-    (loading === true || !$airdrops) && "alignContentCenter"
-  }`}
->
-  {#if loading === false}
-    <Countdown />
+<div class={`container`}>
+  <Countdown />
+
+  {#if $userAddress && loading === false && $airdrops && veBalance > 0}
     <!-- <div class="estimatedRewardsContainer">
       <EstimatedRewards />
     </div> -->
-    <ClaimRewards />
-  {:else if $selectedNetworks.length > 0 && $userAddress}
+    <ClaimRewards {canClaimVE} {canClaimDF} />
+  {:else if $userAddress && loading === false}
+    {#if !$userAddress}
+      <MainMessage
+        title="No wallet connected"
+        message={`Connect your wallet to see the rewards`}
+      />
+    {:else if $selectedNetworks.length === 0 && $userAddress}
+      <MainMessage
+        title="No network selected"
+        message={`Select a network to see rewards.`}
+      />
+    {:else}
+      <MainMessage
+        title="No veOcean"
+        message={`Lock Ocean to receive veOcean and earn yield.`}
+      />
+    {/if}
+  {:else}
     <span class="loading">Loading...</span>
-  {/if}
-  {#if $selectedNetworks.length === 0 && $userAddress}
-    <MainMessage
-      title="No network selected"
-      message={`Select one or more networks from the **Selected networks** dropdown in
-    order to see rewards from those networks.`}
-    />
   {/if}
 </div>
 
@@ -93,12 +133,12 @@
   .estimatedRewardsContainer {
     width: 100%;
     font-size: var(--font-size-large);
-    margin: calc(var(--spacer)) 0;
   }
 
   .loading {
     font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
+    margin: calc(var(--spacer)) 0;
   }
 
   .alignContentCenter {

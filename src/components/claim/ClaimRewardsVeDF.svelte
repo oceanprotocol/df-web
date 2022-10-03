@@ -3,7 +3,7 @@
     userAddress,
     networkSigner,
     connectedChainId,
-    web3Provider
+    web3Provider,
   } from "../../stores/web3";
   import {
     veClaimables,
@@ -13,15 +13,13 @@
   } from "../../stores/airdrops";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
-  import {
-    getRewardsFeeEstimate,
-    claimVERewards,
-  } from "../../utils/feeEstimate";
-  import {
-    updateUserBalanceOcean
-  } from "../../stores/tokens";
+  import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
+  import { updateUserBalanceOcean } from "../../stores/tokens";
   import { getAddressByChainIdKey } from "../../utils/address/address";
+  import { claim as claimVERewards } from "../../utils/feeDistributor";
 
+  export let canClaimVE = true;
+  export let canClaimDF = true;
   let claiming;
 
   async function onClaimDfRewards() {
@@ -50,7 +48,6 @@
     claiming = undefined;
   }
 
-  // Todo
   async function onClaimVeRewards() {
     claiming = "VE_REWARDS";
     try {
@@ -74,14 +71,18 @@
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
     loading={claiming === "VE_REWARDS"}
     onClick={onClaimVeRewards}
-    disabled={claiming !== undefined || $veClaimables <= 0}
+    disabled={canClaimVE === false ||
+      claiming !== undefined ||
+      $veClaimables <= 0}
   />
   <ClaimItem
     title="DF Claimable"
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     loading={claiming === "DF_REWARDS"}
     onClick={onClaimDfRewards}
-    disabled={claiming !== undefined || $dfClaimables <= 0}
+    disabled={canClaimDF === false ||
+      claiming !== undefined ||
+      $dfClaimables <= 0}
   />
 </div>
 

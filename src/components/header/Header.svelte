@@ -28,11 +28,11 @@
       <li class:active={$location.pathname === "/veocean"}>
         <Link to="/veocean" class="link">veOCEAN</Link>
       </li>
-      <li class:active={$location.pathname === "/rewards"}>
-        <Link to="/rewards" class="link">CLAIM PORTAL</Link>
-      </li>
       <li class:active={$location.pathname === "/data"}>
         <Link to="/data" class="link">DATA EXPLORER</Link>
+      </li>
+      <li class:active={$location.pathname === "/rewards"}>
+        <Link to="/rewards" class="link">REWARDS</Link>
       </li>
       <li class:active={false}>
         <a href={aboutURL} target="_blank" class="link">ABOUT</a>

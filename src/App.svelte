@@ -83,6 +83,18 @@
     isAppLoading.update(() => false);
   }
 
+  function initStore() {
+    let emptyUserBalances = {};
+    emptyUserBalances[process.env.VE_OCEAN_CONTRACT] = 0;
+    emptyUserBalances[getAddressByChainIdKey($connectedChainId, "veOCEAN")] = 0;
+    userBalances.update(() => emptyUserBalances);
+    veOceanWithDelegations.update(() => 0);
+    oceanUnlockDate.update(() => undefined);
+    lockedOceanAmount.update(() => 0);
+  }
+
+  initStore();
+
   $: if ($userAddress && $web3Provider && $connectedChainId) {
     if ($connectedChainId != process.env.VE_SUPPORTED_CHAINID) {
       veOceanWithDelegations.update(() => 0);
@@ -92,13 +104,13 @@
       let oceanAddress = getAddressByChainIdKey($connectedChainId, "Ocean");
       if (oceanAddress) emptyUserBalances[oceanAddress] = 0;
       userBalances.update(() => emptyUserBalances);
-      isAppLoading.update(() => false);
       oceanUnlockDate.update(() => undefined);
       lockedOceanAmount.update(() => 0);
       veClaimables.update(() => 0);
       dfClaimables.update(() => 0);
       veEstimate.update(() => 0);
       dfEstimate.update(() => 0);
+      isAppLoading.update(() => false);
     } else {
       initRewards();
     }

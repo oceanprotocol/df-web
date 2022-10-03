@@ -118,10 +118,6 @@
     return 1;
   }
 
-  $: if (rowData) {
-    sortRowsDataByAllocations();
-  }
-
   const sortRowsDataByAllocations = () => {
     rowData = rowData.sort(compare);
   };
@@ -130,7 +126,6 @@
     totalAvailable += step;
     rowData[rowData.findIndex((element) => element.id === id)].myallocation =
       value;
-    if (pagination.page > 1) pagination.page = 1;
   };
 
   const updateAllocations = async () => {

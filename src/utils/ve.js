@@ -72,7 +72,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
       console.log(error?.error?.error ? error?.error?.error.message : error);
       return undefined;
     }
-  }
+}
 
   export const lockOcean = async(amount, unlockDate, signer) => {
     try {
@@ -89,7 +89,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
     } catch (error) {
       throw error;
     }
-  }
+}
 
   export const withdrawOcean = async(signer) => {
     try {
@@ -105,7 +105,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
     } catch (error) {
       throw error;
     }
-  }
+}
 
   export const updateLockedOceanAmount = async(amount, signer) => {
     try {
@@ -122,7 +122,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
     } catch (error) {
       throw error;
     }
-  }
+}
 
   export const updateLockPeriod = async(unlockDate, signer) => {
     try {
@@ -138,4 +138,14 @@ export const getVeOceanBalance = async(userAddress, provider) => {
     } catch (error) {
       throw error;
     }
+}
+
+export const getMaxUserEpoch = async(address, provider) => {
+  try {
+      const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
+      const maxUserEpoch = await contract.user_point_epoch(address)
+      return parseInt(BigInt(maxUserEpoch));
+  } catch (error) {
+    throw error;
   }
+}

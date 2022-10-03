@@ -1,17 +1,16 @@
 import {ethers} from "ethers";
-import {get} from "svelte/store";
 import * as VeFeeEstimateABI from "./abis/veFeeEstimateABI";
 import {networkSigner} from "../stores/web3";
 import {getAddressByChainIdKey} from "../utils/address/address";
 
 const veFeeEstimateABI = VeFeeEstimateABI.default
 
-export const getRewardsFeeEstimate = async(userAddress) => {
+export const getRewardsFeeEstimate = async(userAddress, provider) => {
     try {
       const contract = new ethers.Contract(
         getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veFeeEstimate"),
         veFeeEstimateABI, 
-        get(networkSigner)
+        provider
       );
       const estimateClaim = await contract.estimateClaim(userAddress)
       const estimateClaimFormatted = ethers.utils.formatEther(BigInt(estimateClaim).toString(10))
