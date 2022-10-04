@@ -241,7 +241,13 @@
       >
         <Toolbar size="sm">
           <ToolbarContent>
-            <ToolbarSearch persistent shouldFilterRows />
+            <ToolbarSearch
+              persistent
+              on:input={() => {
+                pagination.page = 1;
+              }}
+              shouldFilterRows
+            />
           </ToolbarContent>
         </Toolbar>
         <svelte:fragment slot="cell" let:cell let:row>
