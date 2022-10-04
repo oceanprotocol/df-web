@@ -1,61 +1,32 @@
 <script>
-  import NetworkRewards from "./NetworkRewards.svelte";
   import MainMessage from "../common/MainMessage.svelte";
-  import EstimatedRewards from "../common/EstimatedRewards.svelte";
   import ClaimRewards from "./ClaimRewardsVeDF.svelte";
-  import { get } from "svelte/store";
   import {
     userAddress,
     connectedChainId,
     selectedNetworks,
-    networkSigner,
-    web3Provider,
+    web3Provider
   } from "../../stores/web3.js";
   import {
     airdrops,
-    rewards,
     veClaimables,
     dfClaimables,
     getDFRewards,
-    updateAllClaimables,
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
-  import { getVeOceanBalance, getMaxUserEpoch } from "../../utils/ve";
-  import {
-    getLastTokenTime,
-    getUserEpoch,
-    getTimeCursor,
-  } from "../../utils/feeDistributor";
+  import { getVeOceanBalance } from "../../utils/ve";
   import Countdown from "../common/CountDown.svelte";
   import { getAddressByChainIdKey } from "../../utils/address/address";
 
   let loading = true;
   let veBalance = 0.0;
-  let maxUserEpoch = 0;
-  let curUserEpoch = 0;
-  let timeCursor = 0;
-  let timeCursorWeeks = 0;
-  let lastTokenTime = 0;
-  let lastTokenTimeWeeks = 0;
   let canClaimVE = true;
   let canClaimDF = true;
 
   async function initClaimables() {
-    console.log("initClaimables");
-
     loading = true;
-    await updateAllClaimables(
-      JSON.parse(process.env.AIRDROP_CONFIG),
-      $selectedNetworks,
-      $userAddress,
-      $rewards
-    );
-
+    
     veBalance = await getVeOceanBalance($userAddress, $web3Provider);
-    maxUserEpoch = await getMaxUserEpoch($userAddress, $web3Provider);
-    curUserEpoch = await getUserEpoch($userAddress, $web3Provider);
-    lastTokenTime = await getLastTokenTime($web3Provider);
-    timeCursor = await getTimeCursor($userAddress, $web3Provider);
 
     const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
     veClaimables.set(veRewards);
@@ -66,18 +37,14 @@
     );
     dfClaimables.set(dfRewards);
 
-    if (
-      maxUserEpoch === 0 ||
-      curUserEpoch >= maxUserEpoch ||
-      timeCursor >= lastTokenTime ||
-      veRewards <= 0
-    ) {
+    if (veRewards <= 0) {
       canClaimVE = false;
     }
 
     if (dfRewards <= 0) {
       canClaimDF = false;
     }
+    
     loading = false;
   }
 

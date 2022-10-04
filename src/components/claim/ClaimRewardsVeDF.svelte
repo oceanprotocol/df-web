@@ -54,7 +54,8 @@
       await claimVERewards($userAddress, $networkSigner);
       Swal.fire("Success!", `You've claimed your VE rewards!`, "success").then(
         async () => {
-          veClaimables.set(await getRewardsFeeEstimate($userAddress));
+          const claimableEstimate = await getRewardsFeeEstimate($userAddress, $web3Provider);
+          veClaimables.set(claimableEstimate);
           await updateUserBalanceOcean($userAddress, $web3Provider);
         }
       );
