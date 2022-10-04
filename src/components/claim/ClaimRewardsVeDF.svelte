@@ -68,7 +68,7 @@
 
 <div class={`container`}>
   <ClaimItem
-    title="veOCEAN Claimable"
+    title="Passive Rewards"
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
     loading={claiming === "VE_REWARDS"}
     onClick={onClaimVeRewards}
@@ -77,7 +77,7 @@
       $veClaimables <= 0}
   />
   <ClaimItem
-    title="DF Claimable"
+    title="Data Farming Rewards"
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     loading={claiming === "DF_REWARDS"}
     onClick={onClaimDfRewards}
