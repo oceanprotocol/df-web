@@ -8,6 +8,7 @@ export let datasets = writable("");
 
 export const columnsData = [
   { key: "network", value: "Network" },
+  { key: "name", value: "Name" },
   { key: "symbol", value: "Symbol" },
   {
     key: "volume",
@@ -21,7 +22,7 @@ export const columnsData = [
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Network", "Volume", "TotalAllocated" ,"MyAllocation", "Action"]
+export const defaultColumns = ["Name", "Volume", "TotalAllocated" ,"MyAllocation", "Action"]
 
 async function getDatasets(api) {
   let res;
@@ -51,6 +52,7 @@ async function getDatasets(api) {
 function getRow(dataInfo, key) {
   return {
     id: key,
+    name: "[Data Whale] Ocean ONDA DataFi Directory V4, [Data Whale] Ocean ONDA DataFi Directory V4, [Data Whale] Ocean ONDA DataFi Directory V4",
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
     nftaddress: dataInfo.nft_addr,
