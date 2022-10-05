@@ -204,14 +204,14 @@
           max={$userBalances[
             getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean")
           ]
-            ? parseFloat(
+            ? parseInt(
                 $userBalances[
                   getAddressByChainIdKey(
                     process.env.VE_SUPPORTED_CHAINID,
                     "Ocean"
                   )
                 ]
-              ).toFixed(3)
+              )
             : 0}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0 ||
@@ -222,6 +222,9 @@
           maxValueLabel="Balance: "
           showMaxValue={true}
           showMaxButton={true}
+          onChange={
+            () => $form.amount = parseInt($form.amount)
+          }
         />
       </div>
       <div class="item">

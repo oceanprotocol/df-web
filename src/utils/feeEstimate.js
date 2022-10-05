@@ -1,15 +1,13 @@
 import {ethers} from "ethers";
-import * as VeFeeEstimateABI from "./abis/veFeeEstimateABI";
+import * as veFeeEstimateABI from "./abis/veFeeEstimateABI";
 import {networkSigner} from "../stores/web3";
 import {getAddressByChainIdKey} from "../utils/address/address";
-
-const veFeeEstimateABI = VeFeeEstimateABI.default
 
 export const getRewardsFeeEstimate = async(userAddress, provider) => {
     try {
       const contract = new ethers.Contract(
         getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veFeeEstimate"),
-        veFeeEstimateABI, 
+        veFeeEstimateABI.default, 
         provider
       );
       const estimateClaim = await contract.estimateClaim(userAddress)
