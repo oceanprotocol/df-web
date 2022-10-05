@@ -18,7 +18,7 @@
 <div class="actionsContainer">
   {#if showMaxValue === true}
     <p class="maxItem maxValueLabel">
-      {maxValueLabel && maxValueLabel !== "" && maxValueLabel}{parseFloat(max).toFixed(3)}
+      {maxValueLabel && maxValueLabel !== "" && maxValueLabel}{max}
     </p>
   {/if}
 </div>
@@ -32,7 +32,7 @@
     {max}
     bind:value
     {placeholder}
-    on:input={onChange}
+    on:change={onChange}
   />
 </div>
 <div class="actionsContainer">
