@@ -5,7 +5,7 @@
 </script>
 
 <Countdown
-  from={"2022-10-06"}
+  from={getThursdayDate(moment())}
   dateFormat="YYYY-MM-DD"
   zone="Europe/Athens"
   let:remaining
