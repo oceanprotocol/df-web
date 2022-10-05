@@ -4,6 +4,7 @@
   export let onclick = () => {};
   export let text;
   export let className = undefined;
+  export let fullWidth = undefined;
   export let secondary = false;
   export let loading = false;
   export let disabled = false;
@@ -17,7 +18,9 @@
     ? 'disabledSecondary'
     : disabled
     ? 'disabled'
-    : ''} {textOnly ? 'textOnly' : ''} {className ? className : ''}"
+    : ''} {textOnly ? 'textOnly' : ''} {className ? className : ''} {fullWidth
+    ? 'fullWidth'
+    : ''}"
   {disabled}
   {type}
 >
@@ -78,5 +81,8 @@
   span {
     display: box;
     line-height: 100%;
+  }
+  .fullWidth {
+    width: 100%;
   }
 </style>

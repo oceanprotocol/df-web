@@ -269,12 +269,14 @@
                 }`}
             onclick={() =>
               switchWalletNetwork(process.env.VE_SUPPORTED_CHAINID)}
+            fullWidth={true}
             disabled={!$userAddress}
           />
         {:else}
           <TokenApproval
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
+            infiniteAmount={true}
             spender={getAddressByChainIdKey(
               process.env.VE_SUPPORTED_CHAINID,
               "veOCEAN"
@@ -288,6 +290,7 @@
             {#if $oceanUnlockDate}
               <Button
                 text={updateLockButtonText}
+                fullWidth={true}
                 disabled={loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
@@ -298,6 +301,7 @@
               />
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
+                fullWidth={true}
                 disabled={loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
