@@ -5,13 +5,15 @@
 </script>
 
 <Countdown
-  from={getThursdayDate(moment())}
-  dateFormat="YYYY-MM-DD"
+  from={moment(getThursdayDate(moment().utc()))
+    .set({ hour: 6 })
+    .format("YYYY-MM-DD H:m:s")}
+  dateFormat="YYYY-MM-DD H:m:s"
   zone="Europe/Athens"
   let:remaining
 >
   <div class="countdown">
-    <p class="countdownTitle">NEXT REWARDS DISTRIBUTION IN</p>
+    <p class="countdownTitle">NEXT ROUND STARTS IN</p>
     <div class="countdownContent">
       <div class="item">
         <span class="itemValue">{remaining.days}</span>
