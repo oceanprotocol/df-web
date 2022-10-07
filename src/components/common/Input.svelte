@@ -40,7 +40,7 @@
         {min}
         {max}
         {disabled}
-        on:input={onChange}
+        {onChange}
         {showMaxValue}
         {maxValueLabel}
         {showMaxButton}

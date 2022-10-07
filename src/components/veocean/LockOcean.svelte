@@ -204,14 +204,14 @@
           max={$userBalances[
             getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean")
           ]
-            ? parseFloat(
+            ? parseInt(
                 $userBalances[
                   getAddressByChainIdKey(
                     process.env.VE_SUPPORTED_CHAINID,
                     "Ocean"
                   )
                 ]
-              ).toFixed(3)
+              )
             : 0}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0 ||
@@ -222,6 +222,9 @@
           maxValueLabel="Balance: "
           showMaxValue={true}
           showMaxButton={true}
+          onChange={
+            () => $form.amount = parseInt($form.amount)
+          }
         />
       </div>
       <div class="item">
@@ -266,12 +269,14 @@
                 }`}
             onclick={() =>
               switchWalletNetwork(process.env.VE_SUPPORTED_CHAINID)}
+            fullWidth={true}
             disabled={!$userAddress}
           />
         {:else}
           <TokenApproval
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
+            infiniteAmount={true}
             spender={getAddressByChainIdKey(
               process.env.VE_SUPPORTED_CHAINID,
               "veOCEAN"
@@ -285,6 +290,7 @@
             {#if $oceanUnlockDate}
               <Button
                 text={updateLockButtonText}
+                fullWidth={true}
                 disabled={loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
@@ -295,6 +301,7 @@
               />
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
+                fullWidth={true}
                 disabled={loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
