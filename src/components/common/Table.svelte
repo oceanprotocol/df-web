@@ -51,7 +51,7 @@
   let loading = false;
 
   let columns = {};
-  let pagination = { pageSize: 13, page: 1 };
+  let pagination = { pageSize: 100, page: 1 };
 
   loadVisibleColumns();
 
@@ -282,12 +282,13 @@
   }
   .tableContainer {
     width: 100%;
+    max-height: calc(100vh - 115px - var(--spacer) * 3.7);
     overflow-y: scroll;
   }
   .tableCustomHeader {
     display: flex;
     justify-content: space-between;
-    margin: calc(var(--spacer) / 8) 0;
+    margin: 0;
   }
   :global(.updateAllocationsBtton) {
     margin-left: calc(var(--spacer) / 3);
@@ -317,6 +318,8 @@
   }
   :global(thead) {
     background-color: var(--brand-white) !important;
+    position: sticky;
+    inset-block-start: 34px;
   }
   :global(button[class*="table-sort"]) {
     background-color: var(--brand-grey-dimmed) !important;
