@@ -17,7 +17,6 @@
   .textWithNetwork {
     display: flex;
     position: relative;
-    cursor: pointer;
   }
   .text {
     width: 150px;
@@ -32,13 +31,20 @@
   .text:hover + .fullText {
     display: block;
     position: absolute;
-    top: -60px;
-    background-color: var(--background-body);
+    transform: translateY(calc(-100% - 5px));
+    word-break: normal;
+    background-color: var(--background-content);
+    box-shadow: var(--box-shadow);
     padding: calc(var(--spacer) / 6);
+    z-index: 100;
+    width: 70vw;
   }
   @media (min-width: 640px) {
     .text {
       width: 180px;
+    }
+    .text:hover + .fullText {
+      width: 50vw;
     }
   }
 </style>

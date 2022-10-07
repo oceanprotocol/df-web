@@ -254,7 +254,7 @@
         <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "action"}
             <Link text="view" url={cell.value} />
-          {:else if cell.key === "name"}
+          {:else if cell.key === "title"}
             <TextWithNetworkIcon networkName={row.newtwork} text={cell.value} />
           {:else if cell.key === "myallocation"}
             <ShareInput
