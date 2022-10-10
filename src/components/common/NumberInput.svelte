@@ -11,6 +11,7 @@
   export let maxValueLabel = "";
   export let showMaxValue = false;
   export let showMaxButton = false;
+  export let noArrows = undefined;
 
   const handleOnMaxClick = () => (value = max);
 </script>
@@ -24,7 +25,7 @@
 </div>
 <div class={`container`}>
   <input
-    class="input"
+    class={`input ${noArrows ? "disableArrows" : ""}`}
     type="number"
     {name}
     {disabled}
@@ -73,5 +74,10 @@
   }
   .actionsContainer :global(.maxValueLabel) {
     color: var(--brand-black);
+  }
+  .disableArrows {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    margin: 0;
   }
 </style>

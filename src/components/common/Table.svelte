@@ -48,6 +48,7 @@
     !$userAddress ||
     !$oceanUnlockDate;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+  let totalAvailableTemporary = totalAvailable;
   let loading = false;
 
   let columns = {};
@@ -123,9 +124,29 @@
   };
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
-    totalAvailable += step;
+    console.log(totalAvailable, step, value);
+    totalAvailableTemporary = totalAvailable + step;
     rowData[rowData.findIndex((element) => element.id === id)].myallocation =
       value;
+  };
+
+  const updateTotalAllocation = (id, value) => {
+    //console.log(totalAvailableTemporary + parseInt(value), totalAvailable);
+    //if (totalAvailableTemporary + value == totalAvailableTemporary) return;
+    console.log(value);
+    if (value == "") {
+      console.log("herre", value);
+      rowData[
+        rowData.findIndex((element) => element.id === id)
+      ].myallocation = 0;
+    }
+    totalAvailable = totalAvailableTemporary;
+  };
+
+  const subtractCurrAllocationsFromTotal = (value) => {
+    console.log(value);
+    if (!value || totalAvailable + parseInt(value) > 100) return;
+    totalAvailable += parseInt(value);
   };
 
   const updateAllocations = async () => {
@@ -210,7 +231,11 @@
       <div class="headerValuesContainer">
         <ItemWithLabel
           title="Available allocation"
-          value={totalAvailable >= 0 ? `${totalAvailable}%` : "loading..."}
+          value={totalAvailable >= 0
+            ? totalAvailableTemporary !== totalAvailable
+              ? `${totalAvailableTemporary}%`
+              : `${totalAvailable}%`
+            : "loading..."}
         />
         <Button
           text={loading ? "Updating..." : "Update allocations"}
@@ -255,6 +280,8 @@
               available={totalAvailable}
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
+              onBlur={updateTotalAllocation}
+              onFocus={subtractCurrAllocationsFromTotal}
               dataId={row.id}
               {disabled}
               showAvailable={false}

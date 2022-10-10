@@ -19,6 +19,7 @@
   export let showMaxButton = false;
   export let disableKeyboardInput = undefined;
   export let className = undefined;
+  export let noArrows = undefined;
 </script>
 
 <div
@@ -44,6 +45,7 @@
         {showMaxValue}
         {maxValueLabel}
         {showMaxButton}
+        {noArrows}
       />
     {:else if type === "checkbox"}
       <input
