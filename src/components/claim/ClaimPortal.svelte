@@ -15,8 +15,8 @@
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import { getVeOceanBalance } from "../../utils/ve";
-  import Countdown from "../common/CountDown.svelte";
   import { getAddressByChainIdKey } from "../../utils/address/address";
+  import EpochSummary from "./EpochSummary.svelte";
 
   let loading = true;
   let veBalance = 0.0;
@@ -54,7 +54,7 @@
 </script>
 
 <div class={`container`}>
-  <Countdown />
+  <EpochSummary />
 
   {#if $userAddress && loading === false && $airdrops && veBalance > 0}
     <!-- <div class="estimatedRewardsContainer">
