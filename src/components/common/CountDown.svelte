@@ -14,7 +14,7 @@
   let:remaining
 >
   <div class="countdown">
-    <p class="countdownTitle">NEXT ROUND STARTS IN</p>
+    <p class="countdownTitle">ENDS IN</p>
     <div class="countdownContent">
       <div class="item">
         <span class="itemValue">{remaining.days}</span>
@@ -47,7 +47,7 @@
     margin-bottom: calc(var(--spacer));
   }
   .countdownTitle {
-    font-size: var(--font-size-normal);
+    font-size: var(--font-size-small);
     margin-bottom: calc(var(--spacer) / 6);
   }
   .countdownContent {
