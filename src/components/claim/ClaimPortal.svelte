@@ -5,7 +5,7 @@
     userAddress,
     connectedChainId,
     selectedNetworks,
-    web3Provider
+    web3Provider,
   } from "../../stores/web3.js";
   import {
     airdrops,
@@ -25,7 +25,7 @@
 
   async function initClaimables() {
     loading = true;
-    
+
     veBalance = await getVeOceanBalance($userAddress, $web3Provider);
 
     const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
@@ -44,7 +44,7 @@
     if (dfRewards <= 0) {
       canClaimDF = false;
     }
-    
+
     loading = false;
   }
 

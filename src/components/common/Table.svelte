@@ -124,18 +124,13 @@
   };
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
-    console.log(totalAvailable, step, value);
     totalAvailableTemporary = totalAvailable + step;
     rowData[rowData.findIndex((element) => element.id === id)].myallocation =
       value;
   };
 
   const updateTotalAllocation = (id, value) => {
-    //console.log(totalAvailableTemporary + parseInt(value), totalAvailable);
-    //if (totalAvailableTemporary + value == totalAvailableTemporary) return;
-    console.log(value);
     if (value == "") {
-      console.log("herre", value);
       rowData[
         rowData.findIndex((element) => element.id === id)
       ].myallocation = 0;
@@ -144,7 +139,6 @@
   };
 
   const subtractCurrAllocationsFromTotal = (value) => {
-    console.log(value);
     if (!value || totalAvailable + parseInt(value) > 100) return;
     totalAvailable += parseInt(value);
   };
@@ -282,6 +276,7 @@
                 onTotalAvailableAllocationChange(id, value, step)}
               onBlur={updateTotalAllocation}
               onFocus={subtractCurrAllocationsFromTotal}
+              max={100 - totalAvailable}
               dataId={row.id}
               {disabled}
               showAvailable={false}

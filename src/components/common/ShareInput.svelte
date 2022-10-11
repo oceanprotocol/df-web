@@ -15,12 +15,14 @@
 
   const increaseValueByStep = () => {
     currentValue += step;
-    //onChange(dataId, currentValue, -step);
+    n = currentValue;
+    onChange(dataId, currentValue, -currentValue);
   };
 
   const decreaseValueByStep = () => {
     currentValue -= step;
-    //onChange(dataId, currentValue, +step);
+    n = currentValue;
+    onChange(dataId, currentValue, -currentValue);
   };
 
   function validator(node, value) {
@@ -60,7 +62,8 @@
       use:validator={currentValue}
       on:blur={(e) => onBlur(dataId, e.target.value)}
       on:focus={(e) => onFocus(e.target.value)}
-      max="100"
+      max={available}
+      disabled={available === 0 && currentValue === 0}
       min="0"
       class="allocationInput"
     />%
@@ -79,7 +82,6 @@
   .container {
     display: flex;
     padding: calc(var(--spacer) / 12) 0;
-    width: fit-content;
     border: 1px solid var(--brand-grey-lighter);
     border-radius: 5px;
   }
