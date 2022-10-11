@@ -1,9 +1,6 @@
 <script>
-  import Input from "./Input.svelte";
-
   export let available = 100;
   export let step = 10;
-  export let disabled = false;
   export let dataId = undefined;
   export let onChange = undefined;
   export let currentValue = 0;
@@ -12,18 +9,6 @@
   export let onFocus = undefined;
 
   let n = currentValue;
-
-  const increaseValueByStep = () => {
-    currentValue += step;
-    n = currentValue;
-    onChange(dataId, currentValue, -currentValue);
-  };
-
-  const decreaseValueByStep = () => {
-    currentValue -= step;
-    n = currentValue;
-    onChange(dataId, currentValue, -currentValue);
-  };
 
   function validator(node, value) {
     return {
@@ -50,29 +35,17 @@
 </script>
 
 <div class="container">
-  <button
-    class="action"
-    on:click={() => decreaseValueByStep()}
-    disabled={currentValue === 0 || disabled}>-</button
-  >
-  <div class="allocationInputContainer">
-    <input
-      type="number"
-      bind:value={currentValue}
-      use:validator={currentValue}
-      on:blur={(e) => onBlur(dataId, e.target.value)}
-      on:focus={(e) => onFocus(e.target.value)}
-      max={available}
-      disabled={available === 0 && currentValue === 0}
-      min="0"
-      class="allocationInput"
-    />%
-  </div>
-  <button
-    class="action"
-    on:click={() => increaseValueByStep()}
-    disabled={disabled || available === 0}>+</button
-  >
+  <input
+    type="number"
+    bind:value={currentValue}
+    use:validator={currentValue}
+    on:blur={(e) => onBlur(dataId, e.target.value)}
+    on:focus={(e) => onFocus(e.target.value)}
+    max={available}
+    disabled={available === 0 && currentValue === 0}
+    min="0"
+    class="allocationInput"
+  />%
   {#if showAvailable === true}
     <span class="available">{available}</span>
   {/if}
@@ -81,35 +54,23 @@
 <style>
   .container {
     display: flex;
+    align-items: center;
+    justify-content: center;
     padding: calc(var(--spacer) / 12) 0;
     border: 1px solid var(--brand-grey-lighter);
     border-radius: 5px;
   }
-  .action,
   .available {
     padding: 0 calc(var(--spacer) / 6);
     background-color: transparent;
     border: none;
     margin: 0;
   }
-  .action:hover {
-    cursor: pointer;
-  }
   .allocationInput {
     border: 0;
   }
   .allocationInput:focus {
     outline: none;
-  }
-  .allocationInputContainer {
-    width: 80px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--brand-grey-lighter);
-  }
-  .action:disabled {
-    cursor: default;
   }
   .available {
     border-left: 1px solid var(--brand-grey-lighter);
