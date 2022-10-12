@@ -18,7 +18,7 @@
 </script>
 
 <div class={`container`}>
-  <Card title="Data Farming Epoch {epoch.index}">
+  <Card title="Data Farming Round {epoch.index}">
     <Countdown />
     <div class="veOcean-info">
       {#if loading === false}
