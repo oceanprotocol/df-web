@@ -188,6 +188,7 @@
       $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
       !$oceanUnlockDate;
     totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+    totalAvailableTemporary = totalAvailable;
   }
 
   $: if ($oceanUnlockDate) {
