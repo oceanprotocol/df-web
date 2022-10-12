@@ -5,7 +5,7 @@
     userAddress,
     connectedChainId,
     selectedNetworks,
-    web3Provider
+    web3Provider,
   } from "../../stores/web3.js";
   import {
     airdrops,
@@ -16,7 +16,8 @@
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import { getVeOceanBalance } from "../../utils/ve";
   import { getAddressByChainIdKey } from "../../utils/address/address";
-  import Countdown from "../common/CountDown.svelte";
+  import RewardOverview from "./RewardOverview.svelte";
+  import epochs from "../../utils/metadata/epochs/epochs.json";
 
   let loading = true;
   let veBalance = 0.0;
@@ -25,7 +26,7 @@
 
   async function initClaimables() {
     loading = true;
-    
+
     veBalance = await getVeOceanBalance($userAddress, $web3Provider);
 
     const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
@@ -44,7 +45,7 @@
     if (dfRewards <= 0) {
       canClaimDF = false;
     }
-    
+
     loading = false;
   }
 
@@ -54,7 +55,7 @@
 </script>
 
 <div class={`container`}>
-  <Countdown />
+  <RewardOverview roundInfo={epochs[epochs.length - 1]} />
 
   {#if $userAddress && loading === false && $airdrops && veBalance > 0}
     <!-- <div class="estimatedRewardsContainer">
