@@ -14,7 +14,7 @@
   let:remaining
 >
   <div class="countdown">
-    <p class="countdownTitle">ENDS IN</p>
+    <p class="countdownTitle">DATA FARMING ROUND ENDS IN</p>
     <div class="countdownContent">
       <div class="item">
         <span class="itemValue">{remaining.days}</span>
