@@ -20,6 +20,7 @@
 
   export let canClaimVE = true;
   export let canClaimDF = true;
+  export let roundInfo;
   let claiming;
 
   async function onClaimDfRewards() {
@@ -54,7 +55,10 @@
       await claimVERewards($userAddress, $networkSigner);
       Swal.fire("Success!", `You've claimed your VE rewards!`, "success").then(
         async () => {
-          const claimableEstimate = await getRewardsFeeEstimate($userAddress, $web3Provider);
+          const claimableEstimate = await getRewardsFeeEstimate(
+            $userAddress,
+            $web3Provider
+          );
           veClaimables.set(claimableEstimate);
           await updateUserBalanceOcean($userAddress, $web3Provider);
         }
@@ -68,7 +72,10 @@
 
 <div class={`container`}>
   <ClaimItem
-    title="Passive Rewards"
+    title="Passive"
+    description="Shares based on user’s veOCEAN amount. 
+    Lock your OCEAN to receive rewards."
+    distributedAmount={roundInfo.passive}
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
     loading={claiming === "VE_REWARDS"}
     onClick={onClaimVeRewards}
@@ -77,8 +84,11 @@
       $veClaimables <= 0}
   />
   <ClaimItem
-    title="Data Farming Rewards"
+    title="Data Farming"
+    description="Shares based on allocation amount set upon datasets with consume volume. 
+    Set allocations to receive rewards."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
+    distributedAmount={roundInfo.active}
     loading={claiming === "DF_REWARDS"}
     onClick={onClaimDfRewards}
     disabled={canClaimDF === false ||
@@ -90,9 +100,16 @@
 <style>
   .container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow-y: hidden;
     padding-top: 40px;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      flex-direction: row;
+    }
   }
 </style>

@@ -23,9 +23,10 @@
   let veBalance = 0.0;
   let canClaimVE = true;
   let canClaimDF = true;
+  let roundInfo = epochs[epochs.length - 1];
 
   async function initClaimables() {
-    loading = true;
+    loading = false;
 
     veBalance = await getVeOceanBalance($userAddress, $web3Provider);
 
@@ -55,13 +56,13 @@
 </script>
 
 <div class={`container`}>
-  <RewardOverview roundInfo={epochs[epochs.length - 1]} />
+  <RewardOverview {roundInfo} />
 
   {#if $userAddress && loading === false && $airdrops && veBalance > 0}
     <!-- <div class="estimatedRewardsContainer">
       <EstimatedRewards />
     </div> -->
-    <ClaimRewards {canClaimVE} {canClaimDF} />
+    <ClaimRewards {canClaimVE} {canClaimDF} {roundInfo} />
   {:else if $userAddress && loading === false}
     {#if !$userAddress}
       <MainMessage
