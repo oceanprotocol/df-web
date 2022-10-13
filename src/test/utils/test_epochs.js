@@ -34,13 +34,13 @@ const date3 = moment("2022-07-01")
 const epoch3 = getEpoch(date3)
 if( epoch3.index != 3 ) throw true
 
-const date5 = moment("2022-10-08")
-const epoch5 = getEpoch(date5)
-if( epoch5.index != 5 ) throw true
+const date6 = moment("2022-10-08")
+const epoch6 = getEpoch(date6)
+if( epoch6.index != 6 ) throw true
 
-const date7 = moment("2022-10-23")
-const epoch7 = getEpoch(date7)
-if( epoch7.index != 7 ) throw true
+const date8 = moment("2022-10-23")
+const epoch8 = getEpoch(date8)
+if( epoch8.index != 8 ) throw true
 
 let arr = [0,1,2,3,4,5]
 console.log("arr", arr)

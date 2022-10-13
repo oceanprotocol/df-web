@@ -17,6 +17,7 @@
   import { getVeOceanBalance } from "../../utils/ve";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import Countdown from "../common/CountDown.svelte";
+  import EpochHistory from "./EpochHistory.svelte";
 
   let loading = true;
   let veBalance = 0.0;
@@ -41,7 +42,7 @@
       canClaimVE = false;
     }
 
-    if (dfRewards <= 0) {
+    if (dfRewards <= 0) { 
       canClaimDF = false;
     }
     
@@ -81,6 +82,8 @@
   {:else}
     <span class="loading">Loading...</span>
   {/if}
+
+  <EpochHistory />
 </div>
 
 <style>
