@@ -15,8 +15,6 @@ export let veClaimables = writable(0);
 export let dfEstimate = writable(0);
 export let dfClaimables = writable(0);
 
-const gasLimit = 1000000;
-
 export const getTokenAddress = (chainId, tokenName, airdropsConfig) => {
     if (!chainId || !tokenName) return null;
     try {
@@ -134,7 +132,8 @@ export async function claimDFRewards(airdropData, chainId, userAddress, signer) 
                 airdropABI.default,
                 signer
             );
-            const resp = await contract.claimMultiple(userAddress, positiveClaimables,{"gasLimit": gasLimit});
+            const calcGasLimit = await contract.estimateGas.claimMultiple(userAddress, positiveClaimables)
+            const resp = await contract.claimMultiple(userAddress, positiveClaimables,{"gasLimit": calcGasLimit + 1});
             await resp.wait();
             console.log("Success claiming rewards, txReceipt here");
         }
