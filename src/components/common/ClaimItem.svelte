@@ -2,6 +2,7 @@
   import Button from "./Button.svelte";
   import Card from "./Card.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
+  import { navigate } from "svelte-navigator";
 
   export let title;
   export let amount;
@@ -9,6 +10,8 @@
   export let loading = false;
   export let disabled = false;
   export let description;
+  export let redirectLink;
+  export let showRedirectLink;
   export let onClick;
   export let metrics;
 </script>
@@ -17,17 +20,25 @@
   <Card title={`${distributedAmount} OCEAN - ${title} REWARDS`}>
     <p class="description">{@html description}</p>
     <div class="metrics">
-      <ItemWithLabel {title} value={amount} />
+      <ItemWithLabel title="rewards" value={amount} />
       {#each metrics as metric}
         <ItemWithLabel title={metric.name} value={metric.value} />
       {/each}
     </div>
-    <Button
-      fullWidth
-      text={loading ? "Loading..." : "Claim"}
-      onclick={() => onClick()}
-      disabled={loading || disabled}
-    />
+    {#if showRedirectLink}
+      <Button
+        fullWidth
+        text={redirectLink.text}
+        onclick={() => navigate(redirectLink.url)}
+      />
+    {:else}
+      <Button
+        fullWidth
+        text={loading ? "Loading..." : "Claim"}
+        onclick={() => onClick()}
+        disabled={loading || disabled}
+      />
+    {/if}
   </Card>
 </div>
 

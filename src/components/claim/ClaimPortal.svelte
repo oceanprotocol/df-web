@@ -58,7 +58,7 @@
 <div class={`container`}>
   <RewardOverview {roundInfo} />
 
-  {#if $userAddress && loading === false && $airdrops && veBalance > 0}
+  {#if $userAddress && loading === false && $airdrops}
     <!-- <div class="estimatedRewardsContainer">
       <EstimatedRewards />
     </div> -->
@@ -73,11 +73,6 @@
       <MainMessage
         title="No network selected"
         message={`Select a network to see rewards.`}
-      />
-    {:else}
-      <MainMessage
-        title="No veOcean"
-        message={`Lock Ocean to receive veOcean and earn yield.`}
       />
     {/if}
   {:else}

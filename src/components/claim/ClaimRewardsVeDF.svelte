@@ -18,6 +18,7 @@
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { claim as claimVERewards } from "../../utils/feeDistributor";
   import { totalUserAllocation } from "../../stores/dataAllocations";
+  import { oceanUnlockDate } from "../../stores/veOcean";
 
   export let canClaimVE = true;
   export let canClaimDF = true;
@@ -78,6 +79,8 @@
     description="Shares based on user’s <strong>veOCEAN</strong> amount. 
     Lock your OCEAN to receive rewards."
     distributedAmount={roundInfo.passive}
+    showRedirectLink={!$oceanUnlockDate}
+    redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
     metrics={[
       {
@@ -110,6 +113,8 @@
     Set allocations to receive rewards."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
+    showRedirectLink={!$oceanUnlockDate || $totalUserAllocation === 100}
+    redirectLink={{ text: "Set allocations", url: "data" }}
     distributedAmount={roundInfo.active}
     loading={claiming === "DF_REWARDS"}
     onClick={onClaimDfRewards}

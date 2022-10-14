@@ -82,9 +82,8 @@ export const getVeOceanBalance = async(userAddress, provider) => {
           signer
         );
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
-        const tx = await contract.create_lock(amountToLockInEth, unlockDate,{
-          gasLimit: gasLimit
-      })
+        const calcGasLimit = await contract.estimateGas.create_lock(amountToLockInEth, unlockDate)
+        const tx = await contract.create_lock(amountToLockInEth, unlockDate, {gasLimit: calcGasLimit})
         const receipt = await tx.wait()
     } catch (error) {
       throw error;
