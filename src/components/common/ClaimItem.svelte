@@ -10,6 +10,7 @@
   export let disabled = false;
   export let description;
   export let onClick;
+  export let metrics;
 </script>
 
 <div class={`container`}>
@@ -17,7 +18,9 @@
     <p class="description">{@html description}</p>
     <div class="metrics">
       <ItemWithLabel {title} value={amount} />
-      <ItemWithLabel {title} value={amount} />
+      {#each metrics as metric}
+        <ItemWithLabel title={metric.name} value={metric.value} />
+      {/each}
     </div>
     <Button
       fullWidth
@@ -31,7 +34,6 @@
 <style>
   .container {
     width: 100%;
-    margin-bottom: var(--spacer);
   }
   .metrics {
     width: 100%;

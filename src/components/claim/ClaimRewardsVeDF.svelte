@@ -14,9 +14,10 @@
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
-  import { updateUserBalanceOcean } from "../../stores/tokens";
+  import { updateUserBalanceOcean, userBalances } from "../../stores/tokens";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { claim as claimVERewards } from "../../utils/feeDistributor";
+  import { totalUserAllocation } from "../../stores/dataAllocations";
 
   export let canClaimVE = true;
   export let canClaimDF = true;
@@ -78,6 +79,25 @@
     Lock your OCEAN to receive rewards."
     distributedAmount={roundInfo.passive}
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
+    metrics={[
+      {
+        name: "balance",
+        value: `${
+          $userBalances[
+            getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+          ]
+            ? parseFloat(
+                $userBalances[
+                  getAddressByChainIdKey(
+                    process.env.VE_SUPPORTED_CHAINID,
+                    "veOCEAN"
+                  )
+                ]
+              ).toFixed(3)
+            : 0
+        } veOCEAN`,
+      },
+    ]}
     loading={claiming === "VE_REWARDS"}
     onClick={onClaimVeRewards}
     disabled={canClaimVE === false ||
@@ -89,6 +109,7 @@
     description="Shares based on <strong>allocation</strong> amount set upon datasets with consume volume. 
     Set allocations to receive rewards."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
+    metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
     distributedAmount={roundInfo.active}
     loading={claiming === "DF_REWARDS"}
     onClick={onClaimDfRewards}
@@ -111,14 +132,11 @@
     font-weight: bold;
     width: 100%;
     font-size: var(--font-size-normal);
-    margin-bottom: calc(var(--spacer) / 2);
   }
 
   @media (min-width: 640px) {
-    .cardsContainer {
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: space-between;
+    .container {
+      gap: calc(var(--spacer) / 2);
     }
   }
 </style>
