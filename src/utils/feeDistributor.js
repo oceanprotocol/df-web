@@ -39,7 +39,7 @@ export const getLastTokenTime = async(provider) => {
       feeDistributorABI.default, 
       provider
     );
-    const calcGasLimit = await contract.estimateGas.last_token_time(userAddress, positiveClaimables)
+    const calcGasLimit = await contract.estimateGas.last_token_time()
     const lastTokenTime = await contract.last_token_time({"gasLimit": calcGasLimit + 1});
     return parseInt(BigInt(lastTokenTime));
   } catch (error) {

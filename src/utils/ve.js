@@ -114,7 +114,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
           signer
         );
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
-        const calcGasLimit = await contract.estimateGas.increase_unlock_time(amountToLockInEth)
+        const calcGasLimit = await contract.estimateGas.increase_amount(amountToLockInEth)
         const tx = await contract.increase_amount(amountToLockInEth,{
           gasLimit: calcGasLimit + 1
       })
