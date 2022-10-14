@@ -9,8 +9,8 @@
   let rows = [];
   
   const headers = [
-    { key: "round", value: "Round" },
-    { key: "ended", value: "Ended" },
+    { key: "index", value: "Round" },
+    { key: "date_start", value: "Start" },
     { key: "passive", value: "Passive Rewards" }, 
     { key: "active", value:"Active Rewards" }
   ]
