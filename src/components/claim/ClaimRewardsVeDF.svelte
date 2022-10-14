@@ -71,9 +71,10 @@
 </script>
 
 <div class={`container`}>
+  <p class="title">Get your share of OCEAN rewards</p>
   <ClaimItem
     title="Passive"
-    description="Shares based on user’s veOCEAN amount. 
+    description="Shares based on user’s <strong>veOCEAN</strong> amount. 
     Lock your OCEAN to receive rewards."
     distributedAmount={roundInfo.passive}
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
@@ -84,8 +85,8 @@
       $veClaimables <= 0}
   />
   <ClaimItem
-    title="Data Farming"
-    description="Shares based on allocation amount set upon datasets with consume volume. 
+    title="Active"
+    description="Shares based on <strong>allocation</strong> amount set upon datasets with consume volume. 
     Set allocations to receive rewards."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     distributedAmount={roundInfo.active}
@@ -99,17 +100,25 @@
 
 <style>
   .container {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow-y: hidden;
-    padding-top: 40px;
+    flex-wrap: wrap;
+    gap: calc(var(--spacer) / 2);
+    flex-direction: row;
+    margin: calc(var(--spacer)) 0;
+  }
+  .title {
+    font-weight: bold;
+    width: 100%;
+    font-size: var(--font-size-normal);
+    margin-bottom: calc(var(--spacer) / 2);
   }
 
   @media (min-width: 640px) {
-    .container {
+    .cardsContainer {
       flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
     }
   }
 </style>

@@ -50,7 +50,7 @@
     font-size: var(--font-size-large);
   }
   .countdownTitle {
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-large);
     margin-bottom: calc(var(--spacer) / 6);
   }
   .countdownContent {
