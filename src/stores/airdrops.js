@@ -133,7 +133,7 @@ export async function claimDFRewards(airdropData, chainId, userAddress, signer) 
                 signer
             );
             const calcGasLimit = await contract.estimateGas.claimMultiple(userAddress, positiveClaimables)
-            const resp = await contract.claimMultiple(userAddress, positiveClaimables,{"gasLimit": calcGasLimit + 1});
+            const resp = await contract.claimMultiple(userAddress, positiveClaimables,{gasLimit: calcGasLimit + 1});
             await resp.wait();
             console.log("Success claiming rewards, txReceipt here");
         }

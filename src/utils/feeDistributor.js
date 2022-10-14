@@ -40,7 +40,7 @@ export const getLastTokenTime = async(provider) => {
       provider
     );
     const calcGasLimit = await contract.estimateGas.last_token_time()
-    const lastTokenTime = await contract.last_token_time({"gasLimit": calcGasLimit + 1});
+    const lastTokenTime = await contract.last_token_time({gasLimit: calcGasLimit + 1});
     return parseInt(BigInt(lastTokenTime));
   } catch (error) {
     console.log(error)
