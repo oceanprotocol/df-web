@@ -16,6 +16,8 @@
   import { GET_ALLOCATIONS } from "../../utils/dataAllocations";
   import { onMount } from "svelte";
   import MainMessage from "../common/MainMessage.svelte";
+  import { getAddressByChainIdKey } from "../../utils/address/address";
+  import { userBalances } from "../../stores/tokens";
 
   let allocations;
 
@@ -64,7 +66,7 @@
 <div
   class={`container ${(!$datasets || $isAppLoading) && "alignContentCenter"}`}
 >
-  {#if $datasets && !$isAppLoading}
+  {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")]}
     <div class="wrapper">
       <MainMessage
         message={`**Allocate your veOCEAN across datasets with consume volume to earn Data Farming Rewards.**`}

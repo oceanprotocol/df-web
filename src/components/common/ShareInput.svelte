@@ -1,6 +1,7 @@
 <script>
+  import { userAddress } from "../../stores/web3";
+
   export let available = 100;
-  export let step = 10;
   export let dataId = undefined;
   export let onChange = undefined;
   export let currentValue = 0;
@@ -10,14 +11,17 @@
 
   let n = currentValue;
 
+  $: $userAddress && resetValues();
+
   function validator(node, value) {
     return {
       update(value) {
+        console.log(n, currentValue, value);
         if (available === 0) return;
         if (value === null) {
-          n = 0;
+          n = null;
           currentValue = null;
-          onChange(dataId, currentValue, value);
+          onChange(dataId, 0, value);
           return;
         }
         currentValue =
@@ -32,6 +36,10 @@
       },
     };
   }
+
+  const resetValues = () => {
+    n = 0;
+  };
 </script>
 
 <div class="container">
@@ -56,8 +64,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: calc(var(--spacer) / 12) 0;
+    padding: calc(var(--spacer) / 12) calc(var(--spacer) / 8);
     border: 1px solid var(--brand-grey-lighter);
+    width: fit-content;
     border-radius: 5px;
   }
   .available {
@@ -68,6 +77,7 @@
   }
   .allocationInput {
     border: 0;
+    width: 50px;
   }
   .allocationInput:focus {
     outline: none;

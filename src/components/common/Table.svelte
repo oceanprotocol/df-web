@@ -48,7 +48,7 @@
     !$userAddress ||
     !$oceanUnlockDate;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
-  let totalAvailableTemporary = totalAvailable;
+  let totalAvailableTemporary = undefined;
   let loading = false;
 
   let columns = {};
@@ -109,22 +109,9 @@
     datasetsWithAllocations = undefined;
   }
 
-  function compare(a, b) {
-    if (a.myallocation > b.myallocation) {
-      return -1;
-    }
-    if (a.myallocation < b.myallocation) {
-      return 1;
-    }
-    return 1;
-  }
-
-  const sortRowsDataByAllocations = () => {
-    rowData = rowData.sort(compare);
-  };
-
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailableTemporary = totalAvailable + step;
+    console.log(totalAvailableTemporary, value, step);
     rowData[rowData.findIndex((element) => element.id === id)].myallocation =
       value;
   };
@@ -179,7 +166,14 @@
     );
   };
 
-  $: if ($totalUserAllocation >= 0) {
+  $: $userAddress && updateTotalAvailableAllocations();
+  $: $totalUserAllocation && updateTotalAvailableAllocations();
+
+  $: if ($totalUserAllocation === 0) {
+    updateTotalAvailableAllocations();
+  }
+
+  const updateTotalAvailableAllocations = () => {
     disabled =
       $userBalances[
         getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
@@ -189,7 +183,7 @@
       !$oceanUnlockDate;
     totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
     totalAvailableTemporary = totalAvailable;
-  }
+  };
 
   $: if ($oceanUnlockDate) {
     updateDisable();
