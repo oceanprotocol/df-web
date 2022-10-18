@@ -10,7 +10,7 @@
   
   const headers = [
     { key: "id", value: "Round" },
-    { key: "date_start", value: "Epoch" },
+    { key: "date_start", value: "Start Date" },
     { key: "passive", value: "Passive Rewards" }, 
     { key: "active", value:"Active Rewards" }
   ]
