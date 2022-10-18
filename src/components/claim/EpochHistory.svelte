@@ -1,25 +1,32 @@
 <script>
   import { DataTable } from "carbon-components-svelte";
-  import * as epochs from "../utils/metadata/epochs/epochs.json";
+  import * as epochs from "../../utils/metadata/epochs/epochs.json"; 
   import {getEpoch} from "../../utils/epochs"
   import moment from "moment";
   
   let loading = true;
-  let epoch;
+  let curEpoch;
   let rows = [];
   
   const headers = [
-    { key: "index", value: "Round" },
-    { key: "date_start", value: "Start" },
+    { key: "id", value: "Round" },
+    { key: "date_start", value: "Epoch" },
     { key: "passive", value: "Passive Rewards" }, 
     { key: "active", value:"Active Rewards" }
   ]
 
   const init = () => {
     const now = moment();
-    epoch = getEpoch(now);
+    curEpoch = getEpoch(now);
 
-    rows = Object.entries(epochs).filter(([k, v]) => v.index < epoch.index );
+    console.log("curEpoch: ", curEpoch);
+    console.log("curEpoch.id: ", curEpoch.id);
+    console.log("epochs: ", epochs.default);
+
+    rows = epochs.default.filter((epoch) => epoch.id < curEpoch.id );
+    rows.sort((first, second) => {return second.id - first.id});
+
+    console.log("rows: ", rows);
     loading = false;
   };
 

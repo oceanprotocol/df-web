@@ -1,6 +1,6 @@
 [
   {
-    "index": 1,
+    "id": 1,
     "date_start": "2022-06-16",
     "date_end": "2022-06-23",
     "passive": 0,
@@ -8,7 +8,7 @@
     "total": 10000
   },
   {
-    "index": 2,
+    "id": 2,
     "date_start": "2022-06-23",
     "date_end": "2022-06-30",
     "passive": 0,
@@ -16,7 +16,7 @@
     "total": 10000
   },
   {
-    "index": 3,
+    "id": 3,
     "date_start": "2022-06-30",
     "date_end": "2022-07-07",
     "passive": 0,
@@ -24,7 +24,7 @@
     "total": 10000
   },
   {
-    "index": 4,
+    "id": 4,
     "date_start": "2022-07-07",
     "date_end": "2022-07-14",
     "passive": 0,
@@ -32,7 +32,7 @@
     "total": 10000
   },
   {
-    "index": 5,
+    "id": 5,
     "date_start": "2022-09-29",
     "date_end": "2022-10-06",
     "passive": 5000,
@@ -40,7 +40,7 @@
     "total": 10000
   },
   {
-    "index": 6,
+    "id": 6,
     "date_start": "2022-10-06",
     "date_end": "2022-10-13",
     "passive": 5000,
@@ -48,7 +48,7 @@
     "total": 10000
   },
   {
-    "index": 7,
+    "id": 7,
     "date_start": "2022-10-13",
     "date_end": "2022-10-20",
     "passive": 5000,
@@ -56,7 +56,7 @@
     "total": 10000
   },
   {
-    "index": 8,
+    "id": 8,
     "date_start": "2022-10-20",
     "date_end": "2022-10-27",
     "passive": 5000,
@@ -64,7 +64,7 @@
     "total": 10000
   },
   {
-    "index": 9,
+    "id": 9,
     "date_start": "2022-10-27",
     "date_end": "2022-11-03",
     "passive": 5000,
