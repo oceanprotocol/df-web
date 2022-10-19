@@ -22,6 +22,8 @@
     rows = epochs.default.filter((epoch) => epoch.id < curEpoch.id);
     rows.forEach((row) => {
       row.date_start = moment(row.date_start).format("DD-MM-YYYY");
+      row.passive = `${row.passive} OCEAN`;
+      row.active = `${row.active} OCEAN`;
     });
     rows.sort((first, second) => {
       return second.id - first.id;
