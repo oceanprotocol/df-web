@@ -19,10 +19,6 @@
     const now = moment();
     curEpoch = getEpoch(now);
 
-    console.log("curEpoch: ", curEpoch);
-    console.log("curEpoch.id: ", curEpoch.id);
-    console.log("epochs: ", epochs.default);
-
     rows = epochs.default.filter((epoch) => epoch.id < curEpoch.id);
     rows.forEach((row) => {
       row.date_start = moment(row.date_start).format("DD-MM-YYYY");
@@ -31,7 +27,6 @@
       return second.id - first.id;
     });
 
-    console.log("rows: ", rows);
     loading = false;
   };
 
