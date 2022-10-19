@@ -14,6 +14,7 @@
   export let showRedirectLink;
   export let onClick;
   export let metrics;
+  export let disableRedirect = false;
 </script>
 
 <div class={`container`}>
@@ -30,11 +31,12 @@
         fullWidth
         text={redirectLink.text}
         onclick={() => navigate(redirectLink.url)}
+        disabled={disableRedirect}
       />
     {:else}
       <Button
         fullWidth
-        text={loading ? "Loading..." : "Claim"}
+        text={loading ? "Loading..." : `Claim ${disabled ? "" : amount}`}
         onclick={() => onClick()}
         disabled={loading || disabled}
       />

@@ -20,8 +20,9 @@
   import RewardOverview from "./RewardOverview.svelte";
   import moment from "moment";
   import { getEpoch } from "../../utils/epochs";
+  import { oceanUnlockDate } from "../../stores/veOcean";
 
-  let loading = true;
+  let loading = false;
   let veBalance = 0.0;
   let canClaimVE = true;
   let canClaimDF = true;
@@ -29,7 +30,13 @@
   let curEpoch = getEpoch(now);
 
   async function initClaimables() {
-    loading = false;
+    if (!userAddress || !oceanUnlockDate) {
+      veClaimables.set(0);
+      dfClaimables.set(0);
+      loading = false;
+      return;
+    }
+    loading = true;
 
     veBalance = await getVeOceanBalance($userAddress, $web3Provider);
 
@@ -41,6 +48,12 @@
       getAddressByChainIdKey($connectedChainId, "Ocean")
     );
     dfClaimables.set(dfRewards);
+
+    /*const veRewards = 20;
+    const dfRewards = 20;
+
+    veClaimables.set(veRewards);
+    dfClaimables.set(dfRewards);*/
 
     if (veRewards <= 0) {
       canClaimVE = false;
@@ -60,28 +73,7 @@
 
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
-
-  {#if $userAddress && loading === false && $airdrops}
-    <!-- <div class="estimatedRewardsContainer">
-      <EstimatedRewards />
-    </div> -->
-    <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} />
-  {:else if $userAddress && loading === false}
-    {#if !$userAddress}
-      <MainMessage
-        title="No wallet connected"
-        message={`Connect your wallet to see the rewards`}
-      />
-    {:else if $selectedNetworks.length === 0 && $userAddress}
-      <MainMessage
-        title="No network selected"
-        message={`Select a network to see rewards.`}
-      />
-    {/if}
-  {:else}
-    <span class="loading">Loading...</span>
-  {/if}
-
+  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} {loading} />
   <EpochHistory />
 </div>
 

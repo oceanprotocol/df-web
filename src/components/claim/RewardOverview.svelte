@@ -1,10 +1,8 @@
 <script>
-  import { relativeTimeRounding } from "moment";
   import Card from "../common/Card.svelte";
   import Countdown from "../common/CountDown.svelte";
 
   export let roundInfo = undefined;
-  console.log(roundInfo);
 </script>
 
 <Card>

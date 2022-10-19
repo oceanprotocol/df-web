@@ -23,6 +23,7 @@
   export let canClaimVE = true;
   export let canClaimDF = true;
   export let roundInfo;
+  export let loading = false;
   let claiming;
 
   async function onClaimDfRewards() {
@@ -81,7 +82,9 @@
     distributedAmount={roundInfo.passive}
     showRedirectLink={!$oceanUnlockDate}
     redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
-    amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
+    amount={loading
+      ? "loading..."
+      : `${parseFloat($veClaimables).toFixed(3)} OCEAN`}
     metrics={[
       {
         name: "balance",
@@ -111,7 +114,9 @@
     title="Active"
     description="Shares based on <strong>allocation</strong> amount set upon datasets with consume volume. 
     Set allocations to receive rewards."
-    amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
+    amount={loading
+      ? "loading..."
+      : `${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
     showRedirectLink={!$oceanUnlockDate || $totalUserAllocation === 100}
     redirectLink={{ text: "Set allocations", url: "data" }}
@@ -121,6 +126,7 @@
     disabled={canClaimDF === false ||
       claiming !== undefined ||
       $dfClaimables <= 0}
+    disableRedirect={!$oceanUnlockDate}
   />
 </div>
 
