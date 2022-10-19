@@ -344,7 +344,7 @@
     z-index: 0 !important;
     position: fixed !important;
   }
-  :global(.bx--data-table) {
+  :global(.tableContainer .bx--data-table) {
     margin-top: calc(var(--spacer) / 2);
   }
 </style>

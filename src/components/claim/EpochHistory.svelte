@@ -33,18 +33,26 @@
   init();
 </script>
 
-<div class="container">
-  <h3 class="title">Data Farmin History</h3>
+<h3 class="title">Data Farmin History</h3>
+<div class="epochHistoryContainer">
   <DataTable sortable {headers} {rows} class="customTable" />
 </div>
 
 <style>
-  .container {
+  .epochHistoryContainer {
     width: 100%;
+    background-color: var(--brand-white);
+    box-shadow: var(--box-shadow);
+    transform: translate3d(0, -0.05rem, 0);
+    border-radius: var(--border-radius);
+    margin-top: calc(var(--spacer) / 2);
   }
   .title {
     font-weight: bold;
     width: 100%;
     font-size: var(--font-size-normal);
+  }
+  :global(.epochHistoryContainer .bx--data-table-container) {
+    padding-top: 0 !important;
   }
 </style>
