@@ -41,6 +41,8 @@
   import { getAddressByChainIdKey } from "./utils/address/address";
   import { getLockedEndTime } from "./utils/ve";
   import moment from "moment";
+  import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
+  import { totalUserAllocation } from "./stores/dataAllocations";
 
   const client = new ApolloClient({
     uri: process.env.SUBGRAPH_API,
@@ -70,6 +72,14 @@
     await oceanUnlockDate.update(() =>
       unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
     );
+
+    if (unlockDateMilliseconds) {
+      let newAllocation = await getTotalAllocatedVeOcean(
+        $userAddress,
+        $networkSigner
+      );
+      totalUserAllocation.update(() => newAllocation);
+    }
 
     const newRewards = await getRewards($userAddress);
     rewards.update(() => newRewards);

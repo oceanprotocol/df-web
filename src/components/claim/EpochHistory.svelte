@@ -34,17 +34,17 @@
 </script>
 
 <div class="container">
-  <DataTable
-    sortable
-    title="Data Farming History"
-    {headers}
-    {rows}
-    class="customTable"
-  />
+  <h3 class="title">Data Farmin History</h3>
+  <DataTable sortable {headers} {rows} class="customTable" />
 </div>
 
 <style>
   .container {
     width: 100%;
+  }
+  .title {
+    font-weight: bold;
+    width: 100%;
+    font-size: var(--font-size-normal);
   }
 </style>

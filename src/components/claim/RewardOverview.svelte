@@ -1,4 +1,5 @@
 <script>
+  import { relativeTimeRounding } from "moment";
   import Card from "../common/Card.svelte";
   import Countdown from "../common/CountDown.svelte";
 
@@ -8,7 +9,9 @@
 
 <Card>
   <h1 class="title">
-    {`Round ${roundInfo.index}  -  ${roundInfo.passive} OCEAN rewards distributed in`}
+    {`Round ${roundInfo.id}  -  ${
+      parseInt(roundInfo.passive) + parseInt(roundInfo.active)
+    } OCEAN rewards distributed in`}
   </h1>
   <Countdown />
 </Card>

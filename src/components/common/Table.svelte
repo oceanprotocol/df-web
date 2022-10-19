@@ -345,6 +345,6 @@
     position: fixed !important;
   }
   :global(.bx--data-table) {
-    margin-top: 2rem;
+    margin-top: calc(var(--spacer) / 2);
   }
 </style>

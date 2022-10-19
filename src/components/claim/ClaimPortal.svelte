@@ -16,14 +16,17 @@
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import { getVeOceanBalance } from "../../utils/ve";
   import { getAddressByChainIdKey } from "../../utils/address/address";
-  import Countdown from "../common/CountDown.svelte";
   import EpochHistory from "./EpochHistory.svelte";
+  import RewardOverview from "./RewardOverview.svelte";
+  import moment from "moment";
+  import { getEpoch } from "../../utils/epochs";
 
   let loading = true;
   let veBalance = 0.0;
   let canClaimVE = true;
   let canClaimDF = true;
-  let roundInfo = epochs[epochs.length - 1];
+  const now = moment();
+  let curEpoch = getEpoch(now);
 
   async function initClaimables() {
     loading = false;
@@ -43,7 +46,7 @@
       canClaimVE = false;
     }
 
-    if (dfRewards <= 0) { 
+    if (dfRewards <= 0) {
       canClaimDF = false;
     }
 
@@ -56,13 +59,13 @@
 </script>
 
 <div class={`container`}>
-  <RewardOverview {roundInfo} />
+  <RewardOverview roundInfo={curEpoch} />
 
   {#if $userAddress && loading === false && $airdrops}
     <!-- <div class="estimatedRewardsContainer">
       <EstimatedRewards />
     </div> -->
-    <ClaimRewards {canClaimVE} {canClaimDF} {roundInfo} />
+    <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} />
   {:else if $userAddress && loading === false}
     {#if !$userAddress}
       <MainMessage

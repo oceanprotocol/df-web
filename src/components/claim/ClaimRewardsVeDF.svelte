@@ -73,7 +73,7 @@
 </script>
 
 <div class={`container`}>
-  <p class="title">Get your share of OCEAN rewards</p>
+  <h3 class="title">Get your share of OCEAN rewards</h3>
   <ClaimItem
     title="Passive"
     description="Shares based on user’s <strong>veOCEAN</strong> amount. 
