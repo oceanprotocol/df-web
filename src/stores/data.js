@@ -52,7 +52,7 @@ async function getDatasets(api) {
 function getRow(dataInfo, key) {
   return {
     id: key,
-    title: "[Data Whale] Ocean ONDA DataFi Directory V4, [Data Whale] Ocean ONDA DataFi Directory V4, [Data Whale] Ocean ONDA DataFi Directory V4",
+    title: dataInfo.name,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
     nftaddress: dataInfo.nft_addr,

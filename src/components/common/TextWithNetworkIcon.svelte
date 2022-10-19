@@ -37,14 +37,11 @@
     box-shadow: var(--box-shadow);
     padding: calc(var(--spacer) / 6);
     z-index: 100;
-    width: 70vw;
+    width: fit-content;
   }
   @media (min-width: 640px) {
     .text {
       width: 180px;
-    }
-    .text:hover + .fullText {
-      width: 50vw;
     }
   }
 </style>
