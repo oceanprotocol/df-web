@@ -157,8 +157,11 @@
     <Route path="/data" primary={false}>
       <DataPortal />
     </Route>
-    <Route path="/*" primary={false}>
+    <Route path="/veocean" primary={false}>
       <VeOceanPortal />
+    </Route>
+    <Route path="/*" primary={false}>
+      <ClaimPortal />
     </Route>
   </main>
 </Router>
