@@ -33,7 +33,7 @@
   init();
 </script>
 
-<h3 class="title">Data Farmin History</h3>
+<h3 class="title">Data Farming History</h3>
 <div class="epochHistoryContainer">
   <DataTable sortable {headers} {rows} class="customTable" />
 </div>

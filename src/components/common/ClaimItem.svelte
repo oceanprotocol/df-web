@@ -62,6 +62,11 @@
   }
   @media (min-width: 640px) {
     .container {
+      width: 45%;
+    }
+  }
+  @media (min-width: 820px) {
+    .container {
       width: 48%;
     }
   }
