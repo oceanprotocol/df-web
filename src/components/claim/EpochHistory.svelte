@@ -33,11 +33,18 @@
   init();
 </script>
 
-<div>
+<div class="container">
   <DataTable
+    sortable
     title="Data Farming History"
     {headers}
     {rows}
     class="customTable"
   />
 </div>
+
+<style>
+  .container {
+    width: 100%;
+  }
+</style>

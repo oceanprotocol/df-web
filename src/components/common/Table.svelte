@@ -290,12 +290,12 @@
     justify-content: space-between;
     margin: 0;
   }
-  :global(.updateAllocationsBtton) {
-    margin-left: calc(var(--spacer) / 3);
-  }
   .headerValuesContainer {
     display: flex;
     align-items: center;
+    margin-left: calc(var(--spacer) / 3);
+  }
+  :global(.updateAllocationsBtton) {
     margin-left: calc(var(--spacer) / 3);
   }
   :global(.tableActionsContainer) {
