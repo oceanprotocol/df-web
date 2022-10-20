@@ -4,7 +4,7 @@ export const getThursdayDate = (date) => {
   
   if(date.day() < 4) {
       date.day(4);
-  } else if(date.day() > 4) {
+  } else if(date.day() >= 4) {
       date.day(11);
   }
 

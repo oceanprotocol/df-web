@@ -2,13 +2,15 @@
   import moment from "moment";
   import Countdown from "svelte-countdown/src/index";
   import { getThursdayDate } from "../../utils/functions";
+
+  let countdownEnd = moment(getThursdayDate(moment().utc()))
+    .set({ hour: 6 })
+    .add(moment().utcOffset(), "minutes")
+    .format("YYYY-MM-DD H:m:s");
 </script>
 
 <Countdown
-  from={moment(getThursdayDate(moment().utc()))
-    .set({ hour: 6 })
-    .add(moment().utcOffset(), "minutes")
-    .format("YYYY-MM-DD H:m:s")}
+  from={countdownEnd}
   dateFormat="YYYY-MM-DD H:m:s"
   zone="Europe/Athens"
   let:remaining
