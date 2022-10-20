@@ -16,7 +16,6 @@
 <style>
   .textWithNetwork {
     display: flex;
-    position: relative;
   }
   .text {
     width: 150px;

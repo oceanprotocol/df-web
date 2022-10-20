@@ -11,8 +11,8 @@ export const columnsData = [
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
   {
-    key: "volume",
-    value: "Volume",
+    key: "volume(7d)",
+    value: "Volume(7d)",
     display: (volume) => '$' + volume,
   },
   { key: "nftaddress", value: "NFTAddress" },
@@ -22,7 +22,7 @@ export const columnsData = [
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Title", "Volume", "TotalAllocated" ,"MyAllocation", "Action"]
+export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated" ,"MyAllocation", "Action"]
 
 async function getDatasets(api) {
   let res;
@@ -61,7 +61,7 @@ function getRow(dataInfo, key) {
     totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
-    volume: parseFloat(dataInfo.volume).toFixed(3),
+    'volume(7d)': parseFloat(dataInfo.volume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }
