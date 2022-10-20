@@ -3,6 +3,8 @@
   import Countdown from "svelte-countdown/src/index";
   import { getThursdayDate } from "../../utils/functions";
 
+  export let title = undefined;
+
   let countdownEnd = moment(getThursdayDate(moment().utc()))
     .set({ hour: 6 })
     .add(moment().utcOffset(), "minutes")
@@ -16,7 +18,9 @@
   let:remaining
 >
   <div class="countdown">
-    <p class="countdownTitle">DATA FARMING ROUND ENDS IN</p>
+    {#if title}
+      <p class="countdownTitle">{title}</p>
+    {/if}
     <div class="countdownContent">
       <div class="item">
         <span class="itemValue">{remaining.days}</span>
@@ -46,10 +50,9 @@
     height: fit-content;
     font-size: bold;
     font-size: var(--font-size-large);
-    margin-bottom: calc(var(--spacer));
   }
   .countdownTitle {
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-large);
     margin-bottom: calc(var(--spacer) / 6);
   }
   .countdownContent {

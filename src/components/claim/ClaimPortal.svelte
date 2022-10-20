@@ -5,7 +5,7 @@
     userAddress,
     connectedChainId,
     selectedNetworks,
-    web3Provider
+    web3Provider,
   } from "../../stores/web3.js";
   import {
     airdrops,
@@ -16,17 +16,28 @@
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import { getVeOceanBalance } from "../../utils/ve";
   import { getAddressByChainIdKey } from "../../utils/address/address";
-  import Countdown from "../common/CountDown.svelte";
   import EpochHistory from "./EpochHistory.svelte";
+  import RewardOverview from "./RewardOverview.svelte";
+  import moment from "moment";
+  import { getEpoch } from "../../utils/epochs";
+  import { oceanUnlockDate } from "../../stores/veOcean";
 
-  let loading = true;
+  let loading = false;
   let veBalance = 0.0;
   let canClaimVE = true;
   let canClaimDF = true;
+  const now = moment();
+  let curEpoch = getEpoch(now);
 
   async function initClaimables() {
+    if (!userAddress || !oceanUnlockDate) {
+      veClaimables.set(0);
+      dfClaimables.set(0);
+      loading = false;
+      return;
+    }
     loading = true;
-    
+
     veBalance = await getVeOceanBalance($userAddress, $web3Provider);
 
     const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
@@ -38,14 +49,20 @@
     );
     dfClaimables.set(dfRewards);
 
+    /*const veRewards = 20;
+    const dfRewards = 20;
+
+    veClaimables.set(veRewards);
+    dfClaimables.set(dfRewards);*/
+
     if (veRewards <= 0) {
       canClaimVE = false;
     }
 
-    if (dfRewards <= 0) { 
+    if (dfRewards <= 0) {
       canClaimDF = false;
     }
-    
+
     loading = false;
   }
 
@@ -55,34 +72,8 @@
 </script>
 
 <div class={`container`}>
-  <Countdown />
-
-  {#if $userAddress && loading === false && $airdrops && veBalance > 0}
-    <!-- <div class="estimatedRewardsContainer">
-      <EstimatedRewards />
-    </div> -->
-    <ClaimRewards {canClaimVE} {canClaimDF} />
-  {:else if $userAddress && loading === false}
-    {#if !$userAddress}
-      <MainMessage
-        title="No wallet connected"
-        message={`Connect your wallet to see the rewards`}
-      />
-    {:else if $selectedNetworks.length === 0 && $userAddress}
-      <MainMessage
-        title="No network selected"
-        message={`Select a network to see rewards.`}
-      />
-    {:else}
-      <MainMessage
-        title="No veOcean"
-        message={`Lock Ocean to receive veOcean and earn yield.`}
-      />
-    {/if}
-  {:else}
-    <span class="loading">Loading...</span>
-  {/if}
-
+  <RewardOverview roundInfo={curEpoch} />
+  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} {loading} />
   <EpochHistory />
 </div>
 
