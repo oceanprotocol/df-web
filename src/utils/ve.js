@@ -8,7 +8,6 @@ import {getAddressByChainIdKey} from "../utils/address/address";
 const veAllocateABI = VeAllocateABI.default
 const veOceanABI = VeOceanABI.default
 const decimals = 18;
-const gasLimit = 1000000;
 
 export const getAllocatedAmount = async(userAddress) => {
     try {
@@ -83,7 +82,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
         );
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
         const calcGasLimit = await contract.estimateGas.create_lock(amountToLockInEth, unlockDate)
-        const tx = await contract.create_lock(amountToLockInEth, unlockDate, {gasLimit: calcGasLimit})
+        const tx = await contract.create_lock(amountToLockInEth, unlockDate, {gasLimit: calcGasLimit + 1})
         const receipt = await tx.wait()
     } catch (error) {
       throw error;
@@ -97,8 +96,9 @@ export const getVeOceanBalance = async(userAddress, provider) => {
           veOceanABI, 
           signer
         );
+        const calcGasLimit = await contract.estimateGas.withdraw()
         const tx = await contract.withdraw({
-          gasLimit: gasLimit
+          gasLimit: calcGasLimit + 1
       })
         await tx.wait()
     } catch (error) {
@@ -114,8 +114,9 @@ export const getVeOceanBalance = async(userAddress, provider) => {
           signer
         );
         const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
+        const calcGasLimit = await contract.estimateGas.increase_amount(amountToLockInEth)
         const tx = await contract.increase_amount(amountToLockInEth,{
-          gasLimit: gasLimit
+          gasLimit: calcGasLimit + 1
       })
         await tx.wait()
     } catch (error) {
@@ -130,8 +131,9 @@ export const getVeOceanBalance = async(userAddress, provider) => {
           veOceanABI, 
           signer
         );
+        const calcGasLimit = await contract.estimateGas.increase_unlock_time(unlockDate)
         const tx = await contract.increase_unlock_time(unlockDate,{
-          gasLimit: gasLimit
+          gasLimit: calcGasLimit + 1
         })
         await tx.wait()
     } catch (error) {
