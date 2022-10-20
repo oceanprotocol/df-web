@@ -16,6 +16,7 @@
     totalUserAllocation,
   } from "../../stores/dataAllocations";
   import Input from "./Input.svelte";
+  import TextWithNetworkIcon from "./TextWithNetworkIcon.svelte";
   import ShareInput from "./ShareInput.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
   import Link from "./Link.svelte";
@@ -241,15 +242,21 @@
       >
         <Toolbar size="sm">
           <ToolbarContent>
-            <ToolbarSearch persistent shouldFilterRows />
+            <ToolbarSearch
+              persistent
+              on:input={() => {
+                pagination.page = 1;
+              }}
+              shouldFilterRows
+            />
           </ToolbarContent>
         </Toolbar>
         <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "action"}
-            <Link
-              text="view"
-              url={cell.value}
-            />{:else if cell.key === "myallocation"}
+            <Link text="view" url={cell.value} />
+          {:else if cell.key === "title"}
+            <TextWithNetworkIcon networkName={row.newtwork} text={cell.value} />
+          {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
               available={totalAvailable}
