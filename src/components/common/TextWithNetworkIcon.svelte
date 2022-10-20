@@ -1,7 +1,7 @@
 <script>
   import NetworkIcon from "./NetworkIcon.svelte";
 
-  export let networkName = "Ethereum";
+  export let networkName = "";
   export let text = "";
 </script>
 
