@@ -19,7 +19,9 @@
     const now = moment();
     curEpoch = getEpoch(now);
 
-    rows = epochs.default.filter((epoch) => epoch.id < curEpoch.id);
+    rows = JSON.parse(
+      JSON.stringify(epochs.default.filter((epoch) => epoch.id < curEpoch.id))
+    );
     rows.forEach((row) => {
       row.date_start = moment(row.date_start).format("DD-MM-YYYY");
       row.passive = `${row.passive} OCEAN`;
