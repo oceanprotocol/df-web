@@ -24,7 +24,7 @@
       {#each metrics as metric}
         <ItemWithLabel title={metric.name} value={metric.value} />
       {/each}
-      <ItemWithLabel title="rewards" value={!showRedirectLink ? amount : "unavailable"} />
+      <ItemWithLabel title="rewards" value={!showRedirectLink ? amount : "..."} />
     </div>
     {#if showRedirectLink}
       <Button
