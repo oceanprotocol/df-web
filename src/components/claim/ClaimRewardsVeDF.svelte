@@ -109,7 +109,7 @@
   />
   <ClaimItem
     title="Active"
-    description="Earn active rewards from Data Farming by <strong>allocating</strong> your veOCEAN to datasets with consume volume."
+    description="Earn active rewards from Data Farming by <strong>allocating</strong> your veOCEAN to datasets with consume volume and holding a positive <strong>veOCEAN</strong> balance."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
     showRedirectLink={!$oceanUnlockDate || $totalUserAllocation < 100}
