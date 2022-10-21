@@ -77,14 +77,11 @@
   <h3 class="title">Get your share of OCEAN rewards</h3>
   <ClaimItem
     title="Passive"
-    description="Shares based on user’s <strong>veOCEAN</strong> amount. 
-    Lock your OCEAN to receive rewards."
+    description="Earn passive rewards from Data Farming OCEAN by holding a positive <strong>veOCEAN</strong> balance."
     distributedAmount={roundInfo.passive}
     showRedirectLink={!$oceanUnlockDate}
     redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
-    amount={loading
-      ? "loading..."
-      : `${parseFloat($veClaimables).toFixed(3)} OCEAN`}
+    amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
     metrics={[
       {
         name: "balance",
@@ -112,13 +109,10 @@
   />
   <ClaimItem
     title="Active"
-    description="Shares based on <strong>allocation</strong> amount set upon datasets with consume volume. 
-    Set allocations to receive rewards."
-    amount={loading
-      ? "loading..."
-      : `${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
+    description="Earn active rewards from Data Farming by <strong>allocating</strong> your veOCEAN to datasets with consume volume and holding a positive <strong>veOCEAN</strong> balance."
+    amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
-    showRedirectLink={!$oceanUnlockDate || $totalUserAllocation === 100}
+    showRedirectLink={!$oceanUnlockDate || $totalUserAllocation < 100}
     redirectLink={{ text: "Set allocations", url: "data" }}
     distributedAmount={roundInfo.active}
     loading={claiming === "DF_REWARDS"}

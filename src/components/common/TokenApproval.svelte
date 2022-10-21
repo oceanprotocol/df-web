@@ -9,7 +9,7 @@
 
   export let disabled = false;
   export let loading = false;
-  export let fullWidth = undefined;
+  export let fullWidth = true;
   export let amount;
   export let infiniteAmount = false;
   export let tokenName;
@@ -66,7 +66,7 @@
     {fullWidth}
     loading={approving}
     text={infiniteAmount
-      ? `Allow the OceanDAO to use your ${tokenName}`
+      ? `Allow`
       : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
     onclick={() => onClick()}
     disabled={disabled || loading || !agreed}

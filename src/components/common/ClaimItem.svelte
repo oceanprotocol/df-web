@@ -21,10 +21,10 @@
   <Card title={`${distributedAmount} OCEAN - ${title} REWARDS`}>
     <p class="description">{@html description}</p>
     <div class="metrics">
-      <ItemWithLabel title="rewards" value={amount} />
       {#each metrics as metric}
         <ItemWithLabel title={metric.name} value={metric.value} />
       {/each}
+      <ItemWithLabel title="rewards" value={!showRedirectLink ? amount : "..."} />
     </div>
     {#if showRedirectLink}
       <Button
