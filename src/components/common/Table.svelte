@@ -212,6 +212,7 @@
         <ItemWithLabel
           title="Available allocation"
           value={totalAvailable >= 0 ? `${totalAvailable}%` : "loading..."}
+          tootipMessage="Percent of veOCEAN power that is not allocated."
         />
         <Button
           text={loading ? "Updating..." : "Update allocations"}
