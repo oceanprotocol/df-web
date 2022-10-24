@@ -222,9 +222,7 @@
           maxValueLabel="Balance: "
           showMaxValue={true}
           showMaxButton={true}
-          onChange={
-            () => $form.amount = parseInt($form.amount)
-          }
+          onChange={() => ($form.amount = parseInt($form.amount))}
         />
       </div>
       <div class="item">
@@ -249,10 +247,12 @@
           <ItemWithLabel
             title={`Lock Multiplier`}
             value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
+            tootipMessage="What percenteg of total potential is used based on lock end time."
           />
           <ItemWithLabel
             title={`Receive`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
+            tootipMessage="The amount of veOCEAN received based on locked amount and duration."
           />
         </div>
       </div>

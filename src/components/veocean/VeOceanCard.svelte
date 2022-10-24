@@ -50,11 +50,13 @@
               ).toFixed(3)
             : 0
         } veOCEAN`}
+        tootipMessage="Current veOCEAN balance. The value decreases once lock time decreases."
         {loading}
       />
       <ItemWithLabel
         title={`Allocation Power`}
         value={`${parseFloat($veOceanWithDelegations).toFixed(3)} veOCEAN`}
+        tootipMessage="Current veOCEAN balance including delegated veOCEAN."
         {loading}
       />
     </div>
@@ -62,6 +64,7 @@
       <ItemWithLabel
         title={`Locked`}
         value={`${parseFloat($lockedOceanAmount).toFixed(3)} OCEAN`}
+        tootipMessage="Amount of OCEAN tokens locked."
         {loading}
       />
       <ItemWithLabel
@@ -69,6 +72,7 @@
         value={`${
           $oceanUnlockDate ? $oceanUnlockDate.format("DD-MM-YYYY") : "-"
         }`}
+        tootipMessage="The date when OCEAN tokens lock is released, and user cand withdraw his tokens."
         {loading}
       />
     </div>
@@ -92,12 +96,16 @@
     justify-content: space-between;
     align-items: center;
     min-height: var(--spacer);
+    margin-bottom: calc(var(--spacer) / 4);
     width: 100%;
   }
 
   @media (min-width: 640px) {
     .container {
       grid-column: 1 / 2;
+    }
+    .veOcean-info {
+      margin: 0;
     }
   }
 </style>

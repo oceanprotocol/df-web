@@ -1,0 +1,30 @@
+<script>
+  import { Tooltip } from "carbon-components-svelte";
+
+  export let text = undefined;
+  export let direction = "top";
+  export let align = "center";
+</script>
+
+<Tooltip {align} {direction} size={10}>
+  <div class="textContainer">
+    <p class="text">
+      {text}
+    </p>
+  </div>
+</Tooltip>
+
+<style>
+  .textContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: var(--brand-white);
+    width: 160px;
+  }
+  .text {
+    color: black;
+    font-size: var(--font-size-mini);
+  }
+</style>
