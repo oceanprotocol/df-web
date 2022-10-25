@@ -14,11 +14,12 @@ export const columnsData = [
     key: "volume(7d)",
     value: "Volume(7d)",
     display: (volume) => '$' + volume,
+    tooltip: "Consume of a dataset volume for the current funding round."
   },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
-  { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN' },
-  { key: "myallocation", value:"MyAllocation" },
+  { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN',tooltip: "Total veOCEAN amount allocated to a dataset."},
+  { key: "myallocation", value:"MyAllocation", tooltip: "Percent of total available allocation allocate to a dataset." },
   { key: "action", value: "Action" },
 ]
 
