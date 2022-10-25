@@ -73,21 +73,15 @@
         <ItemWithLabel
           title={`Total Locked`}
           value={`${convertToInternationalCurrencySystem(totalLocked)} OCEAN`}
-          tootipMessage="What percenteg of total potential is used based on lock end time."
         />
       {/if}
 
       {#if $deposits.loading === true}
-        <ItemWithLabel
-          title={`Average Lock`}
-          value="Loading..."
-          tooltipDirection="top"
-        />
+        <ItemWithLabel title={`Average Lock`} value="Loading..." />
       {:else}
         <ItemWithLabel
           title={`Average Lock Time`}
           value={`${averageLock} Years`}
-          tootipMessage="What percenteg of total potential is used based on lock end time."
         />
       {/if}
     </div>

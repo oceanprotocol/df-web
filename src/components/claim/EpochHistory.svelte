@@ -14,7 +14,7 @@
     {
       key: "id",
       value: "Round",
-      tooltip: "Rewards distribution rounds",
+      tooltip: "Data farming rewards distribution rounds",
       tooltipDirection: "right",
     },
     { key: "date_start", value: "Start Date" },
@@ -54,8 +54,8 @@
           <CustomTooltip
             text={header.tooltip}
             direction={header.tooltipDirection
-              ? headers.tooltipDirection
-              : "bottom"}
+              ? header.tooltipDirection
+              : "top"}
           />
         {/if}
       </div>

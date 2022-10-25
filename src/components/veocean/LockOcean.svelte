@@ -247,7 +247,7 @@
           <ItemWithLabel
             title={`Lock Multiplier`}
             value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
-            tootipMessage="What percenteg of total potential is used based on lock end time."
+            tootipMessage="The used percenteg of total potential based on lock end time."
           />
           <ItemWithLabel
             title={`Receive`}
