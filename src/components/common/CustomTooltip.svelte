@@ -7,13 +7,15 @@
   export let open = false;
 </script>
 
-<Tooltip {align} {direction} size={10} {open}>
-  <div class="textContainer">
-    <p class="text">
-      {text}
-    </p>
-  </div>
-</Tooltip>
+<div on:mouseleave={() => (open = false)} on:mouseenter={() => (open = true)}>
+  <Tooltip {align} {direction} size={10} {open}>
+    <div class="textContainer">
+      <p class="text">
+        {text}
+      </p>
+    </div>
+  </Tooltip>
+</div>
 
 <style>
   .textContainer {
