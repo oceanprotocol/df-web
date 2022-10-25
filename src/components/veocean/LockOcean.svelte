@@ -314,7 +314,7 @@
         {/if}
       </div>
       <AgreementCheckbox
-        text="I have familiarized myself with veOCEAN, wave all rights, and assume all risks from using this software."
+        text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, wave all rights, and assume all risks."
         bind:value={$form.ageement}
       />
     </form>

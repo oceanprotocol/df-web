@@ -8,19 +8,21 @@ export let datasets = writable("");
 
 export const columnsData = [
   { key: "network", value: "Network" },
+  { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
   {
-    key: "volume",
-    value: "Volume",
+    key: "volume(7d)",
+    value: "Volume(7d)",
     display: (volume) => '$' + volume,
   },
   { key: "nftaddress", value: "NFTAddress" },
+  { key: "did", value: "DID" },
   { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN' },
   { key: "myallocation", value:"MyAllocation" },
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Network", "Volume", "TotalAllocated" ,"MyAllocation", "Action"]
+export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated" ,"MyAllocation", "Action"]
 
 async function getDatasets(api) {
   let res;
@@ -50,14 +52,16 @@ async function getDatasets(api) {
 function getRow(dataInfo, key) {
   return {
     id: key,
+    title: dataInfo.name,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
     nftaddress: dataInfo.nft_addr,
+    did: dataInfo.did,
     chainId: dataInfo.chainID,
     totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
-    volume: parseFloat(dataInfo.volume).toFixed(3),
+    'volume(7d)': parseFloat(dataInfo.volume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }

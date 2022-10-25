@@ -2,8 +2,6 @@ import {ethers} from "ethers";
 import * as feeDistributorABI from "./abis/feeDistributorABI";
 import {getAddressByChainIdKey} from "../utils/address/address";
 
-const readGasLimit = 32000;
-
 export const getTimeCursor = async(userAddress, provider) => {
   try {
     const contract = new ethers.Contract(
@@ -41,7 +39,8 @@ export const getLastTokenTime = async(provider) => {
       feeDistributorABI.default, 
       provider
     );
-    const lastTokenTime = await contract.last_token_time({"gasLimit": readGasLimit});
+    const calcGasLimit = await contract.estimateGas.last_token_time()
+    const lastTokenTime = await contract.last_token_time({gasLimit:BigInt(calcGasLimit) + BigInt(10000)});
     return parseInt(BigInt(lastTokenTime));
   } catch (error) {
     console.log(error)

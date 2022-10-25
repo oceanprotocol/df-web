@@ -70,7 +70,8 @@ export const allocateVeOceanToMultipleNFTs = async(amounts, dataAddresses, chain
       veAllocateABI, 
       signer
     );
-    const tx = await contract.setBatchAllocation(formatedAmounts, dataAddresses, chainIds)
+    const calcGasLimit = await contract.estimateGas.setBatchAllocation(formatedAmounts, dataAddresses, chainIds)
+    const tx = await contract.setBatchAllocation(formatedAmounts, dataAddresses, chainIds, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
     await tx.wait()
   } catch (error) {
     throw error;

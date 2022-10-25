@@ -47,7 +47,7 @@
 
 <style>
   div.modal {
-    position: absolute;
+    position: fixed;
     z-index: 300;
     top: calc(100vh - (100vh + var(--spacer) / 4));
     bottom: 0;
