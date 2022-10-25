@@ -64,7 +64,14 @@
 </script>
 
 <div
-  class={`container ${(!$datasets || $isAppLoading) && "alignContentCenter"}`}
+  class={`container ${
+    (!$datasets ||
+      $isAppLoading ||
+      !$userBalances[
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+      ]) &&
+    "alignContentCenter"
+  }`}
 >
   {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")]}
     <div class="wrapper">
