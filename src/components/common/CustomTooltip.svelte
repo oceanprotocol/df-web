@@ -4,9 +4,10 @@
   export let text = undefined;
   export let direction = "top";
   export let align = "center";
+  export let open = false;
 </script>
 
-<Tooltip {align} {direction} size={10}>
+<Tooltip {align} {direction} size={10} {open}>
   <div class="textContainer">
     <p class="text">
       {text}

@@ -8,9 +8,14 @@
   export let tootipMessage = undefined;
   export let tooltipDirection;
   export let tooltipAlign;
+  let tooltipOpen = false;
 </script>
 
-<div class="item">
+<div
+  class="item"
+  on:mouseleave={() => (tooltipOpen = false)}
+  on:mouseenter={() => (tooltipOpen = true)}
+>
   <div class="titleContainer">
     <span class="title">{title}</span>
     {#if tootipMessage}
@@ -18,6 +23,7 @@
         text={tootipMessage}
         direction={tooltipDirection}
         align={tooltipAlign}
+        open={tooltipOpen}
       />
     {/if}
   </div>
