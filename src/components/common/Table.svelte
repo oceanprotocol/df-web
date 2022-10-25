@@ -101,7 +101,7 @@
     localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
   }
 
-  $: if (showDataWithAllocations) {
+  $: if (showDataWithAllocations === true) {
     const newData = filterDataByUserAllocation(rowData, $dataAllocations);
     datasetsWithAllocations = newData;
   }
