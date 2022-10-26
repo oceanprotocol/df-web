@@ -222,9 +222,7 @@
           maxValueLabel="Balance: "
           showMaxValue={true}
           showMaxButton={true}
-          onChange={
-            () => $form.amount = parseInt($form.amount)
-          }
+          onChange={() => ($form.amount = parseInt($form.amount))}
         />
       </div>
       <div class="item">
@@ -276,7 +274,6 @@
           <TokenApproval
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
-            infiniteAmount={true}
             spender={getAddressByChainIdKey(
               process.env.VE_SUPPORTED_CHAINID,
               "veOCEAN"
