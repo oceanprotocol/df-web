@@ -10,6 +10,7 @@
   export let onFocus = undefined;
 
   let n = currentValue;
+  let isFocused = false;
 
   $: $userAddress && resetValues();
 
@@ -21,7 +22,7 @@
         if (value === null) {
           n = null;
           currentValue = null;
-          onChange(dataId, 0, value);
+          isFocused && onChange(dataId, currentValue, value);
           return;
         }
         currentValue =
@@ -30,7 +31,7 @@
             : parseInt(value);
         if (currentValue == parseInt(value)) {
           console.log(n, currentValue);
-          onChange(dataId, currentValue, -value);
+          isFocused && onChange(dataId, currentValue, -value);
         }
         n = currentValue;
       },
@@ -47,8 +48,14 @@
     type="number"
     bind:value={currentValue}
     use:validator={currentValue}
-    on:blur={(e) => onBlur(dataId, e.target.value)}
-    on:focus={(e) => onFocus(e.target.value)}
+    on:blur={(e) => {
+      onBlur(dataId, e.target.value);
+      isFocused = false;
+    }}
+    on:focus={(e) => {
+      onFocus(e.target.value);
+      isFocused = true;
+    }}
     max={available}
     disabled={available === 0 && currentValue === 0}
     min="0"
