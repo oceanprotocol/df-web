@@ -334,7 +334,7 @@
     border-top: 0 !important;
   }
   :global(th) {
-    background-color: var(--brand-white) !important;
+    background-color: var(--brand-grey-dimmed) !important;
   }
   :global(thead) {
     background-color: var(--brand-white) !important;

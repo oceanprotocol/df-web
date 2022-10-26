@@ -54,6 +54,9 @@
     }}
     on:focus={(e) => {
       onFocus(e.target.value);
+      if (currentValue === 0) {
+        currentValue = null;
+      }
       isFocused = true;
     }}
     max={available}

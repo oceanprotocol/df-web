@@ -18,7 +18,7 @@ export const columnsData = [
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
   { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN' },
-  { key: "myallocation", value:"MyAllocation" },
+  { key: "myallocation", value:"MyAllocation", sort: false  },
   { key: "action", value: "Action" },
 ]
 
