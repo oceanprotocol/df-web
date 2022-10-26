@@ -68,7 +68,6 @@
       $userAddress,
       $networkSigner
     );
-
     await oceanUnlockDate.update(() =>
       unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
     );
@@ -105,15 +104,30 @@
 
   initStore();
 
+  $: if (!$userAddress) {
+    setBalancesTo0();
+  }
+
+  function setBalancesTo0() {
+    let emptyUserBalances = {};
+    let veOceanAddress = getAddressByChainIdKey(
+      process.env.VE_SUPPORTED_CHAINID,
+      "veOCEAN"
+    );
+    if (veOceanAddress) emptyUserBalances[veOceanAddress] = 0;
+    let oceanAddress = getAddressByChainIdKey(
+      process.env.VE_SUPPORTED_CHAINID,
+      "Ocean"
+    );
+    if (oceanAddress) emptyUserBalances[oceanAddress] = 0;
+    userBalances.update(() => emptyUserBalances);
+  }
+
   $: if ($userAddress && $web3Provider && $connectedChainId) {
     if ($connectedChainId != process.env.VE_SUPPORTED_CHAINID) {
       veOceanWithDelegations.update(() => 0);
-      let emptyUserBalances = {};
-      let veOceanAddress = getAddressByChainIdKey($connectedChainId, "veOCEAN");
-      if (veOceanAddress) emptyUserBalances[veOceanAddress] = 0;
-      let oceanAddress = getAddressByChainIdKey($connectedChainId, "Ocean");
-      if (oceanAddress) emptyUserBalances[oceanAddress] = 0;
-      userBalances.update(() => emptyUserBalances);
+      setBalancesTo0();
+      totalUserAllocation.update(() => 0);
       oceanUnlockDate.update(() => undefined);
       lockedOceanAmount.update(() => 0);
       veClaimables.update(() => 0);

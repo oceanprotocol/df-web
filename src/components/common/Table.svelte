@@ -169,19 +169,15 @@
 
   $: $userAddress && updateTotalAvailableAllocations();
   $: $totalUserAllocation && updateTotalAvailableAllocations();
+  $: !$oceanUnlockDate && updateTotalAvailableAllocations();
+  $: $oceanUnlockDate && updateTotalAvailableAllocations();
 
   $: if ($totalUserAllocation === 0) {
     updateTotalAvailableAllocations();
   }
 
   const updateTotalAvailableAllocations = () => {
-    disabled =
-      $userBalances[
-        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
-      ] === undefined ||
-      !$userAddress ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
-      !$oceanUnlockDate;
+    updateDisable();
     totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
     totalAvailableTemporary = totalAvailable;
   };

@@ -73,7 +73,7 @@
     "alignContentCenter"
   }`}
 >
-  {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")]}
+  {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
     <div class="wrapper">
       <MainMessage
         message={`**Allocate your veOCEAN across datasets with consume volume to earn Data Farming Rewards.**`}
