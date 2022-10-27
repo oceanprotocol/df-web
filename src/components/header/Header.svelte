@@ -120,7 +120,6 @@
 
   :global(div [class*="tooltip"]) {
     background-color: var(--brand-white);
-    z-index: 100;
   }
 
   @media (min-width: 660px) {

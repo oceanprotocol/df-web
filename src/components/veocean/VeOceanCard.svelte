@@ -12,6 +12,7 @@
   import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
   import WithdrawOcean from "./WithdrawOcean.svelte";
   import { getAddressByChainIdKey } from "../../utils/address/address";
+  import * as descriptions from "../../utils/metadata/descriptions.json";
 
   let loading = false;
 
@@ -50,11 +51,13 @@
               ).toFixed(3)
             : 0
         } veOCEAN`}
+        tootipMessage={descriptions.default.tooltip_veocean_my_balance}
         {loading}
       />
       <ItemWithLabel
         title={`Allocation Power`}
         value={`${parseFloat($veOceanWithDelegations).toFixed(3)} veOCEAN`}
+        tootipMessage={descriptions.default.tooltip_veocean_my_voting_power}
         {loading}
       />
     </div>
@@ -62,6 +65,7 @@
       <ItemWithLabel
         title={`Locked`}
         value={`${parseFloat($lockedOceanAmount).toFixed(3)} OCEAN`}
+        tootipMessage={descriptions.default.tooltip_veocean_my_locked_ocean}
         {loading}
       />
       <ItemWithLabel
@@ -69,6 +73,7 @@
         value={`${
           $oceanUnlockDate ? $oceanUnlockDate.format("DD-MM-YYYY") : "-"
         }`}
+        tootipMessage={descriptions.default.tooltip_veocean_my_lock_ends}
         {loading}
       />
     </div>
@@ -92,12 +97,16 @@
     justify-content: space-between;
     align-items: center;
     min-height: var(--spacer);
+    margin-bottom: calc(var(--spacer) / 4);
     width: 100%;
   }
 
   @media (min-width: 640px) {
     .container {
       grid-column: 1 / 2;
+    }
+    .veOcean-info {
+      margin: 0;
     }
   }
 </style>
