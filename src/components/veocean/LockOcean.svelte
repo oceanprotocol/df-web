@@ -39,6 +39,7 @@
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import moment from "moment";
+  import * as descriptions from "../../utils/metadata/descriptions.json";
 
   let networksData = networksDataArray.default;
 
@@ -247,12 +248,12 @@
           <ItemWithLabel
             title={`Lock Multiplier`}
             value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
-            tootipMessage="The used percenteg of total potential based on lock end time."
+            tootipMessage={descriptions.default.tooltip_veocean_lock_multiplier}
           />
           <ItemWithLabel
             title={`Receive`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
-            tootipMessage="The amount of veOCEAN received based on locked amount and duration."
+            tootipMessage={descriptions.default.tooltip_veocean_receive}
           />
         </div>
       </div>

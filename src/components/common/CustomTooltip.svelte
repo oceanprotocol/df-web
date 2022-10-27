@@ -29,5 +29,6 @@
   .text {
     color: black;
     font-size: var(--font-size-mini);
+    white-space: pre-wrap;
   }
 </style>

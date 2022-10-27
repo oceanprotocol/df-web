@@ -5,7 +5,8 @@
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
   import { CellTower } from "carbon-icons-svelte";
-
+  import * as descriptions from "../../utils/metadata/descriptions.json";
+  
   let loading = true;
   let curEpoch;
   let rows = [];
@@ -14,7 +15,7 @@
     {
       key: "id",
       value: "Round",
-      tooltip: "Data farming rewards distribution rounds",
+      tooltip: descriptions.default.tooltip_rewards_history_rounds,
       tooltipDirection: "right",
     },
     { key: "date_start", value: "Start Date" },

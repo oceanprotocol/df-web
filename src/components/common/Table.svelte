@@ -34,6 +34,7 @@
   import { oceanUnlockDate } from "../../stores/veOcean";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import CustomTooltip from "./CustomTooltip.svelte";
+  import * as descriptions from "../../utils/metadata/descriptions.json";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -213,7 +214,7 @@
         <ItemWithLabel
           title="Available allocation"
           value={totalAvailable >= 0 ? `${totalAvailable}%` : "loading..."}
-          tootipMessage="Percent of veOCEAN power that is not allocated."
+          tootipMessage={descriptions.default.tooltip_datafarming_available_allocation}
         />
         <Button
           text={loading ? "Updating..." : "Update allocations"}
