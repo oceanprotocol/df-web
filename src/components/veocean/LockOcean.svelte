@@ -170,7 +170,7 @@
   }
 
   const updateMultiplier = () => {
-    if ($form.unlockDate && $form.amount > 0) {
+    if ($form.unlockDate && moment($form.unlockDate) > moment()) {
       // 4 years = 100% voting power
       var today = moment.utc();
       var unlockDate = moment.utc($form.unlockDate);
