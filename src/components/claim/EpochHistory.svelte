@@ -3,13 +3,21 @@
   import * as epochs from "../../utils/metadata/epochs/epochs.json";
   import { getEpoch } from "../../utils/epochs";
   import moment from "moment";
-
+  import CustomTooltip from "../common/CustomTooltip.svelte";
+  import { CellTower } from "carbon-icons-svelte";
+  import * as descriptions from "../../utils/metadata/descriptions.json";
+  
   let loading = true;
   let curEpoch;
   let rows = [];
 
   const headers = [
-    { key: "id", value: "Round" },
+    {
+      key: "id",
+      value: "Round",
+      tooltip: descriptions.default.tooltip_rewards_history_rounds,
+      tooltipDirection: "right",
+    },
     { key: "date_start", value: "Start Date" },
     { key: "passive", value: "Passive Rewards" },
     { key: "active", value: "Active Rewards" },
@@ -39,7 +47,21 @@
 
 <h3 class="title">Data Farming History</h3>
 <div class="epochHistoryContainer">
-  <DataTable sortable {headers} {rows} class="customTable" />
+  <DataTable sortable {headers} {rows} class="customTable">
+    <svelte:fragment slot="cell-header" let:header>
+      <div class="headerContainer">
+        {header.value}
+        {#if header.tooltip}
+          <CustomTooltip
+            text={header.tooltip}
+            direction={header.tooltipDirection
+              ? header.tooltipDirection
+              : "top"}
+          />
+        {/if}
+      </div>
+    </svelte:fragment>
+  </DataTable>
 </div>
 
 <style>
@@ -55,6 +77,11 @@
     font-weight: bold;
     width: 100%;
     font-size: var(--font-size-normal);
+  }
+  .headerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   :global(.epochHistoryContainer .bx--data-table-container) {
     padding-top: 0 !important;
