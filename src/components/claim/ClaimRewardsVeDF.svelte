@@ -79,7 +79,7 @@
     title="Passive"
     description="Earn passive rewards from Data Farming OCEAN by holding a positive <strong>veOCEAN</strong> balance."
     distributedAmount={roundInfo.passive}
-    showRedirectLink={!$oceanUnlockDate}
+    showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
     redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
     metrics={[
@@ -112,7 +112,7 @@
     description="Earn active rewards from Data Farming by <strong>allocating</strong> your veOCEAN to datasets with consume volume and holding a positive <strong>veOCEAN</strong> balance."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
-    showRedirectLink={!$oceanUnlockDate}
+    showRedirectLink={(!$oceanUnlockDate || $totalUserAllocation <= 0) && $dfClaimables <= 0}
     redirectLink={{ text: "Set allocations", url: "data" }}
     distributedAmount={roundInfo.active}
     loading={claiming === "DF_REWARDS"}

@@ -30,6 +30,9 @@
   let curEpoch = getEpoch(now);
 
   async function initClaimables() {
+    // userAddress.set("0x0000000000........")
+    // console.log("userAddress", $userAddress)
+
     if (!userAddress || !oceanUnlockDate) {
       veClaimables.set(0);
       dfClaimables.set(0);
@@ -62,7 +65,12 @@
     if (dfRewards <= 0) {
       canClaimDF = false;
     }
-
+    
+    // console.log("canClaimVE", canClaimVE)
+    // console.log("canClaimDF", canClaimDF)
+    // console.log("veClaimables", $veClaimables)
+    // console.log("dfClaimables", $dfClaimables)
+    
     loading = false;
   }
 
