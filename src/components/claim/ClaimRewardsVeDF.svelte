@@ -112,7 +112,7 @@
     description="Earn active rewards from Data Farming by <strong>allocating</strong> your veOCEAN to datasets with consume volume and holding a positive <strong>veOCEAN</strong> balance."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
-    showRedirectLink={!$oceanUnlockDate || $totalUserAllocation < 100}
+    showRedirectLink={!$oceanUnlockDate}
     redirectLink={{ text: "Set allocations", url: "data" }}
     distributedAmount={roundInfo.active}
     loading={claiming === "DF_REWARDS"}
