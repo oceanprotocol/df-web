@@ -6,10 +6,3 @@ export const TOTAL_LOCKED = gql`{
       lockedAmount
     }
 }`;
-
-export const DEPOSITS = gql`{
-    veDeposits(first:1000) {
-      timestamp
-      unlockTime
-    }
-}`
