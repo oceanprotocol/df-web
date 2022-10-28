@@ -195,9 +195,7 @@
     let _amount = $form.amount;
     _amount = _amount == null ? 0 : parseInt(_amount);
     _amount = _amount < 0 ? 0 : parseInt(_amount);
-    
-    // Do not enforce max balance, let user play
-    // _amount = _amount > oceanBalance ? oceanBalance : parseInt(_amount);
+    _amount = _amount > oceanBalance ? oceanBalance : parseInt(_amount);
 
     $form.amount = _amount;
   }
@@ -213,7 +211,7 @@
           type="number"
           name="amount"
           min={$lockedOceanAmount ? 0 : 1}
-          max={oceanBalance}
+          max={parseInt(oceanBalance)}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0 ||
             moment().utc().isAfter($oceanUnlockDate)}
