@@ -2,16 +2,12 @@
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { query } from "svelte-apollo";
-  import { DEPOSITS, TOTAL_LOCKED } from "../../utils/subgraph";
+  import { TOTAL_LOCKED } from "../../utils/subgraph";
   import { veTotalLocked } from "../../stores/subgraph";
   import moment from "moment";
 
   let summary = query(TOTAL_LOCKED);
-  let deposits = query(DEPOSITS);
-
   let totalLocked = 0;
-  let averageLock = 0;
-
   let loading = true;
 
   const convertToInternationalCurrencySystem = (value) => {
@@ -33,33 +29,8 @@
     }, 0);
   };
 
-  const initDeposits = () => {
-    let data = $deposits.data.veDeposits;
-    const deltaDaysArr = data.map(function (deposit) {
-      let unlockTime = moment.unix(parseInt(deposit.unlockTime));
-      let timestamp = moment.unix(parseInt(deposit.timestamp));
-      return unlockTime.diff(timestamp, "days");
-    });
-
-    //average
-    const totalDaysLocked = deltaDaysArr.reduce(function (total, amount) {
-      return total + amount;
-    }, 0);
-
-    const averageLockDays =
-      totalDaysLocked / deltaDaysArr.length
-        ? totalDaysLocked / deltaDaysArr.length
-        : 0;
-    averageLock = parseFloat(averageLockDays / 365).toFixed(3);
-  };
-
   $: if ($summary.data) {
     initSummary();
-    loading = false;
-  }
-
-  $: if ($deposits.data) {
-    initDeposits();
     loading = false;
   }
 </script>
@@ -73,15 +44,6 @@
         <ItemWithLabel
           title={`Total Locked`}
           value={`${convertToInternationalCurrencySystem(totalLocked)} OCEAN`}
-        />
-      {/if}
-
-      {#if $deposits.loading === true}
-        <ItemWithLabel title={`Average Lock`} value="Loading..." />
-      {:else}
-        <ItemWithLabel
-          title={`Average Lock Time`}
-          value={`${averageLock} Years`}
         />
       {/if}
     </div>
