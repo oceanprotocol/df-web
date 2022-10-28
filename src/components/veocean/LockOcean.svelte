@@ -190,6 +190,15 @@
   };
 
   $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
+
+  const updateFormAmount = () => {
+    let _amount = $form.amount;
+    _amount = _amount == null ? 0 : parseInt(_amount);
+    _amount = _amount < 0 ? 0 : parseInt(_amount);
+    _amount = _amount > oceanBalance ? oceanBalance : parseInt(_amount);
+
+    $form.amount = _amount;
+  }
 </script>
 
 <div class={`container`}>
@@ -202,18 +211,7 @@
           type="number"
           name="amount"
           min={$lockedOceanAmount ? 0 : 1}
-          max={$userBalances[
-            getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean")
-          ]
-            ? parseInt(
-                $userBalances[
-                  getAddressByChainIdKey(
-                    process.env.VE_SUPPORTED_CHAINID,
-                    "Ocean"
-                  )
-                ]
-              )
-            : 0}
+          max={parseInt(oceanBalance)}
           error={$errors.amount}
           disabled={getOceanBalance($connectedChainId) <= 0 ||
             moment().utc().isAfter($oceanUnlockDate)}
@@ -223,7 +221,7 @@
           maxValueLabel="Balance: "
           showMaxValue={true}
           showMaxButton={true}
-          onChange={() => ($form.amount = parseInt($form.amount))}
+          onChange={() => (updateFormAmount())}
         />
       </div>
       <div class="item">
