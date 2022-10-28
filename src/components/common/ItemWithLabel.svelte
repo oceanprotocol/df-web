@@ -1,12 +1,26 @@
 <script>
+  import CustomTooltip from "./CustomTooltip.svelte";
+
   export let title;
   export let value;
   export let float = false;
   export let loading = false;
+  export let tootipMessage = undefined;
+  export let tooltipDirection = "top";
+  export let tooltipAlign = "center";
 </script>
 
 <div class="item">
-  <span class="title">{title}</span>
+  <div class="titleContainer">
+    <span class="title">{title}</span>
+    {#if tootipMessage}
+      <CustomTooltip
+        text={tootipMessage}
+        direction={tooltipDirection}
+        align={tooltipAlign}
+      />
+    {/if}
+  </div>
   {#if !loading}
     <span class="value">{float ? parseFloat(value).toFixed(3) : value}</span>
   {:else}
@@ -19,9 +33,14 @@
     display: flex;
     flex-direction: column;
   }
+  .titleContainer {
+    display: flex;
+    margin-bottom: calc((var(--spacer) / 8));
+    justify-content: center;
+    align-items: center;
+  }
   .title {
     font-size: var(--font-size-mini);
-    margin-bottom: calc((var(--spacer) / 8));
   }
   .value {
     font-size: var(--font-size-small);

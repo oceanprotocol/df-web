@@ -33,6 +33,8 @@
   } from "../../stores/web3";
   import { oceanUnlockDate } from "../../stores/veOcean";
   import { getAddressByChainIdKey } from "../../utils/address/address";
+  import CustomTooltip from "./CustomTooltip.svelte";
+  import * as descriptions from "../../utils/metadata/descriptions.json";
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -222,6 +224,7 @@
               ? `${totalAvailableTemporary}%`
               : `${totalAvailable}%`
             : "loading..."}
+          tootipMessage={descriptions.default.tooltip_datafarming_available_allocation}
         />
         <Button
           text={loading ? "Updating..." : "Update allocations"}
@@ -261,6 +264,14 @@
             />
           </ToolbarContent>
         </Toolbar>
+        <svelte:fragment slot="cell-header" let:header>
+          <div class="headerContainer">
+            {header.value}
+            {#if header.tooltip}
+              <CustomTooltip text={header.tooltip} direction="bottom" />
+            {/if}
+          </div>
+        </svelte:fragment>
         <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "action"}
             <Link text="view" url={cell.value} />
@@ -309,6 +320,11 @@
     display: flex;
     justify-content: space-between;
     margin: 0;
+  }
+  .headerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .headerValuesContainer {
     display: flex;

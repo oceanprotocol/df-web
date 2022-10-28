@@ -39,6 +39,7 @@
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import moment from "moment";
+  import * as descriptions from "../../utils/metadata/descriptions.json";
 
   let networksData = networksDataArray.default;
 
@@ -170,7 +171,7 @@
   }
 
   const updateMultiplier = () => {
-    if ($form.unlockDate && $form.amount > 0) {
+    if ($form.unlockDate && moment($form.unlockDate) > moment()) {
       // 4 years = 100% voting power
       var today = moment.utc();
       var unlockDate = moment.utc($form.unlockDate);
@@ -222,9 +223,7 @@
           maxValueLabel="Balance: "
           showMaxValue={true}
           showMaxButton={true}
-          onChange={
-            () => $form.amount = parseInt($form.amount)
-          }
+          onChange={() => ($form.amount = parseInt($form.amount))}
         />
       </div>
       <div class="item">
@@ -249,10 +248,12 @@
           <ItemWithLabel
             title={`Lock Multiplier`}
             value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
+            tootipMessage={descriptions.default.tooltip_veocean_lock_multiplier}
           />
           <ItemWithLabel
             title={`Receive`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
+            tootipMessage={descriptions.default.tooltip_veocean_receive}
           />
         </div>
       </div>
@@ -276,7 +277,6 @@
           <TokenApproval
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
-            infiniteAmount={true}
             spender={getAddressByChainIdKey(
               process.env.VE_SUPPORTED_CHAINID,
               "veOCEAN"

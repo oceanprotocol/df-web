@@ -28,7 +28,7 @@
           $userAddress.length - 6
         )}
       </span>
-      <Tooltip icon={ChevronDown} align="end">
+      <Tooltip icon={ChevronDown} align="end" class="disconnect">
         <Button onclick={() => disconnect()} text={`Disconnect`} textOnly />
       </Tooltip>
     </div>
@@ -55,5 +55,8 @@
     display: flex;
     font-weight: bold;
     color: var(--brand-grey-light);
+  }
+  :global(.disconnect > .bx--tooltip) {
+    top: 35px !important;
   }
 </style>

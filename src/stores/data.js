@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 import { getNetworkDataById } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
+import * as descriptions from "../utils/metadata/descriptions.json";
 
 let networksData = networksDataArray.default
 
@@ -14,11 +15,12 @@ export const columnsData = [
     key: "volume(7d)",
     value: "Volume(7d)",
     display: (volume) => '$' + volume,
+    tooltip: descriptions.default.tooltip_datafarming_consume
   },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
-  { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN' },
-  { key: "myallocation", value:"MyAllocation", sort: false  },
+  { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_total_allocations},
+  { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocations },
   { key: "action", value: "Action" },
 ]
 
