@@ -51,6 +51,7 @@
     !$userAddress ||
     !$oceanUnlockDate;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+  let totalAvailableTemporary = undefined;
   let loading = false;
 
   let columns = {};
@@ -102,7 +103,7 @@
     localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
   }
 
-  $: if (showDataWithAllocations) {
+  $: if (showDataWithAllocations === true) {
     const newData = filterDataByUserAllocation(rowData, $dataAllocations);
     datasetsWithAllocations = newData;
   }
@@ -111,24 +112,25 @@
     datasetsWithAllocations = undefined;
   }
 
-  function compare(a, b) {
-    if (a.myallocation > b.myallocation) {
-      return -1;
-    }
-    if (a.myallocation < b.myallocation) {
-      return 1;
-    }
-    return 1;
-  }
-
-  const sortRowsDataByAllocations = () => {
-    rowData = rowData.sort(compare);
-  };
-
   const onTotalAvailableAllocationChange = async (id, value, step) => {
-    totalAvailable += step;
+    totalAvailableTemporary = totalAvailable + step;
+    console.log(totalAvailableTemporary, value, step);
     rowData[rowData.findIndex((element) => element.id === id)].myallocation =
       value;
+  };
+
+  const updateTotalAllocation = (id, value) => {
+    if (value == "") {
+      rowData[
+        rowData.findIndex((element) => element.id === id)
+      ].myallocation = 0;
+    }
+    totalAvailable = totalAvailableTemporary;
+  };
+
+  const subtractCurrAllocationsFromTotal = (value) => {
+    if (!value || totalAvailable + parseInt(value) > 100) return;
+    totalAvailable += parseInt(value);
   };
 
   const updateAllocations = async () => {
@@ -167,16 +169,20 @@
     );
   };
 
-  $: if ($totalUserAllocation >= 0) {
-    disabled =
-      $userBalances[
-        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
-      ] === undefined ||
-      !$userAddress ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
-      !$oceanUnlockDate;
-    totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+  $: $userAddress && updateTotalAvailableAllocations();
+  $: $totalUserAllocation && updateTotalAvailableAllocations();
+  $: !$oceanUnlockDate && updateTotalAvailableAllocations();
+  $: $oceanUnlockDate && updateTotalAvailableAllocations();
+
+  $: if ($totalUserAllocation === 0) {
+    updateTotalAvailableAllocations();
   }
+
+  const updateTotalAvailableAllocations = () => {
+    updateDisable();
+    totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
+    totalAvailableTemporary = totalAvailable;
+  };
 
   $: if ($oceanUnlockDate) {
     updateDisable();
@@ -213,7 +219,11 @@
       <div class="headerValuesContainer">
         <ItemWithLabel
           title="Available allocation"
-          value={totalAvailable >= 0 ? `${totalAvailable}%` : "loading..."}
+          value={totalAvailable >= 0
+            ? totalAvailableTemporary !== totalAvailable
+              ? `${totalAvailableTemporary}%`
+              : `${totalAvailable}%`
+            : "loading..."}
           tootipMessage={descriptions.default.tooltip_datafarming_available_allocation}
         />
         <Button
@@ -273,6 +283,9 @@
               available={totalAvailable}
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
+              onBlur={updateTotalAllocation}
+              onFocus={subtractCurrAllocationsFromTotal}
+              max={100 - totalAvailable}
               dataId={row.id}
               {disabled}
               showAvailable={false}
@@ -337,7 +350,7 @@
     border-top: 0 !important;
   }
   :global(th) {
-    background-color: var(--brand-white) !important;
+    background-color: var(--brand-grey-dimmed) !important;
   }
   :global(thead) {
     background-color: var(--brand-white) !important;
