@@ -4,26 +4,6 @@ import * as networksDataArray from "../networks-metadata.json";
 let networksList = networksDataArray.default;
 export const GASLIMIT_DEFAULT = 1000000;
 
-const Web3 = window ? window.Web3 : null;
-const Web3Modal = window ? window.Web3Modal.default : null;
-const WalletConnectProvider = window ? window.WalletConnectProvider.default : null;
-
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnectProvider,
-    options: {
-      // Mikko's test key - don't copy as your mileage may vary
-      infuraId: process.env.INFURA_KEY,
-    },
-  }
-};
-
-const web3Modal = new Web3Modal({
-  cacheProvider: true, // optional
-  providerOptions, // required
-  disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
-});
-
 export const getGasFeeMultiplier = (chainId) => {
   const gasFeeMultiplier = {
     1: 1.05,
