@@ -1,8 +1,8 @@
 import { writable } from "svelte/store";
 import { ethers, BigNumber } from "ethers";
-import Web3Modal from "web3modal"
 import * as networksDataArray from "../networks-metadata.json";
 
+export let web3 = writable("")
 export let userAddress = writable("");
 export let poolContracts = writable("");
 export let web3Provider = writable("");
@@ -14,8 +14,13 @@ export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
 
+const Web3 = window.Web3
+const Web3Modal = window.Web3Modal.default;
+const WalletConnectProvider = window.WalletConnectProvider.default;
+
 const providerOptions = {
   walletconnect: {
+    provider: WalletConnectProvider,
     options: {
       // Mikko's test key - don't copy as your mileage may vary
       infuraId: process.env.INFURA_KEY,
@@ -28,6 +33,7 @@ const web3Modal = new Web3Modal({
   providerOptions, // required
   disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
 });
+
 
 // TODO - Replace networkData w/ networksDataArray
 export function getNetworkDataById(
@@ -57,6 +63,7 @@ export const setValuesAfterConnection = async (instance) => {
   const provider = new ethers.providers.Web3Provider(instance);
   const signer = provider.getSigner();
   networkSigner.set(signer);
+  web3.set(new Web3(instance))
   const signerAddress = await signer.getAddress();
   const chainId= (await provider.getNetwork()).chainId;
 
@@ -101,13 +108,15 @@ export const signMessage = async (msg, signer) => {
 export const connectWalletToSpecificProvider = async (provider) => {
   let instance;
   try {
+    console.log(provider)
     instance = await web3Modal?.connectTo(provider);
+    
     //provider = new ethers.providers.Web3Provider(window.ethereum)
   } catch (e) {
     console.log("Could not get a wallet connection", e);
     return;
   }
-
+  console.log('herre')
   // Subscribe to accounts change
   instance.on("accountsChanged", (accounts) => {
     const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
