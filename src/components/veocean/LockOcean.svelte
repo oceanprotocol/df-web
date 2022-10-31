@@ -18,7 +18,6 @@
     getOceanBalance,
     updateUserBalanceOcean,
     updateUserBalanceVeOcean,
-    userBalances,
   } from "../../stores/tokens";
   import {
     getLockedEndTime,
@@ -49,7 +48,6 @@
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
 
-  const DAY = 60 * 60 * 24;
   const MAXDAYS = 4 * 365;
 
   const getMaxDate = () => {
@@ -198,7 +196,7 @@
     _amount = _amount > oceanBalance ? oceanBalance : parseInt(_amount);
 
     $form.amount = _amount;
-  }
+  };
 </script>
 
 <div class={`container`}>
@@ -221,7 +219,7 @@
           maxValueLabel="Balance: "
           showMaxValue={true}
           showMaxButton={true}
-          onChange={() => (updateFormAmount())}
+          onChange={() => updateFormAmount()}
         />
       </div>
       <div class="item">
