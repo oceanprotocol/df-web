@@ -105,7 +105,6 @@ export const signMessage = async (msg, signer) => {
 export const connectWalletToSpecificProvider = async (provider) => {
   let instance;
   try {
-    console.log(provider)
     instance = await web3Modal?.connectTo(provider);
     
     //provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -113,7 +112,6 @@ export const connectWalletToSpecificProvider = async (provider) => {
     console.log("Could not get a wallet connection", e);
     return;
   }
-  console.log('herre')
   // Subscribe to accounts change
   instance.on("accountsChanged", (accounts) => {
     const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
