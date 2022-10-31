@@ -28,8 +28,6 @@
   "dependencies": {
     "@rollup/plugin-html": "^0.2.4",
     "@rollup/plugin-replace": "^4.0.0",
-    "@walletconnect/client": "^1.8.0",
-    "@walletconnect/web3-provider": "^1.8.0",
     "apollo-boost": "^0.4.9",
     "carbon-components-svelte": "^0.63.8",
     "carbon-icons-svelte": "^11.0.1",
