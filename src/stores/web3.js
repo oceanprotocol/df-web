@@ -14,8 +14,11 @@ export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
 
+const WalletConnectProvider = window?.WalletConnectProvider?.default;
+
 const providerOptions = {
   walletconnect: {
+    package: WalletConnectProvider,
     options: {
       // Mikko's test key - don't copy as your mileage may vary
       infuraId: process.env.INFURA_KEY,
@@ -28,6 +31,7 @@ const web3Modal = new Web3Modal({
   providerOptions, // required
   disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
 });
+
 
 // TODO - Replace networkData w/ networksDataArray
 export function getNetworkDataById(
@@ -102,12 +106,12 @@ export const connectWalletToSpecificProvider = async (provider) => {
   let instance;
   try {
     instance = await web3Modal?.connectTo(provider);
+    
     //provider = new ethers.providers.Web3Provider(window.ethereum)
   } catch (e) {
     console.log("Could not get a wallet connection", e);
     return;
   }
-
   // Subscribe to accounts change
   instance.on("accountsChanged", (accounts) => {
     const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
@@ -162,9 +166,6 @@ export const connectWallet = async () => {
 
 export const disconnect = async () => {
   await web3Modal?.clearCachedProvider();
-  if (web3 && web3.currentProvider && web3.currentProvider.close) {
-    await web3.currentProvider.close();
-  }
   userAddress.set(undefined);
   networkSigner.set(undefined);
   localStorage.removeItem("walletconnect");

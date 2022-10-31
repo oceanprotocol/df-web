@@ -42,6 +42,8 @@
     "svelte-markdown": "^0.2.2",
     "svelte-navigator": "^3.1.5",
     "svelte-range-slider-pips": "^2.0.3",
+    "svelte-web3": "^4.0.0",
+    "walletconnect": "^1.7.8",
     "web3modal": "^1.9.9",
     "yup": "^0.32.11"
   }
