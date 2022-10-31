@@ -1,8 +1,8 @@
 import { writable } from "svelte/store";
 import { ethers, BigNumber } from "ethers";
+import Web3Modal from "web3modal"
 import * as networksDataArray from "../networks-metadata.json";
 
-export let web3 = writable("")
 export let userAddress = writable("");
 export let poolContracts = writable("");
 export let web3Provider = writable("");
@@ -14,13 +14,11 @@ export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
 
-const Web3 = window.Web3
-const Web3Modal = window.Web3Modal.default;
 const WalletConnectProvider = window.WalletConnectProvider.default;
 
 const providerOptions = {
   walletconnect: {
-    provider: WalletConnectProvider,
+    package: WalletConnectProvider,
     options: {
       // Mikko's test key - don't copy as your mileage may vary
       infuraId: process.env.INFURA_KEY,
@@ -63,7 +61,6 @@ export const setValuesAfterConnection = async (instance) => {
   const provider = new ethers.providers.Web3Provider(instance);
   const signer = provider.getSigner();
   networkSigner.set(signer);
-  web3.set(new Web3(instance))
   const signerAddress = await signer.getAddress();
   const chainId= (await provider.getNetwork()).chainId;
 
@@ -171,9 +168,6 @@ export const connectWallet = async () => {
 
 export const disconnect = async () => {
   await web3Modal?.clearCachedProvider();
-  if (web3 && web3.currentProvider && web3.currentProvider.close) {
-    await web3.currentProvider.close();
-  }
   userAddress.set(undefined);
   networkSigner.set(undefined);
   localStorage.removeItem("walletconnect");
