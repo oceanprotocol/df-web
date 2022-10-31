@@ -14,7 +14,7 @@ export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
 
-const WalletConnectProvider = window.WalletConnectProvider.default;
+const WalletConnectProvider = window?.WalletConnectProvider?.default;
 
 const providerOptions = {
   walletconnect: {
