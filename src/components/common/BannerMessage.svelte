@@ -47,7 +47,7 @@
     }
     span,
     p {
-      font-size: var(--font-size-smaller);
+      font-size: var(--font-size-mini);
     }
   }
 </style>

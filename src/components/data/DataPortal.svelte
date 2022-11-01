@@ -95,6 +95,7 @@
 <style>
   .wrapper {
     margin-top: var(--spacer);
+    height: 100%;
     width: 100%;
   }
 
@@ -103,7 +104,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    height: calc(100vh - 115px);
   }
 
   .data {
