@@ -19,6 +19,7 @@
   import { claim as claimVERewards } from "../../utils/feeDistributor";
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import { oceanUnlockDate } from "../../stores/veOcean";
+  import * as descriptions from "../../utils/metadata/descriptions.json";
 
   export let canClaimVE = true;
   export let canClaimDF = true;
@@ -111,8 +112,10 @@
     title="Active"
     description="Earn active rewards from Data Farming by <strong>allocating</strong> your veOCEAN to datasets with consume volume and holding a positive <strong>veOCEAN</strong> balance."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
+    rewardTooltip={descriptions.default.tooltip_active_rewards}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
-    showRedirectLink={(!$oceanUnlockDate || $totalUserAllocation <= 0) && $dfClaimables <= 0}
+    showRedirectLink={(!$oceanUnlockDate || $totalUserAllocation <= 0) &&
+      $dfClaimables <= 0}
     redirectLink={{ text: "Set allocations", url: "data" }}
     distributedAmount={roundInfo.active}
     loading={claiming === "DF_REWARDS"}
