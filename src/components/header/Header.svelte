@@ -4,7 +4,7 @@
   import { Link, useLocation, useNavigate } from "svelte-navigator";
 
   const aboutURL =
-    "https://blog.oceanprotocol.com/veocean-is-launching-data-farming-is-resuming-abed779211e3";
+    "https://docs.oceanprotocol.com/veocean-data-farming-tutorial#how-do-i-allocate-veocean";
   const location = useLocation();
 </script>
 
