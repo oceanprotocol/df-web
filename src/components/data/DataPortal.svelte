@@ -122,6 +122,7 @@
 
   .alignContentCenter {
     justify-content: center;
+    height: calc(100vh - 115px);
   }
 
   @media (min-width: 640px) {
