@@ -181,6 +181,11 @@
     } else {
       currentStep = 0;
     }
+    if ($oceanUnlockDate) {
+      steps[1].text = "Update";
+    } else {
+      steps[1].text = "Lock";
+    }
   }
 
   const updateMultiplier = () => {

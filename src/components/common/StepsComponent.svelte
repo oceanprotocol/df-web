@@ -22,7 +22,7 @@
   }
   :global(.steps__label) {
     margin-top: 4px !important;
-    font-size: var(--font-size-small) !important;
+    font-size: var(--font-size-mini) !important;
     color: var(--brand-grey-light);
   }
 </style>
