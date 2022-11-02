@@ -40,6 +40,7 @@
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import moment from "moment";
   import * as descriptions from "../../utils/metadata/descriptions.json";
+  import StepsComponent from "../common/StepsComponent.svelte";
 
   let networksData = networksDataArray.default;
 
@@ -48,9 +49,13 @@
   let calculatedMultiplier = 0;
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
+  let tokenApproved = true;
 
   const DAY = 60 * 60 * 24;
   const MAXDAYS = 4 * 365;
+
+  let steps = [{ text: "Approve" }, { text: "Lock" }];
+  let currentStep = 1;
 
   const getMaxDate = () => {
     let max = moment.utc().add(MAXDAYS, "days");
@@ -170,6 +175,14 @@
     updateLockButtonText = getUpdateLockButtonText();
   }
 
+  $: if (tokenApproved !== undefined) {
+    if (tokenApproved) {
+      currentStep = 1;
+    } else {
+      currentStep = 0;
+    }
+  }
+
   const updateMultiplier = () => {
     if ($form.unlockDate && moment($form.unlockDate) > moment()) {
       // 4 years = 100% voting power
@@ -198,7 +211,7 @@
     _amount = _amount > oceanBalance ? oceanBalance : parseInt(_amount);
 
     $form.amount = _amount;
-  }
+  };
 </script>
 
 <div class={`container`}>
@@ -221,7 +234,7 @@
           maxValueLabel="Balance: "
           showMaxValue={true}
           showMaxButton={true}
-          onChange={() => (updateFormAmount())}
+          onChange={() => updateFormAmount()}
         />
       </div>
       <div class="item">
@@ -255,7 +268,7 @@
           />
         </div>
       </div>
-      <div class="item">
+      <div class="item buttonContainer">
         {#if $connectedChainId !== parseInt(process.env.VE_SUPPORTED_CHAINID)}
           <Button
             text={!$userAddress
@@ -284,6 +297,7 @@
               getOceanBalance($connectedChainId) <= 0 ||
               $form.amount > getOceanBalance($connectedChainId)}
             bind:agreed={$form.ageement}
+            bind:approved={tokenApproved}
           >
             {#if $oceanUnlockDate}
               <Button
@@ -310,6 +324,9 @@
             {/if}
           </TokenApproval>
         {/if}
+        <div class="stepsContainer">
+          <StepsComponent {steps} current={currentStep} />
+        </div>
       </div>
       <AgreementCheckbox
         text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, wave all rights, and assume all risks."
@@ -353,6 +370,14 @@
 
   .item:last-child {
     margin-bottom: 0;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+  }
+
+  .stepsContainer {
+    margin-top: calc(var(--spacer) / 10);
   }
 
   @media (min-width: 640px) {

@@ -16,6 +16,7 @@
   export let tokenAddress;
   export let spender;
   export let approving = false;
+  export let approved = false;
 
   export let agreed = false;
 
@@ -42,6 +43,7 @@
     Swal.fire("Success!", "Tokens succesfully approved.", "success").then(
       async () => {
         isAmountApproved = true;
+        approved = true;
         loading = false;
         approving = false;
       }
@@ -57,6 +59,7 @@
       $networkSigner
     ).then((resp) => {
       isAmountApproved = resp;
+      approved = resp;
       loading = false;
     });
 </script>
