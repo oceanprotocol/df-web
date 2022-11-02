@@ -54,7 +54,11 @@
   const DAY = 60 * 60 * 24;
   const MAXDAYS = 4 * 365;
 
-  let steps = [{ text: "Approve" }, { text: "Lock" }];
+  let steps = [
+    { text: "Approve OCEAN" },
+    { text: "Lock" },
+    { text: "Receive veOCEAN" },
+  ];
   let currentStep = 1;
 
   const getMaxDate = () => {
@@ -112,6 +116,7 @@
   const onFormSubmit = async (values) => {
     loading = true;
     const unlockTimestamp = moment.utc(values.unlockDate).unix();
+    currentStep = 2;
 
     try {
       if ($oceanUnlockDate) {
@@ -127,6 +132,7 @@
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
+      currentStep = 1;
       return;
     }
     Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
@@ -183,8 +189,10 @@
     }
     if ($oceanUnlockDate) {
       steps[1].text = "Update";
+      steps[2].text = "Get more veOCEAN";
     } else {
       steps[1].text = "Lock";
+      steps[2].text = "Receive veOCEAN";
     }
   }
 
