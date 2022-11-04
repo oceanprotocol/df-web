@@ -169,6 +169,15 @@
     );
   };
 
+  const resetAllocations = async () => {
+    await rowData.forEach((data) => {
+      if (data.allocated) {
+        data.myallocation = 0;
+      }
+    });
+    updateAllocations();
+  };
+
   $: $userAddress && updateTotalAvailableAllocations();
   $: $totalUserAllocation && updateTotalAvailableAllocations();
   $: !$oceanUnlockDate && updateTotalAvailableAllocations();
@@ -224,13 +233,22 @@
               ? `${totalAvailableTemporary}%`
               : `${totalAvailable}%`
             : "loading..."}
-          tootipMessage={descriptions.default.tooltip_datafarming_available_allocation}
+          tootipMessage={descriptions.default
+            .tooltip_datafarming_available_allocation}
         />
         <Button
-          text={loading ? "Updating..." : "Update allocations"}
+          text={"Update allocations"}
           className="updateAllocationsBtton"
           onclick={() => updateAllocations()}
           disabled={disabled || loading}
+          {loading}
+        />
+        <Button
+          text={"Reset allocations"}
+          className="updateAllocationsBtton"
+          onclick={() => resetAllocations()}
+          disabled={disabled || loading}
+          {loading}
         />
       </div>
       <div class="tableActionsContainer">
