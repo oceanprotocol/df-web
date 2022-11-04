@@ -11,7 +11,7 @@
   <Tooltip {align} {direction} size={10} {open}>
     <div class="textContainer">
       <p class="text">
-        {text}
+        {@html text}
       </p>
     </div>
   </Tooltip>
