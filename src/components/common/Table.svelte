@@ -52,7 +52,7 @@
     !$oceanUnlockDate;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   let totalAvailableTemporary = undefined;
-  let loading = false;
+  let loading = undefined;
 
   let columns = {};
   let pagination = { pageSize: 100, page: 1 };
@@ -133,7 +133,7 @@
   };
 
   const updateAllocations = async (resetPurgatory) => {
-    loading = true;
+    loading = resetPurgatory ? "RESET" : "UPDATE";
     const amounts = [];
     const nftAddresses = [];
     const chainIds = [];
@@ -169,7 +169,7 @@
       );
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
-      loading = false;
+      loading = undefined;
       return;
     }
     Swal.fire("Success!", "Allocation successfully updated.", "success").then(
@@ -179,7 +179,7 @@
           $networkSigner
         );
         totalUserAllocation.update(() => newAllocation);
-        loading = false;
+        loading = undefined;
       }
     );
   };
@@ -247,7 +247,7 @@
           className="updateAllocationsBtton"
           onclick={() => updateAllocations()}
           disabled={disabled || loading}
-          {loading}
+          loading={loading === "UPDATE"}
         />
         <Button
           text={"Reset allocations"}
@@ -255,7 +255,7 @@
           onclick={() => updateAllocations(true)}
           disabled={disabled || loading || $totalUserAllocation < 1}
           secondary
-          {loading}
+          loading={loading === "RESET"}
         />
       </div>
       <div class="tableActionsContainer">
