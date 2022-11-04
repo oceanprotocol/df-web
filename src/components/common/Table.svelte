@@ -133,7 +133,7 @@
     totalAvailable += parseInt(value);
   };
 
-  const updateAllocations = async () => {
+  const updateAllocations = async (resetPurgatory) => {
     loading = true;
     const amounts = [];
     const nftAddresses = [];
@@ -145,6 +145,23 @@
         chainIds.push(data.chainId);
       }
     });
+    if (resetPurgatory) {
+      await rowData.forEach((data) => {
+        if (data.allocated) {
+          amounts.push(0);
+          nftAddresses.push(data.nftaddress);
+          chainIds.push(data.chainId);
+        }
+      });
+      $dataAllocations.forEach((data) => {
+        if (!nftAddresses.find((address) => address === data.nftAddress)) {
+          amounts.push(0);
+          nftAddresses.push(data.nftAddress);
+          chainIds.push(parseInt(data.chainId));
+        }
+      });
+    }
+    console.log(amounts, nftAddresses, chainIds);
     try {
       await allocateVeOceanToMultipleNFTs(
         amounts,
@@ -167,15 +184,6 @@
         loading = false;
       }
     );
-  };
-
-  const resetAllocations = async () => {
-    await rowData.forEach((data) => {
-      if (data.allocated) {
-        data.myallocation = 0;
-      }
-    });
-    updateAllocations();
   };
 
   $: $userAddress && updateTotalAvailableAllocations();
@@ -246,7 +254,7 @@
         <Button
           text={"Reset allocations"}
           className="updateAllocationsBtton"
-          onclick={() => resetAllocations()}
+          onclick={() => updateAllocations(true)}
           disabled={disabled || loading}
           {loading}
         />

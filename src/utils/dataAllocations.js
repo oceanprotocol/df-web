@@ -64,6 +64,9 @@ export const allocateVeOceanToMultipleNFTs = async(amounts, dataAddresses, chain
   }
   //convert amounts from 100 to 10000 units
   const formatedAmounts = amounts.map((amount) => amount * 100)
+  /*formatedAmounts.push(1000)
+  dataAddresses.push('903DBb6AB9Ac4074d269245bD8d3Fd0Def359128')
+  chainIds.push(5)*/
   try {
     const contract = new ethers.Contract(
       getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veAllocate"),
