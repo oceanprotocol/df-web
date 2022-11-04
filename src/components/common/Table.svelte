@@ -114,7 +114,6 @@
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailableTemporary = totalAvailable + step;
-    console.log(totalAvailableTemporary, value, step);
     rowData[rowData.findIndex((element) => element.id === id)].myallocation =
       value;
   };
@@ -224,7 +223,8 @@
               ? `${totalAvailableTemporary}%`
               : `${totalAvailable}%`
             : "loading..."}
-          tootipMessage={descriptions.default.tooltip_datafarming_available_allocation}
+          tootipMessage={descriptions.default
+            .tooltip_datafarming_available_allocation}
         />
         <Button
           text={loading ? "Updating..." : "Update allocations"}
