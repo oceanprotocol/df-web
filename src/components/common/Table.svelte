@@ -114,7 +114,6 @@
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailableTemporary = totalAvailable + step;
-    console.log(totalAvailableTemporary, value, step);
     rowData[rowData.findIndex((element) => element.id === id)].myallocation =
       value;
   };
@@ -161,7 +160,6 @@
         }
       });
     }
-    console.log(amounts, nftAddresses, chainIds);
     try {
       await allocateVeOceanToMultipleNFTs(
         amounts,
@@ -228,7 +226,6 @@
       $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
       !$oceanUnlockDate;
   }
-  console.log($totalUserAllocation);
 </script>
 
 {#if colData && rowData}
