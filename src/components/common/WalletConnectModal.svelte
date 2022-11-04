@@ -62,7 +62,7 @@
     width: 80vw;
     border-radius: 0.3rem;
     background-color: white;
-    padding: var(--spacer) calc(var(--spacer) / 2);
+    padding: var(--spacer) calc(var(--spacer) / 5);
     padding-top: calc(var(--spacer) / 2);
     border: 2px solid var(--brand-grey-dimmed);
     box-shadow: var(--box-shadow);
