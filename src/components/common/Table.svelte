@@ -228,6 +228,7 @@
       $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
       !$oceanUnlockDate;
   }
+  console.log($totalUserAllocation);
 </script>
 
 {#if colData && rowData}
@@ -255,7 +256,8 @@
           text={"Reset allocations"}
           className="updateAllocationsBtton"
           onclick={() => updateAllocations(true)}
-          disabled={disabled || loading}
+          disabled={disabled || loading || $totalUserAllocation < 1}
+          secondary
           {loading}
         />
       </div>
