@@ -21,10 +21,9 @@ export const columnsData = [
   { key: "did", value: "DID" },
   { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_total_allocations},
   { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocations },
-  { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated" ,"MyAllocation", "Action"]
+export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated" ,"MyAllocation"]
 
 async function getDatasets(api) {
   let res;

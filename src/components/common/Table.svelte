@@ -19,7 +19,6 @@
   import TextWithNetworkIcon from "./TextWithNetworkIcon.svelte";
   import ShareInput from "./ShareInput.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
-  import Link from "./Link.svelte";
   import { userBalances } from "../../stores/tokens";
   import {
     allocateVeOceanToMultipleNFTs,
@@ -298,9 +297,7 @@
           </div>
         </svelte:fragment>
         <svelte:fragment slot="cell" let:cell let:row>
-          {#if cell.key === "action"}
-            <Link text="view" url={cell.value} />
-          {:else if cell.key === "title"}
+          {#if cell.key === "title"}
             <TextWithNetworkIcon
               networkName={row.network}
               text={cell.value}
