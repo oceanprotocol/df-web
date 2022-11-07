@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "start": "sirv public --single --port 4005 --host 0.0.0.0",
-    "startWithDocker": "sirv public --single --port 4005 --host 0.0.0.0"
+    "dev": "HOST=localhost rollup -c -w",
+    "start": "sirv public --single --port 4005 --host 0.0.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.1.0",
