@@ -114,7 +114,6 @@
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailableTemporary = totalAvailable + step;
-    console.log(totalAvailableTemporary, value, step);
     rowData[rowData.findIndex((element) => element.id === id)].myallocation =
       value;
   };

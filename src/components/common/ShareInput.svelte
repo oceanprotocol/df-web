@@ -17,7 +17,6 @@
   function validator(node, value) {
     return {
       update(value) {
-        console.log(n, currentValue, value);
         if (available === 0) return;
         if (value === null) {
           n = null;
@@ -30,7 +29,6 @@
             ? n
             : parseInt(value);
         if (currentValue == parseInt(value)) {
-          console.log(n, currentValue);
           isFocused && onChange(dataId, currentValue, -value);
         }
         n = currentValue;
@@ -88,6 +86,14 @@
   .allocationInput {
     border: 0;
     width: 50px;
+  }
+  .allocationInput::-webkit-inner-spin-button,
+  .allocationInput::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+  .allocationInput[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
   }
   .allocationInput:focus {
     outline: none;
