@@ -10,6 +10,6 @@
     "tooltip_datafarming_total_allocations": "Total veOCEAN amount allocated to a dataset across all users.",
     "tooltip_datafarming_my_allocations": "This number represents the percentage of your veOCEAN allocated towards each dataset.\n\nYour veOCEAN goes down over time but your allocation remain consistent.",
     "tooltip_rewards_history_rounds": "Data Farming rewards distribution rounds. Rounds happen every week starting and ending each Thursday.",
-    "tooltip_rewards_history_active_rewards": "Rewards distributed for active curation of datasets. Active rewards are emitted based on Data Consume Volume.\n\nPlease check the docs for more info."
-    
+    "tooltip_rewards_history_active_rewards": "Rewards distributed for active curation of datasets. Active rewards are emitted based on Data Consume Volume.\n\nPlease check the docs for more info.",
+    "tooltip_active_rewards": "The formula for calculating the active rewards can change. You can find the formula for the current round <a href=https://docs.oceanprotocol.com/veocean-data-farming-tutorial) target=_blank>here</a>"
 }

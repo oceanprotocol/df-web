@@ -14,6 +14,7 @@
   export let showRedirectLink;
   export let onClick;
   export let metrics;
+  export let rewardTooltip;
   export let disableRedirect = false;
 </script>
 
@@ -24,7 +25,11 @@
       {#each metrics as metric}
         <ItemWithLabel title={metric.name} value={metric.value} />
       {/each}
-      <ItemWithLabel title="rewards" value={!showRedirectLink ? amount : "..."} />
+      <ItemWithLabel
+        title="rewards"
+        value={!showRedirectLink ? amount : "..."}
+        tootipMessage={rewardTooltip ? rewardTooltip : undefined}
+      />
     </div>
     {#if showRedirectLink}
       <Button

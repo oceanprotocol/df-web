@@ -333,6 +333,7 @@
 <style>
   .datasetsWithAllocationsInputContainer {
     display: flex !important;
+    width: 200px;
     justify-content: center;
     align-items: center;
   }
@@ -341,9 +342,13 @@
     max-height: calc(100vh - 115px - var(--spacer) * 3.7);
     overflow-y: scroll;
   }
+  .tableCustomHeader > div {
+    padding: calc(var(--spacer) / 4) 0;
+  }
   .tableCustomHeader {
     display: flex;
     justify-content: space-between;
+    flex-direction: column-reverse;
     margin: 0;
   }
   .headerContainer {
@@ -361,7 +366,7 @@
   }
   :global(.tableActionsContainer) {
     display: flex !important;
-    justify-content: flex-end !important;
+    justify-content: space-between !important;
   }
 
   :global(.customTable) {
@@ -407,5 +412,19 @@
   }
   :global(.tableContainer .bx--data-table) {
     margin-top: calc(var(--spacer) / 2);
+  }
+  @media (min-width: 640px) {
+    .tableCustomHeader {
+      flex-direction: row;
+    }
+    .tableCustomHeader > div {
+      padding: 0;
+    }
+    .tableActionsContainer {
+      justify-content: flex-end;
+    }
+    .datasetsWithAllocationsInputContainer {
+      width: auto;
+    }
   }
 </style>

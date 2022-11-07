@@ -17,7 +17,7 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: calc(var(--spacer) / 2) calc(var(--spacer));
+    padding: calc(var(--spacer) / 2) calc(var(--spacer) / 2);
     background-color: var(--background-content);
     box-shadow: var(--box-shadow);
   }
@@ -25,5 +25,10 @@
     font-size: var(--font-size-normal);
     font-weight: bold;
     margin-bottom: calc(var(--spacer) / 2);
+  }
+  @media (min-width: 660px) {
+    .container {
+      padding: calc(var(--spacer) / 2) var(--spacer);
+    }
   }
 </style>

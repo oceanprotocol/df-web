@@ -4,7 +4,7 @@
   import { Link, useLocation, useNavigate } from "svelte-navigator";
 
   const aboutURL =
-    "https://blog.oceanprotocol.com/veocean-is-launching-data-farming-is-resuming-abed779211e3";
+    "https://blog.oceanprotocol.com/ocean-data-farming-series-c7922f1d0e45";
   const location = useLocation();
 </script>
 
@@ -47,15 +47,11 @@
 
 <style>
   header {
-    position: sticky;
-    z-index: 101;
-    top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     margin: auto;
-    margin-top: calc(var(--spacer) / 4);
     padding-top: calc(var(--spacer) / 4);
     background-color: rgba(255, 255, 255, 0.9);
   }
@@ -65,8 +61,8 @@
   }
 
   .logo img {
-    width: 4em;
-    height: 4em;
+    width: 3em;
+    height: 3em;
     object-fit: contain;
   }
 
@@ -100,7 +96,7 @@
     display: flex;
     height: 100%;
     align-items: center;
-    padding: 0 1em;
+    padding: 0 0.4em;
     color: var(--brand-grey-light);
     font-weight: 700;
     text-decoration: none;
@@ -127,8 +123,14 @@
       flex-direction: row;
       margin: 0;
       padding: 0;
-      top: 38px;
       margin-top: calc(var(--spacer) / 4);
+    }
+    li > :global(a) {
+      padding: 0 1em;
+    }
+    .logo img {
+      width: 4em;
+      height: 4em;
     }
   }
 </style>

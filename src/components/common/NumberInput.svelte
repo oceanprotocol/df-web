@@ -61,6 +61,7 @@
     border-radius: 3px;
     width: 100%;
   }
+
   .actionsContainer {
     display: flex;
     flex-direction: row;
@@ -75,9 +76,12 @@
   .actionsContainer :global(.maxValueLabel) {
     color: var(--brand-black);
   }
-  .disableArrows {
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
-    margin: 0;
+  .disableArrows::-webkit-inner-spin-button,
+  .disableArrows::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+  .allocationInput[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
   }
 </style>
