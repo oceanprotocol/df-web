@@ -3,4 +3,4 @@ WORKDIR /dfweb
 COPY . .
 RUN npm install
 RUN npm run build
-RUN npm startWithDocker
+RUN npm run startWithDocker
