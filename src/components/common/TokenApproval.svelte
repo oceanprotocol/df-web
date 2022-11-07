@@ -10,13 +10,14 @@
   export let disabled = false;
   export let loading = false;
   export let fullWidth = true;
-  export let amount;
+  export let amount = 0;
   export let infiniteAmount = false;
   export let tokenName;
   export let tokenAddress;
   export let spender;
   export let approving = false;
   export let approved = false;
+  export let hasLock = false;
 
   export let agreed = false;
 
@@ -58,8 +59,17 @@
       spender,
       $networkSigner
     ).then((resp) => {
-      isAmountApproved = resp;
-      approved = resp;
+      console.log("amount:", amount)
+      console.log("hasLock:", hasLock)
+      // if user has lock and amount is at zero, let them update the lock
+      if( hasLock && amount <= 0 ) {
+        console.log("user has lock, approve amount at zero")
+        isAmountApproved = true;
+        approved = true;
+      } else {
+        isAmountApproved = resp;
+        approved = resp;
+      }
       loading = false;
     });
 </script>

@@ -49,7 +49,7 @@
   let calculatedMultiplier = 0;
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
-  let tokenApproved = true;
+  let tokenApproved = false;
 
   const DAY = 60 * 60 * 24;
   const MAXDAYS = 4 * 365;
@@ -59,7 +59,8 @@
     { text: "Lock" },
     { text: "Receive veOCEAN" },
   ];
-  let currentStep = 1;
+  console.log("init: currentStep = 0")
+  let currentStep = 0;
 
   const getMaxDate = () => {
     let max = moment.utc().add(MAXDAYS, "days");
@@ -179,10 +180,24 @@
 
   $: if ($form) {
     updateLockButtonText = getUpdateLockButtonText();
+
+    console.log("$form.amount", $form.amount)
+    console.log("$form.unlockDate", $form.unlockDate)
+    console.log("$oceanUnlockDate", $oceanUnlockDate)
+    if($oceanUnlockDate) {
+      console.log("$oceanUnlockDate.utc", $oceanUnlockDate.utc())
+      console.log("$oceanUnlockDate.utc.format()", $oceanUnlockDate.utc().format("YYYY-MM-DD"))
+      console.log("isSame simple compare:", $oceanUnlockDate.utc().format("YYYY-MM-DD") === $form.unlockDate)
+      console.log("isBefore:", moment($form.unlockDate).isBefore($oceanUnlockDate.utc().format()))
+      console.log("isSame:", moment($form.unlockDate).isSame($oceanUnlockDate.utc().format()))
+      console.log("isSameOrBefore:", moment($form.unlockDate).isSameOrBefore($oceanUnlockDate.utc().format()))
+      console.log("isAfter:", moment($form.unlockDate).isAfter($oceanUnlockDate.utc().format()))
+      console.log("isSameOrAfter:", moment($form.unlockDate).isSameOrAfter($oceanUnlockDate.utc().format()))
+    }
   }
 
   $: if (tokenApproved !== undefined) {
-    if (tokenApproved) {
+    if (tokenApproved === true) {
       currentStep = 1;
     } else {
       currentStep = 0;
@@ -281,6 +296,10 @@
           />
         </div>
       </div>
+      <AgreementCheckbox
+        text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, wave all rights, and assume all risks."
+        bind:value={$form.ageement}
+      />
       <div class="item buttonContainer">
         {#if $connectedChainId !== parseInt(process.env.VE_SUPPORTED_CHAINID)}
           <Button
@@ -311,6 +330,7 @@
               $form.amount > getOceanBalance($connectedChainId)}
             bind:agreed={$form.ageement}
             bind:approved={tokenApproved}
+            bind:hasLock={$oceanUnlockDate}
           >
             {#if $oceanUnlockDate}
               <Button
@@ -320,8 +340,7 @@
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount > getOceanBalance($connectedChainId) ||
-                  ($form.amount <= 0 &&
-                    moment($form.unlockDate).isBefore($oceanUnlockDate))}
+                  moment($form.unlockDate).isBefore($oceanUnlockDate)}
                 type="submit"
               />
             {:else}<Button
@@ -341,10 +360,6 @@
           <StepsComponent {steps} current={currentStep} />
         </div>
       </div>
-      <AgreementCheckbox
-        text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, wave all rights, and assume all risks."
-        bind:value={$form.ageement}
-      />
     </form>
   </Card>
 </div>
@@ -390,7 +405,7 @@
   }
 
   .stepsContainer {
-    margin-top: calc(var(--spacer) / 10);
+    margin-top: calc(var(--spacer) / 5);
   }
 
   @media (min-width: 640px) {
