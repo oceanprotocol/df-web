@@ -26,7 +26,12 @@
 >
   {#if loading === true}
     <div class="loadingSpinnerContainer">
-      <Circle size="20" color="#FFFFFF" unit="px" cl />
+      <Circle
+        size="20"
+        color={secondary ? "var(--brand-grey-light)" : "var(--brand-white)"}
+        unit="px"
+        cl
+      />
     </div>
   {/if}
   <span>{text}</span>

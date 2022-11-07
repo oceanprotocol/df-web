@@ -52,7 +52,7 @@
     !$oceanUnlockDate;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   let totalAvailableTemporary = undefined;
-  let loading = false;
+  let loading = undefined;
 
   let columns = {};
   let pagination = { pageSize: 100, page: 1 };
@@ -132,8 +132,8 @@
     totalAvailable += parseInt(value);
   };
 
-  const updateAllocations = async () => {
-    loading = true;
+  const updateAllocations = async (resetPurgatory) => {
+    loading = resetPurgatory ? "RESET" : "UPDATE";
     const amounts = [];
     const nftAddresses = [];
     const chainIds = [];
@@ -144,6 +144,22 @@
         chainIds.push(data.chainId);
       }
     });
+    if (resetPurgatory) {
+      await rowData.forEach((data) => {
+        if (data.allocated) {
+          amounts.push(0);
+          nftAddresses.push(data.nftaddress);
+          chainIds.push(data.chainId);
+        }
+      });
+      $dataAllocations.forEach((data) => {
+        if (!nftAddresses.find((address) => address === data.nftAddress)) {
+          amounts.push(0);
+          nftAddresses.push(data.nftAddress);
+          chainIds.push(parseInt(data.chainId));
+        }
+      });
+    }
     try {
       await allocateVeOceanToMultipleNFTs(
         amounts,
@@ -153,7 +169,7 @@
       );
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
-      loading = false;
+      loading = undefined;
       return;
     }
     Swal.fire("Success!", "Allocation successfully updated.", "success").then(
@@ -163,7 +179,7 @@
           $networkSigner
         );
         totalUserAllocation.update(() => newAllocation);
-        loading = false;
+        loading = undefined;
       }
     );
   };
@@ -227,10 +243,19 @@
             .tooltip_datafarming_available_allocation}
         />
         <Button
-          text={loading ? "Updating..." : "Update allocations"}
+          text={"Update allocations"}
           className="updateAllocationsBtton"
           onclick={() => updateAllocations()}
           disabled={disabled || loading}
+          loading={loading === "UPDATE"}
+        />
+        <Button
+          text={"Reset allocations"}
+          className="updateAllocationsBtton"
+          onclick={() => updateAllocations(true)}
+          disabled={disabled || loading || $totalUserAllocation < 1}
+          secondary
+          loading={loading === "RESET"}
         />
       </div>
       <div class="tableActionsContainer">
