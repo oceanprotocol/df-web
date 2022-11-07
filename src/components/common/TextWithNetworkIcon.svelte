@@ -1,24 +1,23 @@
 <script>
+  import Link from "../common/Link.svelte";
   import NetworkIcon from "./NetworkIcon.svelte";
 
   export let networkName = "";
   export let text = "";
+  export let url = undefined;
 </script>
 
-<div class="textWithNetwork">
+<Link className="textWithNetwork" {url}>
   <NetworkIcon name={networkName} minimal />
   <span class="text">{text}</span>
   <div class="fullText">
     <span>{text}</span>
   </div>
-</div>
+</Link>
 
 <style>
-  .textWithNetwork {
-    display: flex;
-  }
   .text {
-    width: 150px;
+    max-width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -30,7 +29,7 @@
   .text:hover + .fullText {
     display: block;
     position: absolute;
-    transform: translateY(calc(-100% - 5px));
+    transform: translateY(calc(-100%));
     word-break: normal;
     background-color: var(--background-content);
     box-shadow: var(--box-shadow);
@@ -40,7 +39,7 @@
   }
   @media (min-width: 640px) {
     .text {
-      width: 180px;
+      max-width: 180px;
     }
   }
 </style>

@@ -301,7 +301,11 @@
           {#if cell.key === "action"}
             <Link text="view" url={cell.value} />
           {:else if cell.key === "title"}
-            <TextWithNetworkIcon networkName={row.network} text={cell.value} />
+            <TextWithNetworkIcon
+              networkName={row.network}
+              text={cell.value}
+              url={row.action}
+            />
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
