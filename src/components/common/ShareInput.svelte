@@ -85,7 +85,7 @@
   }
   .allocationInput {
     border: 0;
-    width: 50px;
+    width: 30px;
   }
   .allocationInput::-webkit-inner-spin-button,
   .allocationInput::-webkit-outer-spin-button {
