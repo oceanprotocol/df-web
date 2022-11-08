@@ -21,6 +21,7 @@
   import { oceanUnlockDate } from "../../stores/veOcean";
 
   let allocations;
+  let message = undefined;
 
   const loadTotalAllocation = async () => {
     let newAllocation = await getTotalAllocatedVeOcean(
@@ -40,13 +41,21 @@
 
   const getMessage = () => {
     if (!$oceanUnlockDate) {
-      return "You don't have allocation. Go to **veOCEAN** and lock your OCEAN tokens to receive allocation.";
+      message =
+        "You don't have allocation. Go to **veOCEAN** and lock your OCEAN tokens to receive allocation.";
     } else if ($totalUserAllocation === 0) {
-      return "You have not used your allocation. Set your allocation at **MyAllocations** column to receive active rewards.";
+      message =
+        "You have not used your allocation. Set your allocation at **MyAllocations** column to receive active rewards.";
     } else {
-      return undefined;
+      message = "";
     }
   };
+
+  $: (!$oceanUnlockDate ||
+    $oceanUnlockDate ||
+    $totalUserAllocation > 0 ||
+    $totalUserAllocation < 1) &&
+    getMessage();
 
   $: if ($allocations?.data) {
     loadValues();
@@ -88,7 +97,7 @@
     <div class="wrapper">
       <MainMessage
         title={`**Allocate your veOCEAN across datasets with consume volume to earn Data Farming Rewards.**`}
-        message={getMessage()}
+        {message}
         warning
       />
       <div class="data">
