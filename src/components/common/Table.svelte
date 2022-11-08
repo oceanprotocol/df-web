@@ -246,6 +246,7 @@
             : "loading..."}
           tootipMessage={descriptions.default
             .tooltip_datafarming_available_allocation}
+          tooltipWarning={$totalUserAllocation < 1}
         />
         <Button
           text={"Update allocations"}

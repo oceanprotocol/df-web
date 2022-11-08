@@ -6,6 +6,7 @@
   export let float = false;
   export let loading = false;
   export let tootipMessage = undefined;
+  export let tooltipWarning = undefined;
   export let tooltipDirection = "top";
   export let tooltipAlign = "center";
 </script>
@@ -18,6 +19,7 @@
         text={tootipMessage}
         direction={tooltipDirection}
         align={tooltipAlign}
+        warning={tooltipWarning}
       />
     {/if}
   </div>

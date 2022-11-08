@@ -18,6 +18,7 @@
   import MainMessage from "../common/MainMessage.svelte";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { userBalances } from "../../stores/tokens";
+  import { oceanUnlockDate } from "../../stores/veOcean";
 
   let allocations;
 
@@ -35,6 +36,16 @@
         ? $allocations.data.veAllocateUser.veAllocation
         : []
     );
+  };
+
+  const getMessage = () => {
+    if (!$oceanUnlockDate) {
+      return "You don't have allocations. Go to **veOCEAN** and lock your OCEAN tokens to receive allocation.";
+    } else if ($totalUserAllocation === 0) {
+      return "You have not used your allocation. Set your allocations at **MyAllocations** column to receive active rewards.";
+    } else {
+      return undefined;
+    }
   };
 
   $: if ($allocations?.data) {
@@ -76,7 +87,9 @@
   {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
     <div class="wrapper">
       <MainMessage
-        message={`**Allocate your veOCEAN across datasets with consume volume to earn Data Farming Rewards.**`}
+        title={`**Allocate your veOCEAN across datasets with consume volume to earn Data Farming Rewards.**`}
+        message={getMessage()}
+        warning
       />
       <div class="data">
         <Table

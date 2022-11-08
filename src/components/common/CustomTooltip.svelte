@@ -5,15 +5,22 @@
   export let direction = "top";
   export let align = "center";
   export let open = false;
+  export let warning = undefined;
 </script>
 
-<div on:mouseleave={() => (open = false)} on:mouseenter={() => (open = true)}>
+<div
+  on:mouseleave={() => (open = false)}
+  on:mouseenter={() => (open = true)}
+  class={`tooltipContiner ${warning ? "warning" : ""}`}
+>
   <Tooltip {align} {direction} size={10} {open}>
-    <div class="textContainer">
-      <p class="text">
-        {@html text}
-      </p>
-    </div>
+    {#if text}
+      <div class="textContainer">
+        <p class="text">
+          {@html text}
+        </p>
+      </div>
+    {/if}
   </Tooltip>
 </div>
 
@@ -30,5 +37,8 @@
     color: black;
     font-size: var(--font-size-mini);
     white-space: pre-wrap;
+  }
+  :global(.warning svg) {
+    fill: var(--brand-alert-yellow) !important;
   }
 </style>
