@@ -233,11 +233,16 @@
     <div class="tableCustomHeader">
       <div class="headerValuesContainer">
         <ItemWithLabel
-          title="Available allocation"
-          value={totalAvailable >= 0
-            ? totalAvailableTemporary !== totalAvailable
-              ? `${totalAvailableTemporary}%`
-              : `${totalAvailable}%`
+          title="Allocated amount"
+          value={!$oceanUnlockDate
+            ? "No available allocation"
+            : totalAvailable >= 0
+            ? `${
+                100 -
+                (totalAvailableTemporary !== totalAvailable
+                  ? totalAvailableTemporary
+                  : totalAvailable)
+              }/100%`
             : "loading..."}
           tootipMessage={descriptions.default
             .tooltip_datafarming_available_allocation}
