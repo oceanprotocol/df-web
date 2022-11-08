@@ -40,9 +40,9 @@
 
   const getMessage = () => {
     if (!$oceanUnlockDate) {
-      return "You don't have allocations. Go to **veOCEAN** and lock your OCEAN tokens to receive allocation.";
+      return "You don't have allocation. Go to **veOCEAN** and lock your OCEAN tokens to receive allocation.";
     } else if ($totalUserAllocation === 0) {
-      return "You have not used your allocation. Set your allocations at **MyAllocations** column to receive active rewards.";
+      return "You have not used your allocation. Set your allocation at **MyAllocations** column to receive active rewards.";
     } else {
       return undefined;
     }
