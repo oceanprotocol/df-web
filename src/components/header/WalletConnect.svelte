@@ -9,6 +9,7 @@
   import { Tooltip } from "carbon-components-svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
   import NetworkItem from "../common/NetworkItem.svelte";
+  import DebugAddress from "./DebugAddress.svelte";
 </script>
 
 <div class="container">
@@ -22,12 +23,19 @@
     />
   {:else}
     <div class="walletContainer">
-      <NetworkItem chainId={$connectedChainId} minimal />
-      <span class="walletAddress">
-        {$userAddress.substr(0, 6)}...{$userAddress.substr(
-          $userAddress.length - 6
-        )}
-      </span>
+      <div class="networkItemContainer">
+        <NetworkItem chainId={$connectedChainId} minimal />
+      </div>
+      {#if process.env.NODE_ENV !== "production"}
+        <DebugAddress />
+      {:else}
+        <span class="walletAddress">
+          {$userAddress.substr(0, 6)}...{$userAddress.substr(
+            $userAddress.length - 6
+          )}
+        </span>
+      {/if}
+
       <Tooltip icon={ChevronDown} align="end" class="disconnect">
         <Button onclick={() => disconnect()} text={`Disconnect`} textOnly />
       </Tooltip>
@@ -56,7 +64,18 @@
     font-weight: bold;
     color: var(--brand-grey-light);
   }
+  .networkItemContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+  }
   :global(.disconnect > .bx--tooltip) {
     top: 35px !important;
+  }
+  :global(.disconnect) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
