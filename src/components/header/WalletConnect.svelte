@@ -5,11 +5,19 @@
     userAddress,
     disconnect,
     connectedChainId,
+    web3Provider,
   } from "../../stores/web3";
   import { Tooltip } from "carbon-components-svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
   import NetworkItem from "../common/NetworkItem.svelte";
   import DebugAddress from "./DebugAddress.svelte";
+
+  let enableDebugAddress = process.env.NODE_ENV !== "production";
+  const resetAccount = async () => {
+    let signer = await $web3Provider.getSigner();
+    let address = await signer.getAddress();
+    userAddress.update(() => address);
+  };
 </script>
 
 <div class="container">
@@ -26,7 +34,7 @@
       <div class="networkItemContainer">
         <NetworkItem chainId={$connectedChainId} minimal />
       </div>
-      {#if process.env.NODE_ENV !== "production"}
+      {#if enableDebugAddress}
         <DebugAddress />
       {:else}
         <span class="walletAddress">
@@ -36,7 +44,20 @@
         </span>
       {/if}
 
-      <Tooltip icon={ChevronDown} align="end" class="disconnect">
+      <Tooltip
+        icon={ChevronDown}
+        align="end"
+        class={`disconnect ${
+          enableDebugAddress ? "multipleButtons" : undefined
+        }`}
+      >
+        {#if enableDebugAddress}
+          <Button
+            onclick={() => resetAccount()}
+            text={`Reset to connected account`}
+            textOnly
+          />
+        {/if}
         <Button onclick={() => disconnect()} text={`Disconnect`} textOnly />
       </Tooltip>
     </div>
@@ -77,5 +98,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  :global(.multipleButtons button) {
+    margin: calc(var(--spacer) / 6) 0 !important;
   }
 </style>
