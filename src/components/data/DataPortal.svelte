@@ -81,7 +81,7 @@
       <div class="data">
         <Table
           colData={columnsData}
-          notHidableColumns={["Action", "Allocate"]}
+          notHidableColumns={["Allocate"]}
           rowData={$datasets}
           description="Explore elligible datasets and allocate your veOCEAN to earn Active Rewards."
         />
