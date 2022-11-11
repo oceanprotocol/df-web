@@ -19,13 +19,13 @@ export const columnsData = [
   },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
-  { key: "sampledtotalallocated", value:"SampledTotalAllocated", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_samplde_total_allocations},
+  { key: "sampledtotalallocated", value:"TotalAllocated(Sampled)", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_samplde_total_allocations},
   { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_total_allocations},
   { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocations },
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated", "SampledTotalAllocated", "MyAllocation", "Action"]
+export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated", "TotalAllocated(Sampled)", "MyAllocation", "Action"]
 
 async function getDatasets(api) {
   let res;
