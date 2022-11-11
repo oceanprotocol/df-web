@@ -19,12 +19,13 @@ export const columnsData = [
   },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
+  { key: "sampledtotalallocated", value:"SampledTotalAllocated", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_samplde_total_allocations},
   { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_total_allocations},
   { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocations },
   { key: "action", value: "Action" },
 ]
 
-export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated" ,"MyAllocation", "Action"]
+export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated", "SampledTotalAllocated", "MyAllocation", "Action"]
 
 async function getDatasets(api) {
   let res;
@@ -61,6 +62,7 @@ function getRow(dataInfo, key) {
     did: dataInfo.did,
     chainId: dataInfo.chainID,
     totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
+    sampledtotalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
     'volume(7d)': parseFloat(dataInfo.volume).toFixed(3),

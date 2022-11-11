@@ -1,5 +1,6 @@
 <script>
   import { Tooltip } from "carbon-components-svelte";
+  import SvelteMarkdown from "svelte-markdown";
 
   export let text = undefined;
   export let direction = "top";
@@ -11,7 +12,7 @@
   <Tooltip {align} {direction} size={10} {open}>
     <div class="textContainer">
       <p class="text">
-        {@html text}
+        <SvelteMarkdown source={text} />
       </p>
     </div>
   </Tooltip>
