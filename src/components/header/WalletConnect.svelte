@@ -12,7 +12,7 @@
   import NetworkItem from "../common/NetworkItem.svelte";
   import DebugAddress from "./DebugAddress.svelte";
 
-  let enableDebugAddress = process.env.NODE_ENV !== "production";
+  let enableDebugAddress = process.env.DEBUGGING === "enabled";
   const resetAccount = async () => {
     let signer = await $web3Provider.getSigner();
     let address = await signer.getAddress();
