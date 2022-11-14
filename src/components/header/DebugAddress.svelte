@@ -7,7 +7,6 @@
   <Input
     bind:value={$userAddress}
     onChange={(event) => {
-      console.log(event.target.value, $userAddress);
       userAddress.update(() => event.target.value);
     }}
   />
