@@ -61,7 +61,7 @@ function getRow(dataInfo, key) {
     nftaddress: dataInfo.nft_addr,
     did: dataInfo.did,
     chainId: dataInfo.chainID,
-    totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
+    totalallocated: parseFloat(dataInfo.ve_allocated_realtime).toFixed(3),
     sampledtotalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
