@@ -19,7 +19,7 @@ export const columnsData = [
   },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
-  { key: "sampledtotalallocated", value:"TotalAllocated(Sampled)", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_samplde_total_allocations},
+  { key: "sampledtotalallocated", value:"TotalAllocated(Sampled)", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_sampled_total_allocations},
   { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_total_allocations},
   { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocations },
 ]
