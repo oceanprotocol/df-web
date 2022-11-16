@@ -24,7 +24,7 @@ export const columnsData = [
   { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocations },
 ]
 
-export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated", "TotalAllocated(Sampled)", "MyAllocation"]
+export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated", "MyAllocation"]
 
 
 async function getDatasets(api) {
