@@ -125,7 +125,7 @@
   .title {
     font-weight: bold;
     width: 100%;
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-medium);
   }
 
   .data {
