@@ -93,7 +93,7 @@
 >
   {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
     <div class="wrapper">
-      <h3 class="title">Data Explorer</h3>
+      <h3 class="title">Explore and Curate Data Assets</h3>
       <div class="data">
         <Table
           colData={columnsData}
