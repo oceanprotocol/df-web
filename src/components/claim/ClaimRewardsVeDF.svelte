@@ -75,7 +75,7 @@
 </script>
 
 <div class={`container`}>
-  <h3 class="title">Get your share of OCEAN rewards</h3>
+  <h3 class="title">Earn OCEAN Rewards</h3>
   <ClaimItem
     title="Passive"
     description="Earn passive rewards from Data Farming OCEAN by holding a positive <strong>veOCEAN</strong> balance."

@@ -19,7 +19,7 @@
 </script>
 
 <div class={`container`}>
-  <Card title={`${distributedAmount} OCEAN - ${title} REWARDS`}>
+  <Card title={`${distributedAmount} OCEAN - ${title} Rewards`}>
     <p class="description">{@html description}</p>
     <div class="metrics">
       {#each metrics as metric}
