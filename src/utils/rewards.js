@@ -1,3 +1,6 @@
+import { getTotalVeSupply } from "./ve";
+import { getEpoch } from "./epochs";
+
 export const getRewards = async(userAddress) => {
   let res;
   try {
@@ -27,4 +30,14 @@ export const getRewardsForDataAllocation = (rewards,  userAddress, nftAddress) =
     }
   })
   return reward ? reward.amt : 0.0
+}
+
+export const getPassiveAPY = async () => {
+  const veSupply = await getTotalVeSupply()
+  let curEpoch = getEpoch();
+  const wpr_passive = curEpoch.passive / veSupply
+  const weeks = 52
+  const apr = wpr_passive * weeks
+  const apy_passiv = (((1 + apr/weeks) ** weeks) - 1) * 100
+  return apy_passiv 
 }

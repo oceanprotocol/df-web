@@ -22,7 +22,7 @@
     veClaimables,
     veEstimate,
   } from "./stores/airdrops";
-  import { getRewards } from "./utils/rewards";
+  import { getPassiveAPY, getRewards } from "./utils/rewards";
   import {
     updateUserBalanceOcean,
     updateUserBalanceVeOcean,
@@ -64,6 +64,12 @@
   }
 
   async function initRewards() {
+    let passiveAPY = await getPassiveAPY();
+    rewards.update(() => {
+      return {
+        passive: passiveAPY,
+      };
+    });
     let unlockDateMilliseconds = await getLockedEndTime(
       $userAddress,
       $networkSigner
