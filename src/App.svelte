@@ -19,10 +19,11 @@
     dfClaimables,
     dfEstimate,
     rewards,
+    APYs,
     veClaimables,
     veEstimate,
   } from "./stores/airdrops";
-  import { getPassiveAPY, getRewards } from "./utils/rewards";
+  import { getActiveAPY, getPassiveAPY, getRewards } from "./utils/rewards";
   import {
     updateUserBalanceOcean,
     updateUserBalanceVeOcean,
@@ -64,10 +65,12 @@
   }
 
   async function initRewards() {
+    let activeAPY = await getActiveAPY();
     let passiveAPY = await getPassiveAPY();
-    rewards.update(() => {
+    APYs.update(() => {
       return {
         passive: passiveAPY,
+        active: activeAPY,
       };
     });
     let unlockDateMilliseconds = await getLockedEndTime(

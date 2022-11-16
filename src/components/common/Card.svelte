@@ -1,8 +1,12 @@
 <script>
   export let title = undefined;
+  export let tag = undefined;
 </script>
 
 <div class="container">
+  {#if tag}
+    <span>{tag}</span>
+  {/if}
   {#if title}
     <p class="title">{title}</p>
   {/if}

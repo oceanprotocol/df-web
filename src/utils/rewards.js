@@ -41,3 +41,21 @@ export const getPassiveAPY = async () => {
   const apy_passiv = (((1 + apr/weeks) ** weeks) - 1) * 100
   return apy_passiv 
 }
+
+export const getActiveAPY = async () => {
+  let res;
+  try {
+    res = await fetch(`${process.env.BACKEND_API}/apy/active`, {
+      method: "GET",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
+  let data = await res.json();
+  return data.apy;
+}

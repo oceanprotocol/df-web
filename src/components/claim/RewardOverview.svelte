@@ -1,11 +1,14 @@
 <script>
+  import { APYs } from "../../stores/airdrops";
   import Card from "../common/Card.svelte";
   import Countdown from "../common/CountDown.svelte";
 
   export let roundInfo = undefined;
 </script>
 
-<Card>
+<Card
+  tag={`APY up to ${$APYs ? ($APYs?.passive + $APYs?.active).toFixed(3) : 0}%`}
+>
   <h1 class="title">
     {`Round ${roundInfo.id}  -  ${
       parseInt(roundInfo.passive) + parseInt(roundInfo.active)
