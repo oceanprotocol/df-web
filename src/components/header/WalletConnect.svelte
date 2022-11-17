@@ -5,10 +5,19 @@
     userAddress,
     disconnect,
     connectedChainId,
+    web3Provider,
   } from "../../stores/web3";
   import { Tooltip } from "carbon-components-svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
   import NetworkItem from "../common/NetworkItem.svelte";
+  import DebugAddress from "./DebugAddress.svelte";
+
+  let enableDebugAddress = process.env.DEBUGGING === "enabled";
+  const resetAccount = async () => {
+    let signer = await $web3Provider.getSigner();
+    let address = await signer.getAddress();
+    userAddress.update(() => address);
+  };
 </script>
 
 <div class="container">
@@ -22,13 +31,33 @@
     />
   {:else}
     <div class="walletContainer">
-      <NetworkItem chainId={$connectedChainId} minimal />
-      <span class="walletAddress">
-        {$userAddress.substr(0, 6)}...{$userAddress.substr(
-          $userAddress.length - 6
-        )}
-      </span>
-      <Tooltip icon={ChevronDown} align="end" class="disconnect">
+      <div class="networkItemContainer">
+        <NetworkItem chainId={$connectedChainId} minimal />
+      </div>
+      {#if enableDebugAddress}
+        <DebugAddress />
+      {:else}
+        <span class="walletAddress">
+          {$userAddress.substr(0, 6)}...{$userAddress.substr(
+            $userAddress.length - 6
+          )}
+        </span>
+      {/if}
+
+      <Tooltip
+        icon={ChevronDown}
+        align="end"
+        class={`disconnect ${
+          enableDebugAddress ? "multipleButtons" : undefined
+        }`}
+      >
+        {#if enableDebugAddress}
+          <Button
+            onclick={() => resetAccount()}
+            text={`Reset to connected account`}
+            textOnly
+          />
+        {/if}
         <Button onclick={() => disconnect()} text={`Disconnect`} textOnly />
       </Tooltip>
     </div>
@@ -56,7 +85,21 @@
     font-weight: bold;
     color: var(--brand-grey-light);
   }
+  .networkItemContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+  }
   :global(.disconnect > .bx--tooltip) {
     top: 35px !important;
+  }
+  :global(.disconnect) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  :global(.multipleButtons button) {
+    margin: calc(var(--spacer) / 6) 0 !important;
   }
 </style>

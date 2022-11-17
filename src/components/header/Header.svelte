@@ -1,7 +1,7 @@
 <script>
   import WalletConnect from "./WalletConnect.svelte";
   import NetworkSelection from "./NetworkSelection.svelte";
-  import { Link, useLocation, useNavigate } from "svelte-navigator";
+  import { Link, useLocation } from "svelte-navigator";
 
   const aboutURL =
     "https://blog.oceanprotocol.com/ocean-data-farming-series-c7922f1d0e45";
