@@ -14,8 +14,6 @@
   import { isAppLoading } from "../../stores/app";
   import { query } from "svelte-apollo";
   import { GET_ALLOCATIONS } from "../../utils/dataAllocations";
-  import { onMount } from "svelte";
-  import MainMessage from "../common/MainMessage.svelte";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { userBalances } from "../../stores/tokens";
   import { oceanUnlockDate } from "../../stores/veOcean";
@@ -95,11 +93,7 @@
 >
   {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
     <div class="wrapper">
-      <MainMessage
-        title={`**Allocate your veOCEAN across datasets with consume volume to earn Data Farming Rewards.**`}
-        {message}
-        warning
-      />
+      <h3 class="title">Curate Data to Earn OCEAN</h3>
       <div class="data">
         <Table
           colData={columnsData}
@@ -126,6 +120,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+  }
+  
+  .title {
+    font-weight: bold;
+    width: 100%;
+    font-size: var(--font-size-medium);
   }
 
   .data {

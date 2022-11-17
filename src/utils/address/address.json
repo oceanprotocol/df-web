@@ -23,7 +23,7 @@
     "veDelegationProxy": "0x257fe2e49530A4B7FC3Ed597465e2931db3f20b7",
     "DFRewards": "0x6fd867E5AEE6D62a24f97939db90C4e67A73A651",
     "DFStrategyV1": "0x1Af3CC30fD18af837f7630Aff12aE2b826bD3c5D",
-    "veFeeEstimate": "0x85Aa84868993e2C07Ef3Ba965ea4693dbf82fD28"
+    "veFeeEstimate": "0xB3AB945aa7553EbC8Ce234a53b03a1bbA23E8fAB"
   },
   "mumbai": {
     "chainId": 80001,
@@ -201,32 +201,6 @@
     "veDelegationProxy": "0x45E3BEc7D139Cd8Ed7FeB161F3B094688ddB0c20",
     "veFeeEstimate": "0x4aA261bC595abC6fDEf0255C83e2a9305261753f",
     "SmartWalletChecker": "0xd7ddf62257A41cc6cdAd7A3d36e4f1d925fD142a"
-  },
-  "goerli": {
-    "chainId": 5,
-    "Ocean": "0xCfDdA22C9837aE76E0faA845354f33C62E03653a",
-    "OPFCommunityFeeCollector": "0xE9397625Df9B63f0C152f975234b7988b54710B8",
-    "startBlock": 7425573,
-    "Router": "0x159924ca0F47D6F704B97E29099b89e518A17B5E",
-    "FixedPrice": "0xc313e19146Fc9a04470689C9d41a4D3054693531",
-    "Staking": "0x98679D582AB3398C03D3308dEB9c7AeC50B52ded",
-    "ERC20Template": {
-      "1": "0x1d535147a97bd87c8443125376E6671B60556E07",
-      "2": "0x042D709b72B437d7d387F2679bD4ac060e561c9f"
-    },
-    "ERC721Template": {
-      "1": "0x4dD281EB67DED07E76E413Df16176D66ae69e240"
-    },
-    "Dispenser": "0xFe7967A5176fDAFa8DE109b3507016B885a82D6e",
-    "ERC721Factory": "0xe8c6Dc39602031A152440311e364818ba25C2Bc1",
-    "veAllocate": "0x3EFDD8f728c8e774aB81D14d0B2F07a8238960f4",
-    "veOCEAN": "0x8B8E187CF9c551e63f54AA04E21F48CDAF2296aE",
-    "veDelegation": "0xE282492d50879b911844fA6dD87aAD6169963fC6",
-    "veFeeDistributor": "0xd09789Ce05aa0f6feFc18315de4964Db07Cc0618",
-    "veDelegationProxy": "0x257fe2e49530A4B7FC3Ed597465e2931db3f20b7",
-    "DFRewards": "0x6fd867E5AEE6D62a24f97939db90C4e67A73A651",
-    "DFStrategyV1": "0x1Af3CC30fD18af837f7630Aff12aE2b826bD3c5D",
-    "veFeeEstimate": "0xB3AB945aa7553EbC8Ce234a53b03a1bbA23E8fAB"
   },
   "polygonedge": {
     "chainId": 81001,
