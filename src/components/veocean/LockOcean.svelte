@@ -39,6 +39,7 @@
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import moment from "moment";
   import * as descriptions from "../../utils/metadata/descriptions.json";
+  import StepsComponent from "../common/StepsComponent.svelte";
 
   let networksData = networksDataArray.default;
 
@@ -47,8 +48,16 @@
   let calculatedMultiplier = 0;
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
+  let tokenApproved = false;
 
   const MAXDAYS = 4 * 365;
+
+  let steps = [
+    { text: "Approve OCEAN" },
+    { text: "Lock" },
+    { text: "Receive veOCEAN" },
+  ];
+  let currentStep = 0;
 
   const getMaxDate = () => {
     let max = moment.utc().add(MAXDAYS, "days");
@@ -105,6 +114,7 @@
   const onFormSubmit = async (values) => {
     loading = true;
     const unlockTimestamp = moment.utc(values.unlockDate).unix();
+    currentStep = 2;
 
     try {
       if ($oceanUnlockDate) {
@@ -120,6 +130,7 @@
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
+      currentStep = 1;
       return;
     }
     Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
@@ -166,6 +177,21 @@
 
   $: if ($form) {
     updateLockButtonText = getUpdateLockButtonText();
+  }
+
+  $: if (tokenApproved !== undefined) {
+    if (tokenApproved === true) {
+      currentStep = 1;
+    } else {
+      currentStep = 0;
+    }
+    if ($oceanUnlockDate) {
+      steps[1].text = "Update";
+      steps[2].text = "Get more veOCEAN";
+    } else {
+      steps[1].text = "Lock";
+      steps[2].text = "Receive veOCEAN";
+    }
   }
 
   const updateMultiplier = () => {
@@ -253,7 +279,11 @@
           />
         </div>
       </div>
-      <div class="item">
+      <AgreementCheckbox
+        text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, wave all rights, and assume all risks."
+        bind:value={$form.ageement}
+      />
+      <div class="item buttonContainer">
         {#if $connectedChainId !== parseInt(process.env.VE_SUPPORTED_CHAINID)}
           <Button
             text={!$userAddress
@@ -270,6 +300,7 @@
             disabled={!$userAddress}
           />
         {:else}
+          <!-- Todo #398 - disable update lock button, if unlock date == same date inside Date Input -->
           <TokenApproval
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
@@ -282,6 +313,8 @@
               getOceanBalance($connectedChainId) <= 0 ||
               $form.amount > getOceanBalance($connectedChainId)}
             bind:agreed={$form.ageement}
+            bind:approved={tokenApproved}
+            bind:hasLock={$oceanUnlockDate}
           >
             {#if $oceanUnlockDate}
               <Button
@@ -291,8 +324,7 @@
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount > getOceanBalance($connectedChainId) ||
-                  ($form.amount <= 0 &&
-                    moment($form.unlockDate).isBefore($oceanUnlockDate))}
+                  moment($form.unlockDate).isBefore($oceanUnlockDate)}
                 type="submit"
               />
             {:else}<Button
@@ -308,11 +340,10 @@
             {/if}
           </TokenApproval>
         {/if}
+        <div class="stepsContainer">
+          <StepsComponent {steps} current={currentStep} />
+        </div>
       </div>
-      <AgreementCheckbox
-        text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, wave all rights, and assume all risks."
-        bind:value={$form.ageement}
-      />
     </form>
   </Card>
 </div>
@@ -351,6 +382,14 @@
 
   .item:last-child {
     margin-bottom: 0;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+  }
+
+  .stepsContainer {
+    margin-top: calc(var(--spacer) / 5);
   }
 
   @media (min-width: 640px) {

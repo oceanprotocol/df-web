@@ -61,7 +61,7 @@ h1:focus-visible {
 }
 
 .bx--tooltip {
-  background-color: var(--brand-white);
+  background-color: var(--brand-white) !important;
 }
 
 .bx--tooltip__label {
