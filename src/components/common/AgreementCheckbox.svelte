@@ -20,6 +20,7 @@
     color: var(--brand-alert-black);
     text-align: left;
     margin-left: calc(var(--spacer) / 10);
+    margin-bottom: calc(var(--spacer) / 5);
   }
   :global(.lockAgreementCheckbox) {
     width: fit-content !important;
