@@ -59,11 +59,8 @@
       spender,
       $networkSigner
     ).then((resp) => {
-      console.log("amount:", amount)
-      console.log("hasLock:", hasLock)
       // if user has lock and amount is at zero, let them update the lock
       if( hasLock && amount <= 0 ) {
-        console.log("user has lock, approve amount at zero")
         isAmountApproved = true;
         approved = true;
       } else {

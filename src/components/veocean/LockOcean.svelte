@@ -180,20 +180,6 @@
 
   $: if ($form) {
     updateLockButtonText = getUpdateLockButtonText();
-
-    console.log("$form.amount", $form.amount)
-    console.log("$form.unlockDate", $form.unlockDate)
-    console.log("$oceanUnlockDate", $oceanUnlockDate)
-    if($oceanUnlockDate) {
-      console.log("$oceanUnlockDate.utc", $oceanUnlockDate.utc())
-      console.log("$oceanUnlockDate.utc.format()", $oceanUnlockDate.utc().format("YYYY-MM-DD"))
-      console.log("isSame simple compare:", $oceanUnlockDate.utc().format("YYYY-MM-DD") === $form.unlockDate)
-      console.log("isBefore:", moment($form.unlockDate).isBefore($oceanUnlockDate.utc().format()))
-      console.log("isSame:", moment($form.unlockDate).isSame($oceanUnlockDate.utc().format()))
-      console.log("isSameOrBefore:", moment($form.unlockDate).isSameOrBefore($oceanUnlockDate.utc().format()))
-      console.log("isAfter:", moment($form.unlockDate).isAfter($oceanUnlockDate.utc().format()))
-      console.log("isSameOrAfter:", moment($form.unlockDate).isSameOrAfter($oceanUnlockDate.utc().format()))
-    }
   }
 
   $: if (tokenApproved !== undefined) {
@@ -317,6 +303,7 @@
             disabled={!$userAddress}
           />
         {:else}
+          <!-- Todo #398 - disable update lock button, if unlock date == same date inside Date Input -->
           <TokenApproval
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
