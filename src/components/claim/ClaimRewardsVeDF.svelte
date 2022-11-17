@@ -78,7 +78,7 @@
   <h3 class="title">Earn OCEAN Rewards</h3>
   <ClaimItem
     title="Passive"
-    description="Earn passive rewards from Data Farming by <strong>staking</strong> and maintaining a positive <strong>veOCEAN</strong> balance."
+    description="Earn passive rewards from Data Farming by <strong>locking OCEAN</strong> and maintaining a <strong>veOCEAN</strong> balance."
     distributedAmount={roundInfo.passive}
     showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
     redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
@@ -110,7 +110,7 @@
   />
   <ClaimItem
     title="Active"
-    description="Earn active rewards from Data Farming by <strong>allocating</strong> your <strong>veOCEAN</strong> to data assets with consume volume."
+    description="Earn active rewards from Data Farming by <strong>allocating veOCEAN</strong> to data assets with <strong>consume volume</strong>."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     rewardTooltip={descriptions.default.tooltip_active_rewards}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
