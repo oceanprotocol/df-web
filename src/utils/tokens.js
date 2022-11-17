@@ -35,16 +35,17 @@ export const balanceOf = async (balances, chainId, tokenAddress, account, provid
 export const isTokenAmountApproved = async (tokenAddress, amount,
   owner,
   spender,signer)=>{
-    if(!amount) return true
+    if(amount <= 0) {
+      return false;
+    }
     try {
     const allowedAmount = await allowance(tokenAddress, owner, spender, signer)
     const allowedAmountFormated = ethers.utils.formatEther(allowedAmount);
+
     return new Decimal(allowedAmountFormated).greaterThanOrEqualTo(amount)
   }catch (err) {
     console.error(err);
   }
-
-
 }
 
 // Getter/View
