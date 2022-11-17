@@ -59,7 +59,6 @@
     { text: "Lock" },
     { text: "Receive veOCEAN" },
   ];
-  console.log("init: currentStep = 0")
   let currentStep = 0;
 
   const getMaxDate = () => {
