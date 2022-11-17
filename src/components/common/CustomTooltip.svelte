@@ -11,11 +11,11 @@
 <div
   on:mouseleave={() => (open = false)}
   on:mouseenter={() => (open = true)}
-  class={`tooltipContiner ${warning ? "warning" : ""}`}
+  class={`${warning ? "warning" : ""}`}
 >
   <Tooltip {align} {direction} size={10} {open}>
     {#if text}
-      <div class="textContainer">
+      <div class="tooltipTextContainer">
         <p class="text">
           {@html text}
         </p>
