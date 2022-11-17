@@ -8,6 +8,7 @@
     "tooltip_datafarming_consume": "Total Data Consume Volume of a dataset for the current Data Farming round.",
     "tooltip_datafarming_available_allocation": "Percent of veOCEAN voting power available to be allocated.\n\nTo receive active rewards, you need to allocate your veOCEAN to datasets with consume volume.",
     "tooltip_datafarming_total_allocations": "Total veOCEAN amount allocated to a dataset across all users.",
+    "tooltip_apy": "Anual investment return of a dataset based on current consume volume, including compound interest.",
     "tooltip_datafarming_my_allocations": "This number represents the percentage of your veOCEAN allocated towards each dataset.\n\nYour veOCEAN goes down over time but your allocation remain consistent.",
     "tooltip_rewards_history_rounds": "Data Farming rewards distribution rounds. Rounds happen every week starting and ending each Thursday.",
     "tooltip_rewards_history_active_rewards": "Rewards distributed for active curation of datasets. Active rewards are emitted based on Data Consume Volume.\n\nPlease check the docs for more info.",

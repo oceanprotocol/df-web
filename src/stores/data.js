@@ -11,6 +11,7 @@ export const columnsData = [
   { key: "network", value: "Network" },
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
+  { key: "apy", value: "APY", display: (apy) => apy + '%', tooltip: descriptions.default.tooltip_apy },
   {
     key: "volume(7d)",
     value: "Volume(7d)",
@@ -23,7 +24,7 @@ export const columnsData = [
   { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocations },
 ]
 
-export const defaultColumns = ["Title", "Volume(7d)", "TotalAllocated" ,"MyAllocation"]
+export const defaultColumns = ["Title", "APY", "Volume(7d)", "TotalAllocated" ,"MyAllocation"]
 
 async function getDatasets(api) {
   let res;
@@ -56,6 +57,7 @@ function getRow(dataInfo, key) {
     title: dataInfo.name,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
+    apy: dataInfo.apy,
     nftaddress: dataInfo.nft_addr,
     did: dataInfo.did,
     chainId: dataInfo.chainID,
