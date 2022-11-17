@@ -110,7 +110,7 @@
   />
   <ClaimItem
     title="Active"
-    description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating data assets</strong>."
+    description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     rewardTooltip={descriptions.default.tooltip_active_rewards}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
