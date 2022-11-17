@@ -19,9 +19,9 @@ export const columnsData = [
   },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
-  { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_sampled_total_allocations},
-  { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_total_allocations},
-  { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocations },
+  { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
+  { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
+  { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocation },
 ]
 
 export const defaultColumns = ["Title", "RoundVolume", "CurrentAllocation", "MyAllocation"]
