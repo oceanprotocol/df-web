@@ -1,15 +1,18 @@
 <script>
   export let title = undefined;
   export let tag = undefined;
+  export let className = undefined;
 </script>
 
-<div class="container">
-  {#if tag}
-    <span>{tag}</span>
-  {/if}
-  {#if title}
-    <p class="title">{title}</p>
-  {/if}
+<div class={`container ${className ? className : ""}`}>
+  <div class="cardHeader">
+    {#if title}
+      <p class="title">{title}</p>
+    {/if}
+    {#if tag}
+      <span class="tag">{tag}</span>
+    {/if}
+  </div>
   <slot />
 </div>
 
@@ -25,10 +28,17 @@
     background-color: var(--background-content);
     box-shadow: var(--box-shadow);
   }
+  .cardHeader {
+    margin-bottom: calc(var(--spacer) / 2);
+  }
   .title {
     font-size: var(--font-size-normal);
     font-weight: bold;
-    margin-bottom: calc(var(--spacer) / 2);
+    margin-bottom: calc(var(--spacer) / 20);
+  }
+  .tag {
+    color: var(--brand-color-primary);
+    font-weight: bold;
   }
   @media (min-width: 660px) {
     .container {
