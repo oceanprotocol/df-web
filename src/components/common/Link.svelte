@@ -1,11 +1,19 @@
 <script>
   const ExternalIcon = "/images/external.svg";
-  export let text;
+  export let text = undefined;
   export let url;
+  export let className = undefined;
 </script>
 
-<a href={url} target="_blank" class="link">
-  <span class="text">{text}</span>
+<a
+  href={url}
+  target="_blank"
+  class={`link ${className ? className : undefined}`}
+>
+  {#if text}
+    <span>{text}</span>
+  {/if}
+  <slot />
   <img src={ExternalIcon} alt="external link" />
 </a>
 
@@ -18,11 +26,11 @@
     width: fit-content;
     height: fit-content;
   }
-  .text {
+  a {
     color: var(--brand-grey-light);
-    font-size: var(--font-size-normal);
+    font-size: var(--font-size-small);
   }
-  .text:hover {
+  a:hover {
     color: var(--brand-color-primary);
     cursor: pointer;
   }
