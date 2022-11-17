@@ -1,5 +1,6 @@
 <script>
   import { Tooltip } from "carbon-components-svelte";
+  import SvelteMarkdown from "svelte-markdown";
 
   export let text = undefined;
   export let direction = "top";
@@ -9,16 +10,14 @@
 
 <div on:mouseleave={() => (open = false)} on:mouseenter={() => (open = true)}>
   <Tooltip {align} {direction} size={10} {open}>
-    <div class="textContainer">
-      <p class="text">
-        {@html text}
-      </p>
+    <div class="tooltipTextContainer">
+      <SvelteMarkdown source={text} />
     </div>
   </Tooltip>
 </div>
 
 <style>
-  .textContainer {
+  .tooltipTextContainer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -26,9 +25,9 @@
     background-color: var(--brand-white);
     width: 160px;
   }
-  .text {
+  :global(.tooltipTextContainer > p) {
     color: black;
-    font-size: var(--font-size-mini);
+    font-size: var(--font-size-mini) !important;
     white-space: pre-wrap;
   }
 </style>
