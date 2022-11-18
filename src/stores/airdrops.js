@@ -10,6 +10,7 @@ import {getAddressByChainIdKey} from "../utils/address/address";
 export let contracts = writable({});
 export let airdrops = writable({});
 export let rewards = writable();
+export let APYs = writable();
 export let veEstimate = writable(0);
 export let veClaimables = writable(0);
 export let dfEstimate = writable(0);

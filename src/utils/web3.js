@@ -29,7 +29,7 @@ export const getFairGasPrice = async (chainId) => {
 export const getNetworkDataById = (data,networkId) => {
   if (!networkId) return
   const networkData = data.filter(
-      (chain) => chain.chainId === networkId
+      (chain) => chain.chainId === parseInt(networkId)
   )
   return networkData[0]
 }
@@ -43,9 +43,9 @@ export const getRpcUrlByChainId = async(chainId) => {
 
 export const getJsonRpcProvider = async (chainId) => {
   try {
-    const rpcURL = await getRpcUrlByChainId(chainId);
-    if (rpcURL) {
-      return new ethers.providers.InfuraProvider(rpcURL);
+    const rpc = await getRpcUrlByChainId(chainId);
+    if (rpc) {
+      return new ethers.providers.JsonRpcProvider(rpc);
     }
     return null;
   } catch(err) {

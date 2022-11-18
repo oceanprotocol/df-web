@@ -349,24 +349,6 @@ export default [
   {
     "stateMutability": "view",
     "type": "function",
-    "name": "totalSupply",
-    "inputs": [
-      {
-        "name": "t",
-        "type": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "gas": 905026
-  },
-  {
-    "stateMutability": "view",
-    "type": "function",
     "name": "totalSupplyAt",
     "inputs": [
       {

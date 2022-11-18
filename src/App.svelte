@@ -19,10 +19,11 @@
     dfClaimables,
     dfEstimate,
     rewards,
+    APYs,
     veClaimables,
     veEstimate,
   } from "./stores/airdrops";
-  import { getRewards } from "./utils/rewards";
+  import { getActiveAPY, getPassiveAPY, getRewards } from "./utils/rewards";
   import {
     updateUserBalanceOcean,
     updateUserBalanceVeOcean,
@@ -151,6 +152,14 @@
   }
 
   onMount(async () => {
+    let activeAPY = await getActiveAPY();
+    let passiveAPY = await getPassiveAPY();
+    APYs.update(() => {
+      return {
+        passive: passiveAPY,
+        active: activeAPY,
+      };
+    });
     if (!$userAddress) {
       isAppLoading.update(() => false);
     }
