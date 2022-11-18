@@ -5,6 +5,7 @@ import {ethers} from "ethers";
 import {networkSigner, web3Provider} from "../stores/web3";
 import {getAddressByChainIdKey} from "../utils/address/address";
 import moment from "moment";
+import { getJsonRpcProvider } from "./web3";
 
 const veAllocateABI = VeAllocateABI.default
 const veOceanABI = VeOceanABI.default
@@ -153,8 +154,9 @@ export const getMaxUserEpoch = async(address, provider) => {
 }
 
 export const getTotalVeSupply = async() => {
+  let provider = await getJsonRpcProvider(process.env.VE_SUPPORTED_CHAINID)
   try {
-      const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, get(web3Provider));
+      const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
       const totalSupply = await contract.totalSupply()
       const totalSupplyEth = parseFloat(ethers.utils.formatEther(totalSupply))
       return totalSupplyEth;

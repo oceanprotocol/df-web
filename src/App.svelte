@@ -65,14 +65,6 @@
   }
 
   async function initRewards() {
-    let activeAPY = await getActiveAPY();
-    let passiveAPY = await getPassiveAPY();
-    APYs.update(() => {
-      return {
-        passive: passiveAPY,
-        active: activeAPY,
-      };
-    });
     let unlockDateMilliseconds = await getLockedEndTime(
       $userAddress,
       $networkSigner
@@ -160,6 +152,14 @@
   }
 
   onMount(async () => {
+    let activeAPY = await getActiveAPY();
+    let passiveAPY = await getPassiveAPY();
+    APYs.update(() => {
+      return {
+        passive: passiveAPY,
+        active: activeAPY,
+      };
+    });
     if (!$userAddress) {
       isAppLoading.update(() => false);
     }
