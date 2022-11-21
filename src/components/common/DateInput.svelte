@@ -44,7 +44,7 @@
   <input
     class={`input ${
       (value === min && moment.utc().format("YYYY-MM-DD") === min) ||
-      (value < min && moment.utc().format("YYYY-MM-DD") < min)
+      (value <= min && moment.utc().format("YYYY-MM-DD") <= min)
         ? "inputError"
         : ""
     }`}

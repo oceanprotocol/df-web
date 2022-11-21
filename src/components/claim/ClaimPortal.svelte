@@ -1,14 +1,11 @@
 <script>
-  import MainMessage from "../common/MainMessage.svelte";
   import ClaimRewards from "./ClaimRewardsVeDF.svelte";
   import {
     userAddress,
     connectedChainId,
-    selectedNetworks,
     web3Provider,
   } from "../../stores/web3.js";
   import {
-    airdrops,
     veClaimables,
     dfClaimables,
     getDFRewards,
@@ -65,12 +62,12 @@
     if (dfRewards <= 0) {
       canClaimDF = false;
     }
-    
+
     // console.log("canClaimVE", canClaimVE)
     // console.log("canClaimDF", canClaimDF)
     // console.log("veClaimables", $veClaimables)
     // console.log("dfClaimables", $dfClaimables)
-    
+
     loading = false;
   }
 

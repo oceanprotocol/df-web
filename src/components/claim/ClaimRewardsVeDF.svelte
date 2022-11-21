@@ -10,6 +10,7 @@
     dfClaimables,
     claimDFReward,
     getDFRewards,
+    APYs,
   } from "../../stores/airdrops";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
@@ -75,11 +76,18 @@
 </script>
 
 <div class={`container`}>
-  <h3 class="title">Get your share of OCEAN rewards</h3>
+  <h3 class="title">Earn OCEAN Rewards</h3>
   <ClaimItem
     title="Passive"
-    description="Earn passive rewards from Data Farming OCEAN by holding a positive <strong>veOCEAN</strong> balance."
+    description="Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>."
     distributedAmount={roundInfo.passive}
+    apy={`APY up to ${
+      $APYs
+        ? $APYs?.passive > 10000
+          ? "over 10000"
+          : $APYs?.passive.toFixed(3)
+        : 0
+    }%`}
     showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
     redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
@@ -110,7 +118,14 @@
   />
   <ClaimItem
     title="Active"
-    description="Earn active rewards from Data Farming by <strong>allocating</strong> your veOCEAN to datasets with consume volume and holding a positive <strong>veOCEAN</strong> balance."
+    apy={`APY up to ${
+      $APYs
+        ? $APYs?.active > 10000
+          ? "over 10000"
+          : $APYs?.active.toFixed(3)
+        : 0
+    }%`}
+    description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     rewardTooltip={descriptions.default.tooltip_active_rewards}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}

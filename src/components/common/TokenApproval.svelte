@@ -10,12 +10,14 @@
   export let disabled = false;
   export let loading = false;
   export let fullWidth = true;
-  export let amount;
+  export let amount = 0;
   export let infiniteAmount = false;
   export let tokenName;
   export let tokenAddress;
   export let spender;
   export let approving = false;
+  export let approved = false;
+  export let hasLock = false;
 
   export let agreed = false;
 
@@ -42,6 +44,7 @@
     Swal.fire("Success!", "Tokens succesfully approved.", "success").then(
       async () => {
         isAmountApproved = true;
+        approved = true;
         loading = false;
         approving = false;
       }
@@ -56,7 +59,14 @@
       spender,
       $networkSigner
     ).then((resp) => {
-      isAmountApproved = resp;
+      // if user has lock and amount is at zero, let them update the lock
+      if( hasLock && amount <= 0 ) {
+        isAmountApproved = true;
+        approved = true;
+      } else {
+        isAmountApproved = resp;
+        approved = resp;
+      }
       loading = false;
     });
 </script>

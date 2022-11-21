@@ -2,8 +2,10 @@ import * as VeAllocateABI from "./abis/veAllocateABI";
 import * as VeOceanABI from "./abis/veOceanABI";
 import {get} from "svelte/store"
 import {ethers} from "ethers";
-import {networkSigner} from "../stores/web3";
+import {networkSigner, web3Provider} from "../stores/web3";
 import {getAddressByChainIdKey} from "../utils/address/address";
+import moment from "moment";
+import { getJsonRpcProvider } from "./web3";
 
 const veAllocateABI = VeAllocateABI.default
 const veOceanABI = VeOceanABI.default
@@ -146,6 +148,18 @@ export const getMaxUserEpoch = async(address, provider) => {
       const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
       const maxUserEpoch = await contract.user_point_epoch(address)
       return parseInt(BigInt(maxUserEpoch));
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getTotalVeSupply = async() => {
+  let provider = await getJsonRpcProvider(process.env.VE_SUPPORTED_CHAINID)
+  try {
+      const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
+      const totalSupply = await contract.totalSupply()
+      const totalSupplyEth = parseFloat(ethers.utils.formatEther(totalSupply))
+      return totalSupplyEth;
   } catch (error) {
     throw error;
   }

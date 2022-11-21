@@ -14,12 +14,12 @@
   import { isAppLoading } from "../../stores/app";
   import { query } from "svelte-apollo";
   import { GET_ALLOCATIONS } from "../../utils/dataAllocations";
-  import { onMount } from "svelte";
-  import MainMessage from "../common/MainMessage.svelte";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { userBalances } from "../../stores/tokens";
+  import { oceanUnlockDate } from "../../stores/veOcean";
 
   let allocations;
+  let message = undefined;
 
   const loadTotalAllocation = async () => {
     let newAllocation = await getTotalAllocatedVeOcean(
@@ -36,6 +36,24 @@
         : []
     );
   };
+
+  const getMessage = () => {
+    if (!$oceanUnlockDate) {
+      message =
+        "You don't have allocation. Go to **veOCEAN** and lock your OCEAN tokens to receive allocation.";
+    } else if ($totalUserAllocation === 0) {
+      message =
+        "You have not used your allocation. Set your allocation at **MyAllocations** column to receive active rewards.";
+    } else {
+      message = "";
+    }
+  };
+
+  $: (!$oceanUnlockDate ||
+    $oceanUnlockDate ||
+    $totalUserAllocation > 0 ||
+    $totalUserAllocation < 1) &&
+    getMessage();
 
   $: if ($allocations?.data) {
     loadValues();
@@ -75,9 +93,7 @@
 >
   {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
     <div class="wrapper">
-      <MainMessage
-        message={`**Allocate your veOCEAN across datasets with consume volume to earn Data Farming Rewards.**`}
-      />
+      <h3 class="title">Curate Data to Earn OCEAN</h3>
       <div class="data">
         <Table
           colData={columnsData}
@@ -104,6 +120,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+  }
+  
+  .title {
+    font-weight: bold;
+    width: 100%;
+    font-size: var(--font-size-medium);
   }
 
   .data {

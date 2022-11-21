@@ -16,10 +16,11 @@
   export let metrics;
   export let rewardTooltip;
   export let disableRedirect = false;
+  export let apy = undefined;
 </script>
 
-<div class={`container`}>
-  <Card title={`${distributedAmount} OCEAN - ${title} REWARDS`}>
+<div class={`container`}>  
+  <Card title={`${title} Rewards - ${distributedAmount} OCEAN`} tag={apy}>
     <p class="description">{@html description}</p>
     <div class="metrics">
       {#each metrics as metric}

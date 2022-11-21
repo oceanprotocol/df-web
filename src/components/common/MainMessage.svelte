@@ -3,13 +3,14 @@
 
   export let title = undefined;
   export let message = undefined;
+  export let warning = undefined;
 </script>
 
 <div class="container">
-  <span>
+  <h3>
     <SvelteMarkdown source={title} />
-  </span>
-  <p>
+  </h3>
+  <p class={warning ? "warning" : ""}>
     <SvelteMarkdown source={message} />
   </p>
 </div>
@@ -22,11 +23,14 @@
     margin-bottom: calc(var(--spacer) / 4);
     color: var(--brand-black);
   }
-  span {
+  h3 {
     font-weight: bold;
   }
   p {
     margin: 0;
     font-size: var(--font-size-small);
+  }
+  .warning {
+    color: var(--brand-alert-yellow);
   }
 </style>

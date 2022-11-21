@@ -43,15 +43,12 @@
   export let notHidableColumns = [];
   let showDataWithAllocations = false;
   let datasetsWithAllocations = undefined;
-  let disabled =
-    $userBalances[
-      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
-    ] === undefined ||
-    !$userAddress ||
-    !$oceanUnlockDate;
+  let disabled = undefined;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   let totalAvailableTemporary = undefined;
   let loading = undefined;
+  let tooltipMessage = undefined;
+  let tooltipState = undefined;
 
   let columns = {};
   let pagination = { pageSize: 100, page: 1 };
@@ -214,6 +211,23 @@
       !$userAddress ||
       $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
       !$oceanUnlockDate;
+
+    updateTooltip();
+  }
+
+  function updateTooltip() {
+    if( disabled ) { 
+      tooltipMessage = descriptions.default.tooltip_datafarming_alloc_amt_no_lock;
+      tooltipState = "alert";
+    } else {
+      if( $totalUserAllocation < 1 ) {
+        tooltipMessage = descriptions.default.tooltip_datafarming_alloc_amt_has_lock;
+        tooltipState = "warning";
+      } else {
+        tooltipMessage = descriptions.default.tooltip_datafarming_alloc_amt_has_lock;
+        tooltipState = undefined;
+      }
+    }
   }
 
   $: if ($userAddress && $connectedChainId) {
@@ -225,6 +239,10 @@
       $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
       !$oceanUnlockDate;
   }
+
+  // init the page state
+  updateDisable();
+
 </script>
 
 {#if colData && rowData}
@@ -232,14 +250,19 @@
     <div class="tableCustomHeader">
       <div class="headerValuesContainer">
         <ItemWithLabel
-          title="Available allocation"
-          value={totalAvailable >= 0
-            ? totalAvailableTemporary !== totalAvailable
-              ? `${totalAvailableTemporary}%`
-              : `${totalAvailable}%`
+          title="Allocated amount"
+          value={!$oceanUnlockDate
+            ? "No available allocation"
+            : totalAvailable >= 0
+            ? `${
+                100 -
+                (totalAvailableTemporary !== totalAvailable
+                  ? totalAvailableTemporary
+                  : totalAvailable)
+              }/100%`
             : "loading..."}
-          tootipMessage={descriptions.default
-            .tooltip_datafarming_available_allocation}
+          tootipMessage={tooltipMessage}
+          tooltipState={tooltipState}
         />
         <Button
           text={"Update allocations"}

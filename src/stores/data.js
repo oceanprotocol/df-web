@@ -14,18 +14,19 @@ export const columnsData = [
   { key: "apy", value: "APY", display: (apy) => parseFloat(apy).toFixed(3) + '%', tooltip: descriptions.default.tooltip_apy },
   { key: "apr", value: "APR", display: (apr) => parseFloat(apr).toFixed(3) + '%', tooltip: descriptions.default.tooltip_apr },
   {
-    key: "volume(7d)",
-    value: "Volume(7d)",
+    key: "roundvolume",
+    value: "RoundVolume",
     display: (volume) => '$' + volume,
     tooltip: descriptions.default.tooltip_datafarming_consume
   },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
-  { key: "totalallocated", value:"TotalAllocated", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_total_allocations},
-  { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocations },
+  { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
+  { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
+  { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocation },
 ]
 
-export const defaultColumns = ["Title", "APY", "Volume(7d)", "TotalAllocated" ,"MyAllocation"]
+export const defaultColumns = ["Title", "APY", "RoundVolume", "CurrentAllocation", "MyAllocation"]
 
 async function getDatasets(api) {
   let res;
@@ -63,10 +64,11 @@ function getRow(dataInfo, key) {
     nftaddress: dataInfo.nft_addr,
     did: dataInfo.did,
     chainId: dataInfo.chainID,
-    totalallocated: parseFloat(dataInfo.ve_allocated).toFixed(3),
+    currentallocation: parseFloat(dataInfo.ve_allocated_realtime).toFixed(3),
+    roundallocation: parseFloat(dataInfo.ve_allocated).toFixed(3),
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
-    'volume(7d)': parseFloat(dataInfo.volume).toFixed(3),
+    roundvolume: parseFloat(dataInfo.volume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }

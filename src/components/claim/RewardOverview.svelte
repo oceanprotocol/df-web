@@ -1,23 +1,29 @@
 <script>
+  import { APYs } from "../../stores/airdrops";
   import Card from "../common/Card.svelte";
   import Countdown from "../common/CountDown.svelte";
 
   export let roundInfo = undefined;
 </script>
 
-<Card>
-  <h1 class="title">
-    {`Round ${roundInfo.id}  -  ${
-      parseInt(roundInfo.passive) + parseInt(roundInfo.active)
-    } OCEAN rewards distributed in`}
-  </h1>
+<Card
+  title={`Round ${roundInfo.id}  -  ${
+    parseInt(roundInfo.passive) + parseInt(roundInfo.active)
+  } OCEAN rewards distributed in`}
+  tag={`APY up to ${
+    $APYs
+      ? $APYs?.passive + $APYs?.active > 10000
+        ? "over 10000"
+        : parseFloat($APYs?.passive + $APYs?.active).toFixed(3)
+      : 0
+  }%`}
+  className="rewardsOverview"
+>
   <Countdown />
 </Card>
 
 <style>
-  .title {
-    font-size: var(--font-size-large);
-    font-weight: bold;
-    margin-bottom: calc(var(--spacer) / 2);
+  :global(.rewardsOverview .title) {
+    font-size: var(--font-size-large) !important;
   }
 </style>
