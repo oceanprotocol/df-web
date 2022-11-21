@@ -7,7 +7,6 @@
     "tooltip_veocean_receive": "The amount of veOCEAN you'll receive based on the lock end date, and OCEAN deposited.",
     "tooltip_datafarming_consume": "Total Data Consume Volume of a dataset for the current Data Farming round.",
     "tooltip_apy": "Anual investment return of a dataset based on current consume volume, including compound interest.",
-    "tooltip_apr": "Anual investment return of a dataset based on current consume volume.",
     "tooltip_datafarming_alloc_amt_no_lock": "To access Data Farming and earn Active Rewards, you need veOCEAN.\n\nPlease visit the veOCEAN page and lock OCEAN tokens.",
     "tooltip_datafarming_alloc_amt_has_lock": "veOCEAN percent you have currently allocated.\n\nAllocate veOCEAN to curate good datasets with consume volume and earn Active Rewards.",
     "tooltip_datafarming_current_allocation": "veOCEAN amount currently allocated to a dataset across all users.",

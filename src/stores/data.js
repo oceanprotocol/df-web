@@ -12,7 +12,6 @@ export const columnsData = [
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
   { key: "apy", value: "APY", display: (apy) => parseFloat(apy).toFixed(3) + '%', tooltip: descriptions.default.tooltip_apy },
-  { key: "apr", value: "APR", display: (apr) => parseFloat(apr).toFixed(3) + '%', tooltip: descriptions.default.tooltip_apr },
   {
     key: "roundvolume",
     value: "RoundVolume",
@@ -60,7 +59,6 @@ function getRow(dataInfo, key) {
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
     apy: dataInfo.apy,
-    apr: dataInfo.apr,
     nftaddress: dataInfo.nft_addr,
     did: dataInfo.did,
     chainId: dataInfo.chainID,
