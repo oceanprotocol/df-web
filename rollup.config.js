@@ -12,9 +12,6 @@ import replace from '@rollup/plugin-replace';
 import html from "@rollup/plugin-html";
 
 const configToReplace = {};
-for (const [key, v] of Object.entries(config().parsed)) {
-  configToReplace[`process.env.${key}`] = `'${v}'`;
-}
 
 const production = process.env.NODE_ENV==='production';
 const randomHash = () => Math.random().toString(36).substr(2, 5);
