@@ -37,13 +37,9 @@ function serve() {
 	};
 }
 
-const output = !production ? {
+const output = {
 	file: 'public/build/bundle.js'
-} : {
-		dir: 'public/build',
-		entryFileNames: 'bundle.[hash].js',
-		assetFileNames: '[name].[hash].[ext]'
-	};
+}
 
 export default {
 	input: 'src/main.js',
