@@ -16,7 +16,7 @@
     "croner": "^4.3.1",
     "decimal.js": "^10.3.1",
     "dotenv": "^8.6.0",
-    "rollup": "^2.68.4",
+    "rollup": "^3.4.0",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^7.0.0",
