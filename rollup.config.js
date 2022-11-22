@@ -22,16 +22,16 @@ const randomHash = () => Math.random().toString(36).substr(2, 5);
 const htmlOptions = {
   template: async ({ attributes, files, meta, publicPath, title }) => {
     const script = (files.js || [])
-      .map(({ fileName }) => {
+      ?.map(({ fileName }) => {
         return `<script defer src='/build/${fileName}'></script>`;
       })
-      .join("\n");
+      ?.join("\n");
 
     const css = (files.css || [])
-      .map(({ fileName }) => {
+      ?.map(({ fileName }) => {
         return `<link rel='stylesheet' href='/build/${fileName}'>`;
       })
-      .join("\n");
+      ?.join("\n");
     return`<!DOCTYPE html>
 			<html lang="en">
 				<head>
