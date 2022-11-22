@@ -19,38 +19,6 @@ for (const [key, v] of Object.entries(config().parsed)) {
 const production = process.env.NODE_ENV==='production';
 const randomHash = () => Math.random().toString(36).substr(2, 5);
 
-const htmlOptions = {
-  template: async ({ attributes, files, meta, publicPath, title }) => {
-    const script = (files.js || [])
-      ?.map(({ fileName }) => {
-        return `<script defer src='/build/${fileName}'></script>`;
-      })
-      ?.join("\n");
-
-    const css = (files.css || [])
-      ?.map(({ fileName }) => {
-        return `<link rel='stylesheet' href='/build/${fileName}'>`;
-      })
-      ?.join("\n");
-    return`<!DOCTYPE html>
-			<html lang="en">
-				<head>
-					<meta charset='utf-8'>
-					<meta name='viewport' content='width=device-width,initial-scale=1'>
-					<meta http-equiv="Cache-control" content="no-cache, no-store, must-revalidate">
-					<meta http-equiv="Pragma" content="no-cache">
-					<link rel='icon' type='image/png' href='/logo-ocean-svg.svg'>
-					<link rel='stylesheet' href='/global.css'>
-					${css ? css : "<link rel='stylesheet' href='/build/bundle.css'>"}
-					<script type="text/javascript" src="https://unpkg.com/@walletconnect/web3-provider"></script>
-					${script}
-				</head>
-				<body>
-				</body>
-			</html>` ;
-  },
-};
-
 function serve() {
 	let server;
 
@@ -105,9 +73,8 @@ export default {
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
 		css({ 
-			output: production ? `bundle.${randomHash()}.css` : 'bundle.css'
+			output:'bundle.css'
 		}),
-		html(htmlOptions),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
