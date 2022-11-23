@@ -13,11 +13,8 @@ import html from "@rollup/plugin-html";
 
 const configToReplace = {};
 const envConfig = config()
-console.log(envConfig)
-if(envConfig?.parsed){
-for (const[key,v] of Object?.entries(envConfig.parsed)){
+for (const[key,v] of Object?.entries(envConfig?.parsed ? envConfig.parsed : process.env)){
 	configToReplace[`process.env.${key}`] = `'${v}'`;
-}
 }
 
 const production = process.env.NODE_ENV==='production';
@@ -44,6 +41,10 @@ function serve() {
 	};
 }
 
+function createEnvVariablesConfig(){
+	
+}
+
 const output = {
 	file: 'public/build/bundle.js'
 }
@@ -60,8 +61,7 @@ export default {
 		replace({
 			include: ["src/**/*.ts", "src/**/*.svelte", "src/**/*.js"],
 			preventAssignment: true,
-			values: 
-				envConfig?.parsed ? {...configToReplace} : {...process.env}
+			values: {...configToReplace}
 			}
 		),
 		svelte({
