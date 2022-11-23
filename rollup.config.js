@@ -12,7 +12,9 @@ import replace from '@rollup/plugin-replace';
 import html from "@rollup/plugin-html";
 
 const configToReplace = {};
-for (const[key,v] of Object?.entries(config()?.parsed)){
+const envConfig = config()
+console.log(envConfig)
+for (const[key,v] of Object?.entries(envConfig.parsed)){
 	configToReplace[`process.env.${key}`] = `'${v}'`;
 }
 
