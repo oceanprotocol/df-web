@@ -14,8 +14,10 @@ import html from "@rollup/plugin-html";
 const configToReplace = {};
 const envConfig = config()
 console.log(envConfig)
+if(envConfig?.parsed){
 for (const[key,v] of Object?.entries(envConfig.parsed)){
 	configToReplace[`process.env.${key}`] = `'${v}'`;
+}
 }
 
 const production = process.env.NODE_ENV==='production';
@@ -58,10 +60,10 @@ export default {
 		replace({
 			include: ["src/**/*.ts", "src/**/*.svelte", "src/**/*.js"],
 			preventAssignment: true,
-			values: {
-				...configToReplace
+			values: 
+				envConfig?.parsed ? {...configToReplace} : {...process.env}
 			}
-		}),
+		),
 		svelte({
 			compilerOptions: {
 				// enable run-time checks when not in production
