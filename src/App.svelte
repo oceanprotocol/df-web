@@ -4,6 +4,7 @@
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
   import DataPortal from "./components/data/DataPortal.svelte";
+  import { setupAppConfig } from "./app.config";
   import {
     isWalletConnectModalOpen,
     userAddress,
@@ -44,6 +45,8 @@
   import moment from "moment";
   import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
   import { totalUserAllocation } from "./stores/dataAllocations";
+
+  setupAppConfig();
 
   const client = new ApolloClient({
     uri: process.env.SUBGRAPH_API,
