@@ -16,7 +16,6 @@ export const getNetworkByChainId = async (chainId) => {
 };
 
 export const setupAppConfig = () => {
-    console.log(process.env?.NODE_ENV, process.env?.NODE_ENV === 'production')
     if(process.env?.NODE_ENV === 'production'){
         process.env.SUPPORTED_CHAIN_IDS = "[1]"
         process.env.BACKEND_API = "https://df-sql.oceandao.org"
