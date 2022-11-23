@@ -29,7 +29,7 @@ Production = https://v4.subgraph.mainnet.oceanprotocol.com/subgraphs/name/oceanp
 
 
 ```js
-// Enable when you want to debug rollup?
+// Enable when you want to debug rollup
 // ROLLUP_WATCH = true
 // Enable when you want to build using docker
 // NODE_ENV = production
