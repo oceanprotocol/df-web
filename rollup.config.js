@@ -74,9 +74,13 @@ const htmlOptions = {
   };
 
 
-const output = {
+const output = !production ? {
 	file: 'public/build/bundle.js'
-}
+} : {
+		dir: 'public/build',
+		entryFileNames: 'bundle.[hash].js',
+		assetFileNames: '[name].[hash].[ext]'
+	};
 
 export default {
 	input: 'src/main.js',
