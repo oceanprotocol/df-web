@@ -216,15 +216,18 @@
   }
 
   function updateTooltip() {
-    if( disabled ) { 
-      tooltipMessage = descriptions.default.tooltip_datafarming_alloc_amt_no_lock;
+    if (disabled) {
+      tooltipMessage =
+        descriptions.default.tooltip_datafarming_alloc_amt_no_lock;
       tooltipState = "alert";
     } else {
-      if( $totalUserAllocation < 1 ) {
-        tooltipMessage = descriptions.default.tooltip_datafarming_alloc_amt_has_lock;
+      if ($totalUserAllocation < 1) {
+        tooltipMessage =
+          descriptions.default.tooltip_datafarming_alloc_amt_has_lock;
         tooltipState = "warning";
       } else {
-        tooltipMessage = descriptions.default.tooltip_datafarming_alloc_amt_has_lock;
+        tooltipMessage =
+          descriptions.default.tooltip_datafarming_alloc_amt_has_lock;
         tooltipState = undefined;
       }
     }
@@ -242,7 +245,6 @@
 
   // init the page state
   updateDisable();
-
 </script>
 
 {#if colData && rowData}
@@ -262,7 +264,7 @@
               }/100%`
             : "loading..."}
           tootipMessage={tooltipMessage}
-          tooltipState={tooltipState}
+          {tooltipState}
         />
         <Button
           text={"Update allocations"}
@@ -334,9 +336,7 @@
                 onTotalAvailableAllocationChange(id, value, step)}
               onBlur={updateTotalAllocation}
               onFocus={subtractCurrAllocationsFromTotal}
-              max={100 - totalAvailable}
               dataId={row.id}
-              {disabled}
               showAvailable={false}
             />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}

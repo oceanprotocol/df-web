@@ -81,13 +81,13 @@
     title="Passive"
     description="Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>."
     distributedAmount={roundInfo.passive}
-    apy={`APY up to ${
+    apy={`${
       $APYs
         ? $APYs?.passive > 10000
           ? "over 10000"
           : $APYs?.passive.toFixed(3)
         : 0
-    }%`}
+    }% APY`}
     showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
     redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
     amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
@@ -118,13 +118,13 @@
   />
   <ClaimItem
     title="Active"
-    apy={`APY up to ${
+    apy={`${
       $APYs
         ? $APYs?.active > 10000
-          ? "over 10000"
-          : $APYs?.active.toFixed(3)
+          ? "over ~10000"
+          : `~${$APYs?.active.toFixed(3)}`
         : 0
-    }%`}
+    }% APY`}
     description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     rewardTooltip={descriptions.default.tooltip_active_rewards}

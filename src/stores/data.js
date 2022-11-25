@@ -11,11 +11,12 @@ export const columnsData = [
   { key: "network", value: "Network" },
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
+  { key: "apy", value: "RoundAPY", display: (apy) => parseFloat(apy).toFixed(3) + '%', tooltip: descriptions.default.tooltip_datafarming_round_apy },
   {
     key: "roundvolume",
     value: "RoundVolume",
     display: (volume) => '$' + volume,
-    tooltip: descriptions.default.tooltip_datafarming_consume
+    tooltip: descriptions.default.tooltip_datafarming_round_consume
   },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
@@ -24,8 +25,7 @@ export const columnsData = [
   { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocation },
 ]
 
-export const defaultColumns = ["Title", "RoundVolume", "CurrentAllocation", "MyAllocation"]
-
+export const defaultColumns = ["Title", "RoundAPY", "RoundVolume", "CurrentAllocation", "MyAllocation"]
 
 async function getDatasets(api) {
   let res;
@@ -58,6 +58,7 @@ function getRow(dataInfo, key) {
     title: dataInfo.name,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
+    apy: dataInfo.apy,
     nftaddress: dataInfo.nft_addr,
     did: dataInfo.did,
     chainId: dataInfo.chainID,

@@ -1,5 +1,6 @@
 import { getTotalVeSupply } from "./ve";
 import { getEpoch } from "./epochs";
+import {get} from "svelte/store"
 
 export const getRewards = async(userAddress) => {
   let res;
@@ -44,10 +45,10 @@ export const getPassiveAPY = async () => {
   return apy_passiv 
 }
 
-export const getActiveAPY = async () => {
+export const getActiveAPY = async (userAddress) => {
   let res;
   try {
-    res = await fetch(`${process.env.BACKEND_API}/apy/active`, {
+    res = await fetch(`${process.env.BACKEND_API}/apy/${userAddress ? `addr/${userAddress}` : 'active'}`, {
       method: "GET",
       headers: {
         'Accept': 'application/json',
@@ -59,5 +60,5 @@ export const getActiveAPY = async () => {
     return 0;
   }
   let data = await res.json();
-  return data.apy;
+  return data.apy ? data.apy : 0;
 }
