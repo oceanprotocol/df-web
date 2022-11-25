@@ -1,14 +1,14 @@
-import { getTotalVeSupply } from "./ve";
-import { getEpoch } from "./epochs";
+import { getTotalVeSupply } from "./ve.js";
+import { getEpoch } from "./epochs.js";
 
-const convertAPYtoWPR = (apy) => { 
+export const convertAPYtoWPR = (apy) => { 
   const weeks = 52
   let apy_passiv = ((Math.pow((apy / 100) + 1, 1.0/weeks) - 1) * weeks)
   let wpr = apy_passiv / weeks
   return(wpr)
 }
 
-const convertWPRtoAPY = (wpr) =>{
+export const convertWPRtoAPY = (wpr) =>{
   const weeks = 52
   const apr_passiv = wpr * weeks
   const apy_passiv = (((1 + apr_passiv/weeks) ** weeks) - 1) * 100

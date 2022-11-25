@@ -8,7 +8,7 @@ export let poolContracts = writable("");
 export let web3Provider = writable("");
 export let networkSigner = writable("");
 export let connectedChainId = writable("");
-export let selectedNetworks = writable(localStorage.getItem("selectedNetworks") ? JSON.parse(localStorage.getItem("selectedNetworks")): []);
+export let selectedNetworks = writable(localStorage?.getItem("selectedNetworks") ? JSON.parse(localStorage?.getItem("selectedNetworks")): []);
 export let jsonRPCProvider = writable({});
 export let isWalletConnectModalOpen = writable(false)
 
@@ -71,7 +71,7 @@ export const setValuesAfterConnection = async (instance) => {
 
 export const connectWalletFromLocalStorage = async () => {
   const localStorageProvider = JSON.parse(
-      localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")
+      localStorage?.getItem("WEB3_CONNECT_CACHED_PROVIDER")
   );
   if (!localStorageProvider) return;
   const instance = await web3Modal?.connectTo(localStorageProvider);
@@ -168,8 +168,8 @@ export const disconnect = async () => {
   await web3Modal?.clearCachedProvider();
   userAddress.set(undefined);
   networkSigner.set(undefined);
-  localStorage.removeItem("walletconnect");
-  localStorage.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
+  localStorage?.removeItem("walletconnect");
+  localStorage?.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
   window.location.href = "/";
 };
 

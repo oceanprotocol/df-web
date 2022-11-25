@@ -1,3 +1,5 @@
+import {convertWPRtoAPY, convertAPYtoWPR} from "../../utils/rewards.js"
+
 const getPassiveAPY = (veSupply, epoch) => {
     const wpr_passive = epoch.passive / veSupply
     const weeks = 52
@@ -25,3 +27,9 @@ veSupply = 50000;
 epoch.passive = 100;
 apy_passiv = getPassiveAPY(veSupply, epoch);
 if( apy_passiv.toFixed(2) != 10.95 ) throw true;
+
+//Test WPRtoAPY and APYtoWPR conversions
+let wpr = 0.0015065927431079373
+let calculated_apy = convertWPRtoAPY(wpr)
+let calculated_wpr = convertAPYtoWPR(calculated_apy)
+if(parseFloat(calculated_apy).toFixed(5) != parseFloat(calculated_wpr).toFixed(5)) throw true

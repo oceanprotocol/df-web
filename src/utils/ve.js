@@ -1,11 +1,11 @@
-import * as VeAllocateABI from "./abis/veAllocateABI";
-import * as VeOceanABI from "./abis/veOceanABI";
+import * as VeAllocateABI from "./abis/veAllocateABI.js";
+import * as VeOceanABI from "./abis/veOceanABI.js";
 import {get} from "svelte/store"
 import {ethers} from "ethers";
-import {networkSigner, web3Provider} from "../stores/web3";
-import {getAddressByChainIdKey} from "../utils/address/address";
+import {networkSigner, web3Provider} from "../stores/web3.js";
+import {getAddressByChainIdKey} from "../utils/address/address.js";
 import moment from "moment";
-import { getJsonRpcProvider } from "./web3";
+import { getJsonRpcProvider } from "./web3.js";
 
 const veAllocateABI = VeAllocateABI.default
 const veOceanABI = VeOceanABI.default
