@@ -4,6 +4,7 @@
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
   import DataPortal from "./components/data/DataPortal.svelte";
+  import { setupAppConfig } from "./app.config";
   import {
     isWalletConnectModalOpen,
     userAddress,
@@ -44,6 +45,19 @@
   import moment from "moment";
   import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
   import { totalUserAllocation } from "./stores/dataAllocations";
+
+  setupAppConfig();
+
+  async function loadAPYs() {
+    let activeAPY = await getActiveAPY($userAddress);
+    let passiveAPY = $APYs?.passive ? $APYs?.passive : await getPassiveAPY();
+    APYs.update(() => {
+      return {
+        passive: passiveAPY,
+        active: activeAPY,
+      };
+    });
+  }
 
   const client = new ApolloClient({
     uri: process.env.SUBGRAPH_API,
@@ -107,6 +121,7 @@
 
   $: if (!$userAddress) {
     setBalancesTo0();
+    loadAPYs();
   }
 
   function setBalancesTo0() {
@@ -125,6 +140,7 @@
   }
 
   $: if ($userAddress && $web3Provider && $connectedChainId) {
+    loadAPYs();
     if ($connectedChainId != process.env.VE_SUPPORTED_CHAINID) {
       veOceanWithDelegations.update(() => 0);
       setBalancesTo0();
@@ -152,14 +168,6 @@
   }
 
   onMount(async () => {
-    let activeAPY = await getActiveAPY();
-    let passiveAPY = await getPassiveAPY();
-    APYs.update(() => {
-      return {
-        passive: passiveAPY,
-        active: activeAPY,
-      };
-    });
     if (!$userAddress) {
       isAppLoading.update(() => false);
     }

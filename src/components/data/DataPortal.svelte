@@ -99,7 +99,6 @@
           colData={columnsData}
           notHidableColumns={["Allocate"]}
           rowData={$datasets}
-          description="Explore elligible datasets and allocate your veOCEAN to earn Active Rewards."
         />
       </div>
     </div>
@@ -121,7 +120,7 @@
     align-items: center;
     justify-content: flex-start;
   }
-  
+
   .title {
     font-weight: bold;
     width: 100%;

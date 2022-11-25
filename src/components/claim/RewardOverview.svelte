@@ -10,13 +10,13 @@
   title={`Round ${roundInfo.id}  -  ${
     parseInt(roundInfo.passive) + parseInt(roundInfo.active)
   } OCEAN rewards distributed in`}
-  tag={`APY up to ${
+  tag={`${
     $APYs
       ? $APYs?.passive + $APYs?.active > 10000
-        ? "over 10000"
-        : parseFloat($APYs?.passive + $APYs?.active).toFixed(3)
+        ? "over ~10000"
+        : `~${parseFloat($APYs?.passive + $APYs?.active).toFixed(3)}`
       : 0
-  }%`}
+  }% APY`}
   className="rewardsOverview"
 >
   <Countdown />
