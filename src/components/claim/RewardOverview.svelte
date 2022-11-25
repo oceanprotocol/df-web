@@ -1,9 +1,17 @@
 <script>
   import { APYs } from "../../stores/airdrops";
+  import { calcTotalAPY } from "../../utils/rewards";
   import Card from "../common/Card.svelte";
   import Countdown from "../common/CountDown.svelte";
 
   export let roundInfo = undefined;
+
+  let totalApy;
+
+  $: if ($APYs) {
+    console.log($APYs);
+    totalApy = calcTotalAPY($APYs.active, $APYs.passive);
+  }
 </script>
 
 <Card
@@ -11,10 +19,10 @@
     parseInt(roundInfo.passive) + parseInt(roundInfo.active)
   } OCEAN rewards distributed in`}
   tag={`${
-    $APYs
-      ? $APYs?.passive + $APYs?.active > 10000
+    totalApy
+      ? totalApy > 10000
         ? "over ~10000"
-        : `~${parseFloat($APYs?.passive + $APYs?.active).toFixed(3)}`
+        : `~${parseFloat(totalApy).toFixed(3)}`
       : 0
   }% APY`}
   className="rewardsOverview"
