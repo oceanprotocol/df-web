@@ -11,7 +11,6 @@ export const columnsData = [
   { key: "network", value: "Network" },
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
-  { key: "apy", value: "RoundAPY", display: (apy) => parseFloat(apy).toFixed(3) + '%', tooltip: descriptions.default.tooltip_datafarming_round_apy },
   {
     key: "roundvolume",
     value: "RoundVolume",
@@ -25,7 +24,7 @@ export const columnsData = [
   { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocation },
 ]
 
-export const defaultColumns = ["Title", "RoundAPY", "RoundVolume", "CurrentAllocation", "MyAllocation"]
+export const defaultColumns = ["Title", "RoundVolume", "CurrentAllocation", "MyAllocation"]
 
 async function getDatasets(api) {
   let res;
