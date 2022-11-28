@@ -32,4 +32,4 @@ if( apy_passiv.toFixed(2) != 10.95 ) throw true;
 let wpr = 0.0015065927431079373
 let calculated_apy = convertWPRtoAPY(wpr)
 let calculated_wpr = convertAPYtoWPR(calculated_apy)
-if(parseFloat(calculated_apy).toFixed(5) != parseFloat(calculated_wpr).toFixed(5)) throw true
+if(parseFloat(wpr).toFixed(5) != parseFloat(calculated_wpr).toFixed(5)) throw true

@@ -1,6 +1,6 @@
 <script>
   import { DataTable } from "carbon-components-svelte";
-  import * as epochs from "../../utils/metadata/epochs/epochs.json";
+  import * as epochs from "../../utils/metadata/epochs/epoch";
   import { getEpoch } from "../../utils/epochs";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
