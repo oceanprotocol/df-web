@@ -12,9 +12,9 @@
   } OCEAN rewards distributed in`}
   tag={`${
     $APYs
-      ? $APYs?.passive + $APYs?.active > 10000
+      ? $APYs?.passive + $APYs?.activeAVG > 10000
         ? "over ~10000"
-        : `~${parseFloat($APYs?.passive + $APYs?.active).toFixed(3)}`
+        : `~${parseFloat($APYs?.passive + $APYs?.activeAVG).toFixed(3)}`
       : 0
   }% APY`}
   className="rewardsOverview"

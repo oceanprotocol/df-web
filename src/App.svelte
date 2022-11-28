@@ -49,12 +49,14 @@
   setupAppConfig();
 
   async function loadAPYs() {
-    let activeAPY = await getActiveAPY($userAddress);
+    let activeAverageAPY = await getActiveAPY();
+    let activeUserAPY = await getActiveAPY($userAddress);
     let passiveAPY = $APYs?.passive ? $APYs?.passive : await getPassiveAPY();
     APYs.update(() => {
       return {
         passive: passiveAPY,
-        active: activeAPY,
+        activeAVG: activeAverageAPY,
+        activeUser: activeUserAPY,
       };
     });
   }
