@@ -1,12 +1,11 @@
 <script>
   import { DataTable } from "carbon-components-svelte";
-  import * as epochs from "../../utils/metadata/epochs/epoch";
+  import * as epochs from "../../utils/metadata/epochs/epochs.json";
   import { getEpoch } from "../../utils/epochs";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
-  import { CellTower } from "carbon-icons-svelte";
   import * as descriptions from "../../utils/metadata/descriptions.json";
-  
+
   let loading = true;
   let curEpoch;
   let rows = [];
