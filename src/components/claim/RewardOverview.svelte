@@ -13,8 +13,8 @@
   tag={`${
     $APYs
       ? $APYs?.passive + $APYs?.activeAVG > 10000
-        ? "over ~10000"
-        : `~${parseFloat($APYs?.passive + $APYs?.activeAVG).toFixed(3)}`
+        ? "over 10000"
+        : `${parseFloat($APYs?.passive + $APYs?.activeAVG).toFixed(3)}`
       : 0
   }% APY`}
   className="rewardsOverview"

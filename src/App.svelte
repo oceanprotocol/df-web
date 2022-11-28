@@ -50,11 +50,8 @@
 
   async function loadAPYs() {
     let activeAverageAPY = $APYs?.active ? $APYs?.active : await getActiveAPY();
-    let activeUserAPY = $APYs?.active
-      ? $APYs?.active
-      : $userAddress
-      ? await getActiveAPY($userAddress)
-      : 0;
+    let activeUserAPY = $userAddress ? await getActiveAPY($userAddress) : 0;
+    console.log($userAddress, activeUserAPY);
     let passiveAPY = $APYs?.passive ? $APYs?.passive : await getPassiveAPY();
     APYs.update(() => {
       return {
