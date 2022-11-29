@@ -120,9 +120,9 @@
     title="Active"
     apy={`${
       $APYs
-        ? $APYs?.activeAVG > 10000
+        ? $APYs?.active > 10000
           ? "over 10000"
-          : `${$APYs?.activeAVG.toFixed(3)}`
+          : `${$APYs?.active.toFixed(3)}`
         : 0
     }% Avg APY | ${
       $APYs
