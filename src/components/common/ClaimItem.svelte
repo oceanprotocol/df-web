@@ -14,12 +14,12 @@
   export let showRedirectLink;
   export let onClick;
   export let metrics;
-  export let rewardTooltip;
+  export let rewardTooltip = undefined;
   export let disableRedirect = false;
   export let apy = undefined;
 </script>
 
-<div class={`container`}>  
+<div class={`container`}>
   <Card title={`${title} Rewards - ${distributedAmount} OCEAN`} tag={apy}>
     <p class="description">{@html description}</p>
     <div class="metrics">
