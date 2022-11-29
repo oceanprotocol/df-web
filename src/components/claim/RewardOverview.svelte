@@ -1,9 +1,17 @@
 <script>
   import { APYs } from "../../stores/airdrops";
+  import { calcTotalAPY } from "../../utils/rewards";
   import Card from "../common/Card.svelte";
   import Countdown from "../common/CountDown.svelte";
 
   export let roundInfo = undefined;
+
+  let totalApy;
+
+  $: if ($APYs) {
+    console.log($APYs);
+    totalApy = calcTotalAPY($APYs.active, $APYs.passive);
+  }
 </script>
 
 <Card

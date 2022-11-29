@@ -4,7 +4,6 @@
   import { getEpoch } from "../../utils/epochs";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
-  import { CellTower } from "carbon-icons-svelte";
   import * as descriptions from "../../utils/metadata/descriptions.json";
 
   let loading = true;

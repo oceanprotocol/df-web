@@ -1,31 +1,9 @@
-import * as VeAllocateABI from "./abis/veAllocateABI";
-import * as VeOceanABI from "./abis/veOceanABI";
-import {get} from "svelte/store"
+import * as VeOceanABI from "./abis/veOceanABI.js";
 import {ethers} from "ethers";
-import {networkSigner, web3Provider} from "../stores/web3";
-import {getAddressByChainIdKey} from "../utils/address/address";
-import moment from "moment";
-import { getJsonRpcProvider } from "./web3";
+import {getAddressByChainIdKey} from "../utils/address/address.js";
+import { getJsonRpcProvider } from "./web3.js";
 
-const veAllocateABI = VeAllocateABI.default
 const veOceanABI = VeOceanABI.default
-const decimals = 18;
-
-export const getAllocatedAmount = async(userAddress) => {
-    try {
-        const contract = new ethers.Contract(
-          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veAllocate"), 
-          veAllocateABI, 
-          get(networkSigner)
-        );
-        const allocatedAmountInEth = await contract.getTotalAllocation(userAddress)
-        const allocatedAmount = ethers.utils.parseUnits(allocatedAmountInEth, decimals)
-        return allocatedAmount
-    } catch (error) {
-      console.log(error?.error?.error ? error?.error?.error.message : error);
-      return 0;
-    }
-  }
 
 export const getVeOceanBalance = async(userAddress, provider) => {
     try {
