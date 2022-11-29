@@ -1,5 +1,5 @@
 const moment = require('moment');
-const epochs = require('../../utils/metadata/epochs/epochs.json');
+const epochs = require('../../utils/metadata/epochs/epochs');
 
 const getEpoch = (date) => {
   let epoch;
