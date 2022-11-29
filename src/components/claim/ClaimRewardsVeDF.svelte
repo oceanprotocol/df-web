@@ -124,13 +124,17 @@
           ? "over 10000"
           : `${$APYs?.active.toFixed(3)}`
         : 0
-    }% Avg APY | ${
-      $APYs
-        ? $APYs?.activeUser > 10000
-          ? "over 10000"
-          : `${$APYs?.activeUser.toFixed(3)}`
-        : 0
-    }% Your APY`}
+    }% Avg APY ${
+      $userAddress
+        ? `| ${
+            $APYs
+              ? $APYs?.activeUser > 10000
+                ? "over 10000"
+                : `${$APYs?.activeUser.toFixed(3)}`
+              : 0
+          }% Your APY`
+        : ""
+    }`}
     description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     rewardTooltip={descriptions.default.tooltip_active_rewards}

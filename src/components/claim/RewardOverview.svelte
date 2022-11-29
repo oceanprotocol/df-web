@@ -1,15 +1,17 @@
 <script>
   import { APYs } from "../../stores/airdrops";
+  import { userAddress } from "../../stores/web3";
   import { calcTotalAPY } from "../../utils/rewards";
   import Card from "../common/Card.svelte";
   import Countdown from "../common/CountDown.svelte";
 
   export let roundInfo = undefined;
 
-  let totalApy;
+  let totalApy, totalApyUser;
 
   $: if ($APYs) {
     totalApy = calcTotalAPY($APYs.active, $APYs.passive);
+    totalApyUser = calcTotalAPY($APYs.activeUser, $APYs.passive);
   }
 </script>
 
@@ -19,11 +21,21 @@
   } OCEAN rewards distributed in`}
   tag={`${
     $APYs
-      ? $APYs?.passive + $APYs?.active > 10000
+      ? totalApy > 10000
         ? "over 10000"
-        : `${parseFloat($APYs?.passive + $APYs?.active).toFixed(3)}`
+        : `${parseFloat(totalApy).toFixed(3)}`
       : 0
-  }% APY`}
+  }% Avg APY ${
+    $userAddress
+      ? `| ${
+          $APYs
+            ? totalApyUser > 10000
+              ? "over 10000"
+              : `${parseFloat(totalApyUser).toFixed(3)}`
+            : 0
+        }% Your APY`
+      : ""
+  }`}
   className="rewardsOverview"
 >
   <Countdown />
