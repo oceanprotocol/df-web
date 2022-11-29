@@ -9,7 +9,6 @@
   let totalApy;
 
   $: if ($APYs) {
-    console.log($APYs);
     totalApy = calcTotalAPY($APYs.active, $APYs.passive);
   }
 </script>
