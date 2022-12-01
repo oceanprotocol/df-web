@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 import { ethers, BigNumber } from "ethers";
 import Web3Modal from "web3modal"
+import WalletConnectProvider from '@walletconnect/web3-provider'
 import * as networksDataArray from "../networks-metadata.json";
 
 export let userAddress = writable("");
@@ -13,8 +14,6 @@ export let jsonRPCProvider = writable({});
 export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
-
-const WalletConnectProvider = window?.WalletConnectProvider?.default;
 
 const providerOptions = {
   walletconnect: {
