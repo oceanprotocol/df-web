@@ -7,9 +7,6 @@
 
   export let roundInfo = undefined;
   let totalApy, totalApyUser;
-
-  // WIP - APY calculations & data are still wip. 
-  const apyEnabled = false;
     
   $: if ($APYs) {
     totalApy = calcTotalAPY($APYs.active, $APYs.passive);
@@ -17,43 +14,14 @@
   }
 </script>
 
-{#if apyEnabled === true}
-  <Card
-    title={`Round ${roundInfo.id}  -  ${
-      parseInt(roundInfo.passive) + parseInt(roundInfo.active)
-    } OCEAN rewards distributed in`}
-    tag={`${
-      $APYs
-        ? totalApy > 10000
-          ? "over 10000"
-          : `${parseFloat(totalApy).toFixed(3)}`
-        : 0
-    }% Avg APY ${
-      $userAddress
-        ? `| ${
-            $APYs
-              ? totalApyUser > 10000
-                ? "over 10000"
-                : `${parseFloat(totalApyUser).toFixed(3)}`
-              : 0
-          }% Your APY`
-        : ""
-    }`}
-    className="rewardsOverview"
-  >
-    <Countdown />
-  </Card>
-{:else}
-  <Card
-    title={`Round ${roundInfo.id}  -  ${
-      parseInt(roundInfo.passive) + parseInt(roundInfo.active)
-    } OCEAN rewards distributed in`}
-    tag=""
-    className="rewardsOverview"
-  >
-    <Countdown />
-  </Card>
-{/if}
+<Card
+  title={`Round ${roundInfo.id}  -  ${
+    parseInt(roundInfo.passive) + parseInt(roundInfo.active)
+  } OCEAN rewards distributed in`}
+  className="rewardsOverview"
+>
+  <Countdown />
+</Card>
 
 <style>
   :global(.rewardsOverview .title) {

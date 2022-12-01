@@ -1,19 +1,12 @@
 <script>
   export let title = undefined;
-  export let tag = undefined;
   export let className = undefined;
-
-  // WIP - APY calculations & data are still wip. 
-  const apyEnabled = false;
 </script>
 
 <div class={`container ${className ? className : ""}`}>
   <div class="cardHeader">
     {#if title}
       <p class="title">{title}</p>
-    {/if}
-    {#if tag && apyEnabled === true}
-      <span class="tag">{tag}</span>
     {/if}
   </div>
   <slot />
