@@ -16,16 +16,6 @@ export const getGasFeeMultiplier = (chainId) => {
   return gasFeeMultiplier.indexOf(chainId) >= 0 ? gasFeeMultiplier[chainId] : 1;
 }
 
-export const getFairGasPrice = async (chainId) => {
-  const x = await ethers.getGasPrice();
-  console.log("ethers getGasPrice: ", x);
-  const gasFeeMultiplier = getGasFeeMultiplier(chainId);
-  return x
-      .multipliedBy(gasFeeMultiplier)
-      .integerValue(BigNumber.ROUND_DOWN)
-      .toString(10);
-}
-
 export const getNetworkDataById = (data,networkId) => {
   if (!networkId) return
   const networkData = data.filter(
