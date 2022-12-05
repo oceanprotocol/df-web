@@ -1,12 +1,16 @@
 <script>
   export let title = undefined;
   export let className = undefined;
+  export let tag = undefined;
 </script>
 
 <div class={`container ${className ? className : ""}`}>
   <div class="cardHeader">
     {#if title}
       <p class="title">{title}</p>
+    {/if}
+    {#if tag}
+      <span class="tag">{tag}</span>
     {/if}
   </div>
   <slot />
