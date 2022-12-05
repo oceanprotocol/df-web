@@ -1,16 +1,16 @@
 <script>
   import { APYs } from "../../stores/airdrops";
+  import { userAddress } from "../../stores/web3";
   import { calcTotalAPY } from "../../utils/rewards";
   import Card from "../common/Card.svelte";
   import Countdown from "../common/CountDown.svelte";
 
   export let roundInfo = undefined;
-
-  let totalApy;
-
+  let totalApy, totalApyUser;
+    
   $: if ($APYs) {
-    console.log($APYs);
     totalApy = calcTotalAPY($APYs.active, $APYs.passive);
+    totalApyUser = calcTotalAPY($APYs.activeUser, $APYs.passive);
   }
 </script>
 
@@ -18,13 +18,6 @@
   title={`Round ${roundInfo.id}  -  ${
     parseInt(roundInfo.passive) + parseInt(roundInfo.active)
   } OCEAN rewards distributed in`}
-  tag={`${
-    totalApy
-      ? totalApy > 10000
-        ? "over ~10000"
-        : `~${parseFloat(totalApy).toFixed(3)}`
-      : 0
-  }% APY`}
   className="rewardsOverview"
 >
   <Countdown />

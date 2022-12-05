@@ -1,6 +1,5 @@
 <script>
   export let title = undefined;
-  export let tag = undefined;
   export let className = undefined;
 </script>
 
@@ -8,9 +7,6 @@
   <div class="cardHeader">
     {#if title}
       <p class="title">{title}</p>
-    {/if}
-    {#if tag}
-      <span class="tag">{tag}</span>
     {/if}
   </div>
   <slot />

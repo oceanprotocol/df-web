@@ -104,9 +104,6 @@ export const getDFRewards = async(userAddress, tokenAddress) => {
 export async function claimDFReward(userAddress, tokenAddress) {
     try {
         const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "DFRewards"), dfRewardsABI.default, get(networkSigner));
-        console.log("dfRewards", contract)
-        console.log("userAddress", userAddress)
-        console.log("tokenAddress", tokenAddress)
         const resp = await contract.claimFor(userAddress, tokenAddress);
         await resp.wait();
         console.log("Success claiming rewards, txReceipt here", resp);
