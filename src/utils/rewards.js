@@ -1,4 +1,4 @@
-import { getTotalVeSupply } from "./ve.js";
+import { getTotalOceanSupply } from "./ve.js";
 import { getEpoch } from "./epochs.js";
 
 export const convertAPYtoWPR = (apy) => { 
@@ -47,9 +47,9 @@ export const getRewardsForDataAllocation = (rewards,  userAddress, nftAddress) =
 }
 
 export const getPassiveAPY = async () => {
-  const veSupply = await getTotalVeSupply()
+  const oceanSupply = await getTotalOceanSupply()
   let curEpoch = getEpoch();
-  const wpr_passive = curEpoch.passive / veSupply
+  const wpr_passive = curEpoch.passive / oceanSupply
   return convertWPRtoAPY(wpr_passive) 
 }
 
