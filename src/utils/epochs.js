@@ -25,7 +25,7 @@ export const getEpoch = (date) => {
           epoch.total = 200;
         }
 
-        return epoch
+        return null
       }
     }
   } catch (error) {

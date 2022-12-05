@@ -80,7 +80,7 @@
   <ClaimItem
     title="Passive"
     description="Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>."
-    distributedAmount={roundInfo.passive}
+    distributedAmount={roundInfo?.passive}
     apy={`${
       $APYs
         ? $APYs?.passive > 10000
@@ -142,7 +142,7 @@
     showRedirectLink={(!$oceanUnlockDate || $totalUserAllocation <= 0) &&
       $dfClaimables <= 0}
     redirectLink={{ text: "Set allocations", url: "data" }}
-    distributedAmount={roundInfo.active}
+    distributedAmount={roundInfo?.active}
     loading={claiming === "DF_REWARDS"}
     onClick={onClaimDfRewards}
     disabled={canClaimDF === false ||
