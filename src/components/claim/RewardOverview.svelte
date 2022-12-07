@@ -7,7 +7,7 @@
 
   export let roundInfo = undefined;
   let totalApy, totalApyUser;
-    
+
   $: if ($APYs) {
     totalApy = calcTotalAPY($APYs.active, $APYs.passive);
     totalApyUser = calcTotalAPY($APYs.activeUser, $APYs.passive);
@@ -15,8 +15,8 @@
 </script>
 
 <Card
-  title={`Round ${roundInfo.id}  -  ${
-    parseInt(roundInfo.passive) + parseInt(roundInfo.active)
+  title={`Round ${roundInfo?.id}  -  ${
+    parseInt(roundInfo?.passive) + parseInt(roundInfo?.active)
   } OCEAN rewards distributed in`}
   className="rewardsOverview"
 >
