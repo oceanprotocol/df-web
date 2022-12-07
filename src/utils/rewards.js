@@ -68,7 +68,7 @@ export const getActiveAPY = async (userAddress) => {
     return 0;
   }
   let data = await res.json();
-  return data.apy ? data.apy : 0;
+  return data.apy ? data.apy * 100: 0;
 }
 
 export const calcTotalAPY = (activeAPY, passiveAPY) => {
