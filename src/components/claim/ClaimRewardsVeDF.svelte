@@ -85,12 +85,12 @@
       $APYs
         ? $APYs?.passive > 10000
           ? "over 10000"
-          : $APYs?.passive.toFixed(3)
+          : $APYs?.passive.toFixed(2)
         : 0
     }% APY`}
     showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
     redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
-    amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
+    amount={`${parseFloat($veClaimables).toFixed(2)} OCEAN`}
     metrics={[
       {
         name: "balance",
@@ -122,7 +122,7 @@
       $APYs
         ? $APYs?.active > 10000
           ? "over 10000"
-          : `${$APYs?.active.toFixed(3)}`
+          : `${$APYs?.active.toFixed(2)}`
         : 0
     }% Avg APY ${
       $userAddress
@@ -130,7 +130,7 @@
             $APYs
               ? $APYs?.activeUser > 10000
                 ? "over 10000"
-                : `${$APYs?.activeUser.toFixed(3)}`
+                : `${$APYs?.activeUser.toFixed(2)}`
               : 0
           }% Your APY`
         : ""

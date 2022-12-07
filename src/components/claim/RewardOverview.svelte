@@ -22,7 +22,7 @@
     $APYs
       ? totalApy > 10000
         ? "over 10000"
-        : `${parseFloat(totalApy).toFixed(3)}`
+        : `${parseFloat(totalApy).toFixed(2)}`
       : 0
   }% Avg APY ${
     $userAddress
@@ -30,7 +30,7 @@
           $APYs
             ? totalApyUser > 10000
               ? "over 10000"
-              : `${parseFloat(totalApyUser).toFixed(3)}`
+              : `${parseFloat(totalApyUser).toFixed(2)}`
             : 0
         }% Your APY`
       : ""
