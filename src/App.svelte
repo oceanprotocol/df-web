@@ -24,7 +24,12 @@
     veClaimables,
     veEstimate,
   } from "./stores/airdrops";
-  import { getActiveAPY, getPassiveAPY, getRewards } from "./utils/rewards";
+  import {
+    getActiveAPY,
+    getPassiveAPY,
+    getRewards,
+    getPassiveUserAPY,
+  } from "./utils/rewards";
   import {
     updateUserBalanceOcean,
     updateUserBalanceVeOcean,
@@ -41,7 +46,7 @@
   import { setClient } from "svelte-apollo";
   import { onMount } from "svelte";
   import { getAddressByChainIdKey } from "./utils/address/address";
-  import { getLockedEndTime } from "./utils/ve";
+  import { getLockedEndTime, getLockedOceanAmount } from "./utils/ve";
   import moment from "moment";
   import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
   import { totalUserAllocation } from "./stores/dataAllocations";
@@ -52,9 +57,26 @@
     let activeAPY = $APYs?.active ? $APYs?.active : await getActiveAPY();
     let activeUserAPY = $userAddress ? await getActiveAPY($userAddress) : 0;
     let passiveAPY = $APYs?.passive ? $APYs?.passive : await getPassiveAPY();
+    let passiveUserAPY =
+      $userAddress &&
+      $lockedOceanAmount &&
+      $userBalances[
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+      ]
+        ? await getPassiveUserAPY(
+            $userBalances[
+              getAddressByChainIdKey(
+                process.env.VE_SUPPORTED_CHAINID,
+                "veOCEAN"
+              )
+            ],
+            $lockedOceanAmount
+          )
+        : 0;
     APYs.update(() => {
       return {
         passive: passiveAPY,
+        passiveUser: passiveUserAPY,
         active: activeAPY,
         activeUser: activeUserAPY,
       };
@@ -81,6 +103,8 @@
   }
 
   async function initRewards() {
+    let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
+    lockedOceanAmount.update(() => lockedOceans);
     let unlockDateMilliseconds = await getLockedEndTime(
       $userAddress,
       $networkSigner
@@ -142,7 +166,6 @@
   }
 
   $: if ($userAddress && $web3Provider && $connectedChainId) {
-    loadAPYs();
     if ($connectedChainId != process.env.VE_SUPPORTED_CHAINID) {
       veOceanWithDelegations.update(() => 0);
       setBalancesTo0();
@@ -155,7 +178,10 @@
       dfEstimate.update(() => 0);
       isAppLoading.update(() => false);
     } else {
-      initRewards();
+      initRewards().then(() => {
+        console.log("herre");
+        loadAPYs();
+      });
     }
   }
   let selectedNetworksFromLocalStorage =

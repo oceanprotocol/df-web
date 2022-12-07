@@ -85,9 +85,19 @@
       $APYs
         ? $APYs?.passive > 10000
           ? "over 10000"
-          : $APYs?.passive.toFixed(2)
+          : `${$APYs?.passive.toFixed(2)}`
         : 0
-    }% APY`}
+    }% Avg APY ${
+      $userAddress
+        ? `| ${
+            $APYs
+              ? $APYs?.passiveUser > 10000
+                ? "over 10000"
+                : `${$APYs?.passiveUser.toFixed(2)}`
+              : 0
+          }% Your APY`
+        : ""
+    }`}
     showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
     redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
     amount={`${parseFloat($veClaimables).toFixed(2)} OCEAN`}
