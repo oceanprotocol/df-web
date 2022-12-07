@@ -15,8 +15,8 @@
 </script>
 
 <Card
-  title={`Round ${roundInfo.id}  -  ${
-    parseInt(roundInfo.passive) + parseInt(roundInfo.active)
+  title={`Round ${roundInfo?.id}  -  ${
+    parseInt(roundInfo?.passive) + parseInt(roundInfo?.active)
   } OCEAN rewards distributed in`}
   tag={`${
     $APYs
