@@ -98,6 +98,7 @@
           }% Your APY`
         : ""
     }`}
+    apyTooltip={descriptions.default.tooltip_rewards_apy_passive}
     showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
     redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
     amount={`${parseFloat($veClaimables).toFixed(2)} OCEAN`}
@@ -145,6 +146,7 @@
           }% Your APY`
         : ""
     }`}
+    apyTooltip={descriptions.default.tooltip_rewards_apy_active}
     description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     rewardTooltip={descriptions.default.tooltip_active_rewards}

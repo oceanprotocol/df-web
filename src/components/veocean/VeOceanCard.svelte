@@ -51,13 +51,13 @@
               ).toFixed(3)
             : 0
         } veOCEAN`}
-        tootipMessage={descriptions.default.tooltip_veocean_my_balance}
+        tooltipMessage={descriptions.default.tooltip_veocean_my_balance}
         {loading}
       />
       <ItemWithLabel
         title={`Allocation Power`}
         value={`${parseFloat($veOceanWithDelegations).toFixed(3)} veOCEAN`}
-        tootipMessage={descriptions.default.tooltip_veocean_my_voting_power}
+        tooltipMessage={descriptions.default.tooltip_veocean_my_voting_power}
         {loading}
       />
     </div>
@@ -65,7 +65,7 @@
       <ItemWithLabel
         title={`Locked`}
         value={`${parseFloat($lockedOceanAmount).toFixed(3)} OCEAN`}
-        tootipMessage={descriptions.default.tooltip_veocean_my_locked_ocean}
+        tooltipMessage={descriptions.default.tooltip_veocean_my_locked_ocean}
         {loading}
       />
       <ItemWithLabel
@@ -73,7 +73,7 @@
         value={`${
           $oceanUnlockDate ? $oceanUnlockDate.format("DD-MM-YYYY") : "-"
         }`}
-        tootipMessage={descriptions.default.tooltip_veocean_my_lock_ends}
+        tooltipMessage={descriptions.default.tooltip_veocean_my_lock_ends}
         {loading}
       />
     </div>

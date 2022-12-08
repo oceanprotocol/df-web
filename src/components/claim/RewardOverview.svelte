@@ -5,6 +5,7 @@
   import { calcTotalAPY } from "../../utils/rewards";
   import Card from "../common/Card.svelte";
   import Countdown from "../common/CountDown.svelte";
+  import * as descriptions from "../../utils/metadata/descriptions.json";
 
   export let roundInfo = undefined;
   let totalApy, totalApyUser;
@@ -18,7 +19,7 @@
 <Card
   title={`Round ${roundInfo?.id}  -  ${
     parseInt(roundInfo?.passive) + parseInt(roundInfo?.active)
-  } OCEAN rewards distributed in`}
+  } OCEAN`}
   tag={`${
     $APYs
       ? totalApy > 10000
@@ -36,6 +37,7 @@
         }% Your APY`
       : ""
   }`}
+  tooltipMessage={descriptions.default.tooltip_rewards_overview}
   className="rewardsOverview"
 >
   <Countdown />

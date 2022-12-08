@@ -17,10 +17,11 @@
   export let rewardTooltip = undefined;
   export let disableRedirect = false;
   export let apy = undefined;
+  export let apyTooltip = undefined;
 </script>
 
 <div class={`container`}>
-  <Card title={`${title} Rewards - ${distributedAmount} OCEAN`} tag={apy}>
+  <Card title={`${title} Rewards - ${distributedAmount} OCEAN`} tag={apy} tooltipMessage={apyTooltip}>
     <p class="description">{@html description}</p>
     <div class="metrics">
       {#each metrics as metric}
@@ -29,7 +30,7 @@
       <ItemWithLabel
         title="rewards"
         value={!showRedirectLink ? amount : "..."}
-        tootipMessage={rewardTooltip ? rewardTooltip : undefined}
+        tooltipMessage={rewardTooltip ? rewardTooltip : undefined}
       />
     </div>
     {#if showRedirectLink}

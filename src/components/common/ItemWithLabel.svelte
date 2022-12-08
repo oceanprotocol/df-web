@@ -5,7 +5,7 @@
   export let value;
   export let float = false;
   export let loading = false;
-  export let tootipMessage = undefined;
+  export let tooltipMessage = undefined;
   export let tooltipState = undefined;
   export let tooltipDirection = "top";
   export let tooltipAlign = "center";
@@ -14,9 +14,9 @@
 <div class="item">
   <div class="titleContainer">
     <span class="title">{title}</span>
-    {#if tootipMessage}
+    {#if tooltipMessage}
       <CustomTooltip
-        text={tootipMessage}
+        text={tooltipMessage}
         direction={tooltipDirection}
         align={tooltipAlign}
         state={tooltipState}

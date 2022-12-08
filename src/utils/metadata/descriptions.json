@@ -12,7 +12,9 @@
     "tooltip_datafarming_current_allocation": "veOCEAN amount currently allocated to a dataset across all users.",
     "tooltip_datafarming_round_allocation": "veOCEAN amount allocated to dataset across all users, is sampled and used in DF Rewards calculation.\n\nThis number is the same to what is currently allocated in the system.",
     "tooltip_datafarming_my_allocation": "This number represents the percentage of your veOCEAN allocated towards each dataset.\n\nYour veOCEAN goes down over time but your allocation remain consistent.",
-    "tooltip_rewards_history_rounds": "Data Farming rewards distribution rounds. Rounds happen every week starting and ending each Thursday.",
+    "tooltip_rewards_overview": "Data Farming APY for both Passive & Active Rewards.\n\nRounds happen every week starting and ending each Thursday.",
+    "tooltip_rewards_apy_passive": "Data Farming Passive Rewards APY is calculated relative to your Ocean locked.\n\nThe longer you lock, the higher your APY will be.",
+    "tooltip_rewards_apy_active": "Data Farming Active Rewards APY is calculated relative to your Ocean locked and DataNFT curation.\n\nThe longer you lock, and the better you curate, the higher your APY will be.",
     "tooltip_rewards_history_active_rewards": "Rewards distributed for active curation of datasets. Active rewards are emitted based on Data Consume Volume.<br/><br/>Please check the docs for more info.",
     "tooltip_active_rewards": "The formula for calculating the active rewards can change. You can find the formula for the current round <a href=https://docs.oceanprotocol.com/veocean-data-farming-tutorial target=_blank>here</a>"
 }
