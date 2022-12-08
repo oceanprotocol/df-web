@@ -8,7 +8,7 @@
   // tooltip
   export let tooltipMessage = undefined;
   export let tooltipState = undefined;
-  export let tooltipDirection = "top";
+  export let tooltipDirection = "bottom";
   export let tooltipAlign = "center";
 </script>
 
@@ -49,7 +49,7 @@
   .subtitle {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
