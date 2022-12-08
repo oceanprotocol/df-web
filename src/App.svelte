@@ -62,7 +62,7 @@
       $lockedOceanAmount &&
       $userBalances[
         getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
-      ]
+      ] > 0
         ? await getPassiveUserAPY(
             $userBalances[
               getAddressByChainIdKey(
