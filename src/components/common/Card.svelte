@@ -47,6 +47,8 @@
     box-shadow: var(--box-shadow);
   }
   .subtitle {
+    margin-top: calc(var(--spacer) / 16);
+    height: fit-content !important;
     display: flex;
     flex-direction: row;
     justify-content: center;
