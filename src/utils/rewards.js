@@ -54,10 +54,10 @@ export const getPassiveAPY = async () => {
 }
 
 export const getPassiveUserAPY = async (userVeOcean,lockedOcean) => {
-  console.log(userVeOcean,lockedOcean)
   const veOceanSupply = await getTotalVeSupply()
   //const oceanSupply = await getTotalOceanSupply()
   let curEpoch = getEpoch();
+
   const rewards = (curEpoch.passive / veOceanSupply)*userVeOcean
   const wpr_passive = rewards / lockedOcean
   return convertWPRtoAPY(wpr_passive) 

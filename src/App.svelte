@@ -53,10 +53,21 @@
 
   setupAppConfig();
 
-  async function loadAPYs() {
+  async function loadGeneralAPYs() {
     let activeAPY = $APYs?.active ? $APYs?.active : await getActiveAPY();
-    let activeUserAPY = $userAddress ? await getActiveAPY($userAddress) : 0;
     let passiveAPY = $APYs?.passive ? $APYs?.passive : await getPassiveAPY();
+    APYs.update(() => {
+      return {
+        passive: passiveAPY,
+        passiveUser: 0,
+        active: activeAPY,
+        activeUser: 0,
+      };
+    });
+  }
+
+  async function loadUserAPYs() {
+    let activeUserAPY = $userAddress ? await getActiveAPY($userAddress) : 0;
     let passiveUserAPY =
       $userAddress &&
       $lockedOceanAmount &&
@@ -73,11 +84,11 @@
             $lockedOceanAmount
           )
         : 0;
-    APYs.update(() => {
+    APYs.update((oldObj) => {
       return {
-        passive: passiveAPY,
+        passive: oldObj.passive,
         passiveUser: passiveUserAPY,
-        active: activeAPY,
+        active: oldObj.active,
         activeUser: activeUserAPY,
       };
     });
@@ -133,6 +144,10 @@
     isAppLoading.update(() => false);
   }
 
+  $: if ($veOceanWithDelegations > 0) {
+    loadUserAPYs();
+  }
+
   function initStore() {
     let emptyUserBalances = {};
     emptyUserBalances[process.env.VE_OCEAN_CONTRACT] = 0;
@@ -147,7 +162,6 @@
 
   $: if (!$userAddress) {
     setBalancesTo0();
-    loadAPYs();
   }
 
   function setBalancesTo0() {
@@ -178,10 +192,7 @@
       dfEstimate.update(() => 0);
       isAppLoading.update(() => false);
     } else {
-      initRewards().then(() => {
-        console.log("herre");
-        loadAPYs();
-      });
+      initRewards();
     }
   }
   let selectedNetworksFromLocalStorage =
@@ -196,6 +207,8 @@
   }
 
   onMount(async () => {
+    loadGeneralAPYs();
+    loadUserAPYs();
     if (!$userAddress) {
       isAppLoading.update(() => false);
     }

@@ -1,7 +1,9 @@
 <script>
   import { APYs } from "../../stores/airdrops";
+  import { userBalances } from "../../stores/tokens";
   import { lockedOceanAmount } from "../../stores/veOcean";
   import { userAddress } from "../../stores/web3";
+  import { getAddressByChainIdKey } from "../../utils/address/address";
   import { calcTotalAPY } from "../../utils/rewards";
   import Card from "../common/Card.svelte";
   import Countdown from "../common/CountDown.svelte";
@@ -12,7 +14,7 @@
 
   $: if ($APYs) {
     totalApy = calcTotalAPY($APYs.active, $APYs.passive);
-    totalApyUser = calcTotalAPY($APYs.activeUser, $APYs.passive);
+    totalApyUser = calcTotalAPY($APYs.activeUser, $APYs.passiveUser);
   }
 </script>
 
@@ -29,7 +31,10 @@
   }% Avg APY ${
     $userAddress
       ? `| ${
-          $APYs && $lockedOceanAmount > 0
+          $APYs &&
+          $userBalances[
+            getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+          ] > 0
             ? totalApyUser > 10000
               ? "over 10000"
               : `${parseFloat(totalApyUser).toFixed(2)}`
