@@ -86,9 +86,9 @@
         : 0;
     APYs.update((oldObj) => {
       return {
-        passive: oldObj.passive,
+        passive: oldObj?.passive ? oldObj.passive : 0,
         passiveUser: passiveUserAPY,
-        active: oldObj.active,
+        active: oldObj?.active ? oldObj.active : 0,
         activeUser: activeUserAPY,
       };
     });
