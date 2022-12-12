@@ -81,7 +81,8 @@
                 "veOCEAN"
               )
             ],
-            $lockedOceanAmount
+            $lockedOceanAmount,
+            $web3Provider
           )
         : 0;
     APYs.update((oldObj) => {
@@ -208,7 +209,6 @@
 
   onMount(async () => {
     loadGeneralAPYs();
-    loadUserAPYs();
     if (!$userAddress) {
       isAppLoading.update(() => false);
     }

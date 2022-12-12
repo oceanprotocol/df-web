@@ -132,8 +132,7 @@ export const getMaxUserEpoch = async(address, provider) => {
   }
 }
 
-export const getTotalVeSupply = async() => {
-  let provider = await getJsonRpcProvider(process.env.VE_SUPPORTED_CHAINID)
+export const getTotalVeSupply = async(provider) => {
   try {
       const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
       const totalSupply = await contract.totalSupply()
