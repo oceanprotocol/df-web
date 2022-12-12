@@ -2,6 +2,7 @@ import { writable } from "svelte/store";
 import { getNetworkDataById } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
 import * as descriptions from "../utils/metadata/descriptions.json";
+import { getEpoch } from "../utils/epochs";
 
 let networksData = networksDataArray.default
 
@@ -11,6 +12,8 @@ export const columnsData = [
   { key: "network", value: "Network" },
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
+  { key: "apy", value: "APY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_round_consume },
+  { key: "lastRoundAPY", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_round_consume},
   {
     key: "roundvolume",
     value: "RoundVolume",
@@ -24,9 +27,9 @@ export const columnsData = [
   { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocation },
 ]
 
-export const defaultColumns = ["Title", "RoundVolume", "CurrentAllocation", "MyAllocation"]
+export const defaultColumns = ["Title", "RoundVolume", "APY","LastRoundAPY","CurrentAllocation", "MyAllocation"]
 
-async function getDatasets(api) {
+async function getDatasets(api,roundNumber) {
   let res;
   try {
     res = await fetch(api, {
@@ -37,6 +40,7 @@ async function getDatasets(api) {
       },
       body: JSON.stringify({
         "query":{
+          round:roundNumber
         },
         "sort":{
           "volume":-1
@@ -57,6 +61,7 @@ function getRow(dataInfo, key) {
     title: dataInfo.name,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
+    lastRoundAPY: dataInfo.lastRoundAPY,
     apy: dataInfo.apy,
     nftaddress: dataInfo.nft_addr,
     did: dataInfo.did,
@@ -71,14 +76,17 @@ function getRow(dataInfo, key) {
 }
 
 export async function loadDatasets(nftsApi, allocations) {
-  const allDatasets = await getDatasets(nftsApi);
-  if (allDatasets.length === 0) {
+  let curRound = getEpoch().id;
+  const currentRoundDatasets = await getDatasets(nftsApi,curRound-1);
+  const lastRoundDatasets = await getDatasets(nftsApi,curRound-2)
+  if (currentRoundDatasets.length === 0) {
     datasets.set([]);
     return;
   }
   let newDatasets = [];
-  allDatasets.forEach((datasetInfo, key) => {
+  currentRoundDatasets.forEach((datasetInfo, key) => {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
+    datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr).apy
     newDatasets.push(getRow(datasetInfo, key));
   });
   datasets.set(newDatasets);
