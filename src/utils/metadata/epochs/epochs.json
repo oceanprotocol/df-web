@@ -98,15 +98,15 @@
   {
     "id": 13,
     "date_start": "2022-11-24",
-    "date_end": "2022-12-1",
+    "date_end": "2022-12-01",
     "passive": 25000,
     "active": 25000,
     "total": 50000
   },
   {
     "id": 14,
-    "date_start": "2022-12-1",
-    "date_end": "2022-12-8",
+    "date_start": "2022-12-01",
+    "date_end": "2022-12-08",
     "passive": 25000,
     "active": 25000,
     "total": 50000
