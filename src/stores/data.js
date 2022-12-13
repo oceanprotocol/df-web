@@ -12,7 +12,7 @@ export const columnsData = [
   { key: "network", value: "Network" },
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
-  { key: "apy", value: "APY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+  { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
   { key: "lastRoundAPY", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
   {
     key: "roundvolume",
@@ -27,7 +27,7 @@ export const columnsData = [
   { key: "myallocation", value:"MyAllocation", sort: false, tooltip: descriptions.default.tooltip_datafarming_my_allocation },
 ]
 
-export const defaultColumns = ["Title", "RoundVolume", "APY","LastRoundAPY","CurrentAllocation", "MyAllocation"]
+export const defaultColumns = ["Title", "RoundVolume", "RoundAPY","LastRoundAPY","CurrentAllocation", "MyAllocation"]
 
 async function getDatasets(api,roundNumber) {
   let res;
