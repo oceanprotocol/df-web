@@ -77,8 +77,9 @@ function getRow(dataInfo, key) {
 
 export async function loadDatasets(nftsApi, allocations) {
   let curRound = getEpoch().id;
-  const currentRoundDatasets = await getDatasets(nftsApi,curRound-1);
-  const lastRoundDatasets = await getDatasets(nftsApi,curRound-2)
+  //current round number is 0
+  const currentRoundDatasets = await getDatasets(nftsApi,0);
+  const lastRoundDatasets = await getDatasets(nftsApi,curRound-1)
   if (currentRoundDatasets.length === 0) {
     datasets.set([]);
     return;
@@ -86,7 +87,7 @@ export async function loadDatasets(nftsApi, allocations) {
   let newDatasets = [];
   currentRoundDatasets.forEach((datasetInfo, key) => {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
-    datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr).apy
+    datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apy
     newDatasets.push(getRow(datasetInfo, key));
   });
   datasets.set(newDatasets);
