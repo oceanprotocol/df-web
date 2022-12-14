@@ -62,7 +62,7 @@ function getRow(dataInfo, key) {
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
     lastRoundAPY: dataInfo.lastRoundAPY,
-    apy: dataInfo.apy,
+    roundapy: dataInfo.apy,
     nftaddress: dataInfo.nft_addr,
     did: dataInfo.did,
     chainId: dataInfo.chainID,
