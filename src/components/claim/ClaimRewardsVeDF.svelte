@@ -85,12 +85,23 @@
       $APYs
         ? $APYs?.passive > 10000
           ? "over 10000"
-          : $APYs?.passive.toFixed(3)
-        : 0
-    }% APY`}
+          : `${$APYs?.passive.toFixed(2)}`
+        : parseFloat(0).toFixed(2)
+    }% Avg APY ${
+      $userAddress
+        ? `| ${
+            $APYs
+              ? $APYs?.passiveUser > 10000
+                ? "over 10000"
+                : `${$APYs?.passiveUser.toFixed(2)}`
+              : parseFloat(0).toFixed(2)
+          }% Your APY`
+        : ""
+    }`}
+    apyTooltip={descriptions.default.tooltip_rewards_apy_passive}
     showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
     redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
-    amount={`${parseFloat($veClaimables).toFixed(3)} OCEAN`}
+    amount={`${parseFloat($veClaimables).toFixed(2)} OCEAN`}
     metrics={[
       {
         name: "balance",
@@ -122,7 +133,7 @@
       $APYs
         ? $APYs?.active > 10000
           ? "over 10000"
-          : `${$APYs?.active.toFixed(3)}`
+          : `${$APYs?.active.toFixed(2)}`
         : 0
     }% Avg APY ${
       $userAddress
@@ -130,12 +141,13 @@
             $APYs
               ? $APYs?.activeUser > 10000
                 ? "over 10000"
-                : `${$APYs?.activeUser.toFixed(3)}`
+                : `${$APYs?.activeUser.toFixed(2)}`
               : 0
           }% Your APY`
         : ""
     }`}
-    description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>.<br/>Current round active rewards are distributed for <strong>current round</strong> allocations."
+    apyTooltip={descriptions.default.tooltip_rewards_apy_active}
+    description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     rewardTooltip={descriptions.default.tooltip_active_rewards}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}

@@ -272,12 +272,12 @@
           <ItemWithLabel
             title={`Lock Multiplier`}
             value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
-            tootipMessage={descriptions.default.tooltip_veocean_lock_multiplier}
+            tooltipMessage={descriptions.default.tooltip_veocean_lock_multiplier}
           />
           <ItemWithLabel
             title={`Receive`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
-            tootipMessage={descriptions.default.tooltip_veocean_receive}
+            tooltipMessage={descriptions.default.tooltip_veocean_receive}
           />
         </div>
       </div>
