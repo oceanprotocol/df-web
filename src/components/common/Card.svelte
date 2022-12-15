@@ -1,7 +1,15 @@
 <script>
+  import CustomTooltip from "./CustomTooltip.svelte";
+
   export let title = undefined;
-  export let tag = undefined;
   export let className = undefined;
+  export let tag = undefined;
+
+  // tooltip
+  export let tooltipMessage = undefined;
+  export let tooltipState = undefined;
+  export let tooltipDirection = "bottom";
+  export let tooltipAlign = "center";
 </script>
 
 <div class={`container ${className ? className : ""}`}>
@@ -10,7 +18,17 @@
       <p class="title">{title}</p>
     {/if}
     {#if tag}
-      <span class="tag">{tag}</span>
+      <div class="subtitle">
+        <span class="tag">{tag}</span>
+        {#if tooltipMessage}
+          <CustomTooltip
+            text={tooltipMessage}
+            direction={tooltipDirection}
+            align={tooltipAlign}
+            state={tooltipState}
+          />
+        {/if}
+      </div>
     {/if}
   </div>
   <slot />
@@ -28,13 +46,22 @@
     background-color: var(--background-content);
     box-shadow: var(--box-shadow);
   }
+  .subtitle {
+    margin-top: calc(var(--spacer) / 16);
+    height: fit-content !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
   .cardHeader {
     margin-bottom: calc(var(--spacer) / 2);
   }
   .title {
     font-size: var(--font-size-normal);
     font-weight: bold;
-    margin-bottom: calc(var(--spacer) / 20);
   }
   .tag {
     color: var(--brand-color-primary);
