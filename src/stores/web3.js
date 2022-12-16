@@ -1,8 +1,16 @@
 import { writable } from "svelte/store";
 import { ethers, BigNumber } from "ethers";
 import Web3Modal from "web3modal"
-import WalletConnectProvider from '@walletconnect/web3-provider'
 import * as networksDataArray from "../networks-metadata.json";
+
+import { configureChains, createClient } from "@wagmi/core";
+import { arbitrum, mainnet, polygon } from "@wagmi/core/chains";
+import {
+  EthereumClient,
+  modalConnectors,
+  walletConnectProvider,
+} from "@web3modal/ethereum";
+
 
 export let userAddress = writable("");
 export let poolContracts = writable("");
@@ -15,21 +23,24 @@ export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
 
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnectProvider,
-    options: {
-      // Mikko's test key - don't copy as your mileage may vary
-      infuraId: process.env.INFURA_KEY,
-    },
-  }
-};
+const chains = [arbitrum, mainnet, polygon];
 
-const web3Modal = new Web3Modal({
-  cacheProvider: true, // optional
-  providerOptions, // required
-  disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
+// Wagmi Core Client
+const { provider } = configureChains(chains, [
+  walletConnectProvider({ projectId: process.env.WALLET_CONNECT_KEY }),
+]);
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors: modalConnectors({ appName: "web3Modal", chains }),
+  provider,
 });
+
+// Web3Modal and Ethereum Client
+const ethereumClient = new EthereumClient(wagmiClient, chains);
+const web3Modal = new Web3Modal(
+  { projectId: process.env.WALLET_CONNECT_KEY },
+  ethereumClient
+);
 
 
 // TODO - Replace networkData w/ networksDataArray

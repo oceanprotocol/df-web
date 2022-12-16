@@ -87,7 +87,8 @@ export default {
 		sourcemap: !production,
 		format: 'iife',
 		name: 'app',
-		...output
+		...output,
+		inlineDynamicImports: true
 	},
 	plugins: [
 		replace({
