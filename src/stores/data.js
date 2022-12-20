@@ -78,14 +78,12 @@ function getRow(dataInfo, key) {
 
 function filterPurgatoryDatasetsWithoutAllocations(datasets,allocations){
   let purgatoryDatasets = datasets.filter((d) => d.is_purgatory === 1)
-  console.log(purgatoryDatasets)
   let purgatoryDatasetsWithAllocations = []
   allocations.forEach((a) =>{
     purgatoryDatasets.forEach((d) => {
       if(a.nftAddress === d.nft_addr) purgatoryDatasetsWithAllocations.push(d)
     })
   })
-  console.log(purgatoryDatasetsWithAllocations)
   return purgatoryDatasetsWithAllocations
 }
 
@@ -98,7 +96,6 @@ export async function loadDatasets(nftsApi, allocations) {
   let purgatoryDatasetsWithAllocation = filterPurgatoryDatasetsWithoutAllocations(currentRoundDatasets, allocations)
   currentRoundDatasets = currentRoundDatasets.filter((d) => d.is_purgatory === 0)
   currentRoundDatasets = purgatoryDatasetsWithAllocation.concat(currentRoundDatasets)
-  console.log(currentRoundDatasets.length)
   const lastRoundDatasets = await getDatasets(nftsApi,curRound-1)
   if (currentRoundDatasets.length === 0) {
     datasets.set([]);
