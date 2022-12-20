@@ -323,13 +323,12 @@
         </svelte:fragment>
         <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "title"}
-            {#if !row.ispurgatory}
-              <TextWithNetworkIcon
-                networkName={row.network}
-                text={cell.value}
-                url={row.action}
-              />
-            {:else}
+            <TextWithNetworkIcon
+              networkName={row.network}
+              text={cell.value}
+              url={row.action}
+            />
+            {#if row.ispurgatory}
               <p class="purgatory">
                 Item in purgatory. Remove your allocations.
               </p>
