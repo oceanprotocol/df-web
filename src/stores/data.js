@@ -64,6 +64,7 @@ function getRow(dataInfo, key) {
     lastRoundAPY: dataInfo.lastRoundAPY,
     roundapy: dataInfo.apy,
     nftaddress: dataInfo.nft_addr,
+    ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
     chainId: dataInfo.chainID,
     currentallocation: parseFloat(dataInfo.ve_allocated_realtime).toFixed(3),
@@ -96,7 +97,7 @@ export async function loadDatasets(nftsApi, allocations) {
   let currentRoundDatasets = await getDatasets(nftsApi,0);
   let purgatoryDatasetsWithAllocation = filterPurgatoryDatasetsWithoutAllocations(currentRoundDatasets, allocations)
   currentRoundDatasets = currentRoundDatasets.filter((d) => d.is_purgatory === 0)
-  currentRoundDatasets = currentRoundDatasets.concat(purgatoryDatasetsWithAllocation)
+  currentRoundDatasets = purgatoryDatasetsWithAllocation.concat(currentRoundDatasets)
   console.log(currentRoundDatasets.length)
   const lastRoundDatasets = await getDatasets(nftsApi,curRound-1)
   if (currentRoundDatasets.length === 0) {

@@ -263,7 +263,7 @@
                   : totalAvailable)
               }/100%`
             : "loading..."}
-          tooltipMessage={tooltipMessage}
+          {tooltipMessage}
           {tooltipState}
         />
         <Button
@@ -323,11 +323,17 @@
         </svelte:fragment>
         <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "title"}
-            <TextWithNetworkIcon
-              networkName={row.network}
-              text={cell.value}
-              url={row.action}
-            />
+            {#if !row.ispurgatory}
+              <TextWithNetworkIcon
+                networkName={row.network}
+                text={cell.value}
+                url={row.action}
+              />
+            {:else}
+              <p class="purgatory">
+                Item in purgatory. Remove your allocations.
+              </p>
+            {/if}
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
@@ -379,6 +385,10 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+  }
+  .purgatory {
+    font-size: var(--font-size-small);
+    color: var(--brand-alert-red);
   }
   .headerValuesContainer {
     display: flex;
