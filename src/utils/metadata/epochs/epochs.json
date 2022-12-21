@@ -126,5 +126,29 @@
     "passive": 25000,
     "active": 25000,
     "total": 50000
+  },
+  {
+    "id": 17,
+    "date_start": "2022-12-22",
+    "date_end": "2022-12-29",
+    "passive": 25000,
+    "active": 25000,
+    "total": 50000
+  },
+  {
+    "id": 18,
+    "date_start": "2022-12-29",
+    "date_end": "2023-01-05",
+    "passive": 25000,
+    "active": 25000,
+    "total": 50000
+  },
+  {
+    "id": 19,
+    "date_start": "2023-01-05",
+    "date_end": "2023-01-12",
+    "passive": 25000,
+    "active": 25000,
+    "total": 50000
   }
 ]
