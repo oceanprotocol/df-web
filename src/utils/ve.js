@@ -9,7 +9,7 @@ const veOceanABI = VeOceanABI.default
 export const getVeOceanBalance = async(userAddress, provider) => {
     try {
         const contract = new ethers.Contract(
-          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
           veOceanABI, 
           provider
         );
@@ -25,7 +25,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
   export const getLockedOceanAmount = async(userAddress, signer) => {
     try {
         const contract = new ethers.Contract(
-          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
           veOceanABI, 
           signer
         );
@@ -41,7 +41,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
   export const getLockedEndTime = async(userAddress, signer) => {
     try {
         const contract = new ethers.Contract(
-          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
           veOceanABI, 
           signer
         );
@@ -57,7 +57,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
   export const lockOcean = async(amount, unlockDate, signer) => {
     try {
         const contract = new ethers.Contract(
-          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
           veOceanABI, 
           signer
         );
@@ -73,7 +73,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
   export const withdrawOcean = async(signer) => {
     try {
         const contract = new ethers.Contract(
-          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
           veOceanABI, 
           signer
         );
@@ -90,7 +90,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
   export const updateLockedOceanAmount = async(amount, signer) => {
     try {
         const contract = new ethers.Contract(
-          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
           veOceanABI, 
           signer
         );
@@ -108,7 +108,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
   export const updateLockPeriod = async(unlockDate, signer) => {
     try {
         const contract = new ethers.Contract(
-          getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), 
+          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
           veOceanABI, 
           signer
         );
@@ -124,7 +124,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
 
 export const getMaxUserEpoch = async(address, provider) => {
   try {
-      const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
+      const contract = new ethers.Contract(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
       const maxUserEpoch = await contract.user_point_epoch(address)
       return parseInt(BigInt(maxUserEpoch));
   } catch (error) {
@@ -134,7 +134,7 @@ export const getMaxUserEpoch = async(address, provider) => {
 
 export const getTotalVeSupply = async(provider) => {
   try {
-      const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
+      const contract = new ethers.Contract(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
       const totalSupply = await contract.totalSupply()
       const totalSupplyEth = parseFloat(ethers.utils.formatEther(totalSupply))
       return totalSupplyEth;
@@ -144,10 +144,10 @@ export const getTotalVeSupply = async(provider) => {
 }
 
 export const getTotalOceanSupply = async() => {
-  let provider = await getJsonRpcProvider(process.env.VE_SUPPORTED_CHAINID)
+  let provider = await getJsonRpcProvider(import.meta.env.VITE_VE_SUPPORTED_CHAINID)
   try {
-      const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean"), TokenABI.default, provider);
-      const totalSupply = await contract.balanceOf(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"))
+      const contract = new ethers.Contract(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "Ocean"), TokenABI.default, provider);
+      const totalSupply = await contract.balanceOf(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"))
       const totalSupplyEth = parseFloat(ethers.utils.formatEther(totalSupply))
       return totalSupplyEth;
   } catch (error) {

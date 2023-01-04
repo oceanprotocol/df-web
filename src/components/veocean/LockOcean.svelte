@@ -270,7 +270,8 @@
           <ItemWithLabel
             title={`Lock Multiplier`}
             value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
-            tooltipMessage={descriptions.default.tooltip_veocean_lock_multiplier}
+            tooltipMessage={descriptions.default
+              .tooltip_veocean_lock_multiplier}
           />
           <ItemWithLabel
             title={`Receive`}
@@ -284,18 +285,18 @@
         bind:value={$form.ageement}
       />
       <div class="item buttonContainer">
-        {#if $connectedChainId !== parseInt(process.env.VE_SUPPORTED_CHAINID)}
+        {#if $connectedChainId !== parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID)}
           <Button
             text={!$userAddress
               ? "Connect Wallet"
               : `Switch Network to ${
                   getNetworkDataById(
                     networksData,
-                    parseInt(process.env.VE_SUPPORTED_CHAINID)
+                    parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID)
                   )?.name
                 }`}
             onclick={() =>
-              switchWalletNetwork(process.env.VE_SUPPORTED_CHAINID)}
+              switchWalletNetwork(import.meta.env.VITE_VE_SUPPORTED_CHAINID)}
             fullWidth={true}
             disabled={!$userAddress}
           />
@@ -305,7 +306,7 @@
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
             spender={getAddressByChainIdKey(
-              process.env.VE_SUPPORTED_CHAINID,
+              import.meta.env.VITE_VE_SUPPORTED_CHAINID,
               "veOCEAN"
             )}
             amount={$form.amount}

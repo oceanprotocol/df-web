@@ -25,7 +25,7 @@ query userAllocations($userAddress: String!) {
 export const getAllAllocationsForAddress = async(userAddress) => {
     let res;
     try {
-      res = await fetch(`${process.env.BACKEND_API}/allocations`, {
+      res = await fetch(`${import.meta.env.VITE_BACKEND_API}/allocations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -66,7 +66,7 @@ export const allocateVeOceanToMultipleNFTs = async(amounts, dataAddresses, chain
   const formatedAmounts = amounts.map((amount) => amount * 100)
   try {
     const contract = new ethers.Contract(
-      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veAllocate"),
+      getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veAllocate"),
       veAllocateABI, 
       signer
     );
@@ -96,7 +96,7 @@ export const getAllocatedVeOcean = async(userAddress, dataAddress, chainId) => {
 export const getTotalAllocatedVeOcean = async(userAddress) => {
   try {
     const contract = new ethers.Contract(
-      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veAllocate"),
+      getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veAllocate"),
       veAllocateABI, 
       get(web3Provider)
     );

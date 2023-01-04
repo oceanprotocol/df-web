@@ -126,5 +126,13 @@
     "passive": 25000,
     "active": 25000,
     "total": 50000
+  },
+  {
+    "id": 17,
+    "date_start": "2022-01-02",
+    "date_end": "2022-01-10",
+    "passive": 25000,
+    "active": 25000,
+    "total": 50000
   }
 ]

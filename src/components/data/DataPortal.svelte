@@ -77,7 +77,7 @@
   }
 
   $: if ($dataAllocations) {
-    loadDatasets(`${process.env.BACKEND_API}/nftinfo`, $dataAllocations);
+    loadDatasets(`${import.meta.env.VITE_BACKEND_API}/nftinfo`, $dataAllocations);
   }
 </script>
 
@@ -86,12 +86,12 @@
     (!$datasets ||
       $isAppLoading ||
       !$userBalances[
-        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+        getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")
       ]) &&
     "alignContentCenter"
   }`}
 >
-  {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
+  {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
     <div class="wrapper">
       <h3 class="title">Curate Data to Earn OCEAN</h3>
       <div class="data">

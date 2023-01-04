@@ -29,13 +29,15 @@
     if (!localStorage.getItem("SupportedChainIds")) {
       localStorage.setItem(
         "SupportedChainIds",
-        JSON.stringify(JSON.parse(process.env.SUPPORTED_CHAIN_IDS))
+        JSON.stringify(JSON.parse(import.meta.env.VITE_SUPPORTED_CHAIN_IDS))
       );
     } else {
       let localStorageSupportedChainIds = JSON.parse(
         localStorage.getItem("SupportedChainIds")
       );
-      let envSupportedChainIds = JSON.parse(process.env.SUPPORTED_CHAIN_IDS);
+      let envSupportedChainIds = JSON.parse(
+        import.meta.env.VITE_SUPPORTED_CHAIN_IDS
+      );
       if (
         envSupportedChainIds.length != localStorageSupportedChainIds.length ||
         envSupportedChainIds.every(function (element, index) {
@@ -75,7 +77,7 @@
     <span class="text"> Selected networks </span>
     <Tooltip icon={ChevronDown} align="end">
       {#if $selectedNetworks}
-        {#each JSON.parse(process.env.SUPPORTED_CHAIN_IDS) as chainId}
+        {#each JSON.parse(import.meta.env.VITE_SUPPORTED_CHAIN_IDS) as chainId}
           <NetworkItem
             {chainId}
             checked={$selectedNetworks.find((id) => id === chainId) !==

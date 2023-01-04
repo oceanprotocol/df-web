@@ -1,6 +1,7 @@
 <script>
   import {
     connectWalletToSpecificProvider,
+    connectWallet,
     isWalletConnectModalOpen,
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
@@ -8,7 +9,8 @@
   let loading = false;
 
   const onButtonClick = async (provider) => {
-    await connectWalletToSpecificProvider(provider);
+    await connectWallet()
+    //await connectWalletToSpecificProvider(provider);
     isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => false);
   };
 </script>

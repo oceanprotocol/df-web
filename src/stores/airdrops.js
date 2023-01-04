@@ -78,7 +78,7 @@ export const updateClaimablesFromAirdrop = async (airdropData, chainId, address,
 }
 
 export const updateAllClaimables = async (airdropData, selectedNetworks, userAddress, rewards) => {
-    await Promise.all(JSON.parse(process.env.SUPPORTED_CHAIN_IDS).map(async function(chainId) {
+    await Promise.all(JSON.parse(import.meta.env.VITE_SUPPORTED_CHAIN_IDS).map(async function(chainId) {
         if( airdropData[chainId] ) {
             await updateClaimablesFromAirdrop(airdropData, chainId, userAddress, rewards);
         } else {
@@ -91,7 +91,7 @@ export const updateAllClaimables = async (airdropData, selectedNetworks, userAdd
 
 export const getDFRewards = async(userAddress, tokenAddress) => {
     try {
-        const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "DFRewards"), dfRewardsABI.default, get(networkSigner));
+        const contract = new ethers.Contract(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "DFRewards"), dfRewardsABI.default, get(networkSigner));
         const estimateClaim = await contract.claimable(userAddress, tokenAddress);
         const estimateClaimFormatted = ethers.utils.formatEther(BigInt(estimateClaim).toString(10));
         return estimateClaimFormatted
@@ -103,7 +103,7 @@ export const getDFRewards = async(userAddress, tokenAddress) => {
 
 export async function claimDFReward(userAddress, tokenAddress) {
     try {
-        const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "DFRewards"), dfRewardsABI.default, get(networkSigner));
+        const contract = new ethers.Contract(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "DFRewards"), dfRewardsABI.default, get(networkSigner));
         const resp = await contract.claimFor(userAddress, tokenAddress);
         await resp.wait();
         console.log("Success claiming rewards, txReceipt here", resp);

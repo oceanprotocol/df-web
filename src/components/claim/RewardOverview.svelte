@@ -33,7 +33,10 @@
       ? `| ${
           $APYs &&
           $userBalances[
-            getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+            getAddressByChainIdKey(
+              import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+              "veOCEAN"
+            )
           ] > 0
             ? totalApyUser > 10000
               ? "over 10000"

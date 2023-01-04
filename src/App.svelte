@@ -9,6 +9,7 @@
     isWalletConnectModalOpen,
     userAddress,
     connectWalletFromLocalStorage,
+    connectWallet,
     selectedNetworks,
     web3Provider,
     connectedChainId,
@@ -50,12 +51,16 @@
   import moment from "moment";
   import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
   import { totalUserAllocation } from "./stores/dataAllocations";
+  import { Buffer } from "buffer";
 
-  setupAppConfig();
+  // @ts-ignore
+  window.Buffer = Buffer;
+
+  //setupAppConfig();
 
   async function loadGeneralAPYs() {
     let activeAPY = $APYs?.active ? $APYs?.active : await getActiveAPY();
-    let passiveAPY = $APYs?.passive ? $APYs?.passive : await getPassiveAPY();
+    let passiveAPY = $APYs?.passive ? $APYs.passive : await getPassiveAPY();
     APYs.update(() => {
       return {
         passive: passiveAPY,
@@ -72,12 +77,12 @@
       $userAddress &&
       $lockedOceanAmount &&
       $userBalances[
-        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+        getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")
       ] > 0
         ? await getPassiveUserAPY(
             $userBalances[
               getAddressByChainIdKey(
-                process.env.VE_SUPPORTED_CHAINID,
+                import.meta.env.VITE_VE_SUPPORTED_CHAINID,
                 "veOCEAN"
               )
             ],
@@ -96,21 +101,19 @@
   }
 
   const client = new ApolloClient({
-    uri: process.env.SUBGRAPH_API,
+    uri: import.meta.env.VITE_SUBGRAPH_API,
     fetchOptions: {
       credentials: "include",
     },
   });
   setClient(client);
-  window.process = {
-    ...window.process,
-  };
 
   if ($userAddress === "") {
     if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
-      connectWalletFromLocalStorage();
+      //connectWalletFromLocalStorage();
     } else {
-      isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
+      //connectWallet()
+      //isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
     }
   }
 
@@ -151,7 +154,7 @@
 
   function initStore() {
     let emptyUserBalances = {};
-    emptyUserBalances[process.env.VE_OCEAN_CONTRACT] = 0;
+    emptyUserBalances[import.meta.env.VITE_VE_OCEAN_CONTRACT] = 0;
     emptyUserBalances[getAddressByChainIdKey($connectedChainId, "veOCEAN")] = 0;
     userBalances.update(() => emptyUserBalances);
     veOceanWithDelegations.update(() => 0);
@@ -168,12 +171,12 @@
   function setBalancesTo0() {
     let emptyUserBalances = {};
     let veOceanAddress = getAddressByChainIdKey(
-      process.env.VE_SUPPORTED_CHAINID,
+      import.meta.env.VITE_VE_SUPPORTED_CHAINID,
       "veOCEAN"
     );
     if (veOceanAddress) emptyUserBalances[veOceanAddress] = 0;
     let oceanAddress = getAddressByChainIdKey(
-      process.env.VE_SUPPORTED_CHAINID,
+      import.meta.env.VITE_VE_SUPPORTED_CHAINID,
       "Ocean"
     );
     if (oceanAddress) emptyUserBalances[oceanAddress] = 0;
@@ -181,7 +184,7 @@
   }
 
   $: if ($userAddress && $web3Provider && $connectedChainId) {
-    if ($connectedChainId != process.env.VE_SUPPORTED_CHAINID) {
+    if ($connectedChainId != import.meta.env.VITE_VE_SUPPORTED_CHAINID) {
       veOceanWithDelegations.update(() => 0);
       setBalancesTo0();
       totalUserAllocation.update(() => 0);
@@ -204,7 +207,9 @@
     );
     selectedNetworks.update(() => selectedNetworksFromLocalStorage);
   } else {
-    selectedNetworks.update(() => JSON.parse(process.env.SUPPORTED_CHAIN_IDS));
+    selectedNetworks.update(() =>
+      JSON.parse(import.meta.env.VITE_SUPPORTED_CHAIN_IDS)
+    );
   }
 
   onMount(async () => {

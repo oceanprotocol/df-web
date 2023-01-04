@@ -206,10 +206,10 @@
   function updateDisable() {
     disabled =
       $userBalances[
-        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+        getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")
       ] === undefined ||
       !$userAddress ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
+      $connectedChainId != import.meta.env.VITE_VE_SUPPORTED_CHAINID ||
       !$oceanUnlockDate;
 
     updateTooltip();
@@ -236,10 +236,10 @@
   $: if ($userAddress && $connectedChainId) {
     disabled =
       $userBalances[
-        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+        getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")
       ] === undefined ||
       !$userAddress ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
+      $connectedChainId != import.meta.env.VITE_VE_SUPPORTED_CHAINID ||
       !$oceanUnlockDate;
   }
 
@@ -263,7 +263,7 @@
                   : totalAvailable)
               }/100%`
             : "loading..."}
-          tooltipMessage={tooltipMessage}
+          {tooltipMessage}
           {tooltipState}
         />
         <Button

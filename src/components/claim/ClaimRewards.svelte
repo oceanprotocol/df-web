@@ -41,7 +41,7 @@
         "success"
       ).then(async (result) => {
         await updateAllClaimables(
-          JSON.parse(process.env.AIRDROP_CONFIG),
+          JSON.parse(import.meta.env.VITE_AIRDROP_CONFIG),
           $selectedNetworks,
           $userAddress
         );

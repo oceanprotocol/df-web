@@ -96,7 +96,7 @@
       disabled={loading ||
         withdrawing ||
         !$oceanUnlockDate ||
-        parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId ||
+        parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID) !== $connectedChainId ||
         (moment().utc().isBefore($oceanUnlockDate) &&
           blockTimestamp <= unlockTimestamp)}
       onclick={() => withdraw()}

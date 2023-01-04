@@ -66,7 +66,7 @@
 
   $: if (
     $userAddress &&
-    parseInt(process.env.VE_SUPPORTED_CHAINID) === $connectedChainId
+    parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID) === $connectedChainId
   ) {
     updateBalance();
   }
@@ -113,7 +113,7 @@
     amountToAllocate = newValue;
     if (
       amountToAllocate > 0.0 &&
-      parseInt(process.env.VE_SUPPORTED_CHAINID) === $connectedChainId
+      parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID) === $connectedChainId
     ) {
       updateCanAllocate();
       loading = false;
@@ -131,7 +131,7 @@
   }
 
   async function switchNetwork() {
-    await switchWalletNetwork(process.env.VE_SUPPORTED_CHAINID);
+    await switchWalletNetwork(import.meta.env.VITE_VE_SUPPORTED_CHAINID);
   }
 
   $: if (availableAllocation) {
@@ -144,13 +144,13 @@
     <h4>Allocation</h4>
   </div>
   <div class="components-container">
-    {#if $userAddress && parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId}
+    {#if $userAddress && parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID) !== $connectedChainId}
       <div class="button">
         <Button
           text={`Switch Network to ${
             getNetworkDataById(
               networksData,
-              parseInt(process.env.VE_SUPPORTED_CHAINID)
+              parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID)
             )?.name
           }`}
           onclick={() => switchNetwork()}

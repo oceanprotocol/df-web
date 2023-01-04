@@ -1,14 +1,14 @@
 import { writable } from "svelte/store";
 import { ethers, BigNumber } from "ethers";
-import Web3Modal from "web3modal"
+import {Web3Modal} from "@web3modal/html"
 import * as networksDataArray from "../networks-metadata.json";
-
+//import WalletConnectProvider from '@walletconnect/web3-provider'
 import { configureChains, createClient } from "@wagmi/core";
-import { arbitrum, mainnet, polygon } from "@wagmi/core/chains";
+import { mainnet } from "@wagmi/core/chains";
 import {
   EthereumClient,
   modalConnectors,
-  walletConnectProvider,
+  walletConnectProvider
 } from "@web3modal/ethereum";
 
 
@@ -23,11 +23,11 @@ export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
 
-const chains = [arbitrum, mainnet, polygon];
+const chains = [mainnet];
 
 // Wagmi Core Client
 const { provider } = configureChains(chains, [
-  walletConnectProvider({ projectId: process.env.WALLET_CONNECT_KEY }),
+  walletConnectProvider({ projectId: import.meta.env.VITE_WALLET_CONNECT_KEY }),
 ]);
 const wagmiClient = createClient({
   autoConnect: true,
@@ -38,9 +38,25 @@ const wagmiClient = createClient({
 // Web3Modal and Ethereum Client
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 const web3Modal = new Web3Modal(
-  { projectId: process.env.WALLET_CONNECT_KEY },
+  { projectId: import.meta.env.VITE_WALLET_CONNECT_KEY },
   ethereumClient
 );
+
+/*const providerOptions = {
+  walletconnect: {
+    package: WalletConnectProvider,
+    options: {
+      // Mikko's test key - don't copy as your mileage may vary
+      infuraId: import.meta.env.VITE_INFURA_KEY,
+    },
+  }
+};
+
+const web3Modal = new Web3Modal({
+  cacheProvider: true, // optional
+  providerOptions, // required
+  disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
+});*/
 
 
 // TODO - Replace networkData w/ networksDataArray
@@ -115,7 +131,8 @@ export const signMessage = async (msg, signer) => {
 export const connectWalletToSpecificProvider = async (provider) => {
   let instance;
   try {
-    instance = await web3Modal?.connectTo(provider);
+    web3Modal.connect()
+    //instance = await web3Modal?.connectTo(provider);
     
     //provider = new ethers.providers.Web3Provider(window.ethereum)
   } catch (e) {
@@ -144,34 +161,14 @@ export const connectWalletToSpecificProvider = async (provider) => {
 }
 
 export const connectWallet = async () => {
-  let instance;
+  console.log('herre')
   try {
-    instance = await web3Modal?.connect();
-    //provider = new ethers.providers.Web3Provider(window.ethereum)
+    const instance = await web3Modal?.openModal();
+    console.log(instance)
   } catch (e) {
     console.log("Could not get a wallet connection", e);
     return;
   }
-
-  // Subscribe to accounts change
-  instance.on("accountsChanged", (accounts) => {
-    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
-    userAddress.set(accounts[0])
-    networkSigner.set(signer)
-  });
-
-  // Subscribe to chainChanged change
-  instance.on("chainChanged", (chainId) => {
-    connectedChainId.set(Number(chainId))
-    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
-    networkSigner.set(provider.getSigner())
-    web3Provider.set(provider)
-  });
-
-  // Subscribe to networkId change
-  instance.on("disconnect", disconnect);
-
-  setValuesAfterConnection(instance);
 };
 
 export const disconnect = async () => {

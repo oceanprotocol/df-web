@@ -6,13 +6,14 @@
     disconnect,
     connectedChainId,
     web3Provider,
+    connectWallet
   } from "../../stores/web3";
   import { Tooltip } from "carbon-components-svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
   import NetworkItem from "../common/NetworkItem.svelte";
   import DebugAddress from "./DebugAddress.svelte";
 
-  let enableDebugAddress = process.env.DEBUGGING === "enabled";
+  let enableDebugAddress = import.meta.env.VITE_DEBUGGING === "enabled";
   const resetAccount = async () => {
     let signer = await $web3Provider.getSigner();
     let address = await signer.getAddress();
@@ -24,7 +25,7 @@
   {#if !$userAddress}
     <Button
       onclick={() => {
-        isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
+        connectWallet()
       }}
       text={`Connect Wallet`}
       textOnly

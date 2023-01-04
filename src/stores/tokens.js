@@ -14,11 +14,11 @@ const updateBalanceStore = (tokenAddress, newBalance) => {
 }
 
 export const updateUserBalanceOcean = async (userAddress, provider) => {
-  const oceanContractAddress = getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean");
+  const oceanContractAddress = getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "Ocean");
 
   const balanceInWei = await balanceOf(
     get(userBalances),
-    process.env.VE_SUPPORTED_CHAINID,
+    import.meta.env.VITE_VE_SUPPORTED_CHAINID,
     oceanContractAddress,
     userAddress,
     provider,
@@ -35,7 +35,7 @@ export const updateUserBalanceOcean = async (userAddress, provider) => {
 export const updateUserBalanceVeOcean = async (userAddress, provider) => {
   const veOceanBalance = await getVeOceanBalance(userAddress, provider)
   updateBalanceStore(
-    getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"),
+    getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),
     veOceanBalance
   )
 }

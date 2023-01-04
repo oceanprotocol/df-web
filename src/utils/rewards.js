@@ -18,7 +18,7 @@ export const convertWPRtoAPY = (wpr) =>{
 export const getRewards = async(userAddress) => {
   let res;
   try {
-    res = await fetch(`${process.env.BACKEND_API}/rewards`, {
+    res = await fetch(`${import.meta.env.VITE_BACKEND_API}/rewards`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -64,7 +64,7 @@ export const getPassiveUserAPY = async (userVeOcean,lockedOcean,provider) => {
 export const getActiveAPY = async (userAddress) => {
   let res;
   try {
-    res = await fetch(`${process.env.BACKEND_API}/apy/${userAddress ? `addr/${userAddress}` : 'active'}`, {
+    res = await fetch(`${import.meta.env.VITE_BACKEND_API}/apy/${userAddress ? `addr/${userAddress}` : 'active'}`, {
       method: "GET",
       headers: {
         'Accept': 'application/json',
