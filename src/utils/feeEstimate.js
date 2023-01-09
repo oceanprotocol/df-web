@@ -1,16 +1,17 @@
 import {ethers} from "ethers";
 import * as veFeeEstimateABI from "./abis/veFeeEstimateABI";
 import {networkSigner} from "../stores/web3";
+import {readContract} from "@wagmi/core"
 import {getAddressByChainIdKey} from "../utils/address/address";
 
-export const getRewardsFeeEstimate = async(userAddress, provider) => {
+export const getRewardsFeeEstimate = async(userAddress) => {
     try {
-      const contract = new ethers.Contract(
-        getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veFeeEstimate"),
-        veFeeEstimateABI.default, 
-        provider
-      );
-      const estimateClaim = await contract.estimateClaim(userAddress)
+      const estimateClaim = await readContract({
+        address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veFeeEstimate"),
+        args: [userAddress],
+        abi: veFeeEstimateABI.default,
+        functionName: 'estimateClaim',
+      })
       const estimateClaimFormatted = ethers.utils.formatEther(BigInt(estimateClaim).toString(10))
       return estimateClaimFormatted
   } catch (error) {

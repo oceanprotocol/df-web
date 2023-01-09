@@ -1,6 +1,7 @@
 import { Decimal } from 'decimal.js';
 import { ethers } from "ethers";
 import { getRpcUrlByChainId, GASLIMIT_DEFAULT } from "./web3";
+import { readContract } from "@wagmi/core";
 import * as TokenABI from "./abis/tokenABI";
 
 //TODO - Standardize function calls & Params to follow ocean.js
@@ -23,9 +24,12 @@ export const balanceOf = async (balances, chainId, tokenAddress, account, provid
     if (balances[tokenAddress] === undefined) {
       balances[tokenAddress] = {};
     }
-    const tokenContract = await getTokenContract(chainId, tokenAddress, provider);
-    balance = await tokenContract.balanceOf(account);
-
+    const balance = await readContract({
+      address: tokenAddress,
+      args: [account],
+      abi: TokenABI.default,
+      functionName: 'balanceOf',
+    })
     return balance;
   } catch(err) {
     console.error(err);

@@ -48,9 +48,12 @@ const wagmiClient = createClient({
 // Web3Modal and Ethereum Client
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 ethereumClient.watchAccount((data) =>{
-console.log(data)
   if(data.address){
     userAddress.set(data.address)
+    let web3Provider = new ethers.providers.Web3Provider(wagmiClient.provider)
+    web3Provider.s
+    console.log(web3Provider.getSigner())
+    //web3Provider.set(ethereumClient.wagmi.providers)
     //connectedChainId.set()
   }
 })
@@ -122,7 +125,7 @@ export const connectWalletFromLocalStorage = async () => {
   // Subscribe to chainId change
   instance.on("chainChanged", (chainId) => {
     connectedChainId.set(Number(chainId))
-    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+    web3Provider.set(new ethers.providers.Web3Provider(window.ethereum, 'any'))
     networkSigner.set(provider.getSigner())
     web3Provider.set(provider)
   });

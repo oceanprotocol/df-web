@@ -33,7 +33,7 @@
   };
 
   const updateLockEndDate = async () => {
-    unlockTimestamp = await getLockedEndTime($userAddress, $networkSigner);
+    unlockTimestamp = await getLockedEndTime($userAddress);
     await oceanUnlockDate.update(() =>
       unlockTimestamp ? moment.utc(unlockTimestamp) : undefined
     );

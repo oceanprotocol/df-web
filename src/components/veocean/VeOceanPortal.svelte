@@ -15,8 +15,7 @@
     lockedOceanAmount.update(() => lockedOceans);
     if (!oceanUnlockDate) {
       let unlockDateMilliseconds = await getLockedEndTime(
-        $userAddress,
-        $networkSigner
+        $userAddress
       );
       await oceanUnlockDate.update(() =>
         unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined

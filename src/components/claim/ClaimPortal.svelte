@@ -40,7 +40,7 @@
 
     veBalance = await getVeOceanBalance($userAddress, $web3Provider);
 
-    const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
+    const veRewards = await getRewardsFeeEstimate($userAddress);
     veClaimables.set(veRewards);
 
     const dfRewards = await getDFRewards(

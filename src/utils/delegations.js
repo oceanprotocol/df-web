@@ -1,19 +1,19 @@
 import {ethers} from "ethers";
 import {get} from "svelte/store"
 import * as VeDelegationABI from "./abis/veDelegationABI";
-import {networkSigner} from "../stores/web3";
+import {readContract} from "@wagmi/core";
 import {getAddressByChainIdKey} from "../utils/address/address";
 
 const veDelegationABI = VeDelegationABI.default
 
 export const getUserVotingPowerWithDelegations = async(userAddress) => {
     try {
-      const contract = new ethers.Contract(
-        getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veDelegation"),
-        veDelegationABI, 
-        get(networkSigner)
-      );
-      const balanceWithDelegations = await contract.adjusted_balance_of(userAddress)
+      const balanceWithDelegations = await readContract({
+        address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veDelegation"),
+        args: [userAddress],
+        abi: veDelegationABI,
+        functionName: 'adjusted_balance_of',
+      })
       const balanceWithDelegationsFormatted = ethers.utils.formatEther(BigInt(balanceWithDelegations).toString(10))
       return balanceWithDelegationsFormatted
   } catch (error) {

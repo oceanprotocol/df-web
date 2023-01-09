@@ -86,8 +86,7 @@
                 "veOCEAN"
               )
             ],
-            $lockedOceanAmount,
-            $web3Provider
+            $lockedOceanAmount
           )
         : 0;
     APYs.update((oldObj) => {
@@ -121,8 +120,7 @@
     let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
     lockedOceanAmount.update(() => lockedOceans);
     let unlockDateMilliseconds = await getLockedEndTime(
-      $userAddress,
-      $networkSigner
+      $userAddress
     );
     await oceanUnlockDate.update(() =>
       unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
@@ -183,7 +181,7 @@
     userBalances.update(() => emptyUserBalances);
   }
 
-  $: if ($userAddress && $web3Provider && $connectedChainId) {
+  $: if ($userAddress && $connectedChainId) {
     if ($connectedChainId != import.meta.env.VITE_VE_SUPPORTED_CHAINID) {
       veOceanWithDelegations.update(() => 0);
       setBalancesTo0();

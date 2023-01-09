@@ -140,8 +140,7 @@
         await updateUserBalanceVeOcean($userAddress, $web3Provider);
         await updateUserBalanceOcean($userAddress, $web3Provider);
         let unlockDateMilliseconds = await getLockedEndTime(
-          $userAddress,
-          $networkSigner
+          $userAddress
         );
         let lockedOceans = await getLockedOceanAmount(
           $userAddress,
