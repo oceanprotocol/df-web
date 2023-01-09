@@ -1,6 +1,5 @@
 <script>
   import {
-    connectWalletToSpecificProvider,
     connectWallet,
     isWalletConnectModalOpen,
   } from "../../stores/web3";
@@ -10,7 +9,6 @@
 
   const onButtonClick = async (provider) => {
     await connectWallet()
-    //await connectWalletToSpecificProvider(provider);
     isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => false);
   };
 </script>

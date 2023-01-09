@@ -3,27 +3,37 @@ import { ethers, BigNumber } from "ethers";
 import {Web3Modal} from "@web3modal/html"
 import * as networksDataArray from "../networks-metadata.json";
 //import WalletConnectProvider from '@walletconnect/web3-provider'
-import { configureChains, createClient } from "@wagmi/core";
-import { mainnet } from "@wagmi/core/chains";
+import { configureChains, createClient} from "@wagmi/core";
+import { mainnet,goerli } from "@wagmi/core/chains";
+import SignClient from "@walletconnect/sign-client";
 import {
   EthereumClient,
   modalConnectors,
   walletConnectProvider
 } from "@web3modal/ethereum";
 
-
 export let userAddress = writable("");
 export let poolContracts = writable("");
 export let web3Provider = writable("");
 export let networkSigner = writable("");
-export let connectedChainId = writable("");
+export let connectedChainId = writable(null);
 export let selectedNetworks = writable(localStorage?.getItem("selectedNetworks") ? JSON.parse(localStorage?.getItem("selectedNetworks")): []);
 export let jsonRPCProvider = writable({});
 export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
 
-const chains = [mainnet];
+const chains = [mainnet,goerli];
+
+const signClient = await SignClient.init({
+  projectId: import.meta.env.VITE_WALLET_CONNECT_KEY ,
+  metadata: {
+    name: "web3Modal",
+    description: "Example Dapp",
+    url: "#",
+    icons: ["https://walletconnect.com/walletconnect-logo.png"],
+  },
+});
 
 // Wagmi Core Client
 const { provider } = configureChains(chains, [
@@ -37,26 +47,26 @@ const wagmiClient = createClient({
 
 // Web3Modal and Ethereum Client
 const ethereumClient = new EthereumClient(wagmiClient, chains);
+ethereumClient.watchAccount((data) =>{
+console.log(data)
+  if(data.address){
+    userAddress.set(data.address)
+    //connectedChainId.set()
+  }
+})
+ethereumClient.watchNetwork((network) => {
+  connectedChainId.set(network?.chain?.id)
+})
+console.log(ethereumClient)
 const web3Modal = new Web3Modal(
   { projectId: import.meta.env.VITE_WALLET_CONNECT_KEY },
   ethereumClient
 );
 
-/*const providerOptions = {
-  walletconnect: {
-    package: WalletConnectProvider,
-    options: {
-      // Mikko's test key - don't copy as your mileage may vary
-      infuraId: import.meta.env.VITE_INFURA_KEY,
-    },
-  }
-};
+web3Modal.setTheme({
+  themeMode: "light"
+})
 
-const web3Modal = new Web3Modal({
-  cacheProvider: true, // optional
-  providerOptions, // required
-  disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
-});*/
 
 
 // TODO - Replace networkData w/ networksDataArray
@@ -128,43 +138,38 @@ export const signMessage = async (msg, signer) => {
   return signedMessage;
 };
 
-export const connectWalletToSpecificProvider = async (provider) => {
-  let instance;
-  try {
-    web3Modal.connect()
-    //instance = await web3Modal?.connectTo(provider);
-    
-    //provider = new ethers.providers.Web3Provider(window.ethereum)
-  } catch (e) {
-    console.log("Could not get a wallet connection", e);
-    return;
-  }
-  // Subscribe to accounts change
-  instance.on("accountsChanged", (accounts) => {
-    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
-    userAddress.set(accounts[0])
-    networkSigner.set(signer)
-  });
-
-  // Subscribe to networkId change
-  instance.on("chainChanged", (chainId) => {
-    connectedChainId.set(Number(chainId))
-    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
-    networkSigner.set(provider.getSigner())
-    web3Provider.set(provider)
-  });
-
-  // Subscribe to networkId change
-  instance.on("disconnect", disconnect);
-
-  setValuesAfterConnection(instance);
-}
-
 export const connectWallet = async () => {
-  console.log('herre')
   try {
-    const instance = await web3Modal?.openModal();
-    console.log(instance)
+    const { uri, approval } = await signClient.connect({
+      // Optionally: pass a known prior pairing (e.g. from `signClient.core.pairing.getPairings()`) to skip the `uri` step.
+      // Provide the namespaces and chains (e.g. `eip155` for EVM-based chains) we want to use in this session.
+      requiredNamespaces: {
+        eip155: {
+          methods: [
+            "eth_sendTransaction",
+            "eth_signTransaction",
+            "eth_sign",
+            "personal_sign",
+            "eth_signTypedData",
+          ],
+          chains: ["eip155:1"],
+          events: ["chainChanged", "accountsChanged"],
+        },
+      },
+    });
+    if (uri) {
+      //dsc()
+      /*const result = await connect({
+        chainId: 1,
+        connector: new InjectedConnector(),
+      })*/
+      console.log(uri)
+      let resp = await web3Modal?.openModal({ uri });
+      //const session = await approval();
+      console.log(resp)
+      console.log('session')
+      //console.log(session)
+    }
   } catch (e) {
     console.log("Could not get a wallet connection", e);
     return;
@@ -172,7 +177,7 @@ export const connectWallet = async () => {
 };
 
 export const disconnect = async () => {
-  await web3Modal?.clearCachedProvider();
+  ethereumClient.disconnect()
   userAddress.set(undefined);
   networkSigner.set(undefined);
   localStorage?.removeItem("walletconnect");
@@ -181,64 +186,13 @@ export const disconnect = async () => {
 };
 
 export const switchWalletNetwork = async(chainId) => {
-  let networksList = networksDataArray.default;
-  const networkNode = await networksList.find(
+  let resp = await ethereumClient.switchNetwork({'chainId': chainId})
+  console.log(resp)
+  connectedChainId.set(resp.id.toString())
+  /*const networkNode = await networksList.find(
     (data) => data.chainId === parseInt(chainId)
   )
-  addCustomNetwork(networkNode)
-}
-
-export async function addCustomNetwork(
-  network
-) {
-  // Always add explorer URL from ocean.js first, as it's null sometimes
-  // in network data
-  const blockExplorerUrls = [
-    network.explorers && network.explorers[0].url
-  ]
-
-  const newNetworkData = {
-    chainId: `0x${network.chainId.toString(16)}`,
-    chainName: network.name,
-    nativeCurrency: network.nativeCurrency,
-    rpcUrls: network.rpc,
-    blockExplorerUrls
-  }
-  try {
-    await window.ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: newNetworkData.chainId }]
-    })
-  } catch (switchError) {
-    if (switchError.code === 4902) {
-      await window.ethereum.request(
-        {
-          method: 'wallet_addEthereumChain',
-          params: [newNetworkData]
-        },
-        (err, added) => {
-          if (err || 'error' in added) {
-            console.error(
-              `Couldn't add ${network.name} (0x${
-                network.chainId
-              }) network to MetaMask, error: ${err || added.error}`
-            )
-          } else {
-            console.log(
-              `Added ${network.name} (0x${network.chainId}) network to MetaMask`
-            )
-          }
-        }
-      )
-    } else {
-      console.error(
-        `Couldn't add ${network.name} (0x${network.chainId}) network to MetaMask, error: ${switchError}`
-      )
-    }
-  }
-  console.log(
-    `Added ${network.name} (0x${network.chainId}) network to MetaMask`
-  )
+  addCustomNetwork(networkNode)*/
 }
 
 export function getGasFeeMultiplier(chainId) {

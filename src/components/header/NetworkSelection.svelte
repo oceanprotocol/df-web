@@ -56,6 +56,7 @@
   $: if ($selectedNetworks) {
     localStorage.setItem("selectedNetworks", JSON.stringify($selectedNetworks));
   }
+
 </script>
 
 {#if $selectedNetworks?.length < 2}
