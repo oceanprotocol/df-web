@@ -2,7 +2,6 @@
   import Button from "../common/Button.svelte";
   import {
     isWalletConnectModalOpen,
-    connectWalletFromLocalStorage,
     userAddress,
     connectedChainId,
   } from "../../stores/web3";
@@ -17,16 +16,7 @@
 
   // MODAL
   async function open() {
-    if ($userAddress === "") {
-      networkDisabled = true;
-      if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
-        connectWalletFromLocalStorage();
-      } else {
-        isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
-      }
-    } else {
-      isOpen = true;
-    }
+  
   }
 
   function close() {

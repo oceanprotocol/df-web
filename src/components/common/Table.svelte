@@ -27,7 +27,6 @@
   import Swal from "sweetalert2";
   import {
     connectedChainId,
-    networkSigner,
     userAddress,
   } from "../../stores/web3";
   import { oceanUnlockDate } from "../../stores/veOcean";
@@ -160,8 +159,7 @@
       await allocateVeOceanToMultipleNFTs(
         amounts,
         nftAddresses,
-        chainIds,
-        $networkSigner
+        chainIds
       );
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
@@ -171,8 +169,7 @@
     Swal.fire("Success!", "Allocation successfully updated.", "success").then(
       async () => {
         let newAllocation = await getTotalAllocatedVeOcean(
-          $userAddress,
-          $networkSigner
+          $userAddress
         );
         totalUserAllocation.update(() => newAllocation);
         loading = undefined;

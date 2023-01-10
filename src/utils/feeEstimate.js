@@ -1,6 +1,5 @@
 import {ethers} from "ethers";
 import * as veFeeEstimateABI from "./abis/veFeeEstimateABI";
-import {networkSigner} from "../stores/web3";
 import {readContract} from "@wagmi/core"
 import {getAddressByChainIdKey} from "../utils/address/address";
 
@@ -25,8 +24,7 @@ export async function claimVERewards(userAddress, signer) {
     // ABI function is overriden, specify which fn to use to avoid crashing
     const contract = new ethers.Contract(
         getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veFeeDistributor"),
-        ["function claim(address _addr) returns (uint 256)"],
-        get(networkSigner)
+        ["function claim(address _addr) returns (uint 256)"]
       );
       const resp = await contract.claim(userAddress);
       await resp.wait();

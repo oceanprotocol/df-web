@@ -4,7 +4,7 @@
     approve as approveToken,
     isTokenAmountApproved,
   } from "../../utils/tokens";
-  import { networkSigner, userAddress } from "../../stores/web3";
+  import { userAddress } from "../../stores/web3";
   import Swal from "sweetalert2";
 
   export let disabled = false;
@@ -30,8 +30,7 @@
       let tx = await approveToken(
         tokenAddress,
         spender,
-        infiniteAmount ? 2 ** 53 - 1 : amount,
-        $networkSigner
+        infiniteAmount ? 2 ** 53 - 1 : amount
       );
       const receipt = await tx.wait();
     } catch (e) {
@@ -56,8 +55,7 @@
       tokenAddress,
       amount,
       $userAddress,
-      spender,
-      $networkSigner
+      spender
     ).then((resp) => {
       // if user has lock and amount is at zero, let them update the lock
       if( hasLock && amount <= 0 ) {

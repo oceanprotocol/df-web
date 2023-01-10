@@ -8,11 +8,9 @@
   import {
     isWalletConnectModalOpen,
     userAddress,
-    connectWalletFromLocalStorage,
     connectWallet,
     selectedNetworks,
-    connectedChainId,
-    networkSigner,
+    connectedChainId
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
@@ -106,17 +104,8 @@
   });
   setClient(client);
 
-  if ($userAddress === "") {
-    if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
-      //connectWalletFromLocalStorage();
-    } else {
-      //connectWallet()
-      //isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
-    }
-  }
-
   async function initRewards() {
-    let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
+    let lockedOceans = await getLockedOceanAmount($userAddress);
     lockedOceanAmount.update(() => lockedOceans);
     let unlockDateMilliseconds = await getLockedEndTime(
       $userAddress
@@ -127,8 +116,7 @@
 
     if (unlockDateMilliseconds) {
       let newAllocation = await getTotalAllocatedVeOcean(
-        $userAddress,
-        $networkSigner
+        $userAddress
       );
       totalUserAllocation.update(() => newAllocation);
     }

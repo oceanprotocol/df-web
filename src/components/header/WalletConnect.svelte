@@ -5,7 +5,6 @@
     userAddress,
     disconnect,
     connectedChainId,
-    web3Provider,
     connectWallet
   } from "../../stores/web3";
   import { Tooltip } from "carbon-components-svelte";
@@ -15,7 +14,6 @@
 
   let enableDebugAddress = import.meta.env.VITE_DEBUGGING === "enabled";
   const resetAccount = async () => {
-    let signer = await $web3Provider.getSigner();
     let address = await signer.getAddress();
     userAddress.update(() => address);
   };

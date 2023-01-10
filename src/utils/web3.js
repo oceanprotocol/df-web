@@ -1,22 +1,9 @@
 import { fetchSigner, getContract } from "@wagmi/core";
-import { ethers, BigNumber } from "ethers";
+import { ethers, } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
-import { getAddressByChainIdKey } from "./address/address";
 
 let networksList = networksDataArray.default;
 export const GASLIMIT_DEFAULT = 1000000;
-
-export const getGasFeeMultiplier = (chainId) => {
-  const gasFeeMultiplier = {
-    1: 1.05,
-    3: 1,
-    4: 1,
-    56: 1.05,
-    246: 1.05,
-    1285: 1.05
-  }
-  return gasFeeMultiplier.indexOf(chainId) >= 0 ? gasFeeMultiplier[chainId] : 1;
-}
 
 export const getNetworkDataById = (data,networkId) => {
   if (!networkId) return

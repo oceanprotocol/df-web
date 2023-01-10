@@ -7,7 +7,6 @@
   } from "../../stores/dataAllocations";
   import {
     connectedChainId,
-    networkSigner,
     userAddress,
   } from "../../stores/web3";
   import Table from "../common/Table.svelte";
@@ -23,8 +22,7 @@
 
   const loadTotalAllocation = async () => {
     let newAllocation = await getTotalAllocatedVeOcean(
-      $userAddress,
-      $networkSigner
+      $userAddress
     );
     totalUserAllocation.update(() => newAllocation);
   };

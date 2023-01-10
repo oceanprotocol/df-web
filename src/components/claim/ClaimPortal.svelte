@@ -2,8 +2,7 @@
   import ClaimRewards from "./ClaimRewardsVeDF.svelte";
   import {
     userAddress,
-    connectedChainId,
-    web3Provider,
+    connectedChainId
   } from "../../stores/web3.js";
   import {
     veClaimables,
@@ -38,7 +37,7 @@
     }
     loading = true;
 
-    veBalance = await getVeOceanBalance($userAddress, $web3Provider);
+    veBalance = await getVeOceanBalance($userAddress);
 
     const veRewards = await getRewardsFeeEstimate($userAddress);
     veClaimables.set(veRewards);

@@ -1,5 +1,5 @@
 <script>
-  import { networkSigner, userAddress } from "../../stores/web3";
+  import { userAddress } from "../../stores/web3";
   import OceanSummary from "./OceanSummary.svelte";
   import VeOceanCard from "./VeOceanCard.svelte";
   import LockOcean from "./LockOcean.svelte";
@@ -11,7 +11,7 @@
 
   const loadValues = async () => {
     loading = true;
-    let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
+    let lockedOceans = await getLockedOceanAmount($userAddress);
     lockedOceanAmount.update(() => lockedOceans);
     if (!oceanUnlockDate) {
       let unlockDateMilliseconds = await getLockedEndTime(

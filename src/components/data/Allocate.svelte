@@ -1,7 +1,6 @@
 <script>
   import {
     userAddress,
-    networkSigner,
     connectedChainId,
     switchWalletNetwork,
     getNetworkDataById,
@@ -49,8 +48,7 @@
     );
     if (!$totalUserAllocation) {
       newTotalUserAllocation = await getTotalAllocatedVeOcean(
-        $userAddress,
-        $networkSigner
+        $userAddress
       );
       totalUserAllocation.update(() => newTotalUserAllocation);
     }
@@ -77,8 +75,7 @@
       await allocateVeOcean(
         amountToAllocate,
         data.nftAddress,
-        $connectedChainId,
-        $networkSigner
+        $connectedChainId
       );
       Swal.fire(
         "Success!",
@@ -89,8 +86,7 @@
         await updateBalance();
         updateCanAllocate();
         let newTotalUserAllocation = await getTotalAllocatedVeOcean(
-          $userAddress,
-          $networkSigner
+          $userAddress
         );
         totalUserAllocation.update(() => newTotalUserAllocation);
         updateAvailableAllocation(newTotalUserAllocation);

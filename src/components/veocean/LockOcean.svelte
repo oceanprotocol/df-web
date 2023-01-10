@@ -3,8 +3,7 @@
     userAddress,
     connectedChainId,
     switchWalletNetwork,
-    getNetworkDataById,
-    web3Provider,
+    getNetworkDataById
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Card from "../common/Card.svelte";
@@ -101,7 +100,7 @@
   });
 
   async function init() {
-    await updateUserBalanceOcean($userAddress, $web3Provider);
+    await updateUserBalanceOcean($userAddress);
     oceanBalance = getOceanBalance($connectedChainId);
   }
 
@@ -135,8 +134,8 @@
       async () => {
         loading = false;
         $form.ageement = false;
-        await updateUserBalanceVeOcean($userAddress, $web3Provider);
-        await updateUserBalanceOcean($userAddress, $web3Provider);
+        await updateUserBalanceVeOcean($userAddress);
+        await updateUserBalanceOcean($userAddress);
         let unlockDateMilliseconds = await getLockedEndTime(
           $userAddress
         );

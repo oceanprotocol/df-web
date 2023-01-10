@@ -1,7 +1,6 @@
 <script>
   import {
     userAddress,
-    networkSigner,
     connectedChainId,
   } from "../../stores/web3";
   import { updateUserBalanceOcean } from "../../stores/tokens";
@@ -54,7 +53,7 @@
   const withdraw = async () => {
     withdrawing = true;
     try {
-      await withdrawOcean($networkSigner);
+      await withdrawOcean();
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
       withdrawing = false;
@@ -68,8 +67,7 @@
       withdrawing = false;
       await updateUserBalanceOcean($userAddress);
       let lockedOceans = await getLockedOceanAmount(
-        $userAddress,
-        $networkSigner
+        $userAddress
       );
       lockedOceanAmount.update(() => lockedOceans);
       const newVeOceansWithDelegations =

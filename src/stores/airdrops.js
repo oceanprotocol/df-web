@@ -1,14 +1,11 @@
 import {writable} from "svelte/store";
-import {getRpcUrlByChainId} from "../utils/web3";
 import {ethers} from "ethers";
-import * as airdropABI from "../utils/abis/airdropABI";
 import * as dfRewardsABI from "../utils/abis/DFRewardsABI";
-import {get} from "svelte/store";
-import {networkSigner} from "../stores/web3";
 import {getAddressByChainIdKey} from "../utils/address/address";
+import { getGasFeeEstimate } from "../utils/web3";
+import { prepareWriteContract, readContract, writeContract } from "@wagmi/core";
 
 export let contracts = writable({});
-export let airdrops = writable({});
 export let rewards = writable();
 export let APYs = writable();
 export let veEstimate = writable(0);
@@ -34,65 +31,14 @@ export const getTokenAddress = (chainId, tokenName, airdropsConfig) => {
     return null;
 }
 
-export const updateClaimablesFromAirdrop = async (airdropData, chainId, address, rewards) => {
-    if (!chainId || !address) return null;
-    let tokens
-    try {
-        const rpcURL = await getRpcUrlByChainId(chainId);
-        if( rpcURL ) {
-            tokens = Object.keys(airdropData[chainId].tokensData)
-            const provider = new ethers.providers.InfuraProvider(rpcURL);
-            const contract = new ethers.Contract(airdropData[chainId].airdropAddress, airdropABI.default, provider);
-            const claimableRewards = await contract.claimables(address, tokens)
-            let claimableRewardsNumber = 0
-            let estimatedRewardsNumber = 0
-            rewards.forEach((reward) => {
-                if(reward.chainID === chainId){
-                    estimatedRewardsNumber+=1
-                }
-            })
-            airdropData[chainId]['estimatedRewards'] = estimatedRewardsNumber
-            for (let tokenAddress of tokens) {
-                let totalEstimatedRewardsForToken = 0
-                rewards.forEach((reward) => {
-                    if(reward.chainID === chainId && airdropData[chainId].tokensData[tokenAddress].symbol === reward.token){
-                        totalEstimatedRewardsForToken += reward.amt
-                    }
-                })
-                airdropData[chainId]['tokensData'][tokenAddress]['estimated amount'] =  totalEstimatedRewardsForToken===0 ? totalEstimatedRewardsForToken : totalEstimatedRewardsForToken.toFixed(6)
-            }
-            for (let i = 0; i < claimableRewards.length; i++) {
-                const rewardInEthers = ethers.utils.formatEther(BigInt(claimableRewards[i]).toString(10))
-                airdropData[chainId].tokensData[tokens[i]]['claimable amount'] = rewardInEthers > 0.0 ? (Math.round(rewardInEthers * 1000000) / 1000000).toFixed(6) : 0.0
-                claimableRewardsNumber += rewardInEthers > 0.0 ? 1 : 0
-                airdropData[chainId]['claimableRewards'] = claimableRewardsNumber
-            }
-        }
-    } catch (err) {
-        for (let i = 0; i < tokens.length; i++) {
-            airdropData[chainId].tokensData[tokens[i]]['estimated amount'] = 0.0
-            airdropData[chainId].estimatedRewards = 0
-            airdropData[chainId].claimableRewards = 0
-        }
-    }
-}
-
-export const updateAllClaimables = async (airdropData, selectedNetworks, userAddress, rewards) => {
-    await Promise.all(JSON.parse(import.meta.env.VITE_SUPPORTED_CHAIN_IDS).map(async function(chainId) {
-        if( airdropData[chainId] ) {
-            await updateClaimablesFromAirdrop(airdropData, chainId, userAddress, rewards);
-        } else {
-            console.log("Airdrop configuration is not proprely initialized. Please check .supportedChainIds and app configuration.")
-        }
-    }));
-
-    airdrops.set(airdropData);
-}
-
 export const getDFRewards = async(userAddress, tokenAddress) => {
     try {
-        const contract = new ethers.Contract(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "DFRewards"), dfRewardsABI.default, get(networkSigner));
-        const estimateClaim = await contract.claimable(userAddress, tokenAddress);
+        const estimateClaim = await readContract({
+            address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "DFRewards"),
+            args: [userAddress, tokenAddress],
+            abi: dfRewardsABI.default,
+            functionName: 'claimable',
+          })
         const estimateClaimFormatted = ethers.utils.formatEther(BigInt(estimateClaim).toString(10));
         return estimateClaimFormatted
     } catch (error) {
@@ -103,38 +49,19 @@ export const getDFRewards = async(userAddress, tokenAddress) => {
 
 export async function claimDFReward(userAddress, tokenAddress) {
     try {
-        const contract = new ethers.Contract(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "DFRewards"), dfRewardsABI.default, get(networkSigner));
-        const resp = await contract.claimFor(userAddress, tokenAddress);
-        await resp.wait();
-        console.log("Success claiming rewards, txReceipt here", resp);
-        return resp;
-    } catch (error) {
-        console.log("Error claiming rewards :", error);
-        throw error;
-    }
-}
-
-export async function claimDFRewards(airdropData, chainId, userAddress, signer) {
-    try {
-        const tokenAddresses = Object.keys(airdropData[chainId].tokensData);
-        let positiveClaimables = [];
-        // TODO - Make sure that claim is only done on non-zero tokens
-        for (let i = 0; i < tokenAddresses.length; i++) {
-            if (Number(airdropData[chainId].tokensData[tokenAddresses[i]]['claimable amount']) > 0)
-                positiveClaimables.push(tokenAddresses[i]);
+        const gasLimit = await getGasFeeEstimate(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "DFRewards"),dfRewardsABI.default,'claimFor',[userAddress, tokenAddress])
+        const config = await prepareWriteContract({
+        address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "DFRewards"),
+        args: [userAddress, tokenAddress],
+        abi: dfRewardsABI.default,
+        functionName: 'claimFor',
+        overrides:{
+          gasLimit:gasLimit
         }
-
-        if( positiveClaimables.length >= 0 ) {
-            const contract = new ethers.Contract(
-                airdropData[chainId].dfRewardsAddress,
-                airdropABI.default,
-                signer
-            );
-            const calcGasLimit = await contract.estimateGas.claimMultiple(userAddress, positiveClaimables)
-            const resp = await contract.claimMultiple(userAddress, positiveClaimables,{gasLimit:BigInt(calcGasLimit) + BigInt(10000)});
-            await resp.wait();
-            console.log("Success claiming rewards, txReceipt here");
-        }
+      })
+      const tx = await writeContract(config)
+      console.log("Success claiming rewards, txReceipt here", tx);
+      return tx;
     } catch (error) {
         console.log("Error claiming rewards :", error);
         throw error;
