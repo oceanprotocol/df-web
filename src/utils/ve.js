@@ -1,4 +1,5 @@
 import * as VeOceanABI from "./abis/veOceanABI.js";
+import * as TokenABI from "./abis/tokenABI";
 import {ethers} from "ethers";
 import {getAddressByChainIdKey} from "../utils/address/address.js";
 import { getJsonRpcProvider } from "./web3.js";
@@ -131,11 +132,22 @@ export const getMaxUserEpoch = async(address, provider) => {
   }
 }
 
-export const getTotalVeSupply = async() => {
-  let provider = await getJsonRpcProvider(process.env.VE_SUPPORTED_CHAINID)
+export const getTotalVeSupply = async(provider) => {
   try {
       const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
       const totalSupply = await contract.totalSupply()
+      const totalSupplyEth = parseFloat(ethers.utils.formatEther(totalSupply))
+      return totalSupplyEth;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getTotalOceanSupply = async() => {
+  let provider = await getJsonRpcProvider(process.env.VE_SUPPORTED_CHAINID)
+  try {
+      const contract = new ethers.Contract(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "Ocean"), TokenABI.default, provider);
+      const totalSupply = await contract.balanceOf(getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN"))
       const totalSupplyEth = parseFloat(ethers.utils.formatEther(totalSupply))
       return totalSupplyEth;
   } catch (error) {

@@ -1,21 +1,17 @@
 <script>
   import { DataTable } from "carbon-components-svelte";
   import * as epochs from "../../utils/metadata/epochs/epochs.json";
-  import { getEpoch } from "../../utils/epochs";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
-  import * as descriptions from "../../utils/metadata/descriptions.json";
-
-  let loading = true;
-  let curEpoch;
+  
   let rows = [];
+  let loading = true;
 
+  // Tooltips dropped for now, they'll be back
   const headers = [
     {
       key: "id",
       value: "Round",
-      tooltip: descriptions.default.tooltip_rewards_history_rounds,
-      tooltipDirection: "right",
     },
     { key: "date_start", value: "Start Date" },
     { key: "passive", value: "Passive Rewards" },
@@ -23,11 +19,12 @@
   ];
 
   const init = () => {
-    const now = moment();
-    curEpoch = getEpoch(now);
-
     rows = JSON.parse(
-      JSON.stringify(epochs.default.filter((epoch) => epoch.id < curEpoch.id))
+      JSON.stringify(
+        epochs.default.filter((epoch) =>
+          moment(epoch.date_end).isBefore(moment())
+        )
+      )
     );
     rows.forEach((row) => {
       row.date_start = moment(row.date_start).format("DD-MM-YYYY");

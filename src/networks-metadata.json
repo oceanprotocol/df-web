@@ -33,10 +33,10 @@
       "chain": "ETH",
       "icon": "ethereum",
       "rpc": [
+        "https://cloudflare-eth.com",
         "https://mainnet.infura.io/v3/",
         "wss://mainnet.infura.io/ws/v3/",
-        "https://api.mycryptoapi.com/eth",
-        "https://cloudflare-eth.com"
+        "https://api.mycryptoapi.com/eth"
       ],
       "faucets": [],
       "nativeCurrency": {
@@ -150,9 +150,9 @@
       "chain": "ETH",
       "network": "testnet",
       "rpc": [
+        "https://rpc.ankr.com/eth_goerli",
         "https://goerli.infura.io/v3/",
-        "wss://goerli.infura.io/v3/",
-        "https://rpc.goerli.mudit.blog/"
+        "wss://goerli.infura.io/v3/"
       ],
       "faucets": [
         "http://fauceth.komputing.org?chain=5&address=${ADDRESS}",

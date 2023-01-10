@@ -28,7 +28,7 @@ export const getRpcUrlByChainId = async(chainId) => {
   const networkNode = await networksList.find(
     (data) => data.chainId === parseInt(chainId)
   )
-  return networkNode.chain==="ETH" ? `${networkNode.rpc[0]}${process.env.INFURA_KEY}` : networkNode.rpc[0]
+  return networkNode.rpc[0].includes("infura") ? `${networkNode.rpc[0]}${process.env.INFURA_KEY}` : networkNode.rpc[0]
 }
 
 export const getJsonRpcProvider = async (chainId) => {
