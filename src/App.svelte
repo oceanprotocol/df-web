@@ -11,7 +11,6 @@
     connectWalletFromLocalStorage,
     connectWallet,
     selectedNetworks,
-    web3Provider,
     connectedChainId,
     networkSigner,
   } from "./stores/web3";
@@ -141,8 +140,8 @@
     );
 
     veOceanWithDelegations.update(() => newVeOceansWithDelegations);
-    await updateUserBalanceVeOcean($userAddress, $web3Provider);
-    await updateUserBalanceOcean($userAddress, $web3Provider);
+    await updateUserBalanceVeOcean($userAddress);
+    await updateUserBalanceOcean($userAddress);
     isAppLoading.update(() => false);
   }
 

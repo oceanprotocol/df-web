@@ -3,7 +3,6 @@
     userAddress,
     networkSigner,
     connectedChainId,
-    web3Provider,
   } from "../../stores/web3";
   import { updateUserBalanceOcean } from "../../stores/tokens";
   import Button from "../common/Button.svelte";
@@ -18,6 +17,7 @@
     lockedOceanAmount,
     veOceanWithDelegations,
   } from "../../stores/veOcean";
+  import { fetchBlockNumber,getProvider } from '@wagmi/core'
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
   import moment from "moment";
 
@@ -27,9 +27,8 @@
   let unlockTimestamp = 0;
 
   const updateBlockTimestamp = async () => {
-    const blockNumber = await $web3Provider.getBlockNumber();
-    blockTimestamp =
-      (await $web3Provider.getBlock(blockNumber)).timestamp * 1000;
+    const blockNumber = await fetchBlockNumber();
+    blockTimestamp = getProvider().getBlock(blockNumber).timestamp * 1000;
   };
 
   const updateLockEndDate = async () => {
@@ -48,7 +47,7 @@
     loading = false;
   };
 
-  $: if ($userAddress && $web3Provider) {
+  $: if ($userAddress) {
     init();
   }
 
@@ -67,7 +66,7 @@
       "success"
     ).then(async () => {
       withdrawing = false;
-      await updateUserBalanceOcean($userAddress, $web3Provider);
+      await updateUserBalanceOcean($userAddress);
       let lockedOceans = await getLockedOceanAmount(
         $userAddress,
         $networkSigner

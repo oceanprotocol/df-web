@@ -4,6 +4,7 @@ import * as VeAllocateABI from "./abis/veAllocateABI";
 import {readContract} from "@wagmi/core"
 import {getAddressByChainIdKey} from "../utils/address/address";
 import { prepareWriteContract, writeContract } from '@wagmi/core'
+import { getGasFeeEstimate } from "./web3";
 
 const veAllocateABI = VeAllocateABI.default
 
@@ -65,11 +66,15 @@ export const allocateVeOceanToMultipleNFTs = async(amounts, dataAddresses, chain
   //convert amounts from 100 to 10000 units
   const formatedAmounts = amounts.map((amount) => amount * 100)
   try {
+    const gasLimit = await getGasFeeEstimate(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veAllocate"),veAllocateABI,'setBatchAllocation',[formatedAmounts, dataAddresses, chainIds])
     const config = await prepareWriteContract({
       address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veAllocate"),
       args: [formatedAmounts, dataAddresses, chainIds],
       abi: veAllocateABI,
       functionName: 'setBatchAllocation',
+      overrides:{
+        gasLimit:gasLimit
+      }
     })
     const tx = await writeContract(config)
     await tx.wait()

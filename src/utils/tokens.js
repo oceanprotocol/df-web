@@ -1,7 +1,7 @@
 import { Decimal } from 'decimal.js';
 import { ethers } from "ethers";
-import { getRpcUrlByChainId, GASLIMIT_DEFAULT } from "./web3";
-import { readContract } from "@wagmi/core";
+import { getRpcUrlByChainId, GASLIMIT_DEFAULT, getGasFeeEstimate } from "./web3";
+import { prepareWriteContract, readContract, writeContract } from "@wagmi/core";
 import * as TokenABI from "./abis/tokenABI";
 
 //TODO - Standardize function calls & Params to follow ocean.js
@@ -18,8 +18,7 @@ export const getTokenContract = async (chainId, address, signer) => {
 }
 
 //TODO - Standardize function calls & Params to follow ocean.js
-export const balanceOf = async (balances, chainId, tokenAddress, account, provider) => {
-  let balance
+export const balanceOf = async (balances, tokenAddress, account) => {
   try {
     if (balances[tokenAddress] === undefined) {
       balances[tokenAddress] = {};
@@ -38,12 +37,12 @@ export const balanceOf = async (balances, chainId, tokenAddress, account, provid
 
 export const isTokenAmountApproved = async (tokenAddress, amount,
   owner,
-  spender,signer)=>{
+  spender)=>{
     if(amount <= 0) {
       return false;
     }
     try {
-    const allowedAmount = await allowance(tokenAddress, owner, spender, signer)
+    const allowedAmount = await allowance(tokenAddress, owner, spender)
     const allowedAmountFormated = ethers.utils.formatEther(allowedAmount);
 
     return new Decimal(allowedAmountFormated).greaterThanOrEqualTo(amount)
@@ -56,12 +55,15 @@ export const isTokenAmountApproved = async (tokenAddress, amount,
 export const allowance = async (
   datatokenAdress,
   owner,
-  spender,
-  signer
+  spender
 ) => {
-  const datatoken = new ethers.Contract(datatokenAdress, TokenABI.default, signer);
-
-  return datatoken.allowance(owner, spender);
+  const datatoken = await readContract({
+    address: datatokenAdress,
+    args: [owner, spender],
+    abi: TokenABI.default,
+    functionName: 'allowance',
+  })
+  return datatoken
 }
 
 // Tx
@@ -74,19 +76,19 @@ export const approve = async (
   signer,
   force = false
 ) => {
-  const datatoken = new ethers.Contract(datatokenAddress, TokenABI.default, signer);
-  const gasLimitDefault = GASLIMIT_DEFAULT
-  let estGas
-  try {
-    estGas = await datatoken.estimateGas.approve(spender, ethers.utils.parseEther(amount.toString()))
-    console.log("Esimated gas is: ", estGas);
-  } catch (e) {
-      estGas = gasLimitDefault
-  }
   try {
       // TODO - Override gas price & limit
       // let gasPrice = getFairGasPrice();
-      const tx = await datatoken.approve(spender,ethers.utils.parseEther(amount.toString()));
+      const gasLimit = await getGasFeeEstimate(datatokenAddress,TokenABI.default,'approve',[spender,ethers.utils.parseEther(amount.toString())])
+      const config = await prepareWriteContract({
+        address: datatokenAddress,
+        args: [spender,ethers.utils.parseEther(amount.toString())],
+        abi: TokenABI.default,
+        functionName: 'approve',
+        overrides:{
+          gasLimit:gasLimit
+        }})
+      const tx = await writeContract(config)
       return tx;
   } catch (e) {
       console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)

@@ -1,5 +1,7 @@
+import { fetchSigner, getContract } from "@wagmi/core";
 import { ethers, BigNumber } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
+import { getAddressByChainIdKey } from "./address/address";
 
 let networksList = networksDataArray.default;
 export const GASLIMIT_DEFAULT = 1000000;
@@ -47,3 +49,10 @@ export const signMessage = async (msg, signer) => {
   const signedMessage = await signer.signMessage(msg);
   return signedMessage;
 };
+
+export const getGasFeeEstimate = async(contractAddress, abi, functionName, params) => {
+  let signer = await fetchSigner()
+  const contract = getContract({address: contractAddress, abi: abi, signerOrProvider:signer})
+  const gas = await contract.estimateGas[functionName](...params)
+  return BigInt(gas) + BigInt(10000)
+}

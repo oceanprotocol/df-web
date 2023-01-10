@@ -2,7 +2,6 @@
   import {
     userAddress,
     connectedChainId,
-    networkSigner,
     switchWalletNetwork,
     getNetworkDataById,
     web3Provider,
@@ -115,17 +114,16 @@
     loading = true;
     const unlockTimestamp = moment.utc(values.unlockDate).unix();
     currentStep = 2;
-
     try {
       if ($oceanUnlockDate) {
         if (values.amount > 0) {
-          await updateLockedOceanAmount(values.amount, $networkSigner);
+          await updateLockedOceanAmount(values.amount, $userAddress);
         }
         if (moment.utc(values.unlockDate).isAfter($oceanUnlockDate)) {
-          await updateLockPeriod(unlockTimestamp, $networkSigner);
+          await updateLockPeriod(unlockTimestamp);
         }
       } else {
-        await lockOcean(values.amount, unlockTimestamp, $networkSigner);
+        await lockOcean(values.amount, unlockTimestamp);
       }
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
@@ -143,8 +141,7 @@
           $userAddress
         );
         let lockedOceans = await getLockedOceanAmount(
-          $userAddress,
-          $networkSigner
+          $userAddress
         );
         lockedOceanAmount.update(() => lockedOceans);
         await oceanUnlockDate.update(() =>

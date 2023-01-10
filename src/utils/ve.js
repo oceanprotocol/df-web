@@ -2,12 +2,12 @@ import * as VeOceanABI from "./abis/veOceanABI.js";
 import * as TokenABI from "./abis/tokenABI";
 import {ethers} from "ethers";
 import {getAddressByChainIdKey} from "../utils/address/address.js";
-import { readContract } from "@wagmi/core";
-import { getJsonRpcProvider } from "./web3.js";
+import { readContract, writeContract, prepareWriteContract} from "@wagmi/core";
+import { getGasFeeEstimate } from "./web3.js";
 
 const veOceanABI = VeOceanABI.default
 
-export const getVeOceanBalance = async(userAddress, provider) => {
+export const getVeOceanBalance = async(userAddress) => {
     try {
       const veOceanBalanceInEth = await readContract({
         address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),
@@ -24,7 +24,7 @@ export const getVeOceanBalance = async(userAddress, provider) => {
     }
   }
 
-  export const getLockedOceanAmount = async(userAddress, signer) => {
+  export const getLockedOceanAmount = async(userAddress) => {
     try {
       const lock = await readContract({
         address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),
@@ -56,79 +56,92 @@ export const getVeOceanBalance = async(userAddress, provider) => {
     }
 }
 
-  export const lockOcean = async(amount, unlockDate, signer) => {
+  export const lockOcean = async(amount, unlockDate) => {
     try {
-        const contract = new ethers.Contract(
-          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
-          veOceanABI, 
-          signer
-        );
-        const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
-        const calcGasLimit = await contract.estimateGas.create_lock(amountToLockInEth, unlockDate)
-        const tx = await contract.create_lock(amountToLockInEth, unlockDate, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
-        const receipt = await tx.wait()
-    } catch (error) {
-      throw error;
-    }
-}
-
-  export const withdrawOcean = async(signer) => {
-    try {
-        const contract = new ethers.Contract(
-          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
-          veOceanABI, 
-          signer
-        );
-        const calcGasLimit = await contract.estimateGas.withdraw()
-        const tx = await contract.withdraw({
-          gasLimit:BigInt(calcGasLimit) + BigInt(10000)
+      const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
+      const gasLimit = await getGasFeeEstimate(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),veOceanABI,'create_lock',[amountToLockInEth,unlockDate])
+      const config = await prepareWriteContract({
+        address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),
+        args: [amountToLockInEth, unlockDate],
+        abi: veOceanABI,
+        functionName: 'create_lock',
+        overrides:{
+          gasLimit:gasLimit
+        }
       })
-        await tx.wait()
+      const tx = await writeContract(config)
+      await tx.wait()
     } catch (error) {
       throw error;
     }
 }
 
-  export const updateLockedOceanAmount = async(amount, signer) => {
+  export const withdrawOcean = async() => {
     try {
-        const contract = new ethers.Contract(
-          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
-          veOceanABI, 
-          signer
-        );
-        const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
-        const calcGasLimit = await contract.estimateGas.increase_amount(amountToLockInEth)
-        const tx = await contract.increase_amount(amountToLockInEth,{
-          gasLimit:BigInt(calcGasLimit) + BigInt(10000)
+      const gasLimit = await getGasFeeEstimate(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),veOceanABI,'withdraw',[])
+      const config = await prepareWriteContract({
+        address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),
+        abi: veOceanABI,
+        functionName: 'withdraw',
+        overrides:{
+          gasLimit:gasLimit
+        }
       })
-        await tx.wait()
+      const tx = await writeContract(config)
+      await tx.wait()
     } catch (error) {
       throw error;
     }
 }
 
-  export const updateLockPeriod = async(unlockDate, signer) => {
+  export const updateLockedOceanAmount = async(amount) => {
     try {
-        const contract = new ethers.Contract(
-          getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), 
-          veOceanABI, 
-          signer
-        );
-        const calcGasLimit = await contract.estimateGas.increase_unlock_time(unlockDate)
-        const tx = await contract.increase_unlock_time(unlockDate,{
-          gasLimit:BigInt(calcGasLimit) + BigInt(10000)
-        })
-        await tx.wait()
+      const amountToLockInEth = ethers.utils.parseEther(amount.toString()).toString()
+      const gasLimit = await getGasFeeEstimate(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),veOceanABI,'increase_amount',[amountToLockInEth])
+      const config = await prepareWriteContract({
+        address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),
+        args: [amountToLockInEth],
+        abi: veOceanABI,
+        functionName: 'increase_amount',
+        overrides:{
+          gasLimit: gasLimit
+        }
+      })
+      const tx = await writeContract(config)
+      await tx.wait()
     } catch (error) {
       throw error;
     }
 }
 
-export const getMaxUserEpoch = async(address, provider) => {
+  export const updateLockPeriod = async(unlockDate) => {
+    try {
+      const gasLimit = await getGasFeeEstimate(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),veOceanABI,'increase_unlock_time',[unlockDate])
+      const config = await prepareWriteContract({
+        address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),
+        args: [unlockDate],
+        abi: veOceanABI,
+        functionName: 'increase_unlock_time',
+        overrides:{
+          gasLimit: gasLimit
+        }
+      })
+      const tx = await writeContract(config)
+      await tx.wait()
+    } catch (error) {
+      throw error;
+    }
+}
+
+export const getMaxUserEpoch = async(address) => {
   try {
-      const contract = new ethers.Contract(getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"), veOceanABI, provider);
-      const maxUserEpoch = await contract.user_point_epoch(address)
-      return parseInt(BigInt(maxUserEpoch));
+    const maxUserEpoch = await readContract({
+      address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),
+      args: [address],
+      abi: veOceanABI,
+      functionName: 'user_point_epoch',
+    })
+    return parseInt(BigInt(maxUserEpoch));
   } catch (error) {
     throw error;
   }

@@ -13,15 +13,13 @@ const updateBalanceStore = (tokenAddress, newBalance) => {
   userBalances.update(() => newUserBalances);
 }
 
-export const updateUserBalanceOcean = async (userAddress, provider) => {
+export const updateUserBalanceOcean = async (userAddress) => {
   const oceanContractAddress = getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "Ocean");
 
   const balanceInWei = await balanceOf(
     get(userBalances),
-    import.meta.env.VITE_VE_SUPPORTED_CHAINID,
     oceanContractAddress,
     userAddress,
-    provider,
   );
 
   const balance = ethers.utils.formatEther(BigInt(balanceInWei).toString(10));
@@ -32,8 +30,8 @@ export const updateUserBalanceOcean = async (userAddress, provider) => {
   );
 }
 
-export const updateUserBalanceVeOcean = async (userAddress, provider) => {
-  const veOceanBalance = await getVeOceanBalance(userAddress, provider)
+export const updateUserBalanceVeOcean = async (userAddress) => {
+  const veOceanBalance = await getVeOceanBalance(userAddress)
   updateBalanceStore(
     getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN"),
     veOceanBalance
