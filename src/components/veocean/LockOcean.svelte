@@ -255,7 +255,6 @@
           min={$oceanUnlockDate
             ? $oceanUnlockDate.format("YYYY-MM-DD")
             : getThursdayDate(moment().utc())}
-          disabled={getOceanBalance($connectedChainId) <= 0}
           max={getMaxDate().format("YYYY-MM-DD")}
           bind:value={$form.unlockDate}
         />

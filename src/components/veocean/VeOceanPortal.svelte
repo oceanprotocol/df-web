@@ -25,19 +25,16 @@
 
   oceanUnlockDate.subscribe((v) => {
     if(v!==null) {
-      console.log(v)
       loading = false;
     }
   })
-
-  console.log($oceanUnlockDate)
 
   $: if ($userAddress) {
     loadValues();
   }
 </script>
 
-{#if !loading}
+{#if !loading }
   <div class={`container`}>
     <VeOceanCard />
     <LockOcean />

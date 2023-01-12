@@ -143,7 +143,7 @@
     emptyUserBalances[getAddressByChainIdKey($connectedChainId, "veOCEAN")] = 0;
     userBalances.update(() => emptyUserBalances);
     veOceanWithDelegations.update(() => 0);
-    oceanUnlockDate.update(() => null);
+    oceanUnlockDate.update(() => undefined);
     lockedOceanAmount.update(() => 0);
   }
 
@@ -173,7 +173,7 @@
       veOceanWithDelegations.update(() => 0);
       setBalancesTo0();
       totalUserAllocation.update(() => 0);
-      oceanUnlockDate.update(() => null);
+      oceanUnlockDate.update(() => undefined);
       lockedOceanAmount.update(() => 0);
       veClaimables.update(() => 0);
       dfClaimables.update(() => 0);
