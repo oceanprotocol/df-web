@@ -104,6 +104,13 @@
     oceanBalance = getOceanBalance($connectedChainId);
   }
 
+  oceanUnlockDate.subscribe((unlockDate) => {
+    form.update((value) => {
+      value.unlockDate = unlockDate ? unlockDate.format('YYYY-MM-DD') : null
+      return value
+    })
+  })
+
   $: if ($userAddress) {
     loading = false;
     init();
@@ -252,6 +259,7 @@
           error={$errors.unlockDate}
           direction="column"
           disableKeyboardInput="return false"
+          disabled={$oceanUnlockDate && moment().isAfter($oceanUnlockDate)}
           min={$oceanUnlockDate
             ? $oceanUnlockDate.format("YYYY-MM-DD")
             : getThursdayDate(moment().utc())}

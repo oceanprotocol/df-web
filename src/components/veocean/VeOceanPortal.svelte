@@ -10,7 +10,7 @@
   let loading = true;
 
   const loadValues = async () => {
-    if (!$oceanUnlockDate) {
+    if ($oceanUnlockDate===null) {
       loading = true;
       let unlockDateMilliseconds = await getLockedEndTime(
         $userAddress
