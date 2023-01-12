@@ -27,7 +27,7 @@
       )
     );
     rows.forEach((row) => {
-      row.date_start = moment(row.date_start).format("DD-MM-YYYY");
+      row.date_start = moment(new Date(row.date_start)).format("DD-MM-YYYY");
       row.passive = `${row.passive} OCEAN`;
       row.active = `${row.active} OCEAN`;
     });

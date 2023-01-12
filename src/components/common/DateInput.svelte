@@ -76,10 +76,17 @@
     width: 100%;
   }
   .input {
+    background-color: var(--background-content);
+    color: var(--brand-black);
+    font-weight: bold;
     border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
     width: 100%;
+  }
+  .input:disabled {
+    background-color: var(--brand-grey-dimmed);
+    color: var(--brand-grey-light);
   }
   .inputError {
     color: var(--brand-alert-red);

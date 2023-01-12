@@ -143,7 +143,7 @@
     emptyUserBalances[getAddressByChainIdKey($connectedChainId, "veOCEAN")] = 0;
     userBalances.update(() => emptyUserBalances);
     veOceanWithDelegations.update(() => 0);
-    oceanUnlockDate.update(() => undefined);
+    oceanUnlockDate.update(() => null);
     lockedOceanAmount.update(() => 0);
   }
 
@@ -173,7 +173,7 @@
       veOceanWithDelegations.update(() => 0);
       setBalancesTo0();
       totalUserAllocation.update(() => 0);
-      oceanUnlockDate.update(() => undefined);
+      oceanUnlockDate.update(() => null);
       lockedOceanAmount.update(() => 0);
       veClaimables.update(() => 0);
       dfClaimables.update(() => 0);
@@ -231,14 +231,13 @@
 <style>
   main {
     text-align: center;
-    max-width: 240px;
-    max-width: 1024px;
+    width: 85vw;
     margin: 0 auto;
   }
 
   @media only screen and (max-width: 640px) {
     main {
-      max-width: 1024px;
+      width: 90vw;
     }
   }
 </style>

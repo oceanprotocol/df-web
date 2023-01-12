@@ -84,6 +84,8 @@
     margin: 0;
   }
   .allocationInput {
+    background-color: var(--background-content);
+    color: var(--brand-black);
     border: 0;
     width: 30px;
   }

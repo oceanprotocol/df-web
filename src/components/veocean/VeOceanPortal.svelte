@@ -7,23 +7,30 @@
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
   import moment from "moment";
 
-  let loading = false;
+  let loading = true;
 
   const loadValues = async () => {
-    loading = true;
-    let lockedOceans = await getLockedOceanAmount($userAddress);
-    lockedOceanAmount.update(() => lockedOceans);
-    if (!oceanUnlockDate) {
+    if (!$oceanUnlockDate) {
+      loading = true;
       let unlockDateMilliseconds = await getLockedEndTime(
         $userAddress
       );
       await oceanUnlockDate.update(() =>
         unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
       );
+      let lockedOceans = await getLockedOceanAmount($userAddress);
+      lockedOceanAmount.update(() => lockedOceans);
     }
-
-    loading = false;
   };
+
+  oceanUnlockDate.subscribe((v) => {
+    if(v!==null) {
+      console.log(v)
+      loading = false;
+    }
+  })
+
+  console.log($oceanUnlockDate)
 
   $: if ($userAddress) {
     loadValues();
@@ -46,6 +53,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacer);
     padding-top: var(--spacer);
+    width: 100%;
   }
 
   .loading {

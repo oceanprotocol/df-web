@@ -35,7 +35,7 @@
         <Link to="/rewards" class="link">REWARDS</Link>
       </li>
       <li class:active={false}>
-        <a href={aboutURL} target="_blank" class="link">ABOUT</a>
+        <a href={aboutURL} target="_blank" class="link" rel="noreferrer">ABOUT</a>
       </li>
     </ul>
   </nav>

@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 import {Web3Modal} from "@web3modal/html"
 import { configureChains, createClient} from "@wagmi/core";
 import { mainnet,goerli } from "@wagmi/core/chains";
-import SignClient from "@walletconnect/sign-client";
+import SignClient from "@walletconnect/sign-client"
 import {
   EthereumClient,
   modalConnectors,
@@ -59,8 +59,6 @@ web3Modal.setTheme({
   themeMode: "light"
 })
 
-
-
 // TODO - Replace networkData w/ networksDataArray
 export function getNetworkDataById(
     data,
@@ -98,7 +96,11 @@ export const connectWallet = async () => {
       },
     });
     if (uri) {
+      console.log(uri)
       await web3Modal?.openModal({ uri });
+      const session = await approval();
+      console.log(session)
+      web3Modal.closeModal();
     }
   } catch (e) {
     console.log("Could not get a wallet connection", e);

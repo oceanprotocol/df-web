@@ -8,6 +8,7 @@
 <a
   href={url}
   target="_blank"
+  rel="noreferrer"
   class={`link ${className ? className : undefined}`}
 >
   {#if text}

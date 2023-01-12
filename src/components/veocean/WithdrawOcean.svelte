@@ -27,7 +27,8 @@
 
   const updateBlockTimestamp = async () => {
     const blockNumber = await fetchBlockNumber();
-    blockTimestamp = getProvider().getBlock(blockNumber).timestamp * 1000;
+    const block = await getProvider().getBlock(blockNumber)
+    blockTimestamp = block.timestamp * 1000;
   };
 
   const updateLockEndDate = async () => {

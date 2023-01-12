@@ -77,7 +77,7 @@
 
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
-  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} {loading} />
+  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} />
   <EpochHistory />
 </div>
 
