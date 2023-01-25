@@ -6,11 +6,6 @@
   import moment from "moment";
 
   let aboutURL = "https://docs.oceanprotocol.com/veocean-data-farming-tutorial";
-
-  $: if ($oceanUnlockDate && $oceanUnlockDate > moment()) {
-    aboutURL =
-      "https://blog.oceanprotocol.com/ocean-data-farming-series-c7922f1d0e45";
-  }
   const location = useLocation();
 </script>
 
@@ -42,9 +37,7 @@
       </li>
       <li class:active={false}>
         <a
-          href={$oceanUnlockDate && $oceanUnlockDate > moment()
-            ? "https://blog.oceanprotocol.com/ocean-data-farming-series-c7922f1d0e45"
-            : "https://docs.oceanprotocol.com/veocean-data-farming-tutorial"}
+          href={aboutURL}
           target="_blank"
           class="link">ABOUT</a
         >
