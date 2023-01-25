@@ -60,7 +60,7 @@
   />
   <ul class="periodList">
     {#each periods as period, index}
-      <li class="periodItem" on:click={() => handleOnPeriodClick(period.days)}>
+      <li class="periodItem" on:click={() => handleOnPeriodClick(period.days)} on:keypress={()=>{}}>
         {period.label}
       </li>
     {/each}

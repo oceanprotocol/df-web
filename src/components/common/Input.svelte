@@ -28,7 +28,7 @@
   }`}
 >
   {#if label}
-    <label class={`${direction === "column" && "margin-bottom"}`}>
+    <label class={`${direction === "column" && "margin-bottom"}`} for={name}>
       {label}
     </label>
   {/if}

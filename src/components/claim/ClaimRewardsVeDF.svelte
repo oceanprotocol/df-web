@@ -23,7 +23,7 @@
   export let canClaimVE = true;
   export let canClaimDF = true;
   export let roundInfo;
-  export let loading = false;
+  export const loading = false;
   let claiming;
 
   async function onClaimDfRewards() {

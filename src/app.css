@@ -67,6 +67,19 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.rewardsOverview .title {
+  font-size: var(--font-size-large) !important;
+}
+
+.steps-container {
+  width: 100%;
+}
+.steps__label {
+  margin-top: 4px !important;
+  font-size: var(--font-size-mini) !important;
+  color: var(--brand-grey-light);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

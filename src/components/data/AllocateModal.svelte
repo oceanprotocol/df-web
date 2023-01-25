@@ -33,7 +33,7 @@
 
 <Button text="Allocate" onclick={() => open()} />
 {#if isOpen}
-  <div class="modal" on:keydown={keydown} tabindex={0}>
+  <div class="modal" on:keydown={keydown}>
     <div class="content-wrapper">
       <div class="button">
         <Button text="X" textOnly onclick={() => close()} disabled={loading} />

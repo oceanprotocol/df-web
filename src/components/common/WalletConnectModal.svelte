@@ -14,7 +14,7 @@
 </script>
 
 {#if $isWalletConnectModalOpen}
-  <div class="modal" tabindex={0}>
+  <div class="modal">
     <div class="content-wrapper">
       <div class="close-button">
         <Button
