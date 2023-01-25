@@ -2,7 +2,6 @@ import { writable } from "svelte/store";
 import {Web3Modal} from "@web3modal/html"
 import { configureChains, createClient} from "@wagmi/core";
 import { mainnet,goerli } from "@wagmi/core/chains";
-import SignClient from "@walletconnect/sign-client"
 import {
   EthereumClient,
   modalConnectors,
@@ -20,24 +19,13 @@ export const GASLIMIT_DEFAULT = 1000000;
 
 const chains = [mainnet,goerli];
 
-const signClient = await SignClient.init({
-  projectId: import.meta.env.VITE_WALLET_CONNECT_KEY ,
-  metadata: {
-    name: "web3Modal",
-    description: "Example Dapp",
-    url: "#",
-    icons: ["https://walletconnect.com/walletconnect-logo.png"],
-  },
-});
-
 // Wagmi Core Client
-const { provider } = configureChains(chains, [
-  walletConnectProvider({ projectId: import.meta.env.VITE_WALLET_CONNECT_KEY }),
-]);
+const { provider } = configureChains(chains, [walletConnectProvider({ projectId: import.meta.env.VITE_WALLET_CONNECT_KEY })]);
+
 const wagmiClient = createClient({
-  autoConnect: true,
-  connectors: modalConnectors({ appName: "web3Modal", chains }),
-  provider,
+  autoConnect: false,
+  connectors: modalConnectors({appName:'DF-WEB', chains, projectId:import.meta.env.VITE_WALLET_CONNECT_KEY, version:'2'}),
+  provider
 });
 
 // Web3Modal and Ethereum Client
@@ -50,6 +38,7 @@ ethereumClient.watchAccount((data) =>{
 ethereumClient.watchNetwork((network) => {
   connectedChainId.set(network?.chain?.id)
 })
+
 const web3Modal = new Web3Modal(
   { projectId: import.meta.env.VITE_WALLET_CONNECT_KEY },
   ethereumClient
@@ -78,30 +67,7 @@ export const signMessage = async (msg, signer) => {
 
 export const connectWallet = async () => {
   try {
-    const { uri, approval } = await signClient.connect({
-      // Optionally: pass a known prior pairing (e.g. from `signClient.core.pairing.getPairings()`) to skip the `uri` step.
-      // Provide the namespaces and chains (e.g. `eip155` for EVM-based chains) we want to use in this session.
-      requiredNamespaces: {
-        eip155: {
-          methods: [
-            "eth_sendTransaction",
-            "eth_signTransaction",
-            "eth_sign",
-            "personal_sign",
-            "eth_signTypedData",
-          ],
-          chains: ["eip155:1"],
-          events: ["chainChanged", "accountsChanged"],
-        },
-      },
-    });
-    if (uri) {
-      console.log(uri)
-      await web3Modal?.openModal({ uri });
-      const session = await approval();
-      console.log(session)
-      web3Modal.closeModal();
-    }
+    web3Modal?.openModal();
   } catch (e) {
     console.log("Could not get a wallet connection", e);
     return;
