@@ -24,7 +24,12 @@
     veClaimables,
     veEstimate,
   } from "./stores/airdrops";
-  import { getActiveAPY, getPassiveAPY, getRewards } from "./utils/rewards";
+  import {
+    getActiveAPY,
+    getPassiveAPY,
+    getRewards,
+    getPassiveUserAPY,
+  } from "./utils/rewards";
   import {
     updateUserBalanceOcean,
     updateUserBalanceVeOcean,
@@ -41,21 +46,50 @@
   import { setClient } from "svelte-apollo";
   import { onMount } from "svelte";
   import { getAddressByChainIdKey } from "./utils/address/address";
-  import { getLockedEndTime } from "./utils/ve";
+  import { getLockedEndTime, getLockedOceanAmount } from "./utils/ve";
   import moment from "moment";
   import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
   import { totalUserAllocation } from "./stores/dataAllocations";
 
   setupAppConfig();
 
-  async function loadAPYs() {
+  async function loadGeneralAPYs() {
     let activeAPY = $APYs?.active ? $APYs?.active : await getActiveAPY();
-    let activeUserAPY = $userAddress ? await getActiveAPY($userAddress) : 0;
     let passiveAPY = $APYs?.passive ? $APYs?.passive : await getPassiveAPY();
     APYs.update(() => {
       return {
         passive: passiveAPY,
+        passiveUser: 0,
         active: activeAPY,
+        activeUser: 0,
+      };
+    });
+  }
+
+  async function loadUserAPYs() {
+    let activeUserAPY = $userAddress ? await getActiveAPY($userAddress) : 0;
+    let passiveUserAPY =
+      $userAddress &&
+      $lockedOceanAmount &&
+      $userBalances[
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+      ] > 0
+        ? await getPassiveUserAPY(
+            $userBalances[
+              getAddressByChainIdKey(
+                process.env.VE_SUPPORTED_CHAINID,
+                "veOCEAN"
+              )
+            ],
+            $lockedOceanAmount,
+            $web3Provider
+          )
+        : 0;
+    APYs.update((oldObj) => {
+      return {
+        passive: oldObj?.passive ? oldObj.passive : 0,
+        passiveUser: passiveUserAPY,
+        active: oldObj?.active ? oldObj.active : 0,
         activeUser: activeUserAPY,
       };
     });
@@ -81,6 +115,8 @@
   }
 
   async function initRewards() {
+    let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
+    lockedOceanAmount.update(() => lockedOceans);
     let unlockDateMilliseconds = await getLockedEndTime(
       $userAddress,
       $networkSigner
@@ -109,6 +145,10 @@
     isAppLoading.update(() => false);
   }
 
+  $: if ($veOceanWithDelegations > 0) {
+    loadUserAPYs();
+  }
+
   function initStore() {
     let emptyUserBalances = {};
     emptyUserBalances[process.env.VE_OCEAN_CONTRACT] = 0;
@@ -123,7 +163,6 @@
 
   $: if (!$userAddress) {
     setBalancesTo0();
-    loadAPYs();
   }
 
   function setBalancesTo0() {
@@ -142,7 +181,6 @@
   }
 
   $: if ($userAddress && $web3Provider && $connectedChainId) {
-    loadAPYs();
     if ($connectedChainId != process.env.VE_SUPPORTED_CHAINID) {
       veOceanWithDelegations.update(() => 0);
       setBalancesTo0();
@@ -170,6 +208,7 @@
   }
 
   onMount(async () => {
+    loadGeneralAPYs();
     if (!$userAddress) {
       isAppLoading.update(() => false);
     }
@@ -184,10 +223,10 @@
   <WalletConnectModal />
   <main>
     <Header />
-    <Route path="/rewards" primary={false}>
+    <Route path="/datafarming" primary={false}>
       <ClaimPortal />
     </Route>
-    <Route path="/data" primary={false}>
+    <Route path="/activerewards" primary={false}>
       <DataPortal />
     </Route>
     <Route path="/veocean" primary={false}>

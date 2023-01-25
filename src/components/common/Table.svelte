@@ -264,7 +264,7 @@
                   : totalAvailable)
               }/100%`
             : "loading..."}
-          tootipMessage={tooltipMessage}
+          tooltipMessage={tooltipMessage}
           {tooltipState}
         />
         {#if $oceanUnlockDate}
