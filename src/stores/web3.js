@@ -23,7 +23,7 @@ const chains = [mainnet,goerli];
 const { provider } = configureChains(chains, [walletConnectProvider({ projectId: import.meta.env.VITE_WALLET_CONNECT_KEY })]);
 
 const wagmiClient = createClient({
-  autoConnect: false,
+  autoConnect: true,
   connectors: modalConnectors({appName:'DF-WEB', chains, projectId:import.meta.env.VITE_WALLET_CONNECT_KEY, version:'2'}),
   provider
 });
