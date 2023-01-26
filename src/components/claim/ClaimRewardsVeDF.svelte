@@ -153,7 +153,7 @@
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
     showRedirectLink={(!$oceanUnlockDate || $totalUserAllocation <= 0) &&
       $dfClaimables <= 0}
-    redirectLink={{ text: "Set allocations", url: "activerewards" }}
+    redirectLink={{ text: "Set allocations", url: "datafarming" }}
     distributedAmount={roundInfo?.active}
     loading={claiming === "DF_REWARDS"}
     onClick={onClaimDfRewards}
