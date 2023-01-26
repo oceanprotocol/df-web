@@ -5,11 +5,10 @@
     userAddress,
     networkSigner,
     selectedNetworks,
-    web3Provider,
   } from "../../stores/web3";
   import {
     airdrops,
-    claimRewards,
+    claimDFRewards,
     updateAllClaimables,
   } from "../../stores/airdrops";
   import Row from "../common/Row.svelte";
@@ -19,6 +18,7 @@
   export let estimatedRewards;
   export let claimableRewards;
   export let claimables;
+  export let currency;
 
   let loading = false;
   let buttons = [];
@@ -26,7 +26,7 @@
   async function claim() {
     loading = true;
 
-    const result = await claimRewards(
+    const result = await claimDFRewards(
       $airdrops,
       $connectedChainId,
       claimables.tokensData,
@@ -74,12 +74,16 @@
 <Row
   rowObject={{
     network: chainId,
-    "estimated rewards": estimatedRewards,
-    "claimable rewards": claimableRewards,
+    "estimated rewards": `${estimatedRewards}<span class="currencyText">${currency}</span>`,
+    "claimable rewards": `${claimableRewards}<span class="currencyText">${currency}</span>`,
   }}
   {buttons}
   size="large"
 />
 
 <style>
+  :global(.currencyText) {
+    font-weight: normal;
+    font-size: var(--font-size-normal);
+  }
 </style>

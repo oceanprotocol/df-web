@@ -1,3 +1,3 @@
 import { writable } from "svelte/store";
 
-export let userStakes = writable([]);
+export let isAppLoading = writable(true);

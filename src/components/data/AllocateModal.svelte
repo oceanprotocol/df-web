@@ -6,12 +6,10 @@
     userAddress,
     connectedChainId,
   } from "../../stores/web3";
-  import Swal from "sweetalert2";
-  import PoolInfo from "./PoolInfo.svelte";
-  import Stake from "./Stake.svelte";
-  import { updateAllClaimables } from "../../stores/airdrops";
+  import DataInfo from "./DataInfo.svelte";
+  import Allocate from "./Allocate.svelte";
 
-  export let pool;
+  export let data;
 
   let isOpen = false;
   let networkDisabled = false;
@@ -28,10 +26,6 @@
       }
     } else {
       isOpen = true;
-
-      console.log("Pool chain id: ", pool.chainId);
-      console.log("Connected chain id: ", $connectedChainId);
-      console.log("Network disabled: ", networkDisabled);
     }
   }
 
@@ -47,7 +41,7 @@
   }
 </script>
 
-<Button text="LP" onclick={() => open()} />
+<Button text="Allocate" onclick={() => open()} />
 {#if isOpen}
   <div class="modal" on:keydown={keydown} tabindex={0}>
     <div class="content-wrapper">
@@ -55,12 +49,12 @@
         <Button text="X" textOnly onclick={() => close()} disabled={loading} />
       </div>
       <div>
-        {#if pool && isOpen}
+        {#if data && isOpen}
           <div class="container">
-            <PoolInfo {pool} />
+            <DataInfo {data} />
           </div>
           <div class="container">
-            <Stake {pool} bind:loading />
+            <Allocate {data} bind:loading />
           </div>
         {/if}
       </div>
@@ -81,7 +75,7 @@
     background-color: white;
     padding: calc(var(--spacer) / 2);
     border: 2px solid var(--brand-grey-dimmed);
-    box-shadow: 0 6px 15px 0 rgb(0 0 0 / 5%);
+    box-shadow: var(--box-shadow);
     overflow: hidden;
   }
   .container {

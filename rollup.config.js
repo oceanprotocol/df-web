@@ -7,14 +7,18 @@ import css from 'rollup-plugin-css-only';
 import json from '@rollup/plugin-json';
 import dsv from '@rollup/plugin-dsv';
 import {config} from 'dotenv';
+import copy from 'rollup-plugin-copy'
 import replace from '@rollup/plugin-replace';
+import html from "@rollup/plugin-html";
 
 const configToReplace = {};
-for (const [key, v] of Object.entries(config().parsed)) {
-  configToReplace[`process.env.${key}`] = `'${v}'`;
+const envConfig = config()
+for (const[key,v] of Object?.entries(envConfig?.parsed ? envConfig.parsed : process.env)){
+	configToReplace[`process.env.${key}`] = `'${v}'`;
 }
 
-const production = !process.env.ROLLUP_WATCH;
+const production = process.env?.NODE_ENV!=='development';
+const randomHash = () => Math.random().toString(36).substr(2, 5);
 
 function serve() {
 	let server;
@@ -37,22 +41,62 @@ function serve() {
 	};
 }
 
+const htmlOptions = {
+	template: async ({ attributes, files, meta, publicPath, title }) => {
+	  const script = (files.js || [])
+		.map(({ fileName }) => {
+		  return `<script defer src='/build/${fileName}'></script>`;
+		})
+		.join("\n");
+  
+	  const css = (files.css || [])
+		.map(({ fileName }) => {
+		  return `<link rel='stylesheet' href='/build/${fileName}'>`;
+		})
+		.join("\n");
+	  return`<!DOCTYPE html>
+			  <html lang="en">
+				  <head>
+					  <meta charset='utf-8'>
+					  <meta name='viewport' content='width=device-width,initial-scale=1'>
+					  <meta http-equiv="Cache-control" content="no-cache, no-store, must-revalidate">
+					  <meta http-equiv="Pragma" content="no-cache">
+					  <link rel='icon' type='image/png' href='/logo-ocean-svg.svg'>
+					  <link rel='stylesheet' href='/global.css'>
+					  ${css ? css : "<link rel='stylesheet' href='/build/bundle.css'>"}
+					  <script type="text/javascript" src="https://unpkg.com/@walletconnect/web3-provider"></script>
+					  ${script}
+				  </head>
+				  <body>
+				  </body>
+			  </html>` ;
+	},
+  };
+
+
+const output = !production ? {
+	file: 'public/build/bundle.js'
+} : {
+		dir: 'public/build',
+		entryFileNames: 'bundle.[hash].js',
+		assetFileNames: '[name].[hash].[ext]'
+	};
+
 export default {
 	input: 'src/main.js',
 	output: {
-		sourcemap: true,
+		sourcemap: !production,
 		format: 'iife',
 		name: 'app',
-		file: 'public/build/bundle.js'
+		...output
 	},
 	plugins: [
 		replace({
 			include: ["src/**/*.ts", "src/**/*.svelte", "src/**/*.js"],
 			preventAssignment: true,
-			values: {
-				...configToReplace
+			values: {...configToReplace}
 			}
-		}),
+		),
 		svelte({
 			compilerOptions: {
 				// enable run-time checks when not in production
@@ -61,7 +105,10 @@ export default {
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
-		css({ output: 'bundle.css' }),
+		css({ 
+			output: production ? `bundle.${randomHash()}.css` : 'bundle.css'
+		}),
+		html(htmlOptions),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
@@ -77,6 +124,12 @@ export default {
 			compact: true
 		}),
 		dsv(),
+		copy({
+			targets: [
+				{ src: 'public/build/index.html', dest: 'public' }
+			],
+			hook: 'writeBundle'
+		}),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated

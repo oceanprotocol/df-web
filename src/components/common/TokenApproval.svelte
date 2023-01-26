@@ -9,11 +9,17 @@
 
   export let disabled = false;
   export let loading = false;
-  export let amount;
+  export let fullWidth = true;
+  export let amount = 0;
+  export let infiniteAmount = false;
   export let tokenName;
   export let tokenAddress;
-  export let poolAddress;
+  export let spender;
   export let approving = false;
+  export let approved = false;
+  export let hasLock = false;
+
+  export let agreed = false;
 
   let isAmountApproved;
 
@@ -23,8 +29,8 @@
     try {
       let tx = await approveToken(
         tokenAddress,
-        poolAddress,
-        amount,
+        spender,
+        infiniteAmount ? 2 ** 53 - 1 : amount,
         $networkSigner
       );
       const receipt = await tx.wait();
@@ -38,6 +44,7 @@
     Swal.fire("Success!", "Tokens succesfully approved.", "success").then(
       async () => {
         isAmountApproved = true;
+        approved = true;
         loading = false;
         approving = false;
       }
@@ -49,27 +56,34 @@
       tokenAddress,
       amount,
       $userAddress,
-      poolAddress,
+      spender,
       $networkSigner
     ).then((resp) => {
-      isAmountApproved = resp;
+      // if user has lock and amount is at zero, let them update the lock
+      if( hasLock && amount <= 0 ) {
+        isAmountApproved = true;
+        approved = true;
+      } else {
+        isAmountApproved = resp;
+        approved = resp;
+      }
       loading = false;
     });
 </script>
 
-<div>
-  {#if isAmountApproved === false}
-    <Button
-      text={approving
-        ? "Approving"
-        : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
-      onclick={() => onClick()}
-      disabled={disabled || loading}
-    />
-  {:else}
-    <slot />
-  {/if}
-</div>
+{#if isAmountApproved === false}
+  <Button
+    {fullWidth}
+    loading={approving}
+    text={infiniteAmount
+      ? `Allow`
+      : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
+    onclick={() => onClick()}
+    disabled={disabled || loading || !agreed}
+  />
+{:else}
+  <slot />
+{/if}
 
 <style>
 </style>

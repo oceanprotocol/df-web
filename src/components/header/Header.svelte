@@ -1,22 +1,20 @@
 <script>
   import WalletConnect from "./WalletConnect.svelte";
   import NetworkSelection from "./NetworkSelection.svelte";
-  import { Link, useLocation, useNavigate } from "svelte-navigator";
+  import { Link, useLocation } from "svelte-navigator";
 
   const aboutURL =
     "https://blog.oceanprotocol.com/ocean-data-farming-series-c7922f1d0e45";
   const location = useLocation();
-  const navigate = useNavigate();
-  $: if ($location.pathname !== "/pools") {
-    navigate("/rewards");
-  }
 </script>
 
 <svelte:head>
   <title>
-    {`${$location.pathname
-      .charAt(1)
-      .toUpperCase()}${$location.pathname.substring(2)} - Ocean Farm`}
+    {`${
+      $location.pathname.substring(1) === "veocean"
+        ? "veOCEAN"
+        : $location.pathname.substring(1)
+    } - Ocean Farm`}
   </title>
 </svelte:head>
 <header>
@@ -27,11 +25,14 @@
   </div>
   <nav>
     <ul>
-      <li class:active={$location.pathname === "/rewards"}>
-        <Link to="/rewards" class="link">CLAIM PORTAL</Link>
+      <li class:active={$location.pathname === "/veocean"}>
+        <Link to="/veocean" class="link">veOCEAN</Link>
       </li>
-      <li class:active={$location.pathname === "/pools"}>
-        <Link to="/pools" class="link">POOL EXPLORER</Link>
+      <li class:active={$location.pathname === "/datafarming"}>
+        <Link to="/datafarming" class="link">FARMS</Link>
+      </li>
+      <li class:active={$location.pathname === "/activerewards"}>
+        <Link to="/activerewards" class="link">REWARDS</Link>
       </li>
       <li class:active={false}>
         <a href={aboutURL} target="_blank" class="link">ABOUT</a>
@@ -46,15 +47,11 @@
 
 <style>
   header {
-    position: sticky;
-    z-index: 101;
-    top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     margin: auto;
-    margin-top: calc(var(--spacer) / 4);
     padding-top: calc(var(--spacer) / 4);
     background-color: rgba(255, 255, 255, 0.9);
   }
@@ -64,8 +61,8 @@
   }
 
   .logo img {
-    width: 4em;
-    height: 4em;
+    width: 3em;
+    height: 3em;
     object-fit: contain;
   }
 
@@ -99,12 +96,11 @@
     display: flex;
     height: 100%;
     align-items: center;
-    padding: 0 1em;
+    padding: 0 0.4em;
     color: var(--brand-grey-light);
     font-weight: 700;
     text-decoration: none;
     font-size: var(--font-size-small);
-    text-transform: uppercase;
     letter-spacing: 0.1em;
     text-decoration: none;
     transition: color 0.2s linear;
@@ -119,8 +115,7 @@
   }
 
   :global(div [class*="tooltip"]) {
-    background-color: var(--brand-white);
-    z-index: 100;
+    background-color: transparent;
   }
 
   @media (min-width: 660px) {
@@ -128,8 +123,14 @@
       flex-direction: row;
       margin: 0;
       padding: 0;
-      top: 38px;
       margin-top: calc(var(--spacer) / 4);
+    }
+    li > :global(a) {
+      padding: 0 1em;
+    }
+    .logo img {
+      width: 4em;
+      height: 4em;
     }
   }
 </style>

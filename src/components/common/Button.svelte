@@ -1,24 +1,37 @@
 <script>
   import { Circle } from "svelte-loading-spinners";
 
-  export let onclick;
+  export let onclick = () => {};
   export let text;
+  export let className = undefined;
+  export let fullWidth = undefined;
   export let secondary = false;
   export let loading = false;
   export let disabled = false;
   export let textOnly = false;
+  export let type = "button";
 </script>
 
 <button
   on:click={onclick}
-  class="button {secondary && 'buttonSecondary'} {disabled &&
-    'disabled'} {textOnly && 'textOnly'}"
-  disabled={disabled === true}
-  type="button"
+  class="button {secondary ? 'buttonSecondary' : ''} {disabled && secondary
+    ? 'disabledSecondary'
+    : disabled
+    ? 'disabled'
+    : ''} {textOnly ? 'textOnly' : ''} {className ? className : ''} {fullWidth
+    ? 'fullWidth'
+    : ''}"
+  {disabled}
+  {type}
 >
   {#if loading === true}
     <div class="loadingSpinnerContainer">
-      <Circle size="20" color="#FFFFFF" unit="px" cl />
+      <Circle
+        size="20"
+        color={secondary ? "var(--brand-grey-light)" : "var(--brand-white)"}
+        unit="px"
+        cl
+      />
     </div>
   {/if}
   <span>{text}</span>
@@ -35,8 +48,9 @@
     min-width: 7rem;
     padding: calc(var(--spacer) / 4) calc(var(--spacer) / 2);
     font-size: var(--font-size-small);
-    font-family: var(--font-family-base);
-    font-weight: var(--font-weight-bold);
+    padding: calc(var(--spacer) / 6) calc(var(--spacer) / 4);
+    color: var(--brand-white);
+    font-weight: bold;
     text-transform: uppercase;
     border-radius: var(--border-radius);
     transition: 0.2s ease-out;
@@ -72,15 +86,24 @@
   .loadingSpinnerContainer {
     margin-right: 5px;
   }
-
-  .buttonSecondary {
-    background: var(--brand-grey-light);
+  .disabled {
+    background-color: var(--button-disabled-color);
+    cursor: default;
   }
-
-  .textOnly,
-  .textOnly:hover,
-  .textOnly:focus,
-  .textOnly:active {
+  .disabledSecondary {
+    cursor: default;
+    color: var(--brand-grey-lighter) !important;
+    background-color: var(--background-body) !important;
+  }
+  .buttonSecondary {
+    background-color: var(--brand-grey-dimmed);
+    color: var(--brand-grey-light);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--brand-grey-lighter);
+  }
+  .textOnly {
+    background-color: transparent;
+    color: var(--brand-grey-light);
     border: 0;
     border-radius: 0;
     outline: 0;
@@ -92,8 +115,18 @@
     cursor: pointer;
     min-width: auto;
   }
+  .textOnly:hover {
+    color: var(--brand-color-primary) !important;
+  }
+  .textOnly:disabled,
+  .textOnly[disabled]:hover {
+    color: var(--brand-grey-lighter) !important;
+  }
   span {
     display: box;
     line-height: 100%;
+  }
+  .fullWidth {
+    width: 100%;
   }
 </style>

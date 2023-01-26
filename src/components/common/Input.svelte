@@ -1,34 +1,78 @@
 <script>
+  import NumberInput from "./NumberInput.svelte";
+  import DateInput from "./DateInput.svelte";
+
   export let label = undefined;
-  export let value;
+  export let name = undefined;
+  export let value = undefined;
   export let placeholder = undefined;
+  export let disabled = false;
   export let type = "text";
-  export let min;
-  export let max;
-  export let onChange;
+  export let min = undefined;
+  export let max = undefined;
+  export let onChange = undefined;
+  export let error = false;
+  export let step = 1;
+  export let direction = "row";
+  export let showMaxValue = false;
+  export let maxValueLabel = "";
+  export let showMaxButton = false;
+  export let disableKeyboardInput = undefined;
+  export let className = undefined;
+  export let noArrows = undefined;
 </script>
 
-<div class="container">
+<div
+  class={`container ${direction === "row" ? "row" : "column"} ${
+    className ? className : ""
+  }`}
+>
   {#if label}
-    <label>{label}</label>
+    <label class={`${direction === "column" && "margin-bottom"}`}>
+      {label}
+    </label>
   {/if}
-  <div class="inputContainer">
+  <div class={`inputContainer ${type === "checkbox" && "checkbox"}`}>
     {#if type === "number"}
-      <input
-        class="input"
-        type="number"
+      <NumberInput
+        bind:value
+        {name}
+        {placeholder}
         {min}
         {max}
+        {disabled}
+        {onChange}
+        {showMaxValue}
+        {maxValueLabel}
+        {showMaxButton}
+        {noArrows}
+      />
+    {:else if type === "checkbox"}
+      <input
+        class:invalid={error}
+        {disabled}
+        class="input checkbox"
+        type="checkbox"
+        bind:checked={value}
+        {placeholder}
+      />
+    {:else if type === "date"}
+      <DateInput
+        {min}
+        {max}
+        {step}
+        {disableKeyboardInput}
         bind:value
         {placeholder}
         on:input={onChange}
+        {disabled}
       />
-    {:else if type === "checkbox"}
-      <input class="input" type="checkbox" bind:checked={value} {placeholder} />
     {:else}
       <input
         class="input"
+        {disabled}
         type="text"
+        class:invalid={error}
         {min}
         {max}
         bind:value
@@ -36,8 +80,8 @@
         on:input={onChange}
       />
     {/if}
-    {#if value > max}
-      <p class="message">{`The maximum allowed amount is ${max}`}</p>
+    {#if error}
+      <p class="message">{error}</p>
     {/if}
   </div>
 </div>
@@ -47,17 +91,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
   }
   .inputContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
   }
   .input {
     border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
+    width: 100%;
   }
   label {
     font-weight: bold;
@@ -68,5 +115,20 @@
     font-size: var(--font-size-small);
     margin-top: calc(var(--spacer) / 6);
     color: var(--brand-alert-red);
+  }
+  .row {
+    flex-direction: row;
+  }
+  .column {
+    flex-direction: column;
+  }
+  .margin-bottom {
+    margin-bottom: calc(var(--spacer) / 6);
+  }
+  .checkbox {
+    width: auto;
+  }
+  .invalid {
+    border-color: red !important;
   }
 </style>

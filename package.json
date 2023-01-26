@@ -1,10 +1,11 @@
 {
   "name": "svelte-app",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "dev": "HOST=localhost rollup -c -w",
     "start": "sirv public --single --port 4005 --host 0.0.0.0"
   },
   "devDependencies": {
@@ -16,24 +17,37 @@
     "croner": "^4.3.1",
     "decimal.js": "^10.3.1",
     "dotenv": "^8.6.0",
-    "rollup": "^2.68.4",
+    "rollup": "^2.79.1",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
-    "svelte": "^3.0.0",
+    "svelte": "^3.49.0",
+    "svelte-steps": "^2.3.5",
     "sweetalert2": "^11.4.14",
     "web3": "^1.7.3"
   },
   "dependencies": {
     "@oceanprotocol/typographies": "^0.1.0",
+    "@rollup/plugin-html": "^0.2.4",
     "@rollup/plugin-replace": "^4.0.0",
-    "carbon-components-svelte": "^0.67.0",
+    "apollo-boost": "^0.4.9",
+    "carbon-components-svelte": "^0.63.8",
     "carbon-icons-svelte": "^11.0.1",
     "ethers": "^5.6.5",
+    "moment": "2.29.4",
+    "rollup-plugin-copy": "^3.4.0",
     "sirv-cli": "^2.0.0",
+    "svelte-apollo": "^0.5.0",
+    "svelte-countdown": "^1.1.2",
+    "svelte-forms-lib": "^2.0.1",
     "svelte-loading-spinners": "^0.1.7",
     "svelte-markdown": "^0.2.2",
-    "svelte-navigator": "^3.1.5"
+    "svelte-navigator": "^3.1.5",
+    "svelte-range-slider-pips": "^2.0.3",
+    "svelte-web3": "^4.0.0",
+    "walletconnect": "^1.7.8",
+    "web3modal": "^1.9.9",
+    "yup": "^0.32.11"
   }
 }

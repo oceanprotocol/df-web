@@ -47,7 +47,7 @@
 
 <style>
   div.modal {
-    position: absolute;
+    position: fixed;
     z-index: 300;
     top: calc(100vh - (100vh + var(--spacer) / 4));
     bottom: 0;
@@ -62,10 +62,10 @@
     width: 80vw;
     border-radius: 0.3rem;
     background-color: white;
-    padding: var(--spacer) calc(var(--spacer) / 2);
+    padding: var(--spacer) calc(var(--spacer) / 5);
     padding-top: calc(var(--spacer) / 2);
     border: 2px solid var(--brand-grey-dimmed);
-    box-shadow: 0 6px 15px 0 rgb(0 0 0 / 5%);
+    box-shadow: var(--box-shadow);
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,63 +1,85 @@
 <script>
-  import NetworkRewards from "./NetworkRewards.svelte";
-  import MainMessage from "../common/MainMessage.svelte";
-  import ClaimableRewards from "../common/ClaimableRewards.svelte";
-  import { userAddress, selectedNetworks } from "../../stores/web3.js";
-  import { airdrops, updateAllClaimables } from "../../stores/airdrops";
+  import ClaimRewards from "./ClaimRewardsVeDF.svelte";
+  import {
+    userAddress,
+    connectedChainId,
+    web3Provider,
+  } from "../../stores/web3.js";
+  import {
+    veClaimables,
+    dfClaimables,
+    getDFRewards,
+  } from "../../stores/airdrops";
+  import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
+  import { getVeOceanBalance } from "../../utils/ve";
+  import { getAddressByChainIdKey } from "../../utils/address/address";
+  import EpochHistory from "./EpochHistory.svelte";
+  import RewardOverview from "./RewardOverview.svelte";
+  import moment from "moment";
+  import { getEpoch } from "../../utils/epochs";
+  import { oceanUnlockDate } from "../../stores/veOcean";
 
-  import { rewards } from "../../stores/airdrops";
+  let loading = false;
+  let veBalance = 0.0;
+  let canClaimVE = true;
+  let canClaimDF = true;
+  const now = moment();
+  let curEpoch = getEpoch(now);
 
-  let loading = true;
+  async function initClaimables() {
+    // userAddress.set("0x0000000000........")
+    // console.log("userAddress", $userAddress)
 
-  async function initAirdrops() {
+    if (!userAddress || !oceanUnlockDate) {
+      veClaimables.set(0);
+      dfClaimables.set(0);
+      loading = false;
+      return;
+    }
     loading = true;
-    await updateAllClaimables(
-      JSON.parse(process.env.AIRDROP_CONFIG),
-      $selectedNetworks,
+
+    veBalance = await getVeOceanBalance($userAddress, $web3Provider);
+
+    const veRewards = await getRewardsFeeEstimate($userAddress, $web3Provider);
+    veClaimables.set(veRewards);
+
+    const dfRewards = await getDFRewards(
       $userAddress,
-      $rewards
+      getAddressByChainIdKey($connectedChainId, "Ocean")
     );
+    dfClaimables.set(dfRewards);
+
+    /*const veRewards = 20;
+    const dfRewards = 20;
+
+    veClaimables.set(veRewards);
+    dfClaimables.set(dfRewards);*/
+
+    if (veRewards <= 0) {
+      canClaimVE = false;
+    }
+
+    if (dfRewards <= 0) {
+      canClaimDF = false;
+    }
+
+    // console.log("canClaimVE", canClaimVE)
+    // console.log("canClaimDF", canClaimDF)
+    // console.log("veClaimables", $veClaimables)
+    // console.log("dfClaimables", $dfClaimables)
+
     loading = false;
   }
 
-  $: if ($rewards) {
-    initAirdrops();
+  $: if ($userAddress && $connectedChainId) {
+    initClaimables();
   }
 </script>
 
-<div
-  class={`container ${
-    (!$userAddress || loading === true || !$airdrops) && "alignContentCenter"
-  }`}
->
-  {#if $userAddress && loading === false && $airdrops}
-    <div class="claimableRewardsContainer">
-      <ClaimableRewards />
-    </div>
-    <div class="pools">
-      {#each $selectedNetworks as chainId}
-        <NetworkRewards {chainId} airdropData={$airdrops[chainId]} />
-      {/each}
-    </div>
-  {:else if $selectedNetworks.length > 0 && $userAddress}
-    <span class="loading">Loading...</span>
-  {/if}
-  {#if !$userAddress}
-    <MainMessage
-      title="No wallet connected"
-      message={`Connect your wallet to see the rewards`}
-    />
-  {/if}
-  {#if $selectedNetworks.length === 0 && $userAddress}
-    <MainMessage
-      title="No network selected"
-      message={`Select one or more networks from the **Selected networks** dropdown in
-    order to see rewards from those networks.`}
-    />
-  {/if}
-  {#if $userAddress && loading === false && $selectedNetworks.length > 0 && Object.keys($airdrops).length === 0}
-    <MainMessage title="Coming Soon" />
-  {/if}
+<div class={`container`}>
+  <RewardOverview roundInfo={curEpoch} />
+  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} {loading} />
+  <EpochHistory />
 </div>
 
 <style>
@@ -67,28 +89,30 @@
     align-items: center;
     justify-content: flex-start;
     min-height: calc(100vh - 300px);
+    padding-top: var(--spacer);
   }
 
-  .pools {
+  .rewards {
     width: 100%;
   }
 
-  .claimableRewardsContainer {
+  .estimatedRewardsContainer {
+    width: 100%;
     font-size: var(--font-size-large);
-    margin: calc(var(--spacer)) 0;
   }
 
   .loading {
     font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
+    margin: calc(var(--spacer)) 0;
   }
 
   .alignContentCenter {
     justify-content: center;
   }
 
-  @media only screen and (min-width: 660px) {
-    .claimableRewardsContainer {
+  @media only screen and (min-width: 640px) {
+    .estimatedRewardsContainer {
       margin: var(--spacer) 0;
     }
     .container {

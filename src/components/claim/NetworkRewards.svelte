@@ -14,13 +14,18 @@
   <div class="networkRewardsContainer">
     <ClaimRewards
       {chainId}
+      currency={getTokens()?.length > 1
+        ? "$"
+        : ` ${airdropData.tokensData[getTokens()[0]].symbol}`}
       estimatedRewards={airdropData.estimatedRewards}
       claimableRewards={airdropData.claimableRewards}
       claimables={airdropData}
     />
-    {#each getTokens() as token}
-      <Row rowObject={airdropData.tokensData[token]} />
-    {/each}
+    {#if getTokens()?.length > 1}
+      {#each getTokens() as token}
+        <Row rowObject={airdropData.tokensData[token]} />
+      {/each}
+    {/if}
   </div>
 {/if}
 
@@ -33,8 +38,7 @@
     max-height: 55vh;
     overflow-y: auto;
     border-radius: var(--border-radius);
-    border: 1px solid var(--brand-grey-lighter);
-    box-shadow: 0 6px 15px 0 rgb(0 0 0 / 5%);
+    box-shadow: var(--box-shadow);
     margin-bottom: var(--spacer);
   }
 </style>

@@ -3,15 +3,12 @@ import { ethers } from "ethers";
 import { getRpcUrlByChainId, GASLIMIT_DEFAULT } from "./web3";
 import * as TokenABI from "./abis/tokenABI";
 
-const tokenABI = TokenABI.default
-
 //TODO - Standardize function calls & Params to follow ocean.js
-export const getTokenContract = async (chainId, address) => {
+export const getTokenContract = async (chainId, address, signer) => {
   try {
     const rpcURL = await getRpcUrlByChainId(chainId);
     if( rpcURL ) {
-      const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-      return new ethers.Contract(address, TokenABI.default, provider);
+      return new ethers.Contract(address, TokenABI.default, signer);
     }
   } catch (err) {
     console.error(err);
@@ -20,13 +17,16 @@ export const getTokenContract = async (chainId, address) => {
 }
 
 //TODO - Standardize function calls & Params to follow ocean.js
-export const balanceOf = async (balances, chainId, tokenAddress, account) => {
+export const balanceOf = async (balances, chainId, tokenAddress, account, provider) => {
+  let balance
   try {
-    const tokenContract = await getTokenContract(chainId, tokenAddress);
-    if (balances[chainId] === undefined) {
-      balances[chainId] = {};
+    if (balances[tokenAddress] === undefined) {
+      balances[tokenAddress] = {};
     }
-    return await tokenContract.balanceOf(account);
+    const tokenContract = await getTokenContract(chainId, tokenAddress, provider);
+    balance = await tokenContract.balanceOf(account);
+
+    return balance;
   } catch(err) {
     console.error(err);
   }
@@ -35,16 +35,17 @@ export const balanceOf = async (balances, chainId, tokenAddress, account) => {
 export const isTokenAmountApproved = async (tokenAddress, amount,
   owner,
   spender,signer)=>{
-    if(!amount) return true
+    if(amount <= 0) {
+      return false;
+    }
     try {
     const allowedAmount = await allowance(tokenAddress, owner, spender, signer)
     const allowedAmountFormated = ethers.utils.formatEther(allowedAmount);
+
     return new Decimal(allowedAmountFormated).greaterThanOrEqualTo(amount)
   }catch (err) {
     console.error(err);
   }
-
-
 }
 
 // Getter/View
@@ -54,7 +55,7 @@ export const allowance = async (
   spender,
   signer
 ) => {
-  const datatoken = new ethers.Contract(datatokenAdress, tokenABI, signer);
+  const datatoken = new ethers.Contract(datatokenAdress, TokenABI.default, signer);
 
   return datatoken.allowance(owner, spender);
 }
@@ -69,10 +70,9 @@ export const approve = async (
   signer,
   force = false
 ) => {
-  const datatoken = new ethers.Contract(datatokenAddress, tokenABI, signer);
+  const datatoken = new ethers.Contract(datatokenAddress, TokenABI.default, signer);
   const gasLimitDefault = GASLIMIT_DEFAULT
   let estGas
-  console.log("Spender is: ", spender);
   try {
     estGas = await datatoken.estimateGas.approve(spender, ethers.utils.parseEther(amount.toString()))
     console.log("Esimated gas is: ", estGas);

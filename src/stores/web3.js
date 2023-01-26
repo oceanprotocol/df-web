@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 import { ethers, BigNumber } from "ethers";
+import Web3Modal from "web3modal"
 import * as networksDataArray from "../networks-metadata.json";
 
 export let userAddress = writable("");
@@ -7,23 +8,20 @@ export let poolContracts = writable("");
 export let web3Provider = writable("");
 export let networkSigner = writable("");
 export let connectedChainId = writable("");
-export let web3 = writable("");
-export let selectedNetworks = writable(localStorage.getItem("selectedNetworks") ? JSON.parse(localStorage.getItem("selectedNetworks")): []);
+export let selectedNetworks = writable(localStorage?.getItem("selectedNetworks") ? JSON.parse(localStorage?.getItem("selectedNetworks")): []);
 export let jsonRPCProvider = writable({});
 export let isWalletConnectModalOpen = writable(false)
 
 export const GASLIMIT_DEFAULT = 1000000;
 
-const Web3 = window.Web3;
-const Web3Modal = window.Web3Modal.default;
-const WalletConnectProvider = window.WalletConnectProvider.default;
+const WalletConnectProvider = window?.WalletConnectProvider?.default;
 
 const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
     options: {
       // Mikko's test key - don't copy as your mileage may vary
-      infuraId: "4b9c931a4f26483aaf53db3ed884549e",
+      infuraId: process.env.INFURA_KEY,
     },
   }
 };
@@ -33,6 +31,7 @@ const web3Modal = new Web3Modal({
   providerOptions, // required
   disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
 });
+
 
 // TODO - Replace networkData w/ networksDataArray
 export function getNetworkDataById(
@@ -50,7 +49,7 @@ export async function getJsonRpcProvider(chainId) {
   try {
     const rpcURL = await getRpcUrlByChainId(chainId);
     if (rpcURL) {
-      return new ethers.providers.JsonRpcProvider(rpcURL);
+      return new ethers.providers.InfuraProvider(rpcURL);
     }
     return null;
   } catch(err) {
@@ -65,18 +64,17 @@ export const setValuesAfterConnection = async (instance) => {
   const signerAddress = await signer.getAddress();
   const chainId= (await provider.getNetwork()).chainId;
 
-  connectedChainId.set(chainId)
+  connectedChainId.set(chainId);
   userAddress.set(signerAddress);
   web3Provider.set(provider)
-  web3.set(new Web3(instance));
 };
 
 export const connectWalletFromLocalStorage = async () => {
   const localStorageProvider = JSON.parse(
-      localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")
+      localStorage?.getItem("WEB3_CONNECT_CACHED_PROVIDER")
   );
   if (!localStorageProvider) return;
-  const instance = await web3Modal.connectTo(localStorageProvider);
+  const instance = await web3Modal?.connectTo(localStorageProvider);
 
   // Subscribe to accounts change
   instance.on("accountsChanged", (accounts) => {
@@ -88,8 +86,9 @@ export const connectWalletFromLocalStorage = async () => {
   // Subscribe to chainId change
   instance.on("chainChanged", (chainId) => {
     connectedChainId.set(Number(chainId))
-    const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
-    networkSigner.set(signer)
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+    networkSigner.set(provider.getSigner())
+    web3Provider.set(provider)
   });
 
   // Subscribe to networkId change
@@ -106,13 +105,13 @@ export const signMessage = async (msg, signer) => {
 export const connectWalletToSpecificProvider = async (provider) => {
   let instance;
   try {
-    instance = await web3Modal.connectTo(provider);
+    instance = await web3Modal?.connectTo(provider);
+    
     //provider = new ethers.providers.Web3Provider(window.ethereum)
   } catch (e) {
     console.log("Could not get a wallet connection", e);
     return;
   }
-
   // Subscribe to accounts change
   instance.on("accountsChanged", (accounts) => {
     const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
@@ -122,7 +121,10 @@ export const connectWalletToSpecificProvider = async (provider) => {
 
   // Subscribe to networkId change
   instance.on("chainChanged", (chainId) => {
-    connectedChainId.set(parseInt(chainId, 16))
+    connectedChainId.set(Number(chainId))
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+    networkSigner.set(provider.getSigner())
+    web3Provider.set(provider)
   });
 
   // Subscribe to networkId change
@@ -134,7 +136,7 @@ export const connectWalletToSpecificProvider = async (provider) => {
 export const connectWallet = async () => {
   let instance;
   try {
-    instance = await web3Modal.connect();
+    instance = await web3Modal?.connect();
     //provider = new ethers.providers.Web3Provider(window.ethereum)
   } catch (e) {
     console.log("Could not get a wallet connection", e);
@@ -150,7 +152,10 @@ export const connectWallet = async () => {
 
   // Subscribe to chainChanged change
   instance.on("chainChanged", (chainId) => {
-    connectedChainId.set(parseInt(chainId, 16))
+    connectedChainId.set(Number(chainId))
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+    networkSigner.set(provider.getSigner())
+    web3Provider.set(provider)
   });
 
   // Subscribe to networkId change
@@ -160,14 +165,11 @@ export const connectWallet = async () => {
 };
 
 export const disconnect = async () => {
-  await web3Modal.clearCachedProvider();
-  if (web3 && web3.currentProvider && web3.currentProvider.close) {
-    await web3.currentProvider.close();
-  }
+  await web3Modal?.clearCachedProvider();
   userAddress.set(undefined);
   networkSigner.set(undefined);
-  localStorage.removeItem("walletconnect");
-  localStorage.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
+  localStorage?.removeItem("walletconnect");
+  localStorage?.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
   window.location.href = "/";
 };
 
