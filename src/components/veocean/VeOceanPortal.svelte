@@ -64,7 +64,7 @@
 
   @media (min-width: 640px) {
     .container {
-      padding-top: calc(var(--spacer));
+      padding-top: calc(var(--spacer) * 2);
       gap: calc(var(--spacer) / 2);
     }
   }

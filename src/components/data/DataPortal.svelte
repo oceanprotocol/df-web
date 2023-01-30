@@ -109,7 +109,7 @@
 
 <style>
   .wrapper {
-    margin-top: var(--spacer);
+    padding-top: calc(var(--spacer) * 2);
     height: 100%;
     width: 100%;
   }

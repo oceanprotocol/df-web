@@ -123,7 +123,7 @@
       flex-direction: row;
       margin: 0;
       padding: 0;
-      margin-top: calc(var(--spacer) / 4);
+      margin-top: calc(var(--spacer) / 2);
     }
     li > :global(a) {
       padding: 0 1em;

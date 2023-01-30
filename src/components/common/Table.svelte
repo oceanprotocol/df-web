@@ -367,7 +367,7 @@
     overflow-y: scroll;
   }
   .tableCustomHeader > div {
-    padding: calc(var(--spacer) / 4) 0;
+    padding: calc(var(--spacer) / 6) 0 !important;
   }
   .tableCustomHeader {
     display: flex;
