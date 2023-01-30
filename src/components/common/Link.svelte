@@ -31,7 +31,7 @@
     font-size: var(--font-size-small);
   }
   a:hover {
-    color: var(--brand-color-primary);
+    color: var(--color-primary);
     cursor: pointer;
   }
   img {

@@ -116,7 +116,7 @@
     min-width: auto;
   }
   .textOnly:hover {
-    color: var(--brand-color-primary) !important;
+    color: var(--color-primary) !important;
   }
   .textOnly:disabled,
   .textOnly[disabled]:hover {

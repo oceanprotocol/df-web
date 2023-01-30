@@ -386,7 +386,7 @@
     margin-left: calc(var(--spacer) / 3);
   }
   :global(.updateAllocationsBtton) {
-    margin-left: calc(var(--spacer) / 3);
+    margin-left: calc(var(--spacer) / 3) !important;
   }
   :global(.tableActionsContainer) {
     display: flex !important;

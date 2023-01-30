@@ -98,6 +98,6 @@
   }
   .periodItem:hover {
     cursor: pointer;
-    color: var(--brand-color-primary);
+    color: var(--color-primary);
   }
 </style>

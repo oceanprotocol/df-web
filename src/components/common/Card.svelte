@@ -64,7 +64,7 @@
     font-weight: bold;
   }
   .tag {
-    color: var(--brand-color-primary);
+    color: var(--color-primary);
     font-weight: bold;
   }
   @media (min-width: 660px) {
