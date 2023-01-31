@@ -23,8 +23,9 @@
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
     "svelte": "^3.49.0",
+    "svelte-preprocess": "^4.10.7",
     "svelte-steps": "^2.3.5",
-    "sweetalert2": "^11.4.14",
+    "sweetalert2": "^11.4.8",
     "web3": "^1.7.3"
   },
   "dependencies": {
@@ -32,7 +33,8 @@
     "@rollup/plugin-html": "^0.2.4",
     "@rollup/plugin-replace": "^4.0.0",
     "apollo-boost": "^0.4.9",
-    "carbon-components-svelte": "^0.63.8",
+    "carbon-components": "^10.58.3",
+    "carbon-components-svelte": "^0.72.1",
     "carbon-icons-svelte": "^11.0.1",
     "ethers": "^5.6.5",
     "moment": "2.29.4",

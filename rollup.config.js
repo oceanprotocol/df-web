@@ -10,6 +10,7 @@ import {config} from 'dotenv';
 import copy from 'rollup-plugin-copy'
 import replace from '@rollup/plugin-replace';
 import html from "@rollup/plugin-html";
+import sveltePreprocess from 'svelte-preprocess';
 
 const configToReplace = {};
 const envConfig = config()
@@ -62,7 +63,7 @@ const htmlOptions = {
 					  <meta http-equiv="Cache-control" content="no-cache, no-store, must-revalidate">
 					  <meta http-equiv="Pragma" content="no-cache">
 					  <link rel='icon' type='image/png' href='/logo-ocean-svg.svg'>
-					  <link rel='stylesheet' href='/global.css'>
+					  <link rel='stylesheet' href='/global.scss'>
 					  ${css ? css : "<link rel='stylesheet' href='/build/bundle.css'>"}
 					  <script type="text/javascript" src="https://unpkg.com/@walletconnect/web3-provider"></script>
 					  ${script}
@@ -73,6 +74,7 @@ const htmlOptions = {
 	},
   };
 
+const path = require('path');
 
 const output = !production ? {
 	file: 'public/build/bundle.js'
@@ -98,6 +100,10 @@ export default {
 			}
 		),
 		svelte({
+			preprocess: sveltePreprocess({
+				postcss: false,
+				scss: { includePaths: ['src', 'node_modules'] },
+			}),
 			compilerOptions: {
 				// enable run-time checks when not in production
 				dev: !production
