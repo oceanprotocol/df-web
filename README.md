@@ -6,7 +6,6 @@
 - [🛳 Production](#-production)
 - [⬆️ Deployment](#️-deployment)
 
-
 ## 🏄 Get Started
 
 Clone project and setup environment variables:
@@ -30,7 +29,7 @@ npm install
 npm run dev
 ```
 
-Navigate to [localhost:8080](http://localhost:8080). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
+Navigate to [localhost:4005](http://localhost:4005). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
 
 By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
 
@@ -51,7 +50,6 @@ npm run build
 
 Every Pull Request gets its own preview build via Vercel's GitHub integration.
 
-The `main` branch is always deployed to [df-web-88kg.vercel.app](https://df-web-88kg.vercel.app).
+The `main` branch is always deployed to [df-web-oceanprotocol.vercel.app](df-web-oceanprotocol.vercel.app).
 
 Live deployments happen...
-
