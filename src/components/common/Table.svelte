@@ -358,16 +358,16 @@
 
 <style lang="scss" global>
   $css--font-face: false;
-$css--helpers: false;
-$css--body: false;
-$css--use-layer: false;
-$css--reset: false;
-$css--default-type: false;
-$css--plex: false;
-@import "carbon-components/scss/components/data-table/_data-table.scss";
-@import "carbon-components/scss/components/data-table/_data-table-sort.scss";
-@import "carbon-components/scss/components/toolbar/_toolbar.scss";
-@import "carbon-components/scss/components/pagination/_pagination.scss";
+  $css--helpers: false;
+  $css--body: false;
+  $css--use-layer: false;
+  $css--reset: false;
+  $css--default-type: false;
+  $css--plex: false;
+  @import "carbon-components/scss/components/data-table/_data-table.scss";
+  @import "carbon-components/scss/components/data-table/_data-table-sort.scss";
+  @import "carbon-components/scss/components/toolbar/_toolbar.scss";
+  @import "carbon-components/scss/components/pagination/_pagination.scss";
 
   .datasetsWithAllocationsInputContainer {
     display: flex !important;

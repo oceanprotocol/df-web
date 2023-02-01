@@ -63,7 +63,7 @@ const htmlOptions = {
 					  <meta http-equiv="Cache-control" content="no-cache, no-store, must-revalidate">
 					  <meta http-equiv="Pragma" content="no-cache">
 					  <link rel='icon' type='image/png' href='/logo-ocean-svg.svg'>
-					  <link rel='stylesheet' href='/global.scss'>
+					  <link rel='stylesheet' href='/global.css'>
 					  ${css ? css : "<link rel='stylesheet' href='/build/bundle.css'>"}
 					  <script type="text/javascript" src="https://unpkg.com/@walletconnect/web3-provider"></script>
 					  ${script}
@@ -111,8 +111,8 @@ export default {
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
-		css({ 
-			output: production ? `bundle.${randomHash()}.css` : 'bundle.css'
+		css({
+			output: production ? `bundle.${randomHash()}.css` : `bundle.css`
 		}),
 		html(htmlOptions),
 
