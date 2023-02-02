@@ -63,8 +63,6 @@
 
   .button:hover,
   .button:focus {
-    color: var(--brand-white);
-    background: var(--brand-grey-light);
     text-decoration: none;
     box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
     transform: translate3d(0, -0.05rem, 0);
@@ -97,7 +95,6 @@
   }
   .buttonSecondary {
     background-color: var(--brand-grey-dimmed);
-    color: var(--brand-grey-light);
     border-radius: var(--border-radius);
     border: 1px solid var(--brand-grey-lighter);
   }
