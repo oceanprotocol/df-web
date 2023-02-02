@@ -58,7 +58,6 @@
     align-items: center;
     margin: auto;
     padding-top: calc(var(--spacer) / 4);
-    background-color: rgba(255, 255, 255, 0.9);
   }
 
   .headerActions {
