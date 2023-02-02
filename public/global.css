@@ -36,7 +36,6 @@ a {
 
 p {
   margin: 0;
-  margin-bottom: calc(var(--spacer) / var(--line-height));
 }
 
 :root {
