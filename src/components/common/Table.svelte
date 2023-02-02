@@ -32,6 +32,7 @@
   import { oceanUnlockDate } from "../../stores/veOcean";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import CustomTooltip from "./CustomTooltip.svelte";
+  import { navigate } from "svelte-navigator";
   import * as descriptions from "../../utils/metadata/descriptions.json";
   
 
@@ -266,21 +267,29 @@
           tooltipMessage={tooltipMessage}
           {tooltipState}
         />
-        <Button
-          text={"Update allocations"}
-          className="updateAllocationsBtton"
-          onclick={() => updateAllocations()}
-          disabled={disabled || loading}
-          loading={loading === "UPDATE"}
-        />
-        <Button
-          text={"Reset allocations"}
-          className="updateAllocationsBtton"
-          onclick={() => updateAllocations(true)}
-          disabled={disabled || loading || $totalUserAllocation < 1}
-          secondary
-          loading={loading === "RESET"}
-        />
+        {#if $oceanUnlockDate}
+          <Button
+            text={"Update allocations"}
+            className="updateAllocationsBtton"
+            onclick={() => updateAllocations()}
+            disabled={disabled || loading}
+            loading={loading === "UPDATE"}
+          />
+          <Button
+            text={"Reset allocations"}
+            className="updateAllocationsBtton"
+            onclick={() => updateAllocations(true)}
+            disabled={disabled || loading || $totalUserAllocation < 1}
+            secondary
+            loading={loading === "RESET"}
+          />
+        {:else}
+          <Button
+            text={"Get allocations"}
+            className="updateAllocationsBtton"
+            onclick={() => navigate("veocean")}
+          />
+        {/if}
       </div>
       <div class="tableActionsContainer">
         <div class="datasetsWithAllocationsInputContainer">
