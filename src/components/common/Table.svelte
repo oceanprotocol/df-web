@@ -334,14 +334,12 @@
           {#if cell.key === "title"}
             <TextWithNetworkIcon
               networkName={row.network}
+              className={row.ispurgatory ? "purgatory" : ""}
               text={cell.value}
               url={row.action}
+              textColor={row.ispurgatory ? 'var(--brand-alert-red)' : undefined}
+              tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
             />
-            {#if row.ispurgatory}
-              <p class="purgatory">
-                Item in purgatory. Remove your allocations.
-              </p>
-            {/if}
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
@@ -454,6 +452,9 @@
   }
   :global(.tableContainer .bx--data-table) {
     margin-top: calc(var(--spacer) / 2);
+  }
+  :global(tr:has(.purgatory) > td) {
+    color: var(--brand-alert-red) !important;
   }
   @media (min-width: 640px) {
     .tableCustomHeader {
