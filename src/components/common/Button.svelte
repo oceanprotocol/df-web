@@ -46,10 +46,8 @@
     display: inline-block;
     width: fit-content;
     min-width: 7rem;
-    padding: calc(var(--spacer) / 4) calc(var(--spacer) / 2);
     font-size: var(--font-size-small);
     padding: calc(var(--spacer) / 6) calc(var(--spacer) / 4);
-    color: var(--brand-white);
     font-weight: bold;
     text-transform: uppercase;
     border-radius: var(--border-radius);
@@ -100,7 +98,6 @@
   }
   .textOnly {
     background-color: transparent;
-    color: var(--brand-grey-light);
     border: 0;
     border-radius: 0;
     outline: 0;
