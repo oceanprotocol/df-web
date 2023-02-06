@@ -343,7 +343,7 @@
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
-              available={totalAvailable}
+              available={row.ispurgatory ? cell.value : totalAvailable}
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
               onBlur={updateTotalAllocation}
