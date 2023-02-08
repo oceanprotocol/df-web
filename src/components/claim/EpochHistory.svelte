@@ -41,7 +41,7 @@
   init();
 </script>
 
-<h3 class="title">Data Farming History</h3>
+<h2 class="title">Data Farming History</h2>
 <div class="epochHistoryContainer">
   <DataTable sortable {headers} {rows} class="customTable">
     <svelte:fragment slot="cell-header" let:header>
@@ -72,7 +72,6 @@
   .title {
     font-weight: bold;
     width: 100%;
-    font-size: var(--font-size-normal);
   }
   .headerContainer {
     display: flex;

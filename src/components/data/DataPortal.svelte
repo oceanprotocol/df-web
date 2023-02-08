@@ -93,7 +93,7 @@
 >
   {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
     <div class="wrapper">
-      <h3 class="title">Curate Data to Earn OCEAN</h3>
+      <h2 class="title">Curate Data to Earn OCEAN</h2>
       <div class="data">
         <Table
           colData={columnsData}
@@ -122,9 +122,7 @@
   }
 
   .title {
-    font-weight: bold;
     width: 100%;
-    font-size: var(--font-size-medium);
   }
 
   .data {

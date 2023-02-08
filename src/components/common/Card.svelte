@@ -15,7 +15,7 @@
 <div class={`container ${className ? className : ""}`}>
   <div class="cardHeader">
     {#if title}
-      <p class="title">{title}</p>
+      <h3 class="title">{title}</h3>
     {/if}
     {#if tag}
       <div class="subtitle">
@@ -47,7 +47,7 @@
     box-shadow: var(--box-shadow);
   }
   .subtitle {
-    margin-top: calc(var(--spacer) / 16);
+    margin-top: calc(var(--spacer) / 6);
     height: fit-content !important;
     display: flex;
     flex-direction: row;
@@ -60,8 +60,7 @@
     margin-bottom: calc(var(--spacer) / 2);
   }
   .title {
-    font-size: var(--font-size-normal);
-    font-weight: bold;
+    margin-bottom: 0;
   }
   .tag {
     color: var(--color-primary);

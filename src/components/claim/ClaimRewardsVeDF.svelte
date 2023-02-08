@@ -76,7 +76,7 @@
 </script>
 
 <div class={`container`}>
-  <h3 class="title">Earn OCEAN Rewards</h3>
+  <h2 class="title">Earn OCEAN Rewards</h2>
   <ClaimItem
     title="Passive"
     description="Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>."
@@ -176,7 +176,6 @@
   .title {
     font-weight: bold;
     width: 100%;
-    font-size: var(--font-size-normal);
   }
 
   @media (min-width: 640px) {

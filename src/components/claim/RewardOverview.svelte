@@ -50,6 +50,6 @@
 
 <style>
   :global(.rewardsOverview .title) {
-    font-size: var(--font-size-large) !important;
+
   }
 </style>
