@@ -93,7 +93,7 @@
     padding: 0 calc(var(--spacer) / 8);
   }
   .periodItem {
-    font-size: var(--font-size-mini);
+    font-size: var(--font-size-small);
     color: var(--brand-grey-light);
   }
   .periodItem:hover {

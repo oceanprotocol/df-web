@@ -53,7 +53,7 @@
     margin-right: calc(var(--spacer) / 3);
   }
   .networkName {
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-base);
     color: var(--brand-black);
     text-align: start;
   }

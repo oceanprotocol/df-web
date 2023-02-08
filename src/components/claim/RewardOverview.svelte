@@ -47,9 +47,3 @@
 >
   <Countdown />
 </Card>
-
-<style>
-  :global(.rewardsOverview .title) {
-
-  }
-</style>

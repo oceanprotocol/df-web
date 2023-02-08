@@ -57,7 +57,7 @@
   }
   .title {
     color: var(--brand-black);
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-base);
     font-weight: bold;
   }
   input {

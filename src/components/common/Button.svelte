@@ -46,7 +46,7 @@
     display: inline-block;
     width: fit-content;
     min-width: 7rem;
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-base);
     padding: calc(var(--spacer) / 6) calc(var(--spacer) / 4);
     font-weight: bold;
     text-transform: uppercase;

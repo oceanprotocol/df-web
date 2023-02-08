@@ -420,12 +420,7 @@
   }
   td {
     background: var(--brand-white) !important;
-    border-bottom: 1px solid var(--brand-grey-dimmed) !important;
-    font-size: var(--font-size-small) !important;
     border-top: 0 !important;
-  }
-  th {
-    background-color: var(--brand-grey-dimmed) !important;
   }
   thead {
     background-color: var(--brand-white) !important;
@@ -457,6 +452,9 @@
   }
   .tableContainer .bx--data-table {
     margin-top: calc(var(--spacer) / 2);
+  }
+  :global(.bx--search-input){
+    font-size: var(--font-size-base);
   }
   @media (min-width: 640px) {
     .tableCustomHeader {

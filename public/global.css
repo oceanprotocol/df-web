@@ -82,7 +82,6 @@ h5 {
 }
 
 figure,
-img,
 svg,
 video,
 audio,
@@ -116,6 +115,10 @@ fieldset {
   margin: 0;
 }
 
+input {
+  font-size: var(--font-size-base);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -129,11 +132,13 @@ table td {
   margin: 0;
   padding: calc(var(--spacer) / 4);
   border-bottom: 1px solid var(--border-color);
+  font-size: var(--font-size-base) !important;
   text-align: left;
   font-size: 90%;
 }
 
 table th {
+  background-color: var(--brand-grey-dimmed) !important;
   font-weight: var(--font-weight-bold);
 }
 

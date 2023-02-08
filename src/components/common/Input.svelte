@@ -109,7 +109,7 @@
   label {
     font-weight: bold;
     margin-right: calc(var(--spacer) / 8);
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-base);
   }
   .message {
     font-size: var(--font-size-small);

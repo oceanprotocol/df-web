@@ -35,7 +35,7 @@
     cursor: pointer;
   }
   img {
-    height: calc(var(--font-size-normal) / 2.5);
+    height: calc(var(--font-size-small) / 1.2);
     margin-left: calc(var(--spacer) / 12);
   }
 </style>

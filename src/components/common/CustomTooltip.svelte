@@ -17,7 +17,7 @@
   class={`${state === "alert" ? "alert" : state === "warning" ? "warning" : ''}`}
 >
   {#if state === undefined}
-    <Tooltip {align} {direction} size={10} {open}>
+    <Tooltip {align} {direction} size={4} {open}>
       {#if text}
         <div class="tooltipTextContainer">
           <p class="text">
@@ -27,7 +27,7 @@
       {/if}
     </Tooltip>
   {:else}
-    <Tooltip {align} {direction} size={10} {open} icon={InformationFilled}>
+    <Tooltip {align} {direction} size={4} {open} icon={InformationFilled}>
       {#if text}
         <div class="tooltipTextContainer">
           <p class="text">
@@ -58,7 +58,7 @@
   }
   .tooltipTextContainer > p {
     color: black !important;
-    font-size: var(--font-size-mini) !important;
+    font-size: var(--font-size-small) !important;
     white-space: pre-wrap;
   }
   .alert svg {

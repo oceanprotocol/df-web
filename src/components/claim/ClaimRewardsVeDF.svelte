@@ -171,7 +171,7 @@
     flex-wrap: wrap;
     gap: calc(var(--spacer) / 2);
     flex-direction: row;
-    margin: calc(var(--spacer)) 0;
+    margin: calc(var(--spacer) * 2) 0;
   }
   .title {
     font-weight: bold;
