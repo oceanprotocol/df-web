@@ -343,7 +343,7 @@
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
-              available={row.ispurgatory ? cell.value : totalAvailable}
+              available={row.ispurgatory ? parseInt($dataAllocations.find((d) =>d.nftAddress == row.nftaddress)?.allocated)/100 : totalAvailable}
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
               onBlur={updateTotalAllocation}
