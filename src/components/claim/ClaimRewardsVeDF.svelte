@@ -79,7 +79,7 @@
   <h3 class="title">Earn OCEAN Rewards</h3>
   <ClaimItem
     title="Passive"
-    description="Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>."
+    description="Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>.<br/>Current round passive rewards are distributed for <strong>last round</strong> holding."
     distributedAmount={roundInfo?.passive}
     apy={`${
       $APYs
