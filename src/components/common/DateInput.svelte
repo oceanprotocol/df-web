@@ -13,8 +13,8 @@
 
   const periods = [
     {
-      label: "~2 weeks",
-      days: 14,
+      label: "~1 week",
+      days: 7,
     },
     {
       label: "~1 month",
