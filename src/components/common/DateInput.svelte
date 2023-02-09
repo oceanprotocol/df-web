@@ -13,8 +13,8 @@
 
   const periods = [
     {
-      label: "~1 week",
-      days: 7,
+      label: "~2 weeks",
+      days: 14,
     },
     {
       label: "~1 month",
@@ -43,8 +43,7 @@
 <div class={`container`}>
   <input
     class={`input ${
-      (value === min && moment.utc().format("YYYY-MM-DD") === min) ||
-      (value <= min && moment.utc().format("YYYY-MM-DD") <= min)
+      value < min && moment.utc().format("YYYY-MM-DD") <= min
         ? "inputError"
         : ""
     }`}
