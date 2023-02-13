@@ -91,7 +91,9 @@
     amount: 0,
     unlockDate: $oceanUnlockDate
       ? $oceanUnlockDate.format("YYYY-MM-DD")
-      : moment.utc(getThursdayDate(moment.utc())).format("YYYY-MM-DD"),
+      : moment
+          .utc(getThursdayDate(moment.utc().add(7, "days")))
+          .format("YYYY-MM-DD"),
     ageement: false,
   };
 
@@ -259,7 +261,7 @@
           disableKeyboardInput="return false"
           min={$oceanUnlockDate
             ? $oceanUnlockDate.format("YYYY-MM-DD")
-            : getThursdayDate(moment().utc())}
+            : getThursdayDate(moment().utc().add(7, "days"))}
           disabled={getOceanBalance($connectedChainId) <= 0}
           max={getMaxDate().format("YYYY-MM-DD")}
           bind:value={$form.unlockDate}
