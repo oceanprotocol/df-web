@@ -17,7 +17,7 @@ for (const[key,v] of Object?.entries(envConfig?.parsed ? envConfig.parsed : proc
 	configToReplace[`process.env.${key}`] = `'${v}'`;
 }
 
-const production = process.env?.NODE_ENV!=='development';
+const production = process.env?.START_RELOAD_SERVER=='false';
 const randomHash = () => Math.random().toString(36).substr(2, 5);
 
 function serve() {
