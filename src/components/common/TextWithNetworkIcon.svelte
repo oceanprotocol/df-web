@@ -15,7 +15,7 @@
   <NetworkIcon name={networkName} minimal color={textColor}/>
   {#if tooltipMessage}
     <CustomTooltip
-    text={"Item in purgatory. Remove your allocations."}
+    text={"Item in purgatory. Remove all your allocations from this asset."}
     direction={"right"}
     align={"top"}
     state={"alert"}

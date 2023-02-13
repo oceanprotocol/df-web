@@ -77,9 +77,7 @@ function getRow(dataInfo, key) {
 }
 
 function filterPurgatoryDatasetsWithoutAllocations(datasets,allocations){
-  datasets[0].is_purgatory = 1;
   let purgatoryDatasets = datasets.filter((d) => d.is_purgatory === 1)
-  allocations.push({allocated:'2000', nftAddress: datasets[0].nft_addr, chainId:"80001"})
   let purgatoryDatasetsWithAllocations = []
   allocations.forEach((a) =>{
     purgatoryDatasets.forEach((d) => {
