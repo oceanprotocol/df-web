@@ -426,18 +426,12 @@
   :global(button[class*="table-sort"]) {
     background-color: var(--brand-grey-dimmed);
   }
-  :global(div [class*="pagination"]) {
-    background-color: var(--brand-white) !important;
-  }
   :global(div [class*="select-input"]) {
     background-color: var(--brand-white) !important;
     border-left: 1px solid var(--brand-grey-dimmed) !important;
   }
   :global(div [class*="data-table-header"]) {
     background-color: var(--brand-white) !important;
-  }
-  :global(div [class*="pagination__button"]) {
-    border-left: 1px solid var(--brand-grey-dimmed) !important;
   }
   :global([class*="table-toolbar"]) {
     z-index: 0 !important;
