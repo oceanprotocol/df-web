@@ -32,6 +32,7 @@
   }
   .default {
     border-bottom: 1px solid var(--border-color);
+    background-color: var(--background-content);
   }
   span {
     font-weight: bold;

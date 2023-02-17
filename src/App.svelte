@@ -217,9 +217,13 @@
 
 <Router>
   <BannerMessage
+    title={`This software is a Beta release.`}
+    message={`The website is under construction, use at your own discretion`}
+  />
+  <BannerMessage
     type="default"
-    title={`<a>2X Rewards for publishers.</a>`}
-    message={`Publish your datasets trough our <a>marketplace.</a>`}
+    title={`<a href='https://blog.oceanprotocol.com/data-farming-publisher-rewards-f2639525e508' target='_blank'>2X Rewards for publishers.</a>`}
+    message={`Publish your datasets trough our <strong><a href='https://market.oceanprotocol.com/publish/1' target='_blank'>marketplace.</a></strong>`}
   />
   <WalletConnectModal />
   <main>

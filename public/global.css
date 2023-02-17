@@ -59,7 +59,7 @@ body {
 }
 
 a {
-  color: var(--text-color-primary);
+  color: var(--text-color-primary) !important;
   text-decoration: underline;
   cursor: pointer;
 }
