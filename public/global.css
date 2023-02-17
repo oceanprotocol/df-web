@@ -40,6 +40,8 @@ body {
   --brand-color-primary: #ff4092;
   --brand-color-secondary: #8b98a9;
 
+  --border-color: #e2e2e2;
+
   --brand-gradient: linear-gradient(to right bottom, #7b1173, #ff4092);
 
   --spacer: 4rem;
@@ -54,6 +56,12 @@ body {
   --brand-alert-red: #d80606;
   --brand-alert-orange: #b35f36;
   --brand-alert-yellow: #eac146;
+}
+
+a {
+  color: var(--text-color-primary);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 h1:focus-visible {

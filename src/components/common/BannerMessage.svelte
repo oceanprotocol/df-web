@@ -6,10 +6,10 @@
 
 <div class={`container ${type === "warning" ? "warning" : "default"}`}>
   <span>
-    {title}
+    {@html title}
   </span>
   <p>
-    {message}
+    {@html message}
   </p>
 </div>
 
@@ -29,6 +29,9 @@
   }
   .warning {
     background-color: var(--brand-alert-yellow);
+  }
+  .default {
+    border-bottom: 1px solid var(--border-color);
   }
   span {
     font-weight: bold;

@@ -217,8 +217,9 @@
 
 <Router>
   <BannerMessage
-    title="This software is a Beta release."
-    message={`The website is under construction, use at your own discretion.`}
+    type="default"
+    title={`<a>2X Rewards for publishers.</a>`}
+    message={`Publish your datasets trough our <a>marketplace.</a>`}
   />
   <WalletConnectModal />
   <main>

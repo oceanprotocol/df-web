@@ -147,7 +147,7 @@
         : ""
     }`}
     apyTooltip={descriptions.default.tooltip_rewards_apy_active}
-    description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>."
+    description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>.<br/><strong>2X Rewards</strong> for publishers that allocates on their own asset."
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     rewardTooltip={descriptions.default.tooltip_active_rewards}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
