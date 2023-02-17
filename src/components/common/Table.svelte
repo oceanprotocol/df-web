@@ -415,7 +415,7 @@
   :global(th) {
     background-color: var(--brand-grey-dimmed) !important;
   }
-  :global(thead) {
+  :global(.tableContainer thead) {
     background-color: var(--brand-white) !important;
     position: sticky;
     inset-block-start: 34px;

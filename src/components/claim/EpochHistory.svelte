@@ -67,7 +67,13 @@
     box-shadow: var(--box-shadow);
     transform: translate3d(0, -0.05rem, 0);
     border-radius: var(--border-radius);
-    margin-top: calc(var(--spacer) / 2);
+    margin: calc(var(--spacer) / 2) 0;
+    max-height: calc(50vh);
+    overflow-y: scroll;
+  }
+  :global(.epochHistoryContainer thead) {
+    position: sticky;
+    inset-block-start: 0;
   }
   .title {
     font-weight: bold;
