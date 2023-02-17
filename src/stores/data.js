@@ -91,7 +91,6 @@ export async function loadDatasets(nftsApi, allocations) {
   let curRound = getEpoch().id;
   //current round number is 0
   let currentRoundDatasets = await getDatasets(nftsApi,0);
-  currentRoundDatasets[0].is_purgatory = 1;
   let purgatoryDatasetsWithAllocation = filterPurgatoryDatasetsWithoutAllocations(currentRoundDatasets, allocations)
   currentRoundDatasets = currentRoundDatasets.filter((d) => d.is_purgatory === 0)
   currentRoundDatasets = purgatoryDatasetsWithAllocation.concat(currentRoundDatasets)
