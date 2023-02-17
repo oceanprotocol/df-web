@@ -73,10 +73,8 @@
   .epochHistoryTableContainer {
     width: 100%;
     background-color: var(--brand-white);
-    box-shadow: var(--box-shadow);
     transform: translate3d(0, -0.05rem, 0);
     border-radius: var(--border-radius);
-    margin-top: calc(var(--spacer) / 2);
     max-height: calc(50vh);
     overflow-y: scroll;
   }
@@ -86,8 +84,9 @@
   }
   .epochHistoryContainer{
     width: 100%;
-    margin-bottom: calc(var(--spacer) / 2);
+    margin: calc(var(--spacer) / 2) 0;
     background-color: var(--brand-white);
+    box-shadow: var(--box-shadow);
   }
   .title {
     font-weight: bold;
