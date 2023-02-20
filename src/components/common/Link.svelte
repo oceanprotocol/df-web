@@ -3,18 +3,20 @@
   export let text = undefined;
   export let url;
   export let className = undefined;
+  export let color = undefined;
 </script>
 
 <a
   href={url}
   target="_blank"
+  style={color ? `color:${color}`: undefined}
   class={`link ${className ? className : undefined}`}
 >
   {#if text}
     <span>{text}</span>
   {/if}
   <slot />
-  <img src={ExternalIcon} alt="external link" />
+  <img src={ExternalIcon} alt="external link"/>
 </a>
 
 <style>
