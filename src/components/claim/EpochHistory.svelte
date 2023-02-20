@@ -1,10 +1,11 @@
 <script>
-  import { DataTable } from "carbon-components-svelte";
+  import { DataTable, Pagination } from "carbon-components-svelte";
   import * as epochs from "../../utils/metadata/epochs/epochs.json";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
   
   let rows = [];
+  let pagination = { pageSize: 100, page: 1 };
   let loading = true;
 
   // Tooltips dropped for now, they'll be back
@@ -43,6 +44,7 @@
 
 <h2 class="title">Data Farming History</h2>
 <div class="epochHistoryContainer">
+<div class="epochHistoryTableContainer">
   <DataTable sortable {headers} {rows} class="customTable">
     <svelte:fragment slot="cell-header" let:header>
       <div class="headerContainer">
@@ -59,15 +61,32 @@
     </svelte:fragment>
   </DataTable>
 </div>
+  <Pagination
+      bind:pageSize={pagination.pageSize}
+      bind:page={pagination.page}
+      totalItems={rows.length}
+      pageSizeInputDisabled
+    />
+</div>
 
 <style>
-  .epochHistoryContainer {
+  .epochHistoryTableContainer {
     width: 100%;
     background-color: var(--brand-white);
-    box-shadow: var(--box-shadow);
     transform: translate3d(0, -0.05rem, 0);
     border-radius: var(--border-radius);
-    margin-top: calc(var(--spacer) / 2);
+    max-height: calc(50vh);
+    overflow-y: scroll;
+  }
+  :global(.epochHistoryTableContainer thead) {
+    position: sticky;
+    inset-block-start: 0;
+  }
+  .epochHistoryContainer{
+    width: 100%;
+    margin: calc(var(--spacer) / 2) 0;
+    background-color: var(--brand-white);
+    box-shadow: var(--box-shadow);
   }
   .title {
     font-weight: bold;

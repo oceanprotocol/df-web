@@ -168,3 +168,10 @@ h1:focus-visible {
   align-items: center;
   justify-content: center;
 }
+
+:global(div [class*="pagination__button"]) {
+  border-left: 1px solid var(--brand-grey-dimmed) !important;
+}
+.bx--pagination {
+  background-color: var(--brand-white) !important;
+}

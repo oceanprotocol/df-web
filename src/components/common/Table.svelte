@@ -264,7 +264,7 @@
                   : totalAvailable)
               }/100%`
             : "loading..."}
-          tooltipMessage={tooltipMessage}
+          {tooltipMessage}
           {tooltipState}
         />
         {#if $oceanUnlockDate}
@@ -334,13 +334,16 @@
           {#if cell.key === "title"}
             <TextWithNetworkIcon
               networkName={row.network}
+              className={row.ispurgatory ? "purgatory" : ""}
               text={cell.value}
               url={row.action}
+              textColor={row.ispurgatory ? 'var(--brand-alert-red)' : undefined}
+              tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
             />
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
-              available={totalAvailable}
+              available={row.ispurgatory ? parseInt($dataAllocations.find((d) =>d.nftAddress == row.nftaddress)?.allocated)/100 : totalAvailable}
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
               onBlur={updateTotalAllocation}
@@ -401,6 +404,10 @@
     justify-content: flex-start;
     align-items: center;
   }
+  .purgatory {
+    font-size: var(--font-size-small);
+    color: var(--brand-alert-red);
+  }
   .headerValuesContainer {
     display: flex;
     align-items: center;
@@ -422,7 +429,8 @@
     background: var(--brand-white) !important;
     border-top: 0 !important;
   }
-  thead {
+
+  :global(.tableContainer thead) {
     background-color: var(--brand-white) !important;
     position: sticky;
     inset-block-start: 34px;
@@ -436,7 +444,7 @@
   div [class*="pagination"] {
     background-color: var(--brand-white) !important;
   }
-  div [class*="select-input"] {
+  :global(div [class*="select-input"]) {
     background-color: var(--brand-white) !important;
     border-left: 1px solid var(--brand-grey-dimmed) !important;
   }
@@ -446,7 +454,7 @@
   div [class*="pagination__button"] {
     border-left: 1px solid var(--brand-grey-dimmed) !important;
   }
-  [class*="table-toolbar"] {
+  :global([class*="table-toolbar"]) {
     z-index: 0 !important;
     position: fixed !important;
   }
@@ -455,6 +463,9 @@
   }
   :global(.bx--search-input){
     font-size: var(--font-size-base);
+  }
+  :global(tr:has(.purgatory) > td) {
+    color: var(--brand-alert-red) !important;
   }
   @media (min-width: 640px) {
     .tableCustomHeader {

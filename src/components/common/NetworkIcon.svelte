@@ -7,6 +7,7 @@
 
   export let name;
   export let minimal = false;
+  export let color = undefined;
 
   let IconMapped = undefined;
 
@@ -27,7 +28,7 @@
 </script>
 
 <div class="imageContainer">
-  <img src={IconMapped} alt={name} />
+  <img src={IconMapped} alt={name} style={color ? `color:${color}` : ''}/>
 </div>
 
 <style>
