@@ -264,7 +264,7 @@
                   : totalAvailable)
               }/100%`
             : "loading..."}
-          tooltipMessage={tooltipMessage}
+          {tooltipMessage}
           {tooltipState}
         />
         {#if $oceanUnlockDate}
@@ -334,13 +334,16 @@
           {#if cell.key === "title"}
             <TextWithNetworkIcon
               networkName={row.network}
+              className={row.ispurgatory ? "purgatory" : ""}
               text={cell.value}
               url={row.action}
+              textColor={row.ispurgatory ? 'var(--brand-alert-red)' : undefined}
+              tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
             />
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
-              available={totalAvailable}
+              available={row.ispurgatory ? parseInt($dataAllocations.find((d) =>d.nftAddress == row.nftaddress)?.allocated)/100 : totalAvailable}
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
               onBlur={updateTotalAllocation}
@@ -388,6 +391,10 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+  }
+  .purgatory {
+    font-size: var(--font-size-small);
+    color: var(--brand-alert-red);
   }
   .headerValuesContainer {
     display: flex;
@@ -445,6 +452,9 @@
   }
   :global(.tableContainer .bx--data-table) {
     margin-top: calc(var(--spacer) / 2);
+  }
+  :global(tr:has(.purgatory) > td) {
+    color: var(--brand-alert-red) !important;
   }
   @media (min-width: 640px) {
     .tableCustomHeader {
