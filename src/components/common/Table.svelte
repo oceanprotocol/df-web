@@ -17,6 +17,7 @@
   } from "../../stores/dataAllocations";
   import Input from "./Input.svelte";
   import TextWithNetworkIcon from "./TextWithNetworkIcon.svelte";
+  import NetworkIcon from "./NetworkIcon.svelte";
   import ShareInput from "./ShareInput.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
   import { userBalances } from "../../stores/tokens";
@@ -30,6 +31,7 @@
     networkSigner,
     userAddress,
   } from "../../stores/web3";
+  import Link from "./Link.svelte";
   import { oceanUnlockDate } from "../../stores/veOcean";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import CustomTooltip from "./CustomTooltip.svelte";
@@ -332,14 +334,31 @@
         </svelte:fragment>
         <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "title"}
-            <TextWithNetworkIcon
-              networkName={row.network}
-              className={row.ispurgatory ? "purgatory" : ""}
-              text={cell.value}
-              url={row.action}
-              textColor={row.ispurgatory ? 'var(--brand-alert-red)' : undefined}
-              tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
-            />
+          <div class="title">
+            <NetworkIcon name={row.network} minimal/>
+            <div class="textContainer">
+              <TextWithNetworkIcon
+                className={row.ispurgatory ? "purgatory" : ""}
+                text={cell.value}
+                url={row.action}
+                textColor={row.ispurgatory ? 'var(--brand-alert-red)' : 'var(--brand-black)'}
+                tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
+              />
+              <span class="ownerContainer">
+                owned by
+                <div class="ownerAddressContainer">
+                  <Link 
+                    url={`https://market.oceanprotocol.com/profile/${row.owner}`} 
+                    text= {row.owner.substr(0, 6)}...{row.owner.substr(
+                            row.owner.length - 6
+                          )}
+                    className="owner"
+                    hideIcon
+                  />
+                </div>
+              </span>
+            </div>
+          </div>
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
@@ -392,9 +411,30 @@
     justify-content: flex-start;
     align-items: center;
   }
+  .title{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .textContainer{
+    width: 100%;
+  }
   .purgatory {
     font-size: var(--font-size-small);
     color: var(--brand-alert-red);
+  }
+  .ownerContainer{
+    display: block;
+    color: var(--brand-grey-light);
+    font-size: var(--font-size-mini);
+  }
+  .ownerAddressContainer{
+    display: inline-block;
+  }
+  :global(.ownerContainer .owner){
+    color: var(--brand-color-primary);
+    font-size: var(--font-size-mini);
   }
   .headerValuesContainer {
     display: flex;
