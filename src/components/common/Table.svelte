@@ -20,6 +20,7 @@
   import NetworkIcon from "./NetworkIcon.svelte";
   import ShareInput from "./ShareInput.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
+  import Dropdown from "./Dropdown.svelte";
   import { userBalances } from "../../stores/tokens";
   import {
     allocateVeOceanToMultipleNFTs,
@@ -294,13 +295,14 @@
         {/if}
       </div>
       <div class="tableActionsContainer">
-        <div class="datasetsWithAllocationsInputContainer">
-          <Input
-            type="checkbox"
-            label="Only data where I have allocations"
-            bind:value={showDataWithAllocations}
-          />
-        </div>
+        <Dropdown 
+          options={[
+            { id: "0", text: "All datasets" },
+            { id: "1", text: "Datasets where I have allocations" },
+            { id: "2", text: "My published datasets" },
+          ]}
+          selectedOption="0"
+        />
         <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
       </div>
     </div>
