@@ -79,7 +79,7 @@
   <h3 class="title">Earn OCEAN Rewards</h3>
   <ClaimItem
     title="Passive"
-    description="Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>.<br/>Current round passive rewards are distributed for <strong>last round</strong> holding."
+    description="<p>Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>.</p><p>Current round passive rewards are distributed for <strong>last round</strong> holding.</p>"
     distributedAmount={roundInfo?.passive}
     apy={`${
       $APYs
@@ -147,7 +147,7 @@
         : ""
     }`}
     apyTooltip={descriptions.default.tooltip_rewards_apy_active}
-    description="Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>.<br/>Get <strong>2X Rewards by publishing</strong> your own datasets and allocating to them."
+    description="<p>Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>.</p><p>Get <strong>2X Rewards by publishing</strong> your own datasets and allocating to them.</p>"
     amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
     rewardTooltip={descriptions.default.tooltip_active_rewards}
     metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}

@@ -58,10 +58,14 @@ body {
   --brand-alert-yellow: #eac146;
 }
 
-a {
-  color: var(--text-color-primary) !important;
+body a {
+  color: var(--text-color-primary);
   text-decoration: underline;
   cursor: pointer;
+}
+
+body p {
+  margin-bottom: calc(var(--spacer) / 6);
 }
 
 h1:focus-visible {

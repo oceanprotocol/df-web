@@ -5,12 +5,16 @@
 </script>
 
 <div class={`container ${type === "warning" ? "warning" : "default"}`}>
-  <span>
-    {@html title}
-  </span>
-  <p>
-    {@html message}
-  </p>
+  {#if title}
+    <span>
+      {@html title}
+    </span>
+  {/if}
+  {#if message}
+    <p>
+      {@html message}
+    </p>
+  {/if}
 </div>
 
 <style>
@@ -39,7 +43,7 @@
     margin-right: calc(var(--spacer) / 12);
   }
   p {
-    margin: 0;
+    margin-bottom: 0;
     font-weight: 500;
     font-size: var(--font-size-mini);
     text-align: center;
