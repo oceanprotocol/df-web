@@ -101,7 +101,6 @@ export default {
 		),
 		svelte({
 			preprocess: sveltePreprocess({
-				postcss: false,
 				scss: { includePaths: ['src', 'node_modules'] },
 			}),
 			compilerOptions: {
