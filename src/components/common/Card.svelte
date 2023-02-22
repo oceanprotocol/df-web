@@ -68,7 +68,7 @@
   }
   @media (min-width: 660px) {
     .container {
-      padding: calc(var(--spacer) / 2) calc(var(--spacer) / 1.5);
+      padding: calc(var(--spacer) / 2) calc(var(--spacer) * 1.5);
     }
   }
 </style>

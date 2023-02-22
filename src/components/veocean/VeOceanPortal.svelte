@@ -38,7 +38,7 @@
     <OceanSummary />
   </div>
 {:else}
-  <div class="loading">Loading...</div>
+  <h3 class="loading">Loading...</h3>
 {/if}
 
 <style>
@@ -53,7 +53,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
     height: calc(100vh - 115px);
   }
@@ -65,7 +64,7 @@
   @media (min-width: 640px) {
     .container {
       padding-top: calc(var(--spacer) * 2);
-      gap: calc(var(--spacer) / 2);
+      gap: var(--spacer);
     }
   }
 </style>
