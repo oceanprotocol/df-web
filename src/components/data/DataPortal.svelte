@@ -103,7 +103,7 @@
       </div>
     </div>
   {:else}
-    <span class="loading">Loading...</span>
+    <h3 class="loading">Loading...</h3>
   {/if}
 </div>
 
@@ -135,7 +135,6 @@
   }
 
   .loading {
-    font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
   }
 

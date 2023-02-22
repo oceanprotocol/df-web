@@ -17,7 +17,7 @@
   class={`${state === "alert" ? "alert" : state === "warning" ? "warning" : ''}`}
 >
   {#if state === undefined}
-    <Tooltip {align} {direction} size={4} {open}>
+    <Tooltip {align} {direction} size={3} {open}>
       {#if text}
         <div class="tooltipTextContainer">
           <p class="text">
@@ -27,7 +27,7 @@
       {/if}
     </Tooltip>
   {:else}
-    <Tooltip {align} {direction} size={4} {open} icon={InformationFilled}>
+    <Tooltip {align} {direction} size={3} {open} icon={InformationFilled}>
       {#if text}
         <div class="tooltipTextContainer">
           <p class="text">

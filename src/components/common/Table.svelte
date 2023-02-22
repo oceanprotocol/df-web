@@ -399,7 +399,7 @@
     flex-direction: column-reverse;
     margin: 0;
   }
-  .headerContainer {
+  .headerContainer{
     display: flex;
     justify-content: flex-start;
     align-items: center;
