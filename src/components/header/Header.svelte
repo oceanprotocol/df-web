@@ -19,11 +19,11 @@
   </title>
 </svelte:head>
 <header>
-  <div class="logo">
+  <h1 class="logo">
     <Link to="/" class="link">
       <img src={"/logo-ocean-svg.svg"} alt="SvelteKit" />
     </Link>
-  </div>
+  </h1>
   <nav>
     <ul>
       <li class:active={$location.pathname === "/veocean"}>
@@ -58,16 +58,19 @@
     align-items: center;
     margin: auto;
     padding-top: calc(var(--spacer) / 4);
-    background-color: rgba(255, 255, 255, 0.9);
   }
 
   .headerActions {
     display: flex;
   }
 
+  .logo{
+    margin-bottom: 0;
+  }
+
   .logo img {
-    width: 3em;
-    height: 3em;
+    width: 4rem;
+    height: 4rem;
     object-fit: contain;
   }
 
@@ -105,7 +108,7 @@
     color: var(--brand-grey-light);
     font-weight: 700;
     text-decoration: none;
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-base);
     letter-spacing: 0.1em;
     text-decoration: none;
     transition: color 0.2s linear;
@@ -128,14 +131,14 @@
       flex-direction: row;
       margin: 0;
       padding: 0;
-      margin-top: calc(var(--spacer) / 4);
+      margin-top: calc(var(--spacer) / 2);
     }
     li > :global(a) {
       padding: 0 1em;
     }
     .logo img {
-      width: 4em;
-      height: 4em;
+      width: 5rem;
+      height: 5rem;
     }
   }
 </style>

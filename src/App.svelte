@@ -50,6 +50,7 @@
   import moment from "moment";
   import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
   import { totalUserAllocation } from "./stores/dataAllocations";
+  import '@oceanprotocol/typographies/css/ocean-typo.css';
 
   setupAppConfig();
 

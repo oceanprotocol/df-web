@@ -55,12 +55,13 @@
 
   $: if ($connectedChainId) {
     buttons = [
-      {
+      // show button only if neccessary
+      ...(chainId !== $connectedChainId ? [{
         text: "Switch network",
-        onClick: () => switchWalletNetwork(chainId),
-        disabled: chainId === $connectedChainId,
-      },
-      {
+        textOnly: true,
+        onClick: () => switchWalletNetwork(chainId)
+      }] : []),
+      { 
         text: loading ? "lOADING.." : "Claim",
         onClick: () => claim(),
         disabled:

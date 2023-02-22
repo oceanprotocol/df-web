@@ -33,6 +33,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: var(--font-size-base);
   }
   .fullText {
     display: none;

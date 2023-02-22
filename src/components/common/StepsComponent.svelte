@@ -11,7 +11,7 @@
   clickable={false}
   size="1.2rem"
   line="0.2rem"
-  primary="var(--brand-color-primary)"
+  primary="var(--color-primary)"
   secondary="var(--brand-grey-lighter)"
   dark="var(--brand-grey-lighter)"
 />
@@ -22,7 +22,7 @@
   }
   :global(.steps__label) {
     margin-top: 4px !important;
-    font-size: var(--font-size-mini) !important;
+    font-size: var(--font-size-small) !important;
     color: var(--brand-grey-light);
   }
 </style>

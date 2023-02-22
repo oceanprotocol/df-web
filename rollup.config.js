@@ -10,6 +10,7 @@ import {config} from 'dotenv';
 import copy from 'rollup-plugin-copy'
 import replace from '@rollup/plugin-replace';
 import html from "@rollup/plugin-html";
+import sveltePreprocess from 'svelte-preprocess';
 
 const configToReplace = {};
 const envConfig = config()
@@ -73,6 +74,7 @@ const htmlOptions = {
 	},
   };
 
+const path = require('path');
 
 const output = !production ? {
 	file: 'public/build/bundle.js'
@@ -98,6 +100,10 @@ export default {
 			}
 		),
 		svelte({
+			preprocess: sveltePreprocess({
+				postcss: false,
+				scss: { includePaths: ['src', 'node_modules'] },
+			}),
 			compilerOptions: {
 				// enable run-time checks when not in production
 				dev: !production
@@ -105,8 +111,8 @@ export default {
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
-		css({ 
-			output: production ? `bundle.${randomHash()}.css` : 'bundle.css'
+		css({
+			output: production ? `bundle.${randomHash()}.css` : `bundle.css`
 		}),
 		html(htmlOptions),
 
