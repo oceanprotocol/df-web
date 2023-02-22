@@ -39,18 +39,45 @@
 
 <style>
   .button {
-    background-color: var(--brand-color-primary);
-    font-size: var(--font-size-small);
+    border: 0;
+    cursor: pointer;
+    outline: 0;
+    margin: 0;
+    display: inline-block;
+    width: fit-content;
+    min-width: 7rem;
+    font-size: var(--font-size-base);
     padding: calc(var(--spacer) / 6) calc(var(--spacer) / 4);
-    color: var(--brand-white);
     font-weight: bold;
     text-transform: uppercase;
     border-radius: var(--border-radius);
-    border: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    transition: 0.2s ease-out;
+    color: var(--brand-white);
+    background: var(--brand-gradient);
+    box-shadow: 0 9px 18px 0 rgba(0, 0, 0, 0.1);
+    user-select: none;
+    text-align: center;
+  }
+
+  .button:hover,
+  .button:focus {
+    text-decoration: none;
+    box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.1);
+    transform: translate3d(0, -0.05rem, 0);
+  }
+
+  .button:active {
+    background: var(--brand-grey-light);
+    transition: none;
+    transform: none;
+    box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .button:disabled,
+  .button.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.25;
   }
   .loadingSpinnerContainer {
     margin-right: 5px;
@@ -66,18 +93,24 @@
   }
   .buttonSecondary {
     background-color: var(--brand-grey-dimmed);
-    color: var(--brand-grey-light);
     border-radius: var(--border-radius);
     border: 1px solid var(--brand-grey-lighter);
   }
   .textOnly {
     background-color: transparent;
-    color: var(--brand-grey-light);
     border: 0;
+    border-radius: 0;
+    outline: 0;
     padding: 0;
+    display: inline-block;
+    background: 0;
+    color: var(--brand-pink);
+    box-shadow: none;
+    cursor: pointer;
+    min-width: auto;
   }
   .textOnly:hover {
-    color: var(--brand-color-primary) !important;
+    color: var(--color-primary) !important;
   }
   .textOnly:disabled,
   .textOnly[disabled]:hover {

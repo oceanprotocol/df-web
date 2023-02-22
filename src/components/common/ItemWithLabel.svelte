@@ -42,10 +42,10 @@
     align-items: center;
   }
   .title {
-    font-size: var(--font-size-mini);
+    font-size: var(--font-size-small);
   }
   .value {
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-base);
     font-weight: bold;
   }
 </style>

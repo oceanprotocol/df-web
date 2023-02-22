@@ -135,7 +135,7 @@
   }
 
   .item p {
-    font-size: var(--font-size-mini);
+    font-size: var(--font-size-small);
   }
 
   .item:last-child {

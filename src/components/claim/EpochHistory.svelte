@@ -42,7 +42,7 @@
   init();
 </script>
 
-<h3 class="title">Data Farming History</h3>
+<h2 class="title">Data Farming History</h2>
 <div class="epochHistoryContainer">
 <div class="epochHistoryTableContainer">
   <DataTable sortable {headers} {rows} class="customTable">
@@ -91,7 +91,6 @@
   .title {
     font-weight: bold;
     width: 100%;
-    font-size: var(--font-size-normal);
   }
   .headerContainer {
     display: flex;

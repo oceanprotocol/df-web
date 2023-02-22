@@ -70,7 +70,7 @@
   }
   .actionsContainer :global(.maxItem) {
     margin-top: calc(var(--spacer) / 10);
-    font-size: var(--font-size-mini);
+    font-size: var(--font-size-small);
     color: var(--brand-grey-light);
   }
   .actionsContainer :global(.maxValueLabel) {

@@ -76,7 +76,7 @@
 </script>
 
 <div class={`container`}>
-  <h3 class="title">Earn OCEAN Rewards</h3>
+  <h2 class="title">Earn OCEAN Rewards</h2>
   <ClaimItem
     title="Passive"
     description="<p>Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>.</p><p>Current round passive rewards are distributed for <strong>last round</strong> holding.</p>"
@@ -171,12 +171,11 @@
     flex-wrap: wrap;
     gap: calc(var(--spacer) / 2);
     flex-direction: row;
-    margin: calc(var(--spacer)) 0;
+    margin: calc(var(--spacer) * 2) 0;
   }
   .title {
     font-weight: bold;
     width: 100%;
-    font-size: var(--font-size-normal);
   }
 
   @media (min-width: 640px) {
