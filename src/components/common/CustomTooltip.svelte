@@ -17,7 +17,7 @@
   class={`${state === "alert" ? "alert" : state === "warning" ? "warning" : ''}`}
 >
   {#if state === undefined}
-    <Tooltip {align} {direction} size={10} {open}>
+    <Tooltip {align} {direction} size={3} {open}>
       {#if text}
         <div class="tooltipTextContainer">
           <p class="text">
@@ -27,7 +27,7 @@
       {/if}
     </Tooltip>
   {:else}
-    <Tooltip {align} {direction} size={10} {open} icon={InformationFilled}>
+    <Tooltip {align} {direction} size={3} {open} icon={InformationFilled}>
       {#if text}
         <div class="tooltipTextContainer">
           <p class="text">
@@ -39,7 +39,15 @@
   {/if}
 </div>
 
-<style>
+<style lang="scss" global>
+  $css--font-face: false;
+  $css--helpers: false;
+  $css--body: false;
+  $css--use-layer: false;
+  $css--reset: false;
+  $css--default-type: false;
+  $css--plex: false;
+  @import "carbon-components/scss/components/tooltip/_tooltip.scss";
   .tooltipTextContainer {
     display: flex;
     flex-direction: column;
@@ -48,15 +56,15 @@
     background-color: var(--brand-white);
     width: 160px;
   }
-  :global(.tooltipTextContainer > p) {
-    color: black;
-    font-size: var(--font-size-mini) !important;
+  .tooltipTextContainer > p {
+    color: black !important;
+    font-size: var(--font-size-small) !important;
     white-space: pre-wrap;
   }
-  :global(.alert svg) {
+  .alert svg {
     fill: var(--brand-alert-red) !important;
   }
-  :global(.warning svg) {
+  .warning svg {
     fill: var(--brand-alert-yellow) !important;
   }
 </style>

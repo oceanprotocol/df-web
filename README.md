@@ -50,6 +50,6 @@ npm run build
 
 Every Pull Request gets its own preview build via Vercel's GitHub integration.
 
-The `main` branch is always deployed to [df-web-88kg.vercel.app](https://df-web-88kg.vercel.app).
+The `main` branch is always deployed to [df-web-oceanprotocol.vercel.app](df-web-oceanprotocol.vercel.app).
 
 Live deployments happen...

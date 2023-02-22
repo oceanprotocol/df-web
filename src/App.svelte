@@ -49,6 +49,7 @@
   import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
   import { totalUserAllocation } from "./stores/dataAllocations";
   import { Buffer } from "buffer";
+  import '@oceanprotocol/typographies/css/ocean-typo.css';
 
   // @ts-ignore
   window.Buffer = Buffer;
@@ -207,16 +208,20 @@
 
 <Router>
   <BannerMessage
-    title="This software is a Beta release."
-    message={`The website is under construction, use at your own discretion.`}
+    title={`<a href='https://blog.oceanprotocol.com/ocean-data-farming-is-launching-f633532d831c' target='_blank'>Data Farming is in Beta.</a>`}
+    message={`Use at your own discretion.`}
+  />
+  <BannerMessage
+    type="default"
+    message={`Publish your datasets trough our <strong><a href='https://market.oceanprotocol.com/publish/1' target='_blank'>marketplace</a></strong> to get <strong><a href='https://blog.oceanprotocol.com/data-farming-publisher-rewards-f2639525e508' target='_blank'>2X Rewards</a></strong> for publishers.`}
   />
   <WalletConnectModal />
   <main>
     <Header />
-    <Route path="/rewards" primary={false}>
+    <Route path="/activerewards" primary={false}>
       <ClaimPortal />
     </Route>
-    <Route path="/data" primary={false}>
+    <Route path="/datafarming" primary={false}>
       <DataPortal />
     </Route>
     <Route path="/veocean" primary={false}>

@@ -1,13 +1,12 @@
 <script>
-  import {
-    DataTable,
-    Pagination,
-    Toolbar,
-    ToolbarContent,
-    ToolbarSearch,
-  } from "carbon-components-svelte";
-  import "carbon-components-svelte/css/white.css";
+  import DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
+  import Pagination from "carbon-components-svelte/src/Pagination/Pagination.svelte";
+  import Toolbar from "carbon-components-svelte/src/DataTable/Toolbar.svelte";
+  import ToolbarContent from "carbon-components-svelte/src/DataTable/ToolbarContent.svelte";
+  import ToolbarSearch from "carbon-components-svelte/src/DataTable/ToolbarSearch.svelte";
+  import "carbon-components/scss/components/_data-table.scss"
   import Button from "./Button.svelte";
+  import 'carbon-'
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
   import { filterDataByUserAllocation } from "../../utils/data";
@@ -32,7 +31,9 @@
   import { oceanUnlockDate } from "../../stores/veOcean";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import CustomTooltip from "./CustomTooltip.svelte";
+  import { navigate } from "svelte-navigator";
   import * as descriptions from "../../utils/metadata/descriptions.json";
+  
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -263,21 +264,29 @@
           {tooltipMessage}
           {tooltipState}
         />
-        <Button
-          text={"Update allocations"}
-          className="updateAllocationsBtton"
-          onclick={() => updateAllocations()}
-          disabled={disabled || loading}
-          loading={loading === "UPDATE"}
-        />
-        <Button
-          text={"Reset allocations"}
-          className="updateAllocationsBtton"
-          onclick={() => updateAllocations(true)}
-          disabled={disabled || loading || $totalUserAllocation < 1}
-          secondary
-          loading={loading === "RESET"}
-        />
+        {#if $oceanUnlockDate}
+          <Button
+            text={"Update allocations"}
+            className="updateAllocationsBtton"
+            onclick={() => updateAllocations()}
+            disabled={disabled || loading}
+            loading={loading === "UPDATE"}
+          />
+          <Button
+            text={"Reset allocations"}
+            className="updateAllocationsBtton"
+            onclick={() => updateAllocations(true)}
+            disabled={disabled || loading || $totalUserAllocation < 1}
+            secondary
+            loading={loading === "RESET"}
+          />
+        {:else}
+          <Button
+            text={"Get allocations"}
+            className="updateAllocationsBtton"
+            onclick={() => navigate("veocean")}
+          />
+        {/if}
       </div>
       <div class="tableActionsContainer">
         <div class="datasetsWithAllocationsInputContainer">
@@ -322,13 +331,16 @@
           {#if cell.key === "title"}
             <TextWithNetworkIcon
               networkName={row.network}
+              className={row.ispurgatory ? "purgatory" : ""}
               text={cell.value}
               url={row.action}
+              textColor={row.ispurgatory ? 'var(--brand-alert-red)' : undefined}
+              tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
             />
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
-              available={totalAvailable}
+              available={row.ispurgatory ? parseInt($dataAllocations.find((d) =>d.nftAddress == row.nftaddress)?.allocated)/100 : totalAvailable}
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
               onBlur={updateTotalAllocation}
@@ -351,7 +363,19 @@
   </div>
 {/if}
 
-<style>
+<style lang="scss" global>
+  $css--font-face: false;
+  $css--helpers: false;
+  $css--body: false;
+  $css--use-layer: false;
+  $css--reset: false;
+  $css--default-type: false;
+  $css--plex: false;
+  @import "carbon-components/scss/components/data-table/_data-table.scss";
+  @import "carbon-components/scss/components/data-table/_data-table-sort.scss";
+  @import "carbon-components/scss/components/toolbar/_toolbar.scss";
+  @import "carbon-components/scss/components/pagination/_pagination.scss";
+
   .datasetsWithAllocationsInputContainer {
     display: flex !important;
     width: 200px;
@@ -364,7 +388,7 @@
     overflow-y: scroll;
   }
   .tableCustomHeader > div {
-    padding: calc(var(--spacer) / 4) 0;
+    padding: calc(var(--spacer) / 6) 0 !important;
   }
   .tableCustomHeader {
     display: flex;
@@ -372,67 +396,73 @@
     flex-direction: column-reverse;
     margin: 0;
   }
-  .headerContainer {
+  .headerContainer{
     display: flex;
     justify-content: flex-start;
     align-items: center;
+  }
+  .purgatory {
+    font-size: var(--font-size-small);
+    color: var(--brand-alert-red);
   }
   .headerValuesContainer {
     display: flex;
     align-items: center;
     margin-left: calc(var(--spacer) / 3);
   }
-  :global(.updateAllocationsBtton) {
-    margin-left: calc(var(--spacer) / 3);
+  .updateAllocationsBtton {
+    margin-left: calc(var(--spacer) / 3) !important;
   }
-  :global(.tableActionsContainer) {
+  .tableActionsContainer {
     display: flex !important;
     justify-content: space-between !important;
   }
 
-  :global(.customTable) {
+  .customTable {
     max-width: 100%;
     background-color: var(--brand-white) !important;
   }
-  :global(td) {
+  td {
     background: var(--brand-white) !important;
-    border-bottom: 1px solid var(--brand-grey-dimmed) !important;
-    font-size: var(--font-size-small) !important;
     border-top: 0 !important;
   }
-  :global(th) {
-    background-color: var(--brand-grey-dimmed) !important;
-  }
-  :global(thead) {
+
+  :global(.tableContainer thead) {
     background-color: var(--brand-white) !important;
     position: sticky;
     inset-block-start: 34px;
   }
-  :global(button[class*="table-sort"]) {
+  button[class*="table-sort"] {
     background-color: var(--brand-grey-dimmed) !important;
   }
-  :global(button[class*="table-sort"]) {
+  button[class*="table-sort"] {
     background-color: var(--brand-grey-dimmed);
   }
-  :global(div [class*="pagination"]) {
+  div [class*="pagination"] {
     background-color: var(--brand-white) !important;
   }
   :global(div [class*="select-input"]) {
     background-color: var(--brand-white) !important;
     border-left: 1px solid var(--brand-grey-dimmed) !important;
   }
-  :global(div [class*="data-table-header"]) {
+  div [class*="data-table-header"] {
     background-color: var(--brand-white) !important;
   }
-  :global(div [class*="pagination__button"]) {
+  div [class*="pagination__button"] {
     border-left: 1px solid var(--brand-grey-dimmed) !important;
   }
   :global([class*="table-toolbar"]) {
     z-index: 0 !important;
     position: fixed !important;
   }
-  :global(.tableContainer .bx--data-table) {
+  .tableContainer .bx--data-table {
     margin-top: calc(var(--spacer) / 2);
+  }
+  :global(.bx--search-input){
+    font-size: var(--font-size-base);
+  }
+  :global(tr:has(.purgatory) > td) {
+    color: var(--brand-alert-red) !important;
   }
   @media (min-width: 640px) {
     .tableCustomHeader {

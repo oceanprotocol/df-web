@@ -11,7 +11,7 @@
   clickable={false}
   size="1.2rem"
   line="0.2rem"
-  primary="var(--brand-color-primary)"
+  primary="var(--color-primary)"
   secondary="var(--brand-grey-lighter)"
   dark="var(--brand-grey-lighter)"
 />

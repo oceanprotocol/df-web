@@ -28,7 +28,7 @@
           disabled={loading}
         />
       </div>
-      <span class="text">Connect your wallet</span>
+      <h3 class="text">Connect your wallet</h3>
       <div class="buttons-container">
         <Button
           text="Metamask"
@@ -73,9 +73,9 @@
     overflow: hidden;
   }
   .text {
-    font-size: var(--font-size-normal);
     font-weight: bold;
     text-transform: uppercase;
+    margin-bottom: 0;
   }
   .buttons-container {
     display: flex;

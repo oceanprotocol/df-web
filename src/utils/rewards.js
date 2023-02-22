@@ -49,14 +49,16 @@ export const getRewardsForDataAllocation = (rewards,  userAddress, nftAddress) =
 export const getPassiveAPY = async () => {
   const oceanSupply = await getTotalOceanSupply()
   let curEpoch = getEpoch();
-  const wpr_passive = curEpoch.passive / oceanSupply
+  let passiveRewards = process.env.NODE_ENV !== "production" ? 20 : curEpoch.passive
+  const wpr_passive = passiveRewards / oceanSupply
   return convertWPRtoAPY(wpr_passive) 
 }
 
 export const getPassiveUserAPY = async (userVeOcean,lockedOcean) => {
   const veOceanSupply = await getTotalVeSupply()
   let curEpoch = getEpoch();
-  const rewards = (curEpoch.passive / veOceanSupply)*userVeOcean
+  let passiveRewards = process.env.NODE_ENV !== "production" ? 20 : curEpoch.passive
+  const rewards = (passiveRewards / veOceanSupply)*userVeOcean
   const wpr_passive = rewards / lockedOcean
   return convertWPRtoAPY(wpr_passive) 
 }

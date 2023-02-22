@@ -75,6 +75,7 @@
     padding: calc(var(--spacer) / 12) calc(var(--spacer) / 8);
     border: 1px solid var(--brand-grey-lighter);
     width: fit-content;
+    color: black;
     border-radius: 5px;
   }
   .available {

@@ -2,9 +2,10 @@
   import WalletConnect from "./WalletConnect.svelte";
   import NetworkSelection from "./NetworkSelection.svelte";
   import { Link, useLocation } from "svelte-navigator";
+  import { oceanUnlockDate } from "../../stores/veOcean";
+  import moment from "moment";
 
-  const aboutURL =
-    "https://blog.oceanprotocol.com/ocean-data-farming-series-c7922f1d0e45";
+  let aboutURL = "https://docs.oceanprotocol.com/veocean-data-farming-tutorial";
   const location = useLocation();
 </script>
 
@@ -18,21 +19,21 @@
   </title>
 </svelte:head>
 <header>
-  <div class="logo">
+  <h1 class="logo">
     <Link to="/" class="link">
       <img src={"/logo-ocean-svg.svg"} alt="SvelteKit" />
     </Link>
-  </div>
+  </h1>
   <nav>
     <ul>
       <li class:active={$location.pathname === "/veocean"}>
         <Link to="/veocean" class="link">veOCEAN</Link>
       </li>
-      <li class:active={$location.pathname === "/data"}>
-        <Link to="/data" class="link">DATA FARMING</Link>
+      <li class:active={$location.pathname === "/datafarming"}>
+        <Link to="/datafarming" class="link">FARMS</Link>
       </li>
-      <li class:active={$location.pathname === "/rewards"}>
-        <Link to="/rewards" class="link">REWARDS</Link>
+      <li class:active={$location.pathname === "/activerewards"}>
+        <Link to="/activerewards" class="link">REWARDS</Link>
       </li>
       <li class:active={false}>
         <a href={aboutURL} target="_blank" class="link" rel="noreferrer">ABOUT</a>
@@ -53,16 +54,19 @@
     align-items: center;
     margin: auto;
     padding-top: calc(var(--spacer) / 4);
-    background-color: rgba(255, 255, 255, 0.9);
   }
 
   .headerActions {
     display: flex;
   }
 
+  .logo{
+    margin-bottom: 0;
+  }
+
   .logo img {
-    width: 3em;
-    height: 3em;
+    width: 4rem;
+    height: 4rem;
     object-fit: contain;
   }
 
@@ -92,7 +96,7 @@
     height: 100%;
   }
 
-  li > :global(a) {
+  :global(nav a) {
     display: flex;
     height: 100%;
     align-items: center;
@@ -100,7 +104,7 @@
     color: var(--brand-grey-light);
     font-weight: 700;
     text-decoration: none;
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-base);
     letter-spacing: 0.1em;
     text-decoration: none;
     transition: color 0.2s linear;
@@ -123,14 +127,14 @@
       flex-direction: row;
       margin: 0;
       padding: 0;
-      margin-top: calc(var(--spacer) / 4);
+      margin-top: calc(var(--spacer) / 2);
     }
     li > :global(a) {
       padding: 0 1em;
     }
     .logo img {
-      width: 4em;
-      height: 4em;
+      width: 5rem;
+      height: 5rem;
     }
   }
 </style>

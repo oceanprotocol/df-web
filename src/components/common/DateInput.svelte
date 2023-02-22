@@ -13,23 +13,23 @@
 
   const periods = [
     {
-      label: "~1 week",
-      days: 7,
+      label: "≈2 weeks",
+      days: 14,
     },
     {
-      label: "~1 month",
+      label: "≈1 month",
       days: 30,
     },
     {
-      label: "~6 months",
+      label: "≈6 months",
       days: 180,
     },
     {
-      label: "~2 years",
+      label: "≈2 years",
       days: 730,
     },
     {
-      label: "~4 years",
+      label: "≈4 years",
       days: 1460,
     },
   ];
@@ -43,8 +43,7 @@
 <div class={`container`}>
   <input
     class={`input ${
-      (value === min && moment.utc().format("YYYY-MM-DD") === min) ||
-      (value <= min && moment.utc().format("YYYY-MM-DD") <= min)
+      value < min && moment.utc().format("YYYY-MM-DD") <= min
         ? "inputError"
         : ""
     }`}
@@ -100,11 +99,11 @@
     padding: 0 calc(var(--spacer) / 8);
   }
   .periodItem {
-    font-size: var(--font-size-mini);
+    font-size: var(--font-size-small);
     color: var(--brand-grey-light);
   }
   .periodItem:hover {
     cursor: pointer;
-    color: var(--brand-color-primary);
+    color: var(--color-primary);
   }
 </style>
