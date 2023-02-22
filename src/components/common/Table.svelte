@@ -264,7 +264,7 @@
                   : totalAvailable)
               }/100%`
             : "loading..."}
-          tooltipMessage={tooltipMessage}
+          {tooltipMessage}
           {tooltipState}
         />
         {#if $oceanUnlockDate}
@@ -334,13 +334,16 @@
           {#if cell.key === "title"}
             <TextWithNetworkIcon
               networkName={row.network}
+              className={row.ispurgatory ? "purgatory" : ""}
               text={cell.value}
               url={row.action}
+              textColor={row.ispurgatory ? 'var(--brand-alert-red)' : undefined}
+              tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
             />
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
-              available={totalAvailable}
+              available={row.ispurgatory ? parseInt($dataAllocations.find((d) =>d.nftAddress == row.nftaddress)?.allocated)/100 : totalAvailable}
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
               onBlur={updateTotalAllocation}
@@ -389,6 +392,10 @@
     justify-content: flex-start;
     align-items: center;
   }
+  .purgatory {
+    font-size: var(--font-size-small);
+    color: var(--brand-alert-red);
+  }
   .headerValuesContainer {
     display: flex;
     align-items: center;
@@ -415,7 +422,7 @@
   :global(th) {
     background-color: var(--brand-grey-dimmed) !important;
   }
-  :global(thead) {
+  :global(.tableContainer thead) {
     background-color: var(--brand-white) !important;
     position: sticky;
     inset-block-start: 34px;
@@ -426,9 +433,6 @@
   :global(button[class*="table-sort"]) {
     background-color: var(--brand-grey-dimmed);
   }
-  :global(div [class*="pagination"]) {
-    background-color: var(--brand-white) !important;
-  }
   :global(div [class*="select-input"]) {
     background-color: var(--brand-white) !important;
     border-left: 1px solid var(--brand-grey-dimmed) !important;
@@ -436,15 +440,15 @@
   :global(div [class*="data-table-header"]) {
     background-color: var(--brand-white) !important;
   }
-  :global(div [class*="pagination__button"]) {
-    border-left: 1px solid var(--brand-grey-dimmed) !important;
-  }
   :global([class*="table-toolbar"]) {
     z-index: 0 !important;
     position: fixed !important;
   }
   :global(.tableContainer .bx--data-table) {
     margin-top: calc(var(--spacer) / 2);
+  }
+  :global(tr:has(.purgatory) > td) {
+    color: var(--brand-alert-red) !important;
   }
   @media (min-width: 640px) {
     .tableCustomHeader {
