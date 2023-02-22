@@ -100,7 +100,7 @@
     height: 100%;
   }
 
-  li > :global(a) {
+  :global(nav a) {
     display: flex;
     height: 100%;
     align-items: center;

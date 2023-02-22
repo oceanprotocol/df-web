@@ -22,7 +22,7 @@
 
 <div class={`container`}>
   <Card title={`${title} Rewards - ${distributedAmount} OCEAN`} tag={apy} tooltipMessage={apyTooltip}>
-    <p class="description">{@html description}</p>
+    <div class="description">{@html description}</div>
     <div class="metrics">
       {#each metrics as metric}
         <ItemWithLabel title={metric.name} value={metric.value} />
