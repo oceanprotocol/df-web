@@ -3,18 +3,20 @@
   export let text = undefined;
   export let url;
   export let className = undefined;
+  export let color = undefined;
 </script>
 
 <a
   href={url}
   target="_blank"
+  style={color ? `color:${color}`: undefined}
   class={`link ${className ? className : undefined}`}
 >
   {#if text}
     <span>{text}</span>
   {/if}
   <slot />
-  <img src={ExternalIcon} alt="external link" />
+  <img src={ExternalIcon} alt="external link"/>
 </a>
 
 <style>
@@ -31,11 +33,11 @@
     font-size: var(--font-size-small);
   }
   a:hover {
-    color: var(--brand-color-primary);
+    color: var(--color-primary);
     cursor: pointer;
   }
   img {
-    height: calc(var(--font-size-normal) / 2.5);
+    height: calc(var(--font-size-small) / 1.2);
     margin-left: calc(var(--spacer) / 12);
   }
 </style>
