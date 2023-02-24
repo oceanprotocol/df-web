@@ -12,7 +12,11 @@
     items={options}
 />
 
-<style>
+<style lang="scss" global>
+    @import "carbon-components/scss/components/dropdown/_dropdown.scss";
+    :global(.bx--list-box__label){
+        font-size: var(--font-size-base);
+    }
     :global(.bx--list-box__menu){
         background-color: white;
     }
