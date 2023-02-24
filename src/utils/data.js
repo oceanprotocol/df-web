@@ -14,6 +14,12 @@ export let filterDataByUserAllocation = (datasets, allocations) => {
     return filteredDatasets
 }
 
+export let filterDataByOwner = (datasets, ownerAddress) => {
+    let filteredDatasets = []
+    filteredDatasets = datasets.filter((d) => d.owner === ownerAddress)
+    return filteredDatasets
+}
+
  export let calcMaxAllowedStakeInput = (poolReserve) => {
     return (poolReserve / 2).toFixed(3)
 }

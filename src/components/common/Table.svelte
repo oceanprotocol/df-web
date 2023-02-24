@@ -9,7 +9,7 @@
   import 'carbon-'
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
-  import { filterDataByUserAllocation } from "../../utils/data";
+  import { filterDataByUserAllocation, filterDataByOwner } from "../../utils/data";
   import {
     dataAllocations,
     totalUserAllocation,
@@ -46,16 +46,21 @@
   export let rowData = undefined;
   export let notHidableColumns = [];
   let showDataWithAllocations = false;
-  let datasetsWithAllocations = undefined;
+  let filteredDatasets = undefined;
   let disabled = undefined;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   let totalAvailableTemporary = undefined;
   let loading = undefined;
   let tooltipMessage = undefined;
   let tooltipState = undefined;
+  let filterOption = "0";
 
   let columns = {};
   let pagination = { pageSize: 100, page: 1 };
+
+  $:if(filterOption) {
+    filterTable(filterOption)
+  } 
 
   loadVisibleColumns();
 
@@ -66,6 +71,22 @@
         colData = colData.filter((colD) => colD.key !== col.key);
       }
     });
+  }
+
+  function filterTable(option){
+    switch (option) {
+      case "0":
+        filteredDatasets = undefined
+        break;
+      case "1":
+        filteredDatasets = filterDataByUserAllocation(rowData, $dataAllocations);
+        break;
+      case "2":
+        filteredDatasets = filterDataByOwner(rowData, $userAddress);
+        break;
+      default:
+        break;
+    }
   }
 
   function checkLocalColumnsEqualLocalStorageColumns() {
@@ -101,15 +122,6 @@
       colData = colData.filter((col) => col.value !== key);
     }
     localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
-  }
-
-  $: if (showDataWithAllocations === true) {
-    const newData = filterDataByUserAllocation(rowData, $dataAllocations);
-    datasetsWithAllocations = newData;
-  }
-
-  $: if (!showDataWithAllocations && datasetsWithAllocations !== undefined) {
-    datasetsWithAllocations = undefined;
   }
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
@@ -301,7 +313,7 @@
             { id: "1", text: "Datasets where I have allocations" },
             { id: "2", text: "My published datasets" },
           ]}
-          selectedOption="0"
+          bind:selectedOption={filterOption}
         />
         <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
       </div>
@@ -312,7 +324,7 @@
         headers={colData}
         pageSize={pagination.pageSize}
         page={pagination.page}
-        rows={datasetsWithAllocations ? datasetsWithAllocations : rowData}
+        rows={filteredDatasets ? filteredDatasets : rowData}
         class="customTable"
       >
         <Toolbar size="sm">
@@ -379,8 +391,8 @@
     <Pagination
       bind:pageSize={pagination.pageSize}
       bind:page={pagination.page}
-      totalItems={datasetsWithAllocations
-        ? datasetsWithAllocations.length
+      totalItems={filteredDatasets
+        ? filteredDatasets.length
         : rowData.length}
       pageSizeInputDisabled
     />
