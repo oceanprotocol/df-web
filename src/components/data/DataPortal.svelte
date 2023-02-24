@@ -93,7 +93,7 @@
 >
   {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
     <div class="wrapper">
-      <h3 class="title">Curate Data to Earn OCEAN</h3>
+      <h2 class="title">Curate Data to Earn OCEAN</h2>
       <div class="data">
         <Table
           colData={columnsData}
@@ -103,13 +103,13 @@
       </div>
     </div>
   {:else}
-    <span class="loading">Loading...</span>
+    <h3 class="loading">Loading...</h3>
   {/if}
 </div>
 
 <style>
   .wrapper {
-    margin-top: var(--spacer);
+    padding-top: calc(var(--spacer) * 2);
     height: 100%;
     width: 100%;
   }
@@ -122,9 +122,7 @@
   }
 
   .title {
-    font-weight: bold;
     width: 100%;
-    font-size: var(--font-size-medium);
   }
 
   .data {
@@ -137,7 +135,6 @@
   }
 
   .loading {
-    font-size: var(--font-size-normal);
     color: var(--brand-grey-light);
   }
 

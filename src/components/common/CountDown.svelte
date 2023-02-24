@@ -49,7 +49,7 @@
   .countdown {
     height: fit-content;
     font-size: bold;
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-h3);
   }
   .countdownTitle {
     font-size: var(--font-size-large);
@@ -64,11 +64,11 @@
     margin: 0 calc(var(--spacer) / 6);
   }
   .itemTitle {
-    font-size: var(--font-size-mini);
+    font-size: var(--font-size-base);
   }
   .itemValue {
     font-weight: bold;
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-h3);
     margin-bottom: calc(var(--spacer) / 10);
   }
 </style>

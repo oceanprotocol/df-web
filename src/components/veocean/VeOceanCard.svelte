@@ -49,7 +49,7 @@
                   )
                 ]
               ).toFixed(3)
-            : 0
+            : parseFloat('0').toFixed(3)
         } veOCEAN`}
         tooltipMessage={descriptions.default.tooltip_veocean_my_balance}
         {loading}

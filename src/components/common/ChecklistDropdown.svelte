@@ -1,5 +1,5 @@
 <script>
-  import { Tooltip } from "carbon-components-svelte";
+  import Tooltip from "carbon-components-svelte/src/Tooltip/Tooltip.svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
 
   export let options = undefined;
@@ -53,11 +53,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: calc(var(--spacer) / 6);
+    margin-bottom: calc(var(--spacer) / 2);
   }
   .title {
     color: var(--brand-black);
-    font-size: var(--font-size-small);
+    font-size: var(--font-size-base);
     font-weight: bold;
   }
   input {

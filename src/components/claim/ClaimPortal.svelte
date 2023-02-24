@@ -89,7 +89,7 @@
     align-items: center;
     justify-content: flex-start;
     min-height: calc(100vh - 300px);
-    padding-top: var(--spacer);
+    padding-top: calc(var(--spacer) * 2);
   }
 
   .rewards {
