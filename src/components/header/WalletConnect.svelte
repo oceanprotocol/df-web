@@ -99,6 +99,10 @@
     justify-content: center;
     align-items: center;
   }
+  :global(.disconnect .bx--tooltip__trigger) {
+    background-color: transparent !important;
+    width: 18px !important;
+  }
   :global(.multipleButtons button) {
     margin: calc(var(--spacer) / 6) 0 !important;
   }

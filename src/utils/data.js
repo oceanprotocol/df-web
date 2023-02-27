@@ -1,3 +1,9 @@
+export const filterOptions = [
+    { id: "0", text: "All datasets" },
+    { id: "1", text: "My allocations" },
+    { id: "2", text: "My published" },
+]
+
 export let filterDataByUserAllocation = (datasets, allocations) => {
     let filteredDatasets = []
     datasets.forEach((dataset) => {

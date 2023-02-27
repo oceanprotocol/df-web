@@ -9,7 +9,7 @@
   import 'carbon-'
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
-  import { filterDataByUserAllocation, filterDataByOwner } from "../../utils/data";
+  import { filterDataByUserAllocation, filterDataByOwner, filterOptions } from "../../utils/data";
   import {
     dataAllocations,
     totalUserAllocation,
@@ -308,11 +308,7 @@
       </div>
       <div class="tableActionsContainer">
         <Dropdown 
-          options={[
-            { id: "0", text: "All datasets" },
-            { id: "1", text: "Datasets where I have allocations" },
-            { id: "2", text: "My published datasets" },
-          ]}
+          options={filterOptions}
           bind:selectedOption={filterOption}
         />
         <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
@@ -423,6 +419,7 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column-reverse;
+    padding: 0 calc(var(--spacer) / 3);
     margin: 0;
   }
   .headerContainer{
@@ -430,8 +427,11 @@
     justify-content: flex-start;
     align-items: center;
   }
+  :global(.headerContainer .bx--tooltip__label) {
+    background-color: transparent !important;
+    width: 18px !important;
+  }
   .title{
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -446,19 +446,18 @@
   .ownerContainer{
     display: block;
     color: var(--brand-grey-light);
-    font-size: var(--font-size-mini);
+    font-size: var(--font-size-small);
   }
   .ownerAddressContainer{
     display: inline-block;
   }
   :global(.ownerContainer .owner){
     color: var(--brand-color-primary);
-    font-size: var(--font-size-mini);
+    font-size: var(--font-size-small);
   }
   .headerValuesContainer {
     display: flex;
     align-items: center;
-    margin-left: calc(var(--spacer) / 3);
   }
   .updateAllocationsBtton {
     margin-left: calc(var(--spacer) / 3) !important;
