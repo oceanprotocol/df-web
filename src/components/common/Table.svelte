@@ -438,6 +438,7 @@
   }
   .textContainer{
     width: 100%;
+    margin-left: calc(var(--spacer)/8)
   }
   .purgatory {
     font-size: var(--font-size-small);
