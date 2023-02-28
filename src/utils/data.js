@@ -22,7 +22,7 @@ export let filterDataByUserAllocation = (datasets, allocations) => {
 
 export let filterDataByOwner = (datasets, ownerAddress) => {
     let filteredDatasets = []
-    filteredDatasets = datasets.filter((d) => d.owner === ownerAddress)
+    filteredDatasets = datasets.filter((d) => d.owner === ownerAddress.toLowerCase())
     return filteredDatasets
 }
 
