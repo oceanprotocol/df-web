@@ -35,6 +35,10 @@
     display: flex;
     flex-direction: column;
   }
+  :global(.item .bx--tooltip__label) {
+    background-color: transparent !important;
+    width: 18px !important;
+  }
   .titleContainer {
     display: flex;
     margin-bottom: calc((var(--spacer) / 8));

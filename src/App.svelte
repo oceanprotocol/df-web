@@ -243,7 +243,14 @@
   </main>
 </Router>
 
-<style>
+<style lang="scss" global>
+  $css--font-face: false;
+  $css--helpers: false;
+  $css--body: false;
+  $css--use-layer: false;
+  $css--reset: false;
+  $css--default-type: false;
+  $css--plex: false;
   main {
     text-align: center;
     max-width: 240px;
