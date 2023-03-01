@@ -9,15 +9,17 @@
   import 'carbon-'
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
-  import { filterDataByUserAllocation } from "../../utils/data";
+  import { filterDataByUserAllocation, filterDataByOwner, filterOptions } from "../../utils/data";
   import {
     dataAllocations,
     totalUserAllocation,
   } from "../../stores/dataAllocations";
   import Input from "./Input.svelte";
   import TextWithNetworkIcon from "./TextWithNetworkIcon.svelte";
+  import NetworkIcon from "./NetworkIcon.svelte";
   import ShareInput from "./ShareInput.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
+  import Dropdown from "./Dropdown.svelte";
   import { userBalances } from "../../stores/tokens";
   import {
     allocateVeOceanToMultipleNFTs,
@@ -29,6 +31,7 @@
     networkSigner,
     userAddress,
   } from "../../stores/web3";
+  import Link from "./Link.svelte";
   import { oceanUnlockDate } from "../../stores/veOcean";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import CustomTooltip from "./CustomTooltip.svelte";
@@ -43,16 +46,21 @@
   export let rowData = undefined;
   export let notHidableColumns = [];
   let showDataWithAllocations = false;
-  let datasetsWithAllocations = undefined;
+  let filteredDatasets = undefined;
   let disabled = undefined;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
   let totalAvailableTemporary = undefined;
   let loading = undefined;
   let tooltipMessage = undefined;
   let tooltipState = undefined;
+  let filterOption = "0";
 
   let columns = {};
   let pagination = { pageSize: 100, page: 1 };
+
+  $:if(filterOption) {
+    filterTable(filterOption)
+  } 
 
   loadVisibleColumns();
 
@@ -63,6 +71,22 @@
         colData = colData.filter((colD) => colD.key !== col.key);
       }
     });
+  }
+
+  function filterTable(option){
+    switch (option) {
+      case "0":
+        filteredDatasets = undefined
+        break;
+      case "1":
+        filteredDatasets = filterDataByUserAllocation(rowData, $dataAllocations);
+        break;
+      case "2":
+        filteredDatasets = filterDataByOwner(rowData, $userAddress);
+        break;
+      default:
+        break;
+    }
   }
 
   function checkLocalColumnsEqualLocalStorageColumns() {
@@ -98,15 +122,6 @@
       colData = colData.filter((col) => col.value !== key);
     }
     localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
-  }
-
-  $: if (showDataWithAllocations === true) {
-    const newData = filterDataByUserAllocation(rowData, $dataAllocations);
-    datasetsWithAllocations = newData;
-  }
-
-  $: if (!showDataWithAllocations && datasetsWithAllocations !== undefined) {
-    datasetsWithAllocations = undefined;
   }
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
@@ -292,13 +307,10 @@
         {/if}
       </div>
       <div class="tableActionsContainer">
-        <div class="datasetsWithAllocationsInputContainer">
-          <Input
-            type="checkbox"
-            label="Only data where I have allocations"
-            bind:value={showDataWithAllocations}
-          />
-        </div>
+        <Dropdown 
+          options={filterOptions}
+          bind:selectedOption={filterOption}
+        />
         <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
       </div>
     </div>
@@ -308,7 +320,7 @@
         headers={colData}
         pageSize={pagination.pageSize}
         page={pagination.page}
-        rows={datasetsWithAllocations ? datasetsWithAllocations : rowData}
+        rows={filteredDatasets ? filteredDatasets : rowData}
         class="customTable"
       >
         <Toolbar size="sm">
@@ -332,14 +344,31 @@
         </svelte:fragment>
         <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "title"}
-            <TextWithNetworkIcon
-              networkName={row.network}
-              className={row.ispurgatory ? "purgatory" : ""}
-              text={cell.value}
-              url={row.action}
-              textColor={row.ispurgatory ? 'var(--brand-alert-red)' : undefined}
-              tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
-            />
+          <div class="title">
+            <NetworkIcon name={row.network} minimal/>
+            <div class="textContainer">
+              <TextWithNetworkIcon
+                className={row.ispurgatory ? "purgatory" : ""}
+                text={cell.value}
+                url={row.action}
+                textColor={row.ispurgatory ? 'var(--brand-alert-red)' : 'var(--brand-black)'}
+                tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
+              />
+              <span class="ownerContainer">
+                owned by
+                <div class="ownerAddressContainer">
+                  <Link 
+                    url={`https://market.oceanprotocol.com/profile/${row.owner}`} 
+                    text= {row.owner.substr(0, 6)}...{row.owner.substr(
+                            row.owner.length - 6
+                          )}
+                    className="owner"
+                    hideIcon
+                  />
+                </div>
+              </span>
+            </div>
+          </div>
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
@@ -358,8 +387,8 @@
     <Pagination
       bind:pageSize={pagination.pageSize}
       bind:page={pagination.page}
-      totalItems={datasetsWithAllocations
-        ? datasetsWithAllocations.length
+      totalItems={filteredDatasets
+        ? filteredDatasets.length
         : rowData.length}
       pageSizeInputDisabled
     />
@@ -367,13 +396,6 @@
 {/if}
 
 <style lang="scss" global>
-  $css--font-face: false;
-  $css--helpers: false;
-  $css--body: false;
-  $css--use-layer: false;
-  $css--reset: false;
-  $css--default-type: false;
-  $css--plex: false;
   @import "carbon-components/scss/components/data-table/_data-table.scss";
   @import "carbon-components/scss/components/data-table/_data-table-sort.scss";
   @import "carbon-components/scss/components/toolbar/_toolbar.scss";
@@ -397,6 +419,7 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column-reverse;
+    padding: 0 calc(var(--spacer) / 3);
     margin: 0;
   }
   .headerContainer{
@@ -404,14 +427,38 @@
     justify-content: flex-start;
     align-items: center;
   }
+  :global(.headerContainer .bx--tooltip__label) {
+    background-color: transparent !important;
+    width: 18px !important;
+  }
+  .title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .textContainer{
+    width: 100%;
+    margin-left: calc(var(--spacer)/8)
+  }
   .purgatory {
     font-size: var(--font-size-small);
     color: var(--brand-alert-red);
   }
+  .ownerContainer{
+    display: block;
+    color: var(--brand-grey-light);
+    font-size: var(--font-size-small);
+  }
+  .ownerAddressContainer{
+    display: inline-block;
+  }
+  :global(.ownerContainer .owner){
+    color: var(--brand-color-primary);
+    font-size: var(--font-size-small);
+  }
   .headerValuesContainer {
     display: flex;
     align-items: center;
-    margin-left: calc(var(--spacer) / 3);
   }
   .updateAllocationsBtton {
     margin-left: calc(var(--spacer) / 3) !important;

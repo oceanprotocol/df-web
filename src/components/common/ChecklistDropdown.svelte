@@ -38,8 +38,6 @@
     width: auto;
     align-items: center;
     justify-content: flex-start;
-    margin: calc(var(--spacer) / 6);
-    padding: 0 calc(var(--spacer) / 8);
   }
   .optionsContainer {
     display: flex;
