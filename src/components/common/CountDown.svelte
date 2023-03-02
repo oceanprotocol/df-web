@@ -6,7 +6,6 @@
   export let title = undefined;
 
   let countdownEnd = moment(getThursdayDate(moment().utc()))
-    .set({ hour: 6 })
     .add(moment().utcOffset(), "minutes")
     .format("YYYY-MM-DD H:m:s");
 </script>
