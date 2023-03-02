@@ -78,6 +78,9 @@
     color: black;
     border-radius: 5px;
   }
+  .container:focus-within {
+    border: 1px solid var(--brand-grey-darker);
+  }
   .available {
     padding: 0 calc(var(--spacer) / 6);
     background-color: transparent;

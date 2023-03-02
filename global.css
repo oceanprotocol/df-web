@@ -121,6 +121,10 @@ input {
   font-size: var(--font-size-base);
 }
 
+input:focus {
+  outline-color: var(--brand-grey-darker);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -158,13 +162,12 @@ h1:focus-visible {
   outline: none;
 }
 
-.bx--tooltip {
-  background-color: var(--brand-white) !important;
+body button:focus {
+  outline: none !important;
 }
 
-.bx--tooltip__label {
-  background-color: transparent !important;
-  width: 18px !important;
+.bx--tooltip {
+  background-color: var(--brand-white) !important;
 }
 
 .bx--tooltip__trigger:not(.bx--btn--icon-only):focus {

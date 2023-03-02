@@ -12,7 +12,9 @@
 </script>
 
 <Link className={`textWithNetwork ${className ? className : undefined}`} {url} color={textColor}>
-  <NetworkIcon name={networkName} minimal color={textColor}/>
+  {#if networkName}
+    <NetworkIcon name={networkName} minimal color={textColor}/>
+  {/if}
   {#if tooltipMessage}
     <CustomTooltip
     text={"Item in purgatory. Remove all your allocations from this asset."}

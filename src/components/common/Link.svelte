@@ -1,9 +1,11 @@
 <script>
   const ExternalIcon = "/images/external.svg";
+
   export let text = undefined;
   export let url;
   export let className = undefined;
   export let color = undefined;
+  export let hideIcon = false;
 </script>
 
 <a
@@ -17,7 +19,9 @@
     <span>{text}</span>
   {/if}
   <slot />
-  <img src={ExternalIcon} alt="external link"/>
+  {#if !hideIcon}
+    <img src={ExternalIcon} alt="external link"/>
+  {/if}
 </a>
 
 <style>
