@@ -64,48 +64,56 @@
     return moment.utc(getThursdayOffset(moment().utc(), MAXDAYS, max));
   };
 
-  let schema = yup.object().shape({
-    amount: yup
-      .number()
-      .required("Amount is requred")
-      .min($oceanUnlockDate ? 0 : 1)
-      .max(parseInt(getOceanBalance($connectedChainId)))
-      .label("Amount"),
-    unlockDate: yup
-      .date()
-      .min(
-        $oceanUnlockDate
-          ? $oceanUnlockDate.format("YYYY-MM-DD")
-          : getThursdayDate(moment().utc())
-      )
-      .max(getMaxDate().format("YYYY-MM-DD"))
-      .required("Unlock date is requred")
-      .label("Unlock Date"),
-    ageement: yup
-      .boolean()
-      .required("Agreement is requirement.")
-      .label("User Agreement"),
-  });
-
-  let fields = {
-    amount: 0,
-    unlockDate: $oceanUnlockDate
-      ? $oceanUnlockDate.format("YYYY-MM-DD")
-      : moment
-          .utc(getThursdayDate(moment.utc().add(7, "days")))
-          .format("YYYY-MM-DD"),
-    ageement: false,
-  };
-
-  const { form, errors, handleSubmit } = createForm({
-    initialValues: fields,
-    validationSchema: schema,
-    onSubmit: (values) => onFormSubmit(values),
-  });
+  let schema, fields, form, errors
+  var handleSubmit;
+  const initForm = () => {
+    schema = yup.object().shape({
+      amount: yup
+        .number()
+        .required("Amount is requred")
+        .min($oceanUnlockDate ? 0 : 1)
+        .max(parseInt(getOceanBalance($connectedChainId)))
+        .label("Amount"),
+      unlockDate: yup
+        .date()
+        .min(
+          $oceanUnlockDate
+            ? $oceanUnlockDate.format("YYYY-MM-DD")
+            : getThursdayDate(moment().utc())
+        )
+        .max(getMaxDate().format("YYYY-MM-DD"))
+        .required("Unlock date is requred")
+        .label("Unlock Date"),
+      ageement: yup
+        .boolean()
+        .required("Agreement is requirement.")
+        .label("User Agreement"),
+    });
+    fields = {
+      amount: 0,
+      unlockDate: $oceanUnlockDate
+        ? $oceanUnlockDate.format("YYYY-MM-DD")
+        : moment
+            .utc(getThursdayDate(moment.utc().add(7, "days")))
+            .format("YYYY-MM-DD"),
+      ageement: false,
+    };
+    const resp = createForm({
+      initialValues: fields,
+      validationSchema: schema,
+      onSubmit: (values) => onFormSubmit(values),
+    });
+    form = resp.form
+    errors = resp.errors
+    console.log(resp)
+    handleSubmit = form.handleSubmit
+  }
+  initForm()
 
   async function init() {
     await updateUserBalanceOcean($userAddress, $web3Provider);
     oceanBalance = getOceanBalance($connectedChainId);
+    initForm()
   }
 
   $: if ($userAddress) {
@@ -117,7 +125,7 @@
     loading = true;
     const unlockTimestamp = moment.utc(values.unlockDate).unix();
     currentStep = 2;
-
+    console.log('herre')
     try {
       if ($oceanUnlockDate) {
         if (values.amount > 0) {
