@@ -12,8 +12,12 @@ export const columnsData = [
   { key: "network", value: "Network" },
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
-  { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-  { key: "lastRoundAPY", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+  { key: "roundapy", value: "RoundAPY", display: (roundapy) => parseFloat(roundapy ? roundapy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+  { key: "roundAPR", value: "RoundAPR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+  { key: "roundYield", value: "RoundYield", display: (roundYield) => parseFloat(roundYield ? roundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_yield },
+  { key: "lastRoundAPY", value: "LastRoundAPY", display: (lastRoundAPY) => parseFloat(lastRoundAPY ? lastRoundAPY * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+  { key: "lastRoundAPR", value: "LastRoundAPR", display: (lastRoundAPR) => parseFloat(lastRoundAPR ? lastRoundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+  { key: "lastRoundYield", value: "LastRoundYield", display: (lastRoundYield) => parseFloat(lastRoundYield ? lastRoundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_yield},
   {
     key: "roundvolume",
     value: "RoundVolume",
@@ -27,7 +31,7 @@ export const columnsData = [
   { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
 ]
 
-export const defaultColumns = ["Title", "RoundVolume", "RoundAPY","LastRoundAPY","CurrentAllocation", "MyAllocation"]
+export const defaultColumns = ["Title","RoundVolume","RoundAPY","LastRoundAPY","CurrentAllocation","MyAllocation"]
 
 async function getDatasets(api,roundNumber) {
   let res;
@@ -63,7 +67,11 @@ function getRow(dataInfo, key) {
     symbol: dataInfo.symbol,
     owner: dataInfo.owner_addr,
     lastRoundAPY: dataInfo.lastRoundAPY,
+    lastRoundAPR: dataInfo.lastRoundAPR,
+    lastRoundYield: dataInfo.lastRoundAPR / 52,
     roundapy: dataInfo.apy,
+    roundAPR: dataInfo.apr,
+    roundYield: dataInfo.apr / 52,
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
@@ -104,6 +112,7 @@ export async function loadDatasets(nftsApi, allocations) {
   currentRoundDatasets.forEach((datasetInfo, key) => {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apy
+    datasetInfo.lastRoundAPR = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apr
     newDatasets.push(getRow(datasetInfo, key));
   });
   datasets.set(newDatasets);
