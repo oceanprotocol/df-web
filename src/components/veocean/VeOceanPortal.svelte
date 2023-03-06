@@ -21,7 +21,6 @@
       await oceanUnlockDate.update(() =>
         unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
       );
-      console.log($oceanUnlockDate)
     }
 
     loading = false;

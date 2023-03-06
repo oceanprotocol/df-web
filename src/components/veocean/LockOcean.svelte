@@ -89,7 +89,6 @@
         .required("Agreement is requirement.")
         .label("User Agreement"),
     });
-    console.log($oceanUnlockDate)
     fields = {
       amount: 0,
       unlockDate: $oceanUnlockDate
@@ -106,7 +105,6 @@
     });
     form = resp.form
     errors = resp.errors
-    console.log(resp)
     handleSubmit = resp.handleSubmit
   }
   initForm()
@@ -126,7 +124,6 @@
     loading = true;
     const unlockTimestamp = moment.utc(values.unlockDate).unix();
     currentStep = 2;
-    console.log('herre')
     try {
       if ($oceanUnlockDate) {
         if (values.amount > 0) {
@@ -237,7 +234,6 @@
 </script>
 
 <div class={`container`}>
-  {#if $oceanUnlockDate !== null}
   <Card
     title={$oceanUnlockDate ? `Update veOCEAN Lock` : `Lock OCEAN, get veOCEAN`}
   >
@@ -275,7 +271,7 @@
           min={$oceanUnlockDate
             ? $oceanUnlockDate.format("YYYY-MM-DD")
             : getThursdayDate(moment().utc().add(7, "days"))}
-          disabled={getOceanBalance($connectedChainId) <= 0}
+          disabled={getOceanBalance($connectedChainId) <= 0 || ($oceanUnlockDate && $oceanUnlockDate.isBefore(moment()))}
           max={getMaxDate().format("YYYY-MM-DD")}
           bind:value={$form.unlockDate}
         />
@@ -360,7 +356,6 @@
       </div>
     </form>
   </Card>
-  {/if}
 </div>
 
 <style>
