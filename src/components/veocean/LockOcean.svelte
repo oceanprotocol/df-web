@@ -89,6 +89,7 @@
         .required("Agreement is requirement.")
         .label("User Agreement"),
     });
+    console.log($oceanUnlockDate)
     fields = {
       amount: 0,
       unlockDate: $oceanUnlockDate
@@ -106,7 +107,7 @@
     form = resp.form
     errors = resp.errors
     console.log(resp)
-    handleSubmit = form.handleSubmit
+    handleSubmit = resp.handleSubmit
   }
   initForm()
 
@@ -236,10 +237,14 @@
 </script>
 
 <div class={`container`}>
+  {#if $oceanUnlockDate !== null}
   <Card
     title={$oceanUnlockDate ? `Update veOCEAN Lock` : `Lock OCEAN, get veOCEAN`}
   >
-    <form class="content" on:submit={handleSubmit}>
+    <form class="content" on:submit={(event) => {
+      event.preventDefault()
+      handleSubmit()
+      }}>
       <div class="item">
         <Input
           type="number"
@@ -343,8 +348,7 @@
                 disabled={loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
-                  $form.amount > getOceanBalance($connectedChainId) ||
-                  $form.amount <= 0}
+                  $form.amount > getOceanBalance($connectedChainId)}
                 type="submit"
               />
             {/if}
@@ -356,6 +360,7 @@
       </div>
     </form>
   </Card>
+  {/if}
 </div>
 
 <style>

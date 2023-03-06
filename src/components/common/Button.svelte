@@ -55,6 +55,9 @@
     color: var(--brand-white);
     background: var(--brand-gradient);
     box-shadow: 0 9px 18px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     user-select: none;
     text-align: center;
   }
@@ -81,6 +84,7 @@
   }
   .loadingSpinnerContainer {
     margin-right: 5px;
+    display: inline-block;
   }
   .disabled {
     background-color: var(--button-disabled-color);
