@@ -29,3 +29,14 @@ export let filterDataByOwner = (datasets, ownerAddress) => {
  export let calcMaxAllowedStakeInput = (poolReserve) => {
     return (poolReserve / 2).toFixed(3)
 }
+
+export let checkOwnerHasRows = (datasets, ownerAddress) => {
+    if (!ownerAddress) return datasets;
+    return datasets.map((d) => {  
+        const { id, owner } = d;
+        if (owner === ownerAddress?.toLowerCase() && !(JSON.stringify(id)).includes(`owned`)) {
+            d.id = `owned_${id}`
+        }
+        return d;
+    })
+}
