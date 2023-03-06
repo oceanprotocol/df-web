@@ -338,7 +338,8 @@
                 disabled={loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
-                  $form.amount > getOceanBalance($connectedChainId)}
+                  $form.amount > getOceanBalance($connectedChainId) ||
+                  $oceanUnlockDate.isBefore(moment())}
                 type="submit"
               />
             {:else}<Button
