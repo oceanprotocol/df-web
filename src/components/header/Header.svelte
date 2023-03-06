@@ -32,6 +32,9 @@
       <li class:active={$location.pathname === "/datafarming"}>
         <Link to="/datafarming" class="link">FARMS</Link>
       </li>
+      <li class:active={$location.pathname === "/delegation"}>
+        <Link to="/delegation" class="link">DELEGATE</Link>
+      </li>
       <li class:active={$location.pathname === "/activerewards"}>
         <Link to="/activerewards" class="link">REWARDS</Link>
       </li>
