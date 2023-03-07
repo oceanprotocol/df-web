@@ -7,6 +7,9 @@
     import moment from "moment"
     import { createForm } from "svelte-forms-lib";
     import {oceanUnlockDate} from "../../stores/veOcean.js"
+    import {userAddress, networkSigner} from "../../stores/web3.js"
+    import {delegated} from "../../stores/delegation.js"
+    import {delegate} from "../../utils/delegations.js"
 
     let received = 0;
     let loading = false;
@@ -15,15 +18,21 @@
         walletAddress: yup.string().required("Wallet address is requred").label("Wallet address")
     });
 
-  let fields = {
-    walletAddress: ""
-  };
+    let fields = {
+        walletAddress: ""
+    };
 
-  const { form, errors, handleSubmit } = createForm({
-    initialValues: fields,
-    validationSchema: schema,
-    onSubmit: (values) => onFormSubmit(values),
-  });
+    const delegateVeOcean = async (values) => {
+        loading = true
+        await delegate($userAddress, values.walletAddress, $oceanUnlockDate, $networkSigner)
+        loading = false
+    }
+
+    const { form, errors, handleSubmit } = createForm({
+        initialValues: fields,
+        validationSchema: schema,
+        onSubmit: (values) => delegateVeOcean(values),
+    });
 
 </script>
 
@@ -50,12 +59,23 @@
                     bind:value={$form.walletAddress}
                 />
                 </div>
-                <Button
-                    text={"Delegate"}
-                    fullWidth={true}
-                    disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
-                    type="submit"
-                />
+                {#if delegated > 0}
+                    <Button
+                        text={"Delegate"}
+                        fullWidth={true}
+                        {loading}
+                        disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
+                        type="submit"
+                    />
+                {:else}
+                    <Button
+                        text={"Remove delegation"}
+                        fullWidth={true}
+                        {loading}
+                        disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
+                        type="submit"
+                    />
+                {/if}
             </form>
             {/if}
         </div>

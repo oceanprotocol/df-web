@@ -2,12 +2,25 @@
     import Card from "../common/Card.svelte"
     import ItemWithLabel from "../common/ItemWithLabel.svelte"
     import {veOceanWithDelegations} from "../../stores/veOcean.js"
+    import {userAddress} from "../../stores/web3.js"
+    import {delegated} from "../../stores/delegation.js"
+    import {getDelegatedVeOcean, getReceivedDelegation, getTokenId} from "../../utils/delegations.js"
     import moment from "moment"
 
-    let delegated = 0;
     let delegationExpiry = moment()
     let received = 0;
     let loading = false
+
+    const init = async () =>{
+        let newDelegated = await getDelegatedVeOcean($userAddress)
+        delegated.update(() => newDelegated)
+        received = await getReceivedDelegation($userAddress)
+        await getTokenId($userAddress)
+    }
+
+    $:if($userAddress){
+        init()
+    }
 </script>
 
 <div class={`container`}>
