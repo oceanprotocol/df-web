@@ -271,7 +271,7 @@
           min={$oceanUnlockDate
             ? $oceanUnlockDate.format("YYYY-MM-DD")
             : getThursdayDate(moment().utc().add(7, "days"))}
-          disabled={getOceanBalance($connectedChainId) <= 0 || ($oceanUnlockDate && $oceanUnlockDate.isBefore(moment()))}
+          disabled={getOceanBalance($connectedChainId) < 0 || ($oceanUnlockDate && $oceanUnlockDate.isBefore(moment()))}
           max={getMaxDate().format("YYYY-MM-DD")}
           bind:value={$form.unlockDate}
         />
@@ -333,7 +333,6 @@
                 fullWidth={true}
                 disabled={loading ||
                   !$form.ageement ||
-                  getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount > getOceanBalance($connectedChainId) ||
                   $oceanUnlockDate.isBefore(moment())}
                 type="submit"
