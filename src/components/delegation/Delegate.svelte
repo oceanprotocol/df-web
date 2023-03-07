@@ -3,14 +3,16 @@
     import Input from "../common/Input.svelte"
     import Button from "../common/Button.svelte"
     import ItemWithLabel from "../common/ItemWithLabel.svelte"
-    import * as yup from "yup";
+    import * as yup from "yup"
+    import moment from "moment"
     import { createForm } from "svelte-forms-lib";
+    import {oceanUnlockDate} from "../../stores/veOcean.js"
 
     let received = 0;
     let loading = false;
 
     let schema = yup.object().shape({
-        walletAddress: yup.number().required("Wallet address is requred").label("Wallet address")
+        walletAddress: yup.string().required("Wallet address is requred").label("Wallet address")
     });
 
   let fields = {
@@ -51,7 +53,7 @@
                 <Button
                     text={"Delegate"}
                     fullWidth={true}
-                    disabled={false}
+                    disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
                     type="submit"
                 />
             </form>

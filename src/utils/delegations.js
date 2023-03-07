@@ -22,7 +22,7 @@ export const getUserVotingPowerWithDelegations = async(userAddress) => {
   }
 }
 
-export const delegate = async(delegator, receiver, percentage, cancelTime, expireTime, id, signer) => {
+export const delegate = async(delegator, receiver, cancelTime, expireTime, percentage = 100, id, signer) => {
     try {
       const contract = new ethers.Contract(
         getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
