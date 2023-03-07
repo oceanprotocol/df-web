@@ -60,7 +60,7 @@
       $networkSigner
     ).then((resp) => {
       // if user has lock and amount is at zero, let them update the lock
-      if( hasLock && amount <= 0 ) {
+      if(amount <= 0 ) {
         isAmountApproved = true;
         approved = true;
       } else {
