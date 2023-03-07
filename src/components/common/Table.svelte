@@ -364,26 +364,28 @@
                     ? "Item in purgatory. Remove your allocations."
                     : undefined}
                 />
-                <span class="ownerContainer">
-                  owned by
-                  <div class="ownerAddressContainer">
-                    <Link
-                      url={`https://market.oceanprotocol.com/profile/${row.owner}`}
-                      text={row.owner?.substr(0, 6)}...{row.owner?.substr(
-                        row.owner?.length - 6
-                      )}
-                      className="owner"
-                      hideIcon
-                    />
-                  </div>
-                  {#if $userAddress.toLowerCase() === row.owner}
-                    <CustomTooltip
-                      text={"Publishers now receive 2x effective reward! All veOCEAN allocated to an asset you’ve published is treated as 2x stake for the rewards calculation."}
-                      direction="bottom"
-                      size="small"
-                    />
-                  {/if}
-                </span>
+                {#if row.owner}
+                  <span class="ownerContainer">
+                    owned by
+                    <div class="ownerAddressContainer">
+                      <Link
+                        url={`https://market.oceanprotocol.com/profile/${row.owner}`}
+                        text={row.owner.substr(0, 6)}...{row.owner.substr(
+                          row.owner.length - 6
+                        )}
+                        className="owner"
+                        hideIcon
+                      />
+                    </div>
+                    {#if $userAddress.toLowerCase() === row.owner}
+                      <CustomTooltip
+                        text={"Publishers now receive 2x effective reward! All veOCEAN allocated to an asset you’ve published is treated as 2x stake for the rewards calculation."}
+                        direction="bottom"
+                        size="small"
+                      />
+                    {/if}
+                  </span>
+                {/if}
               </div>
             </div>
           {:else if cell.key === "myallocation"}
