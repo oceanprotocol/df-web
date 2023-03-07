@@ -13,7 +13,7 @@
     loading = true;
     let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
     lockedOceanAmount.update(() => lockedOceans);
-    if (!oceanUnlockDate) {
+    if (!$oceanUnlockDate) {
       let unlockDateMilliseconds = await getLockedEndTime(
         $userAddress,
         $networkSigner
