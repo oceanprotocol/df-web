@@ -213,7 +213,7 @@
   />
   <BannerMessage
     type="default"
-    message={`Publish your datasets trough our <strong><a href='https://market.oceanprotocol.com/publish/1' target='_blank'>marketplace</a></strong> to get <strong><a href='https://blog.oceanprotocol.com/data-farming-publisher-rewards-f2639525e508' target='_blank'>2X Rewards</a></strong> for publishers.`}
+    message={`Publish your datasets through our <strong><a href='https://market.oceanprotocol.com/publish/1' target='_blank'>marketplace</a></strong> to get <strong><a href='https://blog.oceanprotocol.com/data-farming-publisher-rewards-f2639525e508' target='_blank'>2X Rewards</a></strong> for publishers.`}
   />
   <WalletConnectModal />
   <main>

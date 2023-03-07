@@ -10,8 +10,10 @@
   let loading = true;
 
   const loadValues = async () => {
-    if ($oceanUnlockDate===null) {
-      loading = true;
+    loading = true;
+    let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
+    lockedOceanAmount.update(() => lockedOceans);
+    if (!$oceanUnlockDate) {
       let unlockDateMilliseconds = await getLockedEndTime(
         $userAddress
       );
