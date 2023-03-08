@@ -100,6 +100,7 @@
         (moment().utc().isBefore($oceanUnlockDate) &&
           blockTimestamp <= unlockTimestamp)}
       onclick={() => withdraw()}
+      class="plausible-event-name=Button+withdraw+locked+ocean"
     />
   </div>
   <div class="item">
