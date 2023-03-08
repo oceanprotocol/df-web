@@ -43,6 +43,7 @@
       className="maxItem"
       text={"max"}
       textOnly
+      class="plausible-event-name=Button+Sellect+max+input"
     />
   {/if}
 </div>

@@ -67,6 +67,7 @@
         className="switchNetworkHeaderButton"
         textOnly
         disabled={!$userAddress}
+        class="plausible-event-name=Button+Switch+Netwrok+to..."
       />
     </div>
   {/if}

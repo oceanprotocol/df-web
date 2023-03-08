@@ -36,7 +36,8 @@
           <Button
             text={button.text}
             onclick={() => button.onClick(pool)}
-            disabled={button.disabled}
+            disabled={button.disabled} 
+            class="plausible-event-name=Button+row+data"
           />
         </div>
       {/each}

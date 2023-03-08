@@ -35,6 +35,7 @@
             onclick={() =>
               clickData ? button.onClick(clickData) : button.onClick(rowObject)}
             disabled={button.disabled}
+            class="plausible-event-name=Button+row+object+click"
           />
         </div>
       {/each}
