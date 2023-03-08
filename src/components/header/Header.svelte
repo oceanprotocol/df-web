@@ -20,20 +20,20 @@
 </svelte:head>
 <header>
   <h1 class="logo">
-    <Link to="/" class="link">
+    <Link to="/" class="link plausible-event-name=Link+to+df-homepage">
       <img src={"/logo-ocean-svg.svg"} alt="SvelteKit" />
     </Link>
   </h1>
   <nav>
     <ul>
       <li class:active={$location.pathname === "/veocean"}>
-        <Link to="/veocean" class="link">veOCEAN</Link>
+        <Link to="/veocean" class="link plausible-event-name=Link+to+veOcean+page">veOCEAN</Link>
       </li>
       <li class:active={$location.pathname === "/datafarming"}>
-        <Link to="/datafarming" class="link">FARMS</Link>
+        <Link to="/datafarming" class="link plausible-event-name=Link+to+datafarming+page">FARMS</Link>
       </li>
       <li class:active={$location.pathname === "/activerewards"}>
-        <Link to="/activerewards" class="link">REWARDS</Link>
+        <Link to="/activerewards" class="link plausible-event-name=Link+to+activerewards+page">REWARDS</Link>
       </li>
       <li class:active={false}>
         <a
