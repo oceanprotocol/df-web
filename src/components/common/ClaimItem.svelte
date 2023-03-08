@@ -39,7 +39,7 @@
         text={redirectLink.text}
         onclick={() => navigate(redirectLink.url)}
         disabled={disableRedirect}
-        class="plausible-event-name=Button+Redirect+link"
+        class="plausible-event-name=Button+Redirect+to+veOCEAN+link"
       />
     {:else}
       <Button
