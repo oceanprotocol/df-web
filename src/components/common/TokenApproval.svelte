@@ -80,7 +80,7 @@
       : `Approve ${amount} ${tokenName}${amount > 1 ? "s" : ""}`}
     onclick={() => onClick()}
     disabled={disabled || loading || !agreed}
-    class="plausible-event-name=Button+Token+Approval"
+    className="plausible-event-name=Button+Token+Approval"
   />
 {:else}
   <slot />
