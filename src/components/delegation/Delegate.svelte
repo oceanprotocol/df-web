@@ -8,10 +8,9 @@
     import { createForm } from "svelte-forms-lib";
     import {oceanUnlockDate} from "../../stores/veOcean.js"
     import {userAddress, networkSigner} from "../../stores/web3.js"
-    import {delegated} from "../../stores/delegation.js"
+    import {delegated, delegationReceived} from "../../stores/delegation.js"
     import {delegate} from "../../utils/delegations.js"
 
-    let received = 0;
     let loading = false;
 
     let schema = yup.object().shape({
@@ -39,10 +38,10 @@
 <div class={`container`}>
     <Card title="Delegate">
         <div class="delegationForm">
-            {#if received>0}
+            {#if delegationReceived>0}
                 <ItemWithLabel
                     title={`Received`}
-                    value={`${parseFloat(received).toFixed(3)} veOCEAN`}
+                    value={`${parseFloat(delegationReceived).toFixed(3)} veOCEAN`}
                     tooltipMessage={"descriptions.default.tooltip_veocean_my_voting_power"}
                     {loading}
                 />
