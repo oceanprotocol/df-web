@@ -289,7 +289,7 @@
             onclick={() => updateAllocations()}
             disabled={disabled || loading}
             loading={loading === "UPDATE"}
-            class="plausible-event-name=Button+Update+Allocations"
+            className="plausible-event-name=Button+Update+Allocations"
           />
           <Button
             text={"Reset allocations"}
@@ -298,14 +298,14 @@
             disabled={disabled || loading || $totalUserAllocation < 1}
             secondary
             loading={loading === "RESET"}
-            class="plausible-event-name=Button+Reset+Allocations"
+            className="plausible-event-name=Button+Reset+Allocations"
           />
         {:else}
           <Button
             text={"Get allocations"}
             className="updateAllocationsBtton"
             onclick={() => navigate("veocean")}
-            class="plausible-event-name=Button+Get+Allocations"
+            className="plausible-event-name=Button+Get+Allocations"
           />
         {/if}
       </div>

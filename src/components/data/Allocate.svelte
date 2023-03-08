@@ -155,7 +155,7 @@
           }`}
           onclick={() => switchNetwork()}
           disabled={!$userAddress}
-          class="plausible-event-name=Button+Switch+network"
+          className="plausible-event-name=Button+Switch+network"
         />
       </div>
     {:else}
@@ -191,7 +191,7 @@
         text={loading ? "Allocating" : `Set allocation to ${amountToAllocate}%`}
         onclick={() => allocate()}
         disabled={!canAllocate || loading}
-        class="plausible-event-name=Button+Set+allocation+to+amount"
+        className="plausible-event-name=Button+Set+allocation+to+amount"
       />
     {/if}
   </div>

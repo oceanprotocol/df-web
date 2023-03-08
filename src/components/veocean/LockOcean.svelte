@@ -309,7 +309,7 @@
               switchWalletNetwork(process.env.VE_SUPPORTED_CHAINID)}
             fullWidth={true}
             disabled={!$userAddress}
-            class="plausible-event-name=Button+switch+wallet+network"
+            className="plausible-event-name=Button+switch+wallet+network"
           />
         {:else}
           <!-- Todo #398 - disable update lock button, if unlock date == same date inside Date Input -->
@@ -337,7 +337,7 @@
                   $form.amount > getOceanBalance($connectedChainId) ||
                   $oceanUnlockDate.isBefore(moment())}
                 type="submit"
-                class="plausible-event-name=Button+Update+lock"
+                className="plausible-event-name=Button+Update+lock"
               />
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
@@ -347,7 +347,7 @@
                   getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount > getOceanBalance($connectedChainId)}
                 type="submit"
-                class="plausible-event-name=Button+lock+ocean"
+                className="plausible-event-name=Button+lock+ocean"
               />
             {/if}
           </TokenApproval>

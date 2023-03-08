@@ -28,7 +28,7 @@
       }}
       text={`Connect Wallet`}
       textOnly
-      class="plausible-event-name=Button+Connect+wallet"
+      className="plausible-event-name=Button+Connect+wallet"
     />
   {:else}
     <div class="walletContainer">
@@ -57,10 +57,10 @@
             onclick={() => resetAccount()}
             text={`Reset to connected account`}
             textOnly
-            class="plausible-event-name=Button+Reset+to+connected+account"
+            className="plausible-event-name=Button+Reset+to+connected+account"
           />
         {/if}
-        <Button onclick={() => disconnect()} text={`Disconnect`} textOnly class="plausible-event-name=Button+disconnect" />
+        <Button onclick={() => disconnect()} text={`Disconnect`} textOnly className="plausible-event-name=Button+disconnect" />
       </Tooltip>
     </div>
   {/if}
