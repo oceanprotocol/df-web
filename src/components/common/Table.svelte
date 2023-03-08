@@ -359,8 +359,8 @@
                 <div class="ownerAddressContainer">
                   <Link 
                     url={`https://market.oceanprotocol.com/profile/${row.owner}`} 
-                    text= {row.owner.substr(0, 6)}...{row.owner.substr(
-                            row.owner.length - 6
+                    text= {row.owner?.substr(0, 6)}...{row.owner?.substr(
+                            row.owner?.length - 6
                           )}
                     className="owner"
                     hideIcon

@@ -3,11 +3,10 @@
     import ItemWithLabel from "../common/ItemWithLabel.svelte"
     import {veOceanWithDelegations} from "../../stores/veOcean.js"
     import {userAddress} from "../../stores/web3.js"
-    import {delegated, delegationReceived} from "../../stores/delegation.js"
+    import {delegated, delegationReceived, veDelegation} from "../../stores/delegation.js"
     import {getDelegatedVeOcean, getReceivedDelegation, getTokenId} from "../../utils/delegations.js"
     import moment from "moment"
 
-    let delegationExpiry = moment()
     let loading = false
 
     const init = async () =>{
@@ -20,6 +19,11 @@
 
     $:if($userAddress){
         init()
+    }
+
+    $:if($veDelegation){
+        console.log($veDelegation)
+        console.log(moment($veDelegation.expireTime * 1000))
     }
 </script>
 
@@ -40,7 +44,7 @@
             />
             <ItemWithLabel
                 title={`Delegation expiry`}
-                value={moment(delegationExpiry).format("YYYY-MM-DD")}
+                value={moment($veDelegation?.expireTime * 1000).format("YYYY-MM-DD")}
                 tooltipMessage={"descriptions.default.tooltip_veocean_my_voting_power"}
                 {loading}
             />

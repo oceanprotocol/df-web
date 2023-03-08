@@ -8,7 +8,7 @@
     import { createForm } from "svelte-forms-lib";
     import {oceanUnlockDate} from "../../stores/veOcean.js"
     import {userAddress, networkSigner} from "../../stores/web3.js"
-    import {delegated, delegationReceived} from "../../stores/delegation.js"
+    import {delegated, delegationReceived, veDelegation} from "../../stores/delegation.js"
     import {delegate} from "../../utils/delegations.js"
 
     let loading = false;
@@ -18,7 +18,7 @@
     });
 
     let fields = {
-        walletAddress: ""
+        walletAddress: $veDelegation ? $veDelegation.receiver.id : ""
     };
 
     const delegateVeOcean = async (values) => {
@@ -48,6 +48,7 @@
             {:else}
             <form class="form" on:submit={handleSubmit}>
                 <div class="inputContainer">
+                {#if !$veDelegation}
                 <Input
                     type="text"
                     label="Receiver wallet address"
@@ -57,6 +58,15 @@
                     direction="column"
                     bind:value={$form.walletAddress}
                 />
+                {:else}
+                    <div>
+                        <span>Receiver wallet address</span>
+                        <span>{`${$veDelegation.receiver.id?.substr(0, 6)}...${$veDelegation.receiver.id?.substr(
+                            $veDelegation.receiver.id?.length - 6
+                        )}`}
+                        </span>
+                    </div>
+                {/if}
                 </div>
                 {#if delegated > 0}
                     <Button

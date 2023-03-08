@@ -1,11 +1,29 @@
 import {ethers} from "ethers";
 import {get} from "svelte/store"
+import {gql} from "apollo-boost";
 import * as VeDelegationABI from "./abis/veDelegationABI";
 import {networkSigner} from "../stores/web3";
 import {getAddressByChainIdKey} from "../utils/address/address";
 import moment from "moment";
 
 const veDelegationABI = VeDelegationABI.default
+
+export const GET_DELEGATIONS = gql`
+  query userDelegation($userAddress: String!) {
+    veDelegations{
+      id
+      delegator(where: {id: $userAddress}) {
+        id
+      }
+      receiver{
+        id
+      }
+      amount
+      expireTime
+      tokenId
+    }
+  }
+`;
 
 export const getUserVotingPowerWithDelegations = async(userAddress) => {
     try {
@@ -102,3 +120,20 @@ export const delegate = async(delegator, receiver, oceanUnlockDate, signer) => {
     throw error;
   }
   }
+
+  export const removeDelegation = async(delegator, receiver, oceanUnlockDate, signer) => {
+    const id = Math.floor(Math.random() * 10000)
+    try {
+      const contract = new ethers.Contract(
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
+        veDelegationABI, 
+         signer
+      );
+      const calcGasLimit = await contract.estimateGas.create_boost(delegator, receiver, 100, moment().unix(), oceanUnlockDate.unix(), id)
+      const resp = await contract.create_boost(delegator, receiver, 10000, moment().unix(), oceanUnlockDate.unix(), id, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
+      return resp
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
+    }
