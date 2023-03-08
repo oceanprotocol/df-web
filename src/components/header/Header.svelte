@@ -39,7 +39,7 @@
         <a
           href={aboutURL}
           target="_blank"
-          class="link">ABOUT</a
+          class="link plausible-event-name=Link+external+to+about+blog+post">ABOUT</a
         >
       </li>
     </ul>

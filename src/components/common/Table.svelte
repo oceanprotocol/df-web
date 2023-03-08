@@ -366,7 +366,7 @@
                     text= {row.owner?.substr(0, 6)}...{row.owner?.substr(
                             row.owner?.length - 6
                           )}
-                    className="owner"
+                    className="owner plausible-event-name=Link+to+ocean+market+profile"
                     hideIcon
                   />
                 </div>
