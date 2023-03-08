@@ -40,10 +40,9 @@
   {#if showMaxButton === true}
     <Button
       onclick={handleOnMaxClick}
-      className="maxItem"
+      className="maxItem plausible-event-name=Button+Sellect+max+input"
       text={"max"}
       textOnly
-      className="plausible-event-name=Button+Sellect+max+input"
     />
   {/if}
 </div>

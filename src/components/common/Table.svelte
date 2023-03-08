@@ -285,27 +285,24 @@
         {#if $oceanUnlockDate}
           <Button
             text={"Update allocations"}
-            className="updateAllocationsBtton"
+            className="updateAllocationsBtton plausible-event-name=Button+Update+Allocations"
             onclick={() => updateAllocations()}
             disabled={disabled || loading}
             loading={loading === "UPDATE"}
-            className="plausible-event-name=Button+Update+Allocations"
           />
           <Button
             text={"Reset allocations"}
-            className="updateAllocationsBtton"
+            className="updateAllocationsBtton plausible-event-name=Button+Reset+Allocations"
             onclick={() => updateAllocations(true)}
             disabled={disabled || loading || $totalUserAllocation < 1}
             secondary
             loading={loading === "RESET"}
-            className="plausible-event-name=Button+Reset+Allocations"
           />
         {:else}
           <Button
             text={"Get allocations"}
-            className="updateAllocationsBtton"
+            className="updateAllocationsBtton plausible-event-name=Button+Get+Allocations"
             onclick={() => navigate("veocean")}
-            className="plausible-event-name=Button+Get+Allocations"
           />
         {/if}
       </div>

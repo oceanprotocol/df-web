@@ -46,7 +46,7 @@
   <div class="modal" on:keydown={keydown} tabindex={0}>
     <div class="content-wrapper">
       <div class="button">
-        <Button text="X" textOnly onclick={() => close()} disabled={loading}  className="plausible-event-name=Button+X+Allocate" />
+        <Button text="X" textOnly onclick={() => close()} disabled={loading} className="plausible-event-name=Button+X+Allocate" />
       </div>
       <div>
         {#if data && isOpen}
