@@ -26,7 +26,7 @@
             );
           }}
           disabled={loading}
-          class="plausible-event-name=Button+Close+Button"
+          class="plausible-event-name=Button+Close+WalletConnect+Modal"
         />
       </div>
       <h3 class="text">Connect your wallet</h3>
