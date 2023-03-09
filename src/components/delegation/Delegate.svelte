@@ -6,12 +6,13 @@
     import * as yup from "yup"
     import moment from "moment"
     import { createForm } from "svelte-forms-lib";
-    import {oceanUnlockDate} from "../../stores/veOcean.js"
+    import {oceanUnlockDate, veOceanWithDelegations} from "../../stores/veOcean.js"
     import {userAddress, networkSigner} from "../../stores/web3.js"
     import {delegated, delegationReceived, veDelegation} from "../../stores/delegation.js"
     import {delegate, cancelDelegation} from "../../utils/delegations.js"
 
     let loading = false;
+    let onDelegationChange;
 
     let schema = yup.object().shape({
         walletAddress: yup.string().required("Wallet address is requred").label("Wallet address")
@@ -23,14 +24,16 @@
 
     const delegateVeOcean = async (values) => {
         loading = true
-        await delegate($userAddress, values.walletAddress, $oceanUnlockDate, $networkSigner)
+        console.log('delegating')
+        await delegate($userAddress, values.walletAddress, $oceanUnlockDate, $networkSigner, undefined)
+        $delegated.update(() => $veOceanWithDelegations)
         loading = false
     }
 
     const removeVeOceanDelegation = async () => {
         loading = true
-        console.log('herre')
         await cancelDelegation($veDelegation.tokenId, $networkSigner)
+        $delegated.update(() => 0)
         loading = false
     }
 

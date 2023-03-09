@@ -8,23 +8,6 @@
     import moment from "moment"
 
     let loading = false
-
-    const init = async () =>{
-        let newDelegated = await getDelegatedVeOcean($userAddress)
-        delegated.update(() => newDelegated)
-        let received = await getReceivedDelegation($userAddress)
-        delegationReceived.update(() => received)
-        await getTokenId($userAddress)
-    }
-
-    $:if($userAddress){
-        init()
-    }
-
-    $:if($veDelegation){
-        console.log($veDelegation)
-        console.log(moment($veDelegation.expireTime * 1000))
-    }
 </script>
 
 <div class={`container`}>
@@ -44,7 +27,7 @@
             />
             <ItemWithLabel
                 title={`Delegation expiry`}
-                value={$veDelegation ? moment($veDelegation?.expireTime * 1000).format("YYYY-MM-DD") : "-"}
+                value={$veDelegation && $delegated > 0 ? moment($veDelegation?.expireTime * 1000).format("YYYY-MM-DD") : "-"}
                 tooltipMessage={"descriptions.default.tooltip_veocean_my_voting_power"}
                 {loading}
             />

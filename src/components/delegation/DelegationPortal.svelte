@@ -3,14 +3,23 @@
     import Delegate from "./Delegate.svelte"
     import {GET_DELEGATIONS} from "../../utils/delegations"
     import {userAddress} from "../../stores/web3.js"
-    import {veDelegation} from "../../stores/delegation.js"
+    import {veDelegation, delegated, delegationReceived} from "../../stores/delegation.js"
+    import {getDelegatedVeOcean, getReceivedDelegation} from "../../utils/delegations.js"
     import { query } from "svelte-apollo";
 
     let delegation
 
-    $: if ($userAddress) {
+    const init = async () =>{
+        let newDelegated = await getDelegatedVeOcean($userAddress)
+        delegated.update(() => newDelegated)
+        let received = await getReceivedDelegation($userAddress)
+        delegationReceived.update(() => received)
+    }
+
+    $:if($userAddress){
+        init()
         delegation = query(GET_DELEGATIONS, {
-        variables: { userAddress: $userAddress.toLowerCase() },
+            variables: { userAddress: $userAddress.toLowerCase() },
         });
     }
 
@@ -19,11 +28,12 @@
         veDelegation.update(() => $delegation?.data.veDelegations[$delegation?.data.veDelegations.length - 1])
     }
 
+
 </script>
 
 <div class={`container`}>
   <DelegationMetrics />
-  <Delegate/>
+  <Delegate onDelegationChange={() => delegation.refetch()}/>
 </div>
 <style>
   .container {
