@@ -32,25 +32,25 @@
         <div class="delegationMetrics">
             <ItemWithLabel
                 title={`Allocation power`}
-                value={`${parseFloat($veOceanWithDelegations).toFixed(3)} veOCEAN`}
+                value={`${parseFloat($veOceanWithDelegations ? $veOceanWithDelegations : 0).toFixed(3)} veOCEAN`}
                 tooltipMessage={"descriptions.default.tooltip_veocean_my_voting_power"}
                 {loading}
             />
             <ItemWithLabel
                 title={`Delegated`}
-                value={`${parseFloat($delegated).toFixed(3)} veOCEAN`}
+                value={`${parseFloat($delegated ? $delegated : 0).toFixed(3)} veOCEAN`}
                 tooltipMessage={"descriptions.default.tooltip_veocean_my_voting_power"}
                 {loading}
             />
             <ItemWithLabel
                 title={`Delegation expiry`}
-                value={moment($veDelegation?.expireTime * 1000).format("YYYY-MM-DD")}
+                value={$veDelegation ? moment($veDelegation?.expireTime * 1000).format("YYYY-MM-DD") : "-"}
                 tooltipMessage={"descriptions.default.tooltip_veocean_my_voting_power"}
                 {loading}
             />
             <ItemWithLabel
                 title={`Received`}
-                value={`${parseFloat($delegationReceived).toFixed(3)} veOCEAN`}
+                value={`${parseFloat($delegationReceived ? $delegationReceived : 0).toFixed(3)} veOCEAN`}
                 tooltipMessage={"descriptions.default.tooltip_veocean_my_voting_power"}
                 {loading}
             />

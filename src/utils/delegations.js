@@ -10,9 +10,9 @@ const veDelegationABI = VeDelegationABI.default
 
 export const GET_DELEGATIONS = gql`
   query userDelegation($userAddress: String!) {
-    veDelegations{
+    veDelegations(where: {delegator_contains: $userAddress}){
       id
-      delegator(where: {id: $userAddress}) {
+      delegator{
         id
       }
       receiver{
@@ -49,7 +49,9 @@ export const getDelegatedVeOcean = async(userAddress) => {
       get(networkSigner)
     );
     const delegated = await contract.delegated_boost(userAddress)
+    console.log(delegated)
     const delegatedFormated = ethers.utils.formatEther(BigInt(delegated).toString(10))
+    console.log(delegatedFormated)
     return delegatedFormated
   } catch (error) {
     console.log(error)
@@ -114,6 +116,7 @@ export const delegate = async(delegator, receiver, oceanUnlockDate, signer) => {
     );
     const calcGasLimit = await contract.estimateGas.create_boost(delegator, receiver, 100, moment().unix(), oceanUnlockDate.unix(), id)
     const resp = await contract.create_boost(delegator, receiver, 10000, moment().unix(), oceanUnlockDate.unix(), id, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
+    await resp.wait()
     return resp
   } catch (error) {
     console.log(error)
@@ -121,19 +124,40 @@ export const delegate = async(delegator, receiver, oceanUnlockDate, signer) => {
   }
   }
 
-  export const removeDelegation = async(delegator, receiver, oceanUnlockDate, signer) => {
-    const id = Math.floor(Math.random() * 10000)
+  export const removeDelegation = async(tokenId, signer) => {
+    console.log(tokenId, signer)
     try {
       const contract = new ethers.Contract(
         getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
         veDelegationABI, 
          signer
       );
-      const calcGasLimit = await contract.estimateGas.create_boost(delegator, receiver, 100, moment().unix(), oceanUnlockDate.unix(), id)
-      const resp = await contract.create_boost(delegator, receiver, 10000, moment().unix(), oceanUnlockDate.unix(), id, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
+      const calcGasLimit = await contract.estimateGas.burn(tokenId)
+      console.log(calcGasLimit)
+      const resp = await contract.burn(tokenId, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
+      await resp.wait()
       return resp
     } catch (error) {
       console.log(error)
       throw error;
     }
+  }
+
+  export const cancelDelegation = async(tokenId, signer) => {
+    console.log(tokenId, signer)
+    try {
+      const contract = new ethers.Contract(
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
+        veDelegationABI, 
+         signer
+      );
+      const calcGasLimit = await contract.estimateGas.cancel_boost(tokenId)
+      console.log(calcGasLimit)
+      const resp = await contract.cancel_boost(tokenId, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
+      await resp.wait()
+      return resp
+    } catch (error) {
+      console.log(error)
+      throw error;
     }
+  }

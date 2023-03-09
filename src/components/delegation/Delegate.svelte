@@ -9,7 +9,7 @@
     import {oceanUnlockDate} from "../../stores/veOcean.js"
     import {userAddress, networkSigner} from "../../stores/web3.js"
     import {delegated, delegationReceived, veDelegation} from "../../stores/delegation.js"
-    import {delegate} from "../../utils/delegations.js"
+    import {delegate, cancelDelegation} from "../../utils/delegations.js"
 
     let loading = false;
 
@@ -27,10 +27,17 @@
         loading = false
     }
 
+    const removeVeOceanDelegation = async () => {
+        loading = true
+        console.log('herre')
+        await cancelDelegation($veDelegation.tokenId, $networkSigner)
+        loading = false
+    }
+
     const { form, errors, handleSubmit } = createForm({
         initialValues: fields,
         validationSchema: schema,
-        onSubmit: (values) => delegateVeOcean(values),
+        onSubmit: (values) => {$veDelegation && delegated>0 ? removeVeOceanDelegation($veDelegation.tokenId) : delegateVeOcean(values)},
     });
 
 </script>
@@ -48,37 +55,43 @@
             {:else}
             <form class="form" on:submit={handleSubmit}>
                 <div class="inputContainer">
-                {#if !$veDelegation}
-                <Input
-                    type="text"
-                    label="Receiver wallet address"
-                    name="receiverWalletAddress"
-                    placeholder="0x000..."
-                    error={$errors.walletAddress}
-                    direction="column"
-                    bind:value={$form.walletAddress}
-                />
-                {:else}
-                    <div>
-                        <span>Receiver wallet address</span>
-                        <span>{`${$veDelegation.receiver.id?.substr(0, 6)}...${$veDelegation.receiver.id?.substr(
+                {#if $veDelegation && $delegated>0}
+                    <Input
+                        type="text"
+                        label="Receiver wallet address"
+                        name="receiverWalletAddress"
+                        placeholder="0x000..."
+                        error={$errors.walletAddress}
+                        disabled
+                        direction="column"
+                        value={`${$veDelegation.receiver.id?.substr(0, 6)}...${$veDelegation.receiver.id?.substr(
                             $veDelegation.receiver.id?.length - 6
                         )}`}
-                        </span>
-                    </div>
+                    />
+                {:else}
+                    <Input
+                        type="text"
+                        label="Receiver wallet address"
+                        name="receiverWalletAddress"
+                        placeholder="0x000..."
+                        error={$errors.walletAddress}
+                        disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
+                        direction="column"
+                        bind:value={$form.walletAddress}
+                    />
                 {/if}
                 </div>
-                {#if delegated > 0}
+                {#if $delegated > 0}
                     <Button
-                        text={"Delegate"}
+                        text={"Remove delegation"}
                         fullWidth={true}
                         {loading}
-                        disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
-                        type="submit"
+                        onclick={() => removeVeOceanDelegation()}
+                        type="button"
                     />
                 {:else}
                     <Button
-                        text={"Remove delegation"}
+                        text={"Delegate"}
                         fullWidth={true}
                         {loading}
                         disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}

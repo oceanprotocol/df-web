@@ -16,7 +16,7 @@
 
     $: if ($delegation?.data) {
         console.log($delegation?.data)
-        veDelegation.update(() => $delegation?.data.veDelegations[0])
+        veDelegation.update(() => $delegation?.data.veDelegations[$delegation?.data.veDelegations.length - 1])
     }
 
 </script>
