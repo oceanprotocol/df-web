@@ -24,10 +24,11 @@ export const columnsData = [
   { key: "did", value: "DID" },
   { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
   { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
+  { key: "ownerallocation", value:"OwnerAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_veocean_owner_allocation},
   { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
 ]
 
-export const defaultColumns = ["Title", "RoundVolume", "RoundAPY","LastRoundAPY","CurrentAllocation", "MyAllocation"]
+export const defaultColumns = ["Title", "RoundVolume", "RoundAPY","LastRoundAPY","CurrentAllocation", "OwnerAllocation", "MyAllocation"]
 
 async function getDatasets(api,roundNumber) {
   let res;
@@ -73,6 +74,7 @@ function getRow(dataInfo, key) {
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
     roundvolume: parseFloat(dataInfo.volume).toFixed(3),
+    ownerallocation: parseFloat(dataInfo.ve_allocated_realtime_owner).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }
