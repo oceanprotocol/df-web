@@ -24,16 +24,20 @@
 
     const delegateVeOcean = async (values) => {
         loading = true
-        console.log('delegating')
+        if(moment($oceanUnlockDate).diff(moment(), 'days') < 7){
+            errors.set({walletAddress : 'Current lock period must be grater than 1 week'})
+            loading = false
+            return
+        }
         await delegate($userAddress, values.walletAddress, $oceanUnlockDate, $networkSigner, undefined)
-        $delegated.update(() => $veOceanWithDelegations)
+        delegated.update(() => $veOceanWithDelegations)
         loading = false
     }
 
     const removeVeOceanDelegation = async () => {
         loading = true
         await cancelDelegation($veDelegation.tokenId, $networkSigner)
-        $delegated.update(() => 0)
+        delegated.update(() => 0)
         loading = false
     }
 
