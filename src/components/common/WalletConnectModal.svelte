@@ -26,6 +26,7 @@
             );
           }}
           disabled={loading}
+          className="plausible-event-name=Button+Close+WalletConnect+Modal"
         />
       </div>
       <h3 class="text">Connect your wallet</h3>
@@ -34,11 +35,13 @@
           text="Metamask"
           onclick={() => onButtonClick("injected")}
           disabled={loading}
+          className="plausible-event-name=Button+Metamask+Connect"
         />
         <Button
           text="WalletConnect"
           onclick={() => onButtonClick("walletconnect")}
           disabled={loading}
+          className="plausible-event-name=Button+WalletConnect+Connect+wallet"
         />
       </div>
     </div>
