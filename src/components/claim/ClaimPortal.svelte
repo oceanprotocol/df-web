@@ -23,7 +23,7 @@
   let veBalance = 0.0;
   let canClaimVE = true;
   let canClaimDF = true;
-  const now = moment();
+  const now = moment.utc();
   let curEpoch = getEpoch(now);
 
   async function initClaimables() {
