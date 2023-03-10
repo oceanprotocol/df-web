@@ -33,7 +33,11 @@
 
 <div class={`container`}>
   <DelegationMetrics />
-  <Delegate onDelegationChange={() => delegation.refetch()}/>
+  <Delegate onDelegationChange={() => {
+      console.log('refetch delegation')
+      delegation.refetch()
+  }
+    }/>
 </div>
 <style>
   .container {

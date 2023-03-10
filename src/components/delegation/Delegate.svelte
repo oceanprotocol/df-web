@@ -12,7 +12,7 @@
     import {delegate, cancelDelegation} from "../../utils/delegations.js"
 
     let loading = false;
-    let onDelegationChange = () =>{};
+    export let onDelegationChange;
 
     let schema = yup.object().shape({
         walletAddress: yup.string().required("Wallet address is requred").label("Wallet address")
@@ -40,7 +40,6 @@
     }
 
     const removeVeOceanDelegation = async () => {
-        onDelegationChange()
         loading = true
         try{
             await cancelDelegation($veDelegation.tokenId, $networkSigner)
