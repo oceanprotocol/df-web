@@ -12,7 +12,7 @@
     import {delegate, cancelDelegation} from "../../utils/delegations.js"
 
     let loading = false;
-    let onDelegationChange;
+    let onDelegationChange = () =>{};
 
     let schema = yup.object().shape({
         walletAddress: yup.string().required("Wallet address is requred").label("Wallet address")
@@ -29,14 +29,25 @@
             loading = false
             return
         }
-        await delegate($userAddress, values.walletAddress, $oceanUnlockDate, $networkSigner, undefined)
+        try{
+            await delegate($userAddress, values.walletAddress, $oceanUnlockDate, $networkSigner, undefined)
+        }catch(error){
+            loading = false
+        }    
+        onDelegationChange()
         delegated.update(() => $veOceanWithDelegations)
         loading = false
     }
 
     const removeVeOceanDelegation = async () => {
+        onDelegationChange()
         loading = true
-        await cancelDelegation($veDelegation.tokenId, $networkSigner)
+        try{
+            await cancelDelegation($veDelegation.tokenId, $networkSigner)
+        }catch(error){
+            loading = false
+        }
+        onDelegationChange()
         delegated.update(() => 0)
         loading = false
     }

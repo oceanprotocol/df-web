@@ -39,7 +39,7 @@
         text={redirectLink.text}
         onclick={() => navigate(redirectLink.url)}
         disabled={disableRedirect}
-        class="plausible-event-name=Button+Redirect+to+veOCEAN+link"
+        className="plausible-event-name=Button+Redirect+to+veOCEAN+link"
       />
     {:else}
       <Button
@@ -47,7 +47,7 @@
         text={loading ? "Loading..." : `Claim ${disabled ? "" : amount}`}
         onclick={() => onClick()}
         disabled={loading || disabled}
-        class="plausible-event-name=Button+Claim"
+        className="plausible-event-name=Button+Claim"
       />
     {/if}
   </Card>

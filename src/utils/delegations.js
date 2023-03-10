@@ -10,7 +10,7 @@ const veDelegationABI = VeDelegationABI.default
 
 export const GET_DELEGATIONS = gql`
   query userDelegation($userAddress: String!) {
-    veDelegations(where: {delegator_contains: $userAddress}){
+    veDelegations(where: {delegator_contains: $userAddress}, orderBy: block, orderDirection: desc, first: 1){
       id
       delegator{
         id
@@ -50,6 +50,7 @@ export const getDelegatedVeOcean = async(userAddress) => {
     );
     const delegated = await contract.delegated_boost(userAddress)
     const delegatedFormated = ethers.utils.formatEther(BigInt(delegated).toString(10))
+    console.log(delegatedFormated)
     return delegatedFormated
   } catch (error) {
     console.log(error)
@@ -104,16 +105,14 @@ export const getTokenId = async(userAddress) => {
 }
 
 export const delegate = async(delegator, receiver, oceanUnlockDate, signer, tokenId) => {
-  console.log(tokenId)
-  const id = tokenId ? tokenId : Math.floor(Math.random() * 10000)
-  console.log(id)
+  const id = Math.floor(Math.random() * 10000)
   try {
     const contract = new ethers.Contract(
       getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
       veDelegationABI, 
        signer
     );
-    const calcGasLimit = await contract.estimateGas.create_boost(delegator, receiver, 100, moment().unix(), oceanUnlockDate.unix(), id)
+    const calcGasLimit = await contract.estimateGas.create_boost(delegator, receiver, 10000, moment().unix(), oceanUnlockDate.unix(), id)
     const resp = await contract.create_boost(delegator, receiver, 10000, moment().unix(), oceanUnlockDate.unix(), id, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
     await resp.wait()
     return resp
@@ -147,6 +146,7 @@ export const delegate = async(delegator, receiver, oceanUnlockDate, signer, toke
         veDelegationABI, 
          signer
       );
+      console.log(tokenId)
       const calcGasLimit = await contract.estimateGas.cancel_boost(tokenId)
       const resp = await contract.cancel_boost(tokenId, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
       await resp.wait()
