@@ -32,12 +32,15 @@
 </script>
 
 <div class={`container`}>
+  <h2 class="title">Delegate your veOCEAN allocations to be managed by another address</h2>
   <DelegationMetrics />
-  <Delegate onDelegationChange={() => {
-      console.log('refetch delegation')
-      delegation.refetch()
-  }
+  {#if $veDelegation !== null}
+    <Delegate onDelegationChange={() => {
+        console.log('refetch delegation')
+        delegation.refetch()
+    }
     }/>
+  {/if}
 </div>
 <style>
   .container {
@@ -46,7 +49,15 @@
     align-items: flex-end;
     justify-content: flex-start;
     padding-top: calc(var(--spacer) * 2);
-}
-    
+    }
+    .cardsContainer {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacer);
+        padding-top: var(--spacer);
+    }
+    .title {
+    width: 100%;
+  } 
 </style>
   

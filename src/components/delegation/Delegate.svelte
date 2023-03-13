@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte';
     import Card from "../common/Card.svelte"
     import Input from "../common/Input.svelte"
     import Button from "../common/Button.svelte"
@@ -19,7 +20,9 @@
     });
 
     let fields = {
-        walletAddress: $veDelegation ? $veDelegation.receiver.id : ""
+        walletAddress: $veDelegation && $delegated>0 ? `${$veDelegation.receiver.id?.substr(0, 6)}...${$veDelegation.receiver.id?.substr(
+                            $veDelegation.receiver.id?.length - 6
+                        )}` : ""
     };
 
     const delegateVeOcean = async (values) => {
@@ -72,31 +75,16 @@
             {:else}
             <form class="form" on:submit={handleSubmit}>
                 <div class="inputContainer">
-                {#if $veDelegation && $delegated>0}
                     <Input
                         type="text"
                         label="Receiver wallet address"
                         name="receiverWalletAddress"
                         placeholder="0x000..."
                         error={$errors.walletAddress}
-                        disabled
-                        direction="column"
-                        value={`${$veDelegation.receiver.id?.substr(0, 6)}...${$veDelegation.receiver.id?.substr(
-                            $veDelegation.receiver.id?.length - 6
-                        )}`}
-                    />
-                {:else}
-                    <Input
-                        type="text"
-                        label="Receiver wallet address"
-                        name="receiverWalletAddress"
-                        placeholder="0x000..."
-                        error={$errors.walletAddress}
-                        disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
+                        disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment()) || $delegated > 0}
                         direction="column"
                         bind:value={$form.walletAddress}
                     />
-                {/if}
                 </div>
                 {#if $delegated > 0}
                     <Button

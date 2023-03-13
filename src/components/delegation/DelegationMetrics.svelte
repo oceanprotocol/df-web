@@ -28,7 +28,7 @@
             />
             <ItemWithLabel
                 title={`Delegation expiry`}
-                value={$veDelegation && $delegated > 0 ? moment($veDelegation?.expireTime * 1000).format("YYYY-MM-DD") : "-"}
+                value={$veDelegation && $delegated > 0 ? moment($veDelegation?.expireTime * 1000).format("DD-MM-YYYY") : "-"}
                 tooltipMessage={descriptions.default.tooltip_delegation_expiry_date}
                 {loading}
             />
