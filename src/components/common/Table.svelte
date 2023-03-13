@@ -370,9 +370,9 @@
                     <div class="ownerAddressContainer">
                       <Link
                         url={`https://market.oceanprotocol.com/profile/${row.owner}`}
-                        text={row.owner.substr(0, 6)}...{row.owner.substr(
-                          row.owner.length - 6
-                        )}
+                        text={
+                          $userAddress.toLowerCase() === row.owner ? 'you' :`${row.owner.substr(0, 6)}...${row.owner.substr(row.owner.length - 6)}`
+                        }
                         className="owner"
                         hideIcon
                       />
@@ -470,8 +470,17 @@
     background-color: var(--brand-white);
   }
   tr[data-row*="owned"] {
-    background-color: var(--brand-color-primary);
+    background-color: var(--brand-alert-yellow);
   }
+
+  tr[data-row*="owned"] .ownerContainer, tr[data-row*="owned"] .ownerContainer span {
+    color: var(--brand-black);
+  }
+
+  tr[data-row*="owned"]:hover {
+    background-color: var(--brand-alert-yellow) !important;
+  }
+
   .ownerContainer {
     display: flex;
     color: var(--brand-grey-light);
