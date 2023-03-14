@@ -56,6 +56,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: calc(var(--spacer) / 2) 0;
     }
     
 </style>

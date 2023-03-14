@@ -11,9 +11,14 @@
     import {userAddress, networkSigner} from "../../stores/web3.js"
     import {delegated, delegationReceived, veDelegation} from "../../stores/delegation.js"
     import {delegate, cancelDelegation} from "../../utils/delegations.js"
+    import { Tabs, Tab, TabContent } from "carbon-components-svelte"
+    import * as delegationReceivers from "../../utils/metadata/delegation/receivers.json";
+
+
+    export let onDelegationChange;
 
     let loading = false;
-    export let onDelegationChange;
+    let selected = 0;
 
     let schema = yup.object().shape({
         walletAddress: yup.string().required("Wallet address is requred").label("Wallet address")
@@ -25,7 +30,7 @@
                         )}` : ""
     };
 
-    const delegateVeOcean = async (values) => {
+    const delegateVeOcean = async (walletAddress) => {
         loading = true
         if(moment($oceanUnlockDate).diff(moment(), 'days') < 7){
             errors.set({walletAddress : 'Current lock period must be grater than 1 week'})
@@ -33,7 +38,7 @@
             return
         }
         try{
-            await delegate($userAddress, values.walletAddress, $oceanUnlockDate, $networkSigner, undefined)
+            await delegate($userAddress, walletAddress, $oceanUnlockDate, $networkSigner, undefined)
         }catch(error){
             loading = false
         }    
@@ -57,59 +62,77 @@
     const { form, errors, handleSubmit } = createForm({
         initialValues: fields,
         validationSchema: schema,
-        onSubmit: (values) => {$veDelegation && delegated>0 ? removeVeOceanDelegation($veDelegation.tokenId) : delegateVeOcean(values)},
+        onSubmit: (values) => {$veDelegation && delegated>0 ? removeVeOceanDelegation($veDelegation.tokenId) : delegateVeOcean(values.walletAddress)},
     });
 
 </script>
 
-<div class={`container`}>
+<div class={`delegationContainer`}>
     <Card title="Delegate">
-        <div class="delegationForm">
-            {#if delegationReceived>0}
-                <ItemWithLabel
-                    title={`Received`}
-                    value={`${parseFloat(delegationReceived).toFixed(3)} veOCEAN`}
-                    tooltipMessage={"descriptions.default.tooltip_veocean_my_voting_power"}
-                    {loading}
-                />
-            {:else}
-            <form class="form" on:submit={handleSubmit}>
-                <div class="inputContainer">
-                    <Input
-                        type="text"
-                        label="Receiver wallet address"
-                        name="receiverWalletAddress"
-                        placeholder="0x000..."
-                        error={$errors.walletAddress}
-                        disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment()) || $delegated > 0}
-                        direction="column"
-                        bind:value={$form.walletAddress}
-                    />
-                </div>
-                {#if $delegated > 0}
-                    <Button
-                        text={"Remove delegation"}
-                        fullWidth={true}
-                        {loading}
-                        onclick={() => removeVeOceanDelegation()}
-                        type="button"
-                    />
-                {:else}
-                    <Button
-                        text={"Delegate"}
-                        fullWidth={true}
-                        {loading}
-                        disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
-                        type="submit"
-                    />
-                {/if}
-            </form>
-            {/if}
-        </div>
+        <p class="message">You will delegate your entire voting power until your current lock will end.</p>
+        <p class="message">You can cancel your delegation at any time.</p>
+        <Tabs bind:selected class="tabs">
+            <Tab label="to custom address" autoWidth/>
+            {#each delegationReceivers.default as receiver}
+                <Tab label={`to ${receiver.name}`} autoWidth/>
+            {/each}
+            <svelte:fragment slot="content">
+                <TabContent>
+                    <div class="delegationFormContainer">
+                        <form class="delegationForm" on:submit={handleSubmit}>
+                            <div class="delegateInputContainer">
+                                <Input
+                                    type="text"
+                                    label="Receiver wallet address"
+                                    name="receiverWalletAddress"
+                                    placeholder="0x000..."
+                                    error={$errors.walletAddress}
+                                    disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment()) || $delegated > 0}
+                                    direction="column"
+                                    bind:value={$form.walletAddress}
+                                />
+                            </div>
+                            {#if $delegated > 0}
+                                <Button
+                                    text={"Remove delegation"}
+                                    fullWidth={true}
+                                    {loading}
+                                    onclick={() => removeVeOceanDelegation()}
+                                    type="button"
+                                />
+                            {:else}
+                                <Button
+                                    text={"Delegate"}
+                                    fullWidth={true}
+                                    {loading}
+                                    disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
+                                    type="submit"
+                                />
+                            {/if}
+                        </form>
+                    </div>
+                </TabContent>
+                {#each delegationReceivers.default as receiver}
+                    <TabContent>
+                        <div class="delegateButtonContainer">
+                            <Button
+                                text={`Delegate to ${receiver.name}`}
+                                fullWidth={true}
+                                {loading}
+                                onclick={() => delegateVeOcean(receiver.wallet_address)}
+                                className="delegateButton"
+                                type="button"
+                            />
+                        </div>
+                    </TabContent>
+                {/each}
+            </svelte:fragment>
+          </Tabs>
       </Card>
 </div>
-<style>
-  .container {
+<style lang="scss" global>
+  @import "carbon-components/scss/components/tabs/_tabs.scss";
+  .delegationContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -117,14 +140,23 @@
     width: 100%;
     padding-top: calc(var(--spacer) * 2);
     }
-    .form{
+    .tabs{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .delegationForm{
         display: flex;
         align-items: flex-end;
         justify-content: center;
         width: 100%;
+        padding: calc(var(--spacer) / 2) 0;
     }
-    .inputContainer{
+    .delegateInputContainer{
         min-width: 200px;
         margin-right: calc(var(--spacer)/2); 
+    }
+    .delegateButtonContainer{
+        padding: calc(var(--spacer) / 2) 0 !important;
     }
 </style>
