@@ -35,13 +35,11 @@
   <h2 class="title">Allow other wallet to manage your veOCEAN allocation by delegating.</h2>
   <p class="message">Maximize your APY and get rid of transaction fees by delegating to a wallet that, manages your alloctation power in the most efficient way possible.</p>
   <DelegationMetrics />
-  {#if $veDelegation !== null}
-    <Delegate onDelegationChange={() => {
+   <Delegate onDelegationChange={() => {
         console.log('refetch delegation')
         delegation.refetch()
     }
     }/>
-  {/if}
 </div>
 <style>
   .container {

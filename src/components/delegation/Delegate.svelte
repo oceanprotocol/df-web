@@ -119,6 +119,7 @@
                                 text={`Delegate to ${receiver.name}`}
                                 fullWidth={true}
                                 {loading}
+                                disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
                                 onclick={() => delegateVeOcean(receiver.wallet_address)}
                                 className="delegateButton"
                                 type="button"
