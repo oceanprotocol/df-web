@@ -36,6 +36,7 @@
             await delegate($userAddress, values.walletAddress, $oceanUnlockDate, $networkSigner, undefined)
         }catch(error){
             loading = false
+            return
         }    
         onDelegationChange()
         delegated.update(() => $veOceanWithDelegations)
@@ -48,6 +49,7 @@
             await cancelDelegation($veDelegation.tokenId, $networkSigner)
         }catch(error){
             loading = false
+            return
         }
         onDelegationChange()
         delegated.update(() => 0)
