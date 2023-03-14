@@ -42,7 +42,7 @@
         loading = false
     }
 
-    const removeVeOceanDelegation = async () => {
+    const cancelVeOceanDelegation = async () => {
         loading = true
         try{
             await cancelDelegation($veDelegation.tokenId, $networkSigner)
@@ -66,14 +66,26 @@
     <Card title="Delegate">
         <p class="message">You will delegate your entire voting power until your current lock will end.</p>
         <p class="message">You can cancel your delegation at any time.</p>
-        <div class="delegationForm">
-            {#if delegationReceived>0}
-                <ItemWithLabel
-                    title={`Received`}
-                    value={`${parseFloat(delegationReceived).toFixed(3)} veOCEAN`}
-                    tooltipMessage={"descriptions.default.tooltip_veocean_my_voting_power"}
+        <div class="delegateContainer">
+            {#if $delegated > 0}
+            <fragment>
+                <span class="delegatedText">
+                    Delegated to 
+                        <b>
+                            {`${$veDelegation ? `${$veDelegation.receiver.id?.substr(0, 6)}...${$veDelegation.receiver.id?.substr(
+                            $veDelegation.receiver.id?.length - 6
+                            )}` : ""}`}
+                        </b>
+                </span>
+                <Button
+                    text={"Cancel delegation"}
+                    fullWidth={true}
                     {loading}
+                    onclick={() => cancelVeOceanDelegation()}
+                    className="cancelDelegationButton"
+                    type="button"
                 />
+                </fragment>
             {:else}
             <form class="form" on:submit={handleSubmit}>
                 <div class="inputContainer">
@@ -88,23 +100,13 @@
                         bind:value={$form.walletAddress}
                     />
                 </div>
-                {#if $delegated > 0}
-                    <Button
-                        text={"Remove delegation"}
-                        fullWidth={true}
-                        {loading}
-                        onclick={() => removeVeOceanDelegation()}
-                        type="button"
-                    />
-                {:else}
-                    <Button
-                        text={"Delegate"}
-                        fullWidth={true}
-                        {loading}
-                        disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
-                        type="submit"
-                    />
-                {/if}
+                <Button
+                    text={"Delegate"}
+                    fullWidth={true}
+                    {loading}
+                    disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
+                    type="submit"
+                />
             </form>
             {/if}
         </div>
@@ -124,10 +126,18 @@
         align-items: flex-end;
         justify-content: center;
         width: 100%;
+    }
+    .delegateContainer{
         padding: calc(var(--spacer) / 2) 0;
     }
     .inputContainer{
         min-width: 200px;
         margin-right: calc(var(--spacer)/2); 
+    }
+    :global(.cancelDelegationButton){
+        margin-top: calc(var(--spacer) / 4) !important;
+    }
+    .delegatedText{
+        font-weight: bold;
     }
 </style>

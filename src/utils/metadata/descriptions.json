@@ -15,7 +15,7 @@
     "tooltip_datafarming_last_round_asset_APY": "Data Farming Last Round Per Asset Rewards APY relative to veOCEAN allocated and consume volume.\n\nGives an overview on how the assets performed in the last round.",
     "tooltip_datafarming_current_round_asset_APY": "Data Farming Current Round Per Asset Rewards APY resets each Round and it is relative to veOCEAN allocated and consume volume.\n\nThe higher the consume volume and lower the allocation, the higher the APY will be.",
     "tooltip_delegation_delegated": "Amount of veOCEAN delegated to receiver wallet address.",
-    "tooltip_delegation_expiry_date": "The date in which your delegation will expiry automatically.",
+    "tooltip_delegation_expiry_date": "The date on which your delegation will expiry.",
     "tooltip_delegation_received": "Amount of veOCEAN received from delegators.",
     "tooltip_rewards_history_rounds": "Data Farming rewards distribution rounds. Rounds happen every week starting and ending each Thursday.",
     "tooltip_rewards_overview": "Data Farming APY for both Passive & Active Rewards.\n\nRounds happen every week starting and ending each Thursday.",
