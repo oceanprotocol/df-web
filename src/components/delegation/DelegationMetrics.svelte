@@ -12,33 +12,37 @@
 </script>
 
 <div class={`container`}>
-    <Card title="My Delegations">
-        <div class="delegationMetrics">
-            <ItemWithLabel
-                title={`Allocation power`}
-                value={`${parseFloat($veOceanWithDelegations ? $veOceanWithDelegations : 0).toFixed(3)} veOCEAN`}
-                tooltipMessage={descriptions.default.tooltip_veocean_my_voting_power}
-                {loading}
-            />
-            <ItemWithLabel
-                title={`Delegated`}
-                value={`${parseFloat($delegated ? $delegated : 0).toFixed(3)} veOCEAN`}
-                tooltipMessage={descriptions.default.tooltip_delegation_delegated}
-                {loading}
-            />
-            <ItemWithLabel
-                title={`Delegation expiry`}
-                value={$veDelegation && $delegated > 0 ? moment($veDelegation?.expireTime * 1000).format("DD-MM-YYYY") : "-"}
-                tooltipMessage={descriptions.default.tooltip_delegation_expiry_date}
-                {loading}
-            />
-            <ItemWithLabel
-                title={`Received`}
-                value={`${parseFloat($delegationReceived ? $delegationReceived : 0).toFixed(3)} veOCEAN`}
-                tooltipMessage={descriptions.default.tooltip_delegation_received}
-                {loading}
-            />
-        </div>
+    <Card title="My Delegations" className="myDelegationsCard">
+        <div class="delegationMetricsContainer"> 
+            <div class="delegationMetrics">
+                <ItemWithLabel
+                    title={`Allocation power`}
+                    value={`${parseFloat($veOceanWithDelegations ? $veOceanWithDelegations : 0).toFixed(3)} veOCEAN`}
+                    tooltipMessage={descriptions.default.tooltip_veocean_my_voting_power}
+                    {loading}
+                />
+                <ItemWithLabel
+                    title={`Delegated`}
+                    value={`${parseFloat($delegated ? $delegated : 0).toFixed(3)} veOCEAN`}
+                    tooltipMessage={descriptions.default.tooltip_delegation_delegated}
+                    {loading}
+                />
+            </div>
+            <div class="delegationMetrics">
+                <ItemWithLabel
+                    title={`Delegation expiry`}
+                    value={$veDelegation && $delegated > 0 ? moment($veDelegation?.expireTime * 1000).format("DD-MM-YYYY") : "-"}
+                    tooltipMessage={descriptions.default.tooltip_delegation_expiry_date}
+                    {loading}
+                />
+                <ItemWithLabel
+                    title={`Received`}
+                    value={`${parseFloat($delegationReceived ? $delegationReceived : 0).toFixed(3)} veOCEAN`}
+                    tooltipMessage={descriptions.default.tooltip_delegation_received}
+                    {loading}
+                />
+            </div>
+        <div>
       </Card>
 </div>
 <style>
@@ -50,7 +54,6 @@
     width: 100%;
     padding-top: calc(var(--spacer) * 2);
     }
-
     .delegationMetrics {
         width: 100%;
         display: flex;
@@ -58,5 +61,15 @@
         justify-content: space-between;
         padding: calc(var(--spacer) / 2) 0;
     }
-    
+    .delegationMetricsContainer{
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    @media (min-width: 640px) {
+        .delegationMetrics {
+            width: 50%;
+            justify-content: space-around;
+        }
+    } 
 </style>
