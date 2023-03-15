@@ -24,7 +24,6 @@
     }
 
     $: if ($delegation?.data) {
-        console.log($delegation?.data)
         veDelegation.update(() => $delegation?.data.veDelegations[0])
     }
 

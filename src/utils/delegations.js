@@ -50,7 +50,6 @@ export const getDelegatedVeOcean = async(userAddress) => {
     );
     const delegated = await contract.delegated_boost(userAddress)
     const delegatedFormated = ethers.utils.formatEther(BigInt(delegated).toString(10))
-    console.log(delegatedFormated)
     return delegatedFormated
   } catch (error) {
     console.log(error)
@@ -146,7 +145,6 @@ export const delegate = async(delegator, receiver, oceanUnlockDate, signer, toke
         veDelegationABI, 
          signer
       );
-      console.log(tokenId)
       const calcGasLimit = await contract.estimateGas.cancel_boost(tokenId)
       const resp = await contract.cancel_boost(tokenId, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
       await resp.wait()
