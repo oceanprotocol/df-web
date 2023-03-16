@@ -219,7 +219,7 @@
 <Router>
   <BannerMessage
     title={`Data Farming Main has started!</a>`}
-    message={`Read <a href='https://blog.oceanprotocol.com/ocean-data-farming-is-launching-f633532d831c' target='_blank'><strong>the blogpost</strong></a> for more information.`}
+    message={`Read <a href='https://blog.oceanprotocol.com/ocean-data-farming-main-is-here-49c99602419e' target='_blank'><strong>the blogpost</strong></a> for more information.`}
   />
   <BannerMessage
     type="default"
