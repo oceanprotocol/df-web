@@ -66,8 +66,8 @@
 
 <div class={`container`}>
     <Card title="Delegate">
-        <p class="message">You will delegate your entire voting power until your current lock will end.</p>
-        <p class="message">You can cancel your delegation at any time.</p>
+        <p class="message">You will delegate your entire veOCEAN until your current lock will end.</p>
+        <p class="message">You can cancel your delegated veOCEAN at any time.</p>
         <div class="delegateContainer">
             {#if $delegated > 0}
             <fragment>

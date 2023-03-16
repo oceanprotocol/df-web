@@ -6,6 +6,8 @@
     import {delegated, delegationReceived, veDelegation} from "../../stores/delegation.js"
     import {getDelegatedVeOcean, getReceivedDelegation, getTokenId} from "../../utils/delegations.js"
     import * as descriptions from "../../utils/metadata/descriptions.json";
+    import { getAddressByChainIdKey } from "../../utils/address/address";
+    import { userBalances } from "../../stores/tokens";
     import moment from "moment"
 
     let loading = false
@@ -23,7 +25,16 @@
                 />
                 <ItemWithLabel
                     title={`Delegated`}
-                    value={`${parseFloat($delegated ? $delegated : 0).toFixed(3)} veOCEAN`}
+                    value={`${parseFloat($delegated ? $delegated : 0).toFixed(3)}/${
+                        parseFloat($userBalances?
+                              $userBalances[
+                                getAddressByChainIdKey(
+                                  process.env.VE_SUPPORTED_CHAINID,
+                                  "veOCEAN"
+                                )
+                              ]
+                          : '0').toFixed(3)
+                      } veOCEAN`}
                     tooltipMessage={descriptions.default.tooltip_delegation_delegated}
                     {loading}
                 />
