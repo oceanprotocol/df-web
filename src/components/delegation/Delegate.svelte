@@ -11,7 +11,13 @@
   } from "../../stores/veOcean.js";
   import { userAddress, networkSigner } from "../../stores/web3.js";
   import { delegated, veDelegation } from "../../stores/delegation.js";
-  import { delegate, cancelDelegation } from "../../utils/delegations.js";
+  import {
+    delegate,
+    cancelDelegation,
+    getTokenId,
+    getDelegatedVeOcean,
+  } from "../../utils/delegations.js";
+  import Swal from "sweetalert2";
 
   let loading = false;
   export let onDelegationChange;
@@ -50,14 +56,21 @@
         values.walletAddress,
         $oceanUnlockDate,
         $networkSigner,
-        undefined
+        $veDelegation.createId
       );
     } catch (error) {
+      Swal.fire("Error!", "Delegation failed.", "error");
       loading = false;
       return;
     }
+    let newDelegated = await getDelegatedVeOcean($userAddress);
+    delegated.update(() => newDelegated);
     onDelegationChange();
-    delegated.update(() => $veOceanWithDelegations);
+    Swal.fire(
+      "Success!",
+      `You've delegated you veOCEAN allocation!`,
+      "success"
+    );
     loading = false;
   };
 
@@ -66,11 +79,18 @@
     try {
       await cancelDelegation($veDelegation.tokenId, $networkSigner);
     } catch (error) {
+      Swal.fire("Error!", "Cancel delegation failed.", "error");
       loading = false;
       return;
     }
+    let newDelegated = await getDelegatedVeOcean($userAddress);
+    delegated.update(() => newDelegated);
     onDelegationChange();
-    delegated.update(() => 0);
+    Swal.fire(
+      "Success!",
+      `You've canceled your veOCEAN allocation!`,
+      "success"
+    );
     loading = false;
   };
 

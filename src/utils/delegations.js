@@ -8,9 +8,9 @@ import moment from "moment";
 
 const veDelegationABI = VeDelegationABI.default
 
-export const GET_DELEGATIONS = gql`
+export const GET_USER_LAST_DELEGATION = gql`
   query userDelegation($userAddress: String!) {
-    veDelegations(where: {delegator_contains: $userAddress}, orderBy: block, orderDirection: desc, first: 1){
+    veDelegations(where: {delegator_contains: $userAddress}, orderBy: block, orderDirection: desc){
       id
       delegator{
         id
@@ -88,14 +88,14 @@ export const getReceivedDelegation = async(userAddress) => {
   }
 }
 
-export const getTokenId = async(userAddress) => {
+export const getTokenId = async(userAddress, id) => {
   try {
     const contract = new ethers.Contract(
       getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
       veDelegationABI, 
       get(networkSigner)
     );
-    const tokenId = await contract.get_token_id(userAddress,1)
+    const tokenId = await contract.get_token_id(userAddress, id)
     return tokenId
   } catch (error) {
     console.log(error)
@@ -104,7 +104,7 @@ export const getTokenId = async(userAddress) => {
 }
 
 export const delegate = async(delegator, receiver, oceanUnlockDate, signer, tokenId) => {
-  const id = Math.floor(Math.random() * 10000)
+  const id = tokenId + 1
   try {
     const contract = new ethers.Contract(
       getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
@@ -114,7 +114,7 @@ export const delegate = async(delegator, receiver, oceanUnlockDate, signer, toke
     const calcGasLimit = await contract.estimateGas.create_boost(delegator, receiver, 10000, moment().unix(), oceanUnlockDate.unix(), id)
     const resp = await contract.create_boost(delegator, receiver, 10000, moment().unix(), oceanUnlockDate.unix(), id, {gasLimit:BigInt(calcGasLimit) + BigInt(10000)})
     await resp.wait()
-    return resp
+    return id
   } catch (error) {
     console.log(error)
     throw error;
@@ -133,7 +133,6 @@ export const delegate = async(delegator, receiver, oceanUnlockDate, signer, toke
       await resp.wait()
       return resp
     } catch (error) {
-      console.log(error)
       throw error;
     }
   }
