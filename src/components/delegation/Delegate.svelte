@@ -5,16 +5,12 @@
   import * as yup from "yup";
   import moment from "moment";
   import { createForm } from "svelte-forms-lib";
-  import {
-    oceanUnlockDate,
-    veOceanWithDelegations,
-  } from "../../stores/veOcean.js";
+  import { oceanUnlockDate } from "../../stores/veOcean.js";
   import { userAddress, networkSigner } from "../../stores/web3.js";
   import { delegated, veDelegation } from "../../stores/delegation.js";
   import {
     delegate,
     cancelDelegation,
-    getTokenId,
     getDelegatedVeOcean,
   } from "../../utils/delegations.js";
   import Swal from "sweetalert2";
@@ -113,7 +109,7 @@
     </p>
     <p class="message">
       Be aware that rewards are going to be dispensed to you by the delegation
-      receiver.
+      receiver who may take a percentage.
     </p>
     <div class="delegateContainer">
       {#if $delegated > 0}
