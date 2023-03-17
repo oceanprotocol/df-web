@@ -1,119 +1,157 @@
 <script>
-    import { onMount } from 'svelte';
-    import Card from "../common/Card.svelte"
-    import Input from "../common/Input.svelte"
-    import Button from "../common/Button.svelte"
-    import ItemWithLabel from "../common/ItemWithLabel.svelte"
-    import * as yup from "yup"
-    import moment from "moment"
-    import { createForm } from "svelte-forms-lib";
-    import {oceanUnlockDate, veOceanWithDelegations} from "../../stores/veOcean.js"
-    import {userAddress, networkSigner} from "../../stores/web3.js"
-    import {delegated, delegationReceived, veDelegation} from "../../stores/delegation.js"
-    import {delegate, cancelDelegation} from "../../utils/delegations.js"
+  import Card from "../common/Card.svelte";
+  import Input from "../common/Input.svelte";
+  import Button from "../common/Button.svelte";
+  import * as yup from "yup";
+  import moment from "moment";
+  import { createForm } from "svelte-forms-lib";
+  import {
+    oceanUnlockDate,
+    veOceanWithDelegations,
+  } from "../../stores/veOcean.js";
+  import { userAddress, networkSigner } from "../../stores/web3.js";
+  import { delegated, veDelegation } from "../../stores/delegation.js";
+  import { delegate, cancelDelegation } from "../../utils/delegations.js";
 
-    let loading = false;
-    export let onDelegationChange;
+  let loading = false;
+  export let onDelegationChange;
 
-    let schema = yup.object().shape({
-        walletAddress: yup.string().required("Wallet address is requred").label("Wallet address")
-    });
+  let schema = yup.object().shape({
+    walletAddress: yup
+      .string()
+      .required("Wallet address is requred")
+      .label("Wallet address"),
+  });
 
-    let fields = {
-        walletAddress: $veDelegation && $delegated>0 ? `${$veDelegation.receiver.id?.substr(0, 6)}...${$veDelegation.receiver.id?.substr(
-                            $veDelegation.receiver.id?.length - 6
-                        )}` : ""
-    };
+  let fields = {
+    walletAddress:
+      $veDelegation && $delegated > 0
+        ? `${$veDelegation.receiver.id?.substr(
+            0,
+            6
+          )}...${$veDelegation.receiver.id?.substr(
+            $veDelegation.receiver.id?.length - 6
+          )}`
+        : "",
+  };
 
-    const delegateVeOcean = async (values) => {
-        loading = true
-        if(moment($oceanUnlockDate).diff(moment(), 'days') < 7){
-            errors.set({walletAddress : 'Current lock period must be grater than 1 week'})
-            loading = false
-            return
-        }
-        try{
-            await delegate($userAddress, values.walletAddress, $oceanUnlockDate, $networkSigner, undefined)
-        }catch(error){
-            loading = false
-            return
-        }    
-        onDelegationChange()
-        delegated.update(() => $veOceanWithDelegations)
-        loading = false
+  const delegateVeOcean = async (values) => {
+    loading = true;
+    if (moment($oceanUnlockDate).diff(moment(), "days") < 7) {
+      errors.set({
+        walletAddress: "Current lock period must be grater than 1 week",
+      });
+      loading = false;
+      return;
     }
-
-    const cancelVeOceanDelegation = async () => {
-        loading = true
-        try{
-            await cancelDelegation($veDelegation.tokenId, $networkSigner)
-        }catch(error){
-            loading = false
-            return
-        }
-        onDelegationChange()
-        delegated.update(() => 0)
-        loading = false
+    try {
+      await delegate(
+        $userAddress,
+        values.walletAddress,
+        $oceanUnlockDate,
+        $networkSigner,
+        undefined
+      );
+    } catch (error) {
+      loading = false;
+      return;
     }
+    onDelegationChange();
+    delegated.update(() => $veOceanWithDelegations);
+    loading = false;
+  };
 
-    const { form, errors, handleSubmit } = createForm({
-        initialValues: fields,
-        validationSchema: schema,
-        onSubmit: (values) => {$veDelegation && delegated>0 ? removeVeOceanDelegation($veDelegation.tokenId) : delegateVeOcean(values)},
-    });
+  const cancelVeOceanDelegation = async () => {
+    loading = true;
+    try {
+      await cancelDelegation($veDelegation.tokenId, $networkSigner);
+    } catch (error) {
+      loading = false;
+      return;
+    }
+    onDelegationChange();
+    delegated.update(() => 0);
+    loading = false;
+  };
 
+  const { form, errors, handleSubmit } = createForm({
+    initialValues: fields,
+    validationSchema: schema,
+    onSubmit: (values) => {
+      $veDelegation && delegated > 0
+        ? removeVeOceanDelegation($veDelegation.tokenId)
+        : delegateVeOcean(values);
+    },
+  });
 </script>
 
 <div class={`container`}>
-    <Card title="Delegate">
-        <p class="message">You will delegate your entire veOCEAN until your current lock will end.</p>
-        <p class="message">You can cancel your delegated veOCEAN at any time.</p>
-        <div class="delegateContainer">
-            {#if $delegated > 0}
-            <fragment>
-                <span class="delegatedText">
-                    Delegated to 
-                        <b>
-                            {`${$veDelegation ? `${$veDelegation.receiver.id?.substr(0, 6)}...${$veDelegation.receiver.id?.substr(
-                            $veDelegation.receiver.id?.length - 6
-                            )}` : ""}`}
-                        </b>
-                </span>
-                <Button
-                    text={"Cancel delegation"}
-                    fullWidth={true}
-                    {loading}
-                    onclick={() => cancelVeOceanDelegation()}
-                    className="cancelDelegationButton"
-                    type="button"
-                />
-                </fragment>
-            {:else}
-            <form class="form" on:submit={handleSubmit}>
-                <div class="inputContainer">
-                    <Input
-                        type="text"
-                        label="Receiver wallet address"
-                        name="receiverWalletAddress"
-                        placeholder="0x000..."
-                        error={$errors.walletAddress}
-                        disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment()) || $delegated > 0}
-                        direction="column"
-                        bind:value={$form.walletAddress}
-                    />
-                </div>
-                <Button
-                    text={"Delegate"}
-                    fullWidth={true}
-                    {loading}
-                    disabled={!$oceanUnlockDate || moment($oceanUnlockDate).isBefore(moment())}
-                    type="submit"
-                />
-            </form>
-            {/if}
-        </div>
-      </Card>
+  <Card title="Delegate">
+    <p class="message">
+      You will delegate your entire veOCEAN allocation until your current lock
+      will end, and you can cancel at any time.
+    </p>
+    <p class="message">
+      Be aware that rewards are going to be dispensed to you by the delegation
+      receiver.
+    </p>
+    <div class="delegateContainer">
+      {#if $delegated > 0}
+        <fragment>
+          <span class="delegatedText">
+            Delegated to
+            <b>
+              {`${
+                $veDelegation
+                  ? `${$veDelegation.receiver.id?.substr(
+                      0,
+                      6
+                    )}...${$veDelegation.receiver.id?.substr(
+                      $veDelegation.receiver.id?.length - 6
+                    )}`
+                  : ""
+              }`}
+            </b>
+          </span>
+          <Button
+            text={"Cancel delegation"}
+            fullWidth={true}
+            {loading}
+            onclick={() => cancelVeOceanDelegation()}
+            className="cancelDelegationButton"
+            type="button"
+          />
+        </fragment>
+      {:else}
+        <form class="form" on:submit={handleSubmit}>
+          <div class="inputContainer">
+            <Input
+              type="text"
+              label="Receiver wallet address"
+              name="receiverWalletAddress"
+              placeholder="0x000..."
+              error={$errors.walletAddress}
+              disabled={!$oceanUnlockDate ||
+                moment($oceanUnlockDate).isBefore(moment()) ||
+                $delegated > 0}
+              direction="column"
+              bind:value={$form.walletAddress}
+            />
+          </div>
+          <Button
+            text={"Delegate"}
+            fullWidth={true}
+            {loading}
+            disabled={!$oceanUnlockDate ||
+              moment($oceanUnlockDate).isBefore(moment())}
+            type="submit"
+          />
+        </form>
+      {/if}
+    </div>
+  </Card>
 </div>
+
 <style>
   .container {
     display: flex;
@@ -122,24 +160,24 @@
     justify-content: flex-start;
     width: 100%;
     padding-top: calc(var(--spacer) * 2);
-    }
-    .form{
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        width: 100%;
-    }
-    .delegateContainer{
-        padding: calc(var(--spacer) / 2) 0;
-    }
-    .inputContainer{
-        min-width: 200px;
-        margin-right: calc(var(--spacer)/2); 
-    }
-    :global(.cancelDelegationButton){
-        margin-top: calc(var(--spacer) / 4) !important;
-    }
-    .delegatedText{
-        font-weight: bold;
-    }
+  }
+  .form {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+  }
+  .delegateContainer {
+    padding: calc(var(--spacer) / 2) 0;
+  }
+  .inputContainer {
+    min-width: 200px;
+    margin-right: calc(var(--spacer) / 2);
+  }
+  :global(.cancelDelegationButton) {
+    margin-top: calc(var(--spacer) / 4) !important;
+  }
+  .delegatedText {
+    font-weight: bold;
+  }
 </style>
