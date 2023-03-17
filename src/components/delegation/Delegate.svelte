@@ -5,13 +5,17 @@
   import * as yup from "yup";
   import moment from "moment";
   import { createForm } from "svelte-forms-lib";
-  import { oceanUnlockDate } from "../../stores/veOcean.js";
+  import {
+    oceanUnlockDate,
+    veOceanWithDelegations,
+  } from "../../stores/veOcean.js";
   import { userAddress, networkSigner } from "../../stores/web3.js";
   import { delegated, veDelegation } from "../../stores/delegation.js";
   import {
     delegate,
     cancelDelegation,
     getDelegatedVeOcean,
+    getUserVotingPowerWithDelegations,
   } from "../../utils/delegations.js";
   import Swal from "sweetalert2";
 
@@ -61,6 +65,10 @@
     }
     let newDelegated = await getDelegatedVeOcean($userAddress);
     delegated.update(() => newDelegated);
+    let newVeOceansWithDelegations = await getUserVotingPowerWithDelegations(
+      $userAddress
+    );
+    veOceanWithDelegations.update(() => newVeOceansWithDelegations);
     onDelegationChange();
     Swal.fire(
       "Success!",
@@ -81,6 +89,10 @@
     }
     let newDelegated = await getDelegatedVeOcean($userAddress);
     delegated.update(() => newDelegated);
+    let newVeOceansWithDelegations = await getUserVotingPowerWithDelegations(
+      $userAddress
+    );
+    veOceanWithDelegations.update(() => newVeOceansWithDelegations);
     onDelegationChange();
     Swal.fire(
       "Success!",
