@@ -26,7 +26,6 @@ export const columnsData = [
   { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
   { key: "ownerallocation", value:"OwnerAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_veocean_owner_allocation},
   { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
-  { key: "publishersreward", value:"PublishersReward" },
 ]
 
 export const defaultColumns = ["Title", "RoundVolume", "RoundAPY","LastRoundAPY","CurrentAllocation", "OwnerAllocation", "MyAllocation"]
