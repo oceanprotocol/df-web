@@ -12,8 +12,9 @@
   import {
     filterDataByUserAllocation,
     filterDataByOwner,
+    filterDataBy2xers,
     filterOptions,
-    checkOwnerHasRows,
+    assignRowsState,
   } from "../../utils/data";
   import {
     dataAllocations,
@@ -89,6 +90,9 @@
         );
         break;
       case "2":
+        filteredDatasets = filterDataBy2xers(rowData, $userAddress);
+        break;
+      case "3":
         filteredDatasets = filterDataByOwner(rowData, $userAddress);
         break;
       default:
@@ -324,9 +328,10 @@
         headers={colData}
         pageSize={pagination.pageSize}
         page={pagination.page}
-        rows={filteredDatasets
-          ? checkOwnerHasRows(filteredDatasets, $userAddress)
-          : checkOwnerHasRows(rowData, $userAddress)}
+        rows={assignRowsState((filteredDatasets
+          ? filteredDatasets
+          : rowData), $userAddress)
+        }
         class="customTable"
       >
         <Toolbar size="sm">
@@ -377,13 +382,6 @@
                         hideIcon
                       />
                     </div>
-                    {#if $userAddress.toLowerCase() === row.owner}
-                      <CustomTooltip
-                        text={"Publishers now receive 2x effective reward! All veOCEAN allocated to an asset you’ve published is treated as 2x stake for the rewards calculation."}
-                        direction="bottom"
-                        size="small"
-                      />
-                    {/if}
                   </span>
                 {/if}
               </div>
@@ -404,6 +402,14 @@
               dataId={row.id}
               showAvailable={false}
             />
+          {:else if cell.key === "publishersreward"}
+            {#if cell.value}
+                <CustomTooltip
+                  text={"Publishers now receive 2x effective reward! All veOCEAN allocated to an asset you’ve published is treated as 2x stake for the rewards calculation."}
+                  direction="bottom"
+                  size="small"
+                />
+              {/if}
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
         </svelte:fragment>
       </DataTable>
@@ -470,15 +476,33 @@
     background-color: var(--brand-white);
   }
   tr[data-row*="owned"] {
-    background-color: var(--brand-alert-yellow);
-  }
-
-  tr[data-row*="owned"] .ownerContainer, tr[data-row*="owned"] .ownerContainer span {
-    color: var(--brand-black);
+    background-color: var(--brand-rank-red-bg);
   }
 
   tr[data-row*="owned"]:hover {
-    background-color: var(--brand-alert-yellow) !important;
+    background-color: var(--brand-rank-red-bg) !important; 
+  }
+
+  tr[data-row*="owned"] .ownerContainer, tr[data-row*="owned"] .ownerContainer span,
+  tr[data-row*="allocated"] .ownerContainer, tr[data-row*="allocated"] .ownerContainer span,
+  tr[data-row*="2xers"] .ownerContainer, tr[data-row*="2xers"] .ownerContainer span  {
+    color: var(--brand-black);
+  }
+
+  tr[data-row*="allocated"] {
+    background-color: var(--brand-rank-gray-bg);
+  }
+
+  tr[data-row*="allocated"]:hover {
+    background-color: var(--brand-rank-gray-bg) !important; 
+  }
+
+  tr[data-row*="2xers"] {
+    background-color: var(--brand-rank-yellow-bg);
+  }
+
+  tr[data-row*="2xers"]:hover {
+    background-color: var(--brand-rank-yellow-bg) !important; 
   }
 
   .ownerContainer {
