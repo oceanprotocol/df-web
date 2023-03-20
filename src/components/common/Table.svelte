@@ -483,12 +483,6 @@
     background-color: var(--brand-rank-red-bg) !important; 
   }
 
-  tr[data-row*="owned"] .ownerContainer, tr[data-row*="owned"] .ownerContainer span,
-  tr[data-row*="allocated"] .ownerContainer, tr[data-row*="allocated"] .ownerContainer span,
-  tr[data-row*="2xers"] .ownerContainer, tr[data-row*="2xers"] .ownerContainer span  {
-    color: var(--brand-black);
-  }
-
   tr[data-row*="allocated"] {
     background-color: var(--brand-rank-gray-bg);
   }
@@ -503,6 +497,12 @@
 
   tr[data-row*="2xers"]:hover {
     background-color: var(--brand-rank-yellow-bg) !important; 
+  }
+  tr[data-row*="2xers"] .ownerContainer,
+  tr[data-row*="2xers"] .ownerContainer span,
+  tr[data-row*="2xers"] td {
+    color: var(--brand-black);
+    font-weight: 800;
   }
 
   .ownerContainer {
