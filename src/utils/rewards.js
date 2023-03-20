@@ -81,6 +81,28 @@ export const getActiveAPY = async (userAddress) => {
   return data.apy ? data.apy * 100: 0;
 }
 
+export const getRoundAPY = async (userAddress) => {
+  let res;
+  try {
+    res = await fetch(`${process.env.BACKEND_API}/rewards_summary`, {
+      method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "query":{
+            "LP_addr": userAddress ? userAddress.toLowerCase() : ''
+          }
+        }),
+    });
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
+  let data = await res.json();
+  return data.apy ? data.apy * 100: 0;
+}
+
 export const calcTotalAPY = (activeAPY, passiveAPY) => {
   let wpr_active = convertAPYtoWPR(activeAPY)
   let wpr_passive = convertAPYtoWPR(passiveAPY)

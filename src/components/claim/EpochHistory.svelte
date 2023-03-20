@@ -1,9 +1,11 @@
 <script>
   import { DataTable, Pagination } from "carbon-components-svelte";
   import * as epochs from "../../utils/metadata/epochs/epochs.json";
+  import { getRoundAPY } from "../../utils/rewards";
+  import { userAddress } from "../../stores/web3";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
-  
+
   let rows = [];
   let pagination = { pageSize: 100, page: 1 };
   let loading = true;
@@ -16,7 +18,9 @@
     },
     { key: "date_start", value: "Start Date" },
     { key: "passive", value: "Passive Rewards" },
+    { key: "passiveAPY", value: "Passive APY" },
     { key: "active", value: "Active Rewards" },
+    { key: "activeAPY", value: "Active APY" },
   ];
 
   const init = () => {
@@ -27,6 +31,7 @@
         )
       )
     );
+    let apys = getRoundAPY();
     rows.forEach((row) => {
       row.date_start = moment(row.date_start).format("DD-MMM-YYYY");
       row.passive = `${row.passive} OCEAN`;
@@ -40,33 +45,40 @@
   };
 
   init();
+
+  const addUserAPYs = () => {
+    let userAPYs = getRoundAPY($userAddress);
+    console.log(userAPYs);
+  };
+
+  $: $userAddress && addUserAPYs();
 </script>
 
 <h2 class="title">Data Farming History</h2>
 <div class="epochHistoryContainer">
-<div class="epochHistoryTableContainer">
-  <DataTable sortable {headers} {rows} class="customTable">
-    <svelte:fragment slot="cell-header" let:header>
-      <div class="headerContainer">
-        {header.value}
-        {#if header.tooltip}
-          <CustomTooltip
-            text={header.tooltip}
-            direction={header.tooltipDirection
-              ? header.tooltipDirection
-              : "top"}
-          />
-        {/if}
-      </div>
-    </svelte:fragment>
-  </DataTable>
-</div>
+  <div class="epochHistoryTableContainer">
+    <DataTable sortable {headers} {rows} class="customTable">
+      <svelte:fragment slot="cell-header" let:header>
+        <div class="headerContainer">
+          {header.value}
+          {#if header.tooltip}
+            <CustomTooltip
+              text={header.tooltip}
+              direction={header.tooltipDirection
+                ? header.tooltipDirection
+                : "top"}
+            />
+          {/if}
+        </div>
+      </svelte:fragment>
+    </DataTable>
+  </div>
   <Pagination
-      bind:pageSize={pagination.pageSize}
-      bind:page={pagination.page}
-      totalItems={rows.length}
-      pageSizeInputDisabled
-    />
+    bind:pageSize={pagination.pageSize}
+    bind:page={pagination.page}
+    totalItems={rows.length}
+    pageSizeInputDisabled
+  />
 </div>
 
 <style>
@@ -82,7 +94,7 @@
     position: sticky;
     inset-block-start: 0;
   }
-  .epochHistoryContainer{
+  .epochHistoryContainer {
     width: 100%;
     margin: calc(var(--spacer) / 2) 0;
     background-color: var(--brand-white);
