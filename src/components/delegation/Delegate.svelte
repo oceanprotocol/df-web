@@ -121,7 +121,7 @@
     </p>
     <p class="message">
       The wallet address you delegate to it's going to receive 100% of your
-      rewards
+      rewards.
     </p>
     <div class="delegateContainer">
       {#if $delegated > 0}
