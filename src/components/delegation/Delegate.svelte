@@ -119,10 +119,6 @@
       You will delegate your entire veOCEAN allocation until your current lock
       will end, and you can cancel at any time.
     </p>
-    <p class="message">
-      Be aware that your rewards are going to be dispensed to the delegation
-      receiver.
-    </p>
     <div class="delegateContainer">
       {#if $delegated > 0}
         <fragment>
