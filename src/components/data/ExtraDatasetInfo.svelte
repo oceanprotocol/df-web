@@ -10,17 +10,23 @@
     <div class="roundValues">
       <ItemWithLabel
         title="APY"
-        value={`${dataset.roundAPY}%`}
+        value={`${parseFloat(dataset.roundAPY ? dataset.roundAPY : 0).toFixed(
+          3
+        )}%`}
         tooltipMessage={""}
       />
       <ItemWithLabel
         title="APR"
-        value={`${dataset.roundAPY}%`}
+        value={`${parseFloat(dataset.roundAPR ? dataset.roundAPR : 0).toFixed(
+          3
+        )}%`}
         tooltipMessage={""}
       />
       <ItemWithLabel
         title="Yield"
-        value={`${dataset.roundYield}%`}
+        value={`${parseFloat(
+          dataset.roundYield ? dataset.roundYield : 0
+        ).toFixed(3)}%`}
         tooltipMessage={""}
       />
     </div>
@@ -30,17 +36,23 @@
     <div class="roundValues">
       <ItemWithLabel
         title="APY"
-        value={`${dataset.lastRoundAPY}%`}
+        value={`${parseFloat(
+          dataset.lastRoundAPY ? dataset.lastRoundAPY : 0
+        ).toFixed(3)}%`}
         tooltipMessage={""}
       />
       <ItemWithLabel
         title="APR"
-        value={`${dataset.lastRoundAPR}%`}
+        value={`${parseFloat(
+          dataset.lastRoundAPR ? dataset.lastRoundAPR : 0
+        ).toFixed(3)}%`}
         tooltipMessage={""}
       />
       <ItemWithLabel
         title="Yield"
-        value={`${dataset.lastRoundYield}%`}
+        value={`${parseFloat(
+          dataset.lastRoundYield ? dataset.lastRoundYield : 0
+        ).toFixed(3)}%`}
         tooltipMessage={""}
       />
     </div>
