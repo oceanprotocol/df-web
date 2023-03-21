@@ -36,7 +36,7 @@
           <Button
             text={button.text}
             onclick={() => button.onClick(pool)}
-            disabled={button.disabled}
+            disabled={button.disabled} 
           />
         </div>
       {/each}

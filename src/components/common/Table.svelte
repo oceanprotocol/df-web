@@ -285,14 +285,14 @@
         {#if $oceanUnlockDate}
           <Button
             text={"Update allocations"}
-            className="updateAllocationsBtton"
+            className="updateAllocationsBtton plausible-event-name=Button+Update+Allocations"
             onclick={() => updateAllocations()}
             disabled={disabled || loading}
             loading={loading === "UPDATE"}
           />
           <Button
             text={"Reset allocations"}
-            className="updateAllocationsBtton"
+            className="updateAllocationsBtton plausible-event-name=Button+Reset+Allocations"
             onclick={() => updateAllocations(true)}
             disabled={disabled || loading || $totalUserAllocation < 1}
             secondary
@@ -301,7 +301,7 @@
         {:else}
           <Button
             text={"Get allocations"}
-            className="updateAllocationsBtton"
+            className="updateAllocationsBtton plausible-event-name=Button+Get+Allocations"
             onclick={() => navigate("veocean")}
           />
         {/if}
@@ -354,19 +354,21 @@
                 textColor={row.ispurgatory ? 'var(--brand-alert-red)' : 'var(--brand-black)'}
                 tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
               />
+              {#if row.owner}
               <span class="ownerContainer">
                 owned by
                 <div class="ownerAddressContainer">
                   <Link 
                     url={`https://market.oceanprotocol.com/profile/${row.owner}`} 
-                    text= {row.owner.substr(0, 6)}...{row.owner.substr(
-                            row.owner.length - 6
+                    text= {row.owner?.substr(0, 6)}...{row.owner?.substr(
+                            row.owner?.length - 6
                           )}
-                    className="owner"
+                    className="owner plausible-event-name=Link+to+ocean+market+profile"
                     hideIcon
                   />
                 </div>
               </span>
+              {/if}
             </div>
           </div>
           {:else if cell.key === "myallocation"}
