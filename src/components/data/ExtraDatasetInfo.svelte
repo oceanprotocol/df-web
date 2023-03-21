@@ -49,12 +49,11 @@
 
 <style>
   .container {
-  }
-  .roundContainer {
-    margin-bottom: var(--spacer);
-  }
-  .container div:last-child {
-    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: calc(var(--spacer) / 2);
+    margin-left: 0;
   }
   p {
     font-size: var(--font-size-large);
