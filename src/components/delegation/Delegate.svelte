@@ -120,7 +120,7 @@
       will end, and you can cancel at any time.
     </p>
     <p class="message">
-      The wallet address you delegate to it's going to receive 100% of your
+      The wallet address you delegate to is going to receive 100% of your
       rewards.
     </p>
     <div class="delegateContainer">
