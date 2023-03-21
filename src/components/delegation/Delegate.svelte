@@ -72,7 +72,7 @@
     onDelegationChange();
     Swal.fire(
       "Success!",
-      `You've delegated you veOCEAN allocation!`,
+      `You've delegated your veOCEAN allocation!`,
       "success"
     );
     loading = false;
