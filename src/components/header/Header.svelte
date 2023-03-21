@@ -2,8 +2,6 @@
   import WalletConnect from "./WalletConnect.svelte";
   import NetworkSelection from "./NetworkSelection.svelte";
   import { Link, useLocation } from "svelte-navigator";
-  import { oceanUnlockDate } from "../../stores/veOcean";
-  import moment from "moment";
 
   let aboutURL = "https://docs.oceanprotocol.com/veocean-data-farming-tutorial";
   const location = useLocation();
@@ -27,22 +25,34 @@
   <nav>
     <ul>
       <li class:active={$location.pathname === "/veocean"}>
-        <Link to="/veocean" class="link plausible-event-name=Link+to+veOcean+page">veOCEAN</Link>
+        <Link
+          to="/veocean"
+          class="link plausible-event-name=Link+to+veOcean+page">veOCEAN</Link
+        >
       </li>
       <li class:active={$location.pathname === "/datafarming"}>
-        <Link to="/datafarming" class="link plausible-event-name=Link+to+datafarming+page">FARMS</Link>
+        <Link
+          to="/datafarming"
+          class="link plausible-event-name=Link+to+datafarming+page">FARMS</Link
+        >
+      </li>
+      <li class:active={$location.pathname === "/activerewards"}>
+        <Link
+          to="/activerewards"
+          class="link plausible-event-name=Link+to+activerewards+page"
+          >REWARDS</Link
+        >
       </li>
       <li class:active={$location.pathname === "/delegation"}>
         <Link to="/delegation" class="link">DELEGATE</Link>
-      </li>
-      <li class:active={$location.pathname === "/activerewards"}>
-        <Link to="/activerewards" class="link plausible-event-name=Link+to+activerewards+page">REWARDS</Link>
       </li>
       <li class:active={false}>
         <a
           href={aboutURL}
           target="_blank"
-          class="link plausible-event-name=Link+external+to+about+blog+post">ABOUT</a
+          rel="noreferrer"
+          class="link plausible-event-name=Link+external+to+about+blog+post"
+          >ABOUT</a
         >
       </li>
     </ul>
@@ -67,7 +77,7 @@
     display: flex;
   }
 
-  .logo{
+  .logo {
     margin-bottom: 0;
   }
 
