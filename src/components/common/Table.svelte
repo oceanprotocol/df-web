@@ -136,9 +136,8 @@
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailableTemporary = totalAvailable + step;
-    let row = rowData[rowData.findIndex((element) => element.id === id)];
-    row.myallocation = value;
-    row.myveocean = parseFloat(row.currentallocation * value / 100).toFixed(3);
+    rowData[rowData.findIndex((element) => element.id === id)].myallocation = value;
+    rowData[rowData.findIndex((element) => element.id === id)].myveocean = parseFloat(rowData[rowData.findIndex((element) => element.id === id)].currentallocation * value / 100).toFixed(3);
   };
 
   const updateTotalAllocation = (id, value) => {
