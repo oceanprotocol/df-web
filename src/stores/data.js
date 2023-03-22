@@ -20,6 +20,12 @@ export const columnsData = [
     display: (volume) => '$' + volume,
     tooltip: descriptions.default.tooltip_datafarming_round_consume
   },
+  {
+    key: "lastRoundVolume",
+    value: "LastRoundVolume",
+    display: (volume) => '$' + volume,
+    tooltip: descriptions.default.tooltip_datafarming_last_round_consume
+  },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
   { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
@@ -73,6 +79,7 @@ function getRow(dataInfo, key) {
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
     roundvolume: parseFloat(dataInfo.volume).toFixed(3),
+    lastRoundVolume: parseFloat(dataInfo.lastRoundVolume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }
@@ -104,6 +111,8 @@ export async function loadDatasets(nftsApi, allocations) {
   currentRoundDatasets.forEach((datasetInfo, key) => {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apy
+    datasetInfo.lastRoundVolume = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.volume
+    datasetInfo.lastRoundVolume = datasetInfo.lastRoundVolume > 0 ? datasetInfo.lastRoundVolume : 0.00
     newDatasets.push(getRow(datasetInfo, key));
   });
   datasets.set(newDatasets);
