@@ -136,8 +136,9 @@
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailableTemporary = totalAvailable + step;
-    rowData[rowData.findIndex((element) => element.id === id)].myallocation =
-      value;
+    let row = rowData[rowData.findIndex((element) => element.id === id)];
+    row.myallocation = value;
+    row.myveocean = parseFloat(row.currentallocation * value / 100).toFixed(3);
   };
 
   const updateTotalAllocation = (id, value) => {
@@ -487,7 +488,6 @@
     display: flex;
     align-items: center;
   }
-
   .cellContainer.owned {
     background-color: var(--brand-rank-red-bg);
   }
@@ -509,14 +509,13 @@
     color: var(--brand-black);
     font-weight: 800;
   }
+  .bonus .title{
+    font-weight: 400;
+  }
 
   .cellContainer.bonus:hover {
     background-color: var(--brand-rank-yellow-bg) !important; 
   }
-
-  .cellContainer.bonus:first-child {
-    font-weight: 400;
-  } 
   .ownerContainer {
     display: flex;
     color: var(--brand-grey-light);
