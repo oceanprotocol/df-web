@@ -14,7 +14,6 @@
     filterDataByOwner,
     filterDataBy2xers,
     filterOptions,
-    assignRowsState,
   } from "../../utils/data";
   import {
     dataAllocations,
@@ -230,6 +229,16 @@
     updateDisable();
   }
 
+
+  function getCellContainerClasses(row) {
+    const { id, owner, myallocation, ownerallocation } = row;
+    const isOwned = owner === $userAddress?.toLowerCase();
+    const hasAllocated = myallocation > 0;
+    const hasBonusAllocation = ownerallocation > 0 || (isOwned && hasAllocated);
+
+    return `cellContainer ${isOwned ? 'owned ' : ''}${hasAllocated ? 'allocated ' : ''}${hasBonusAllocation ? 'bonus' : ''}`;
+  };
+
   function updateDisable() {
     disabled =
       $userBalances[
@@ -272,6 +281,7 @@
 
   // init the page state
   updateDisable();
+  
 </script>
 
 {#if colData && rowData}
@@ -328,10 +338,7 @@
         headers={colData}
         pageSize={pagination.pageSize}
         page={pagination.page}
-        rows={assignRowsState((filteredDatasets
-          ? filteredDatasets
-          : rowData), $userAddress)
-        }
+        rows={filteredDatasets ? filteredDatasets : rowData}
         class="customTable"
       >
         <Toolbar size="sm">
@@ -349,68 +356,64 @@
           <div class="headerContainer">
             {header.value}
             {#if header.tooltip}
-              <CustomTooltip text={header.tooltip} direction="bottom" />
+              <CustomTooltip text={header.tooltip} direction={
+                header.value === "Title" ? "right" : "bottom"
+              } />
             {/if}
           </div>
         </svelte:fragment>
         <svelte:fragment slot="cell" let:cell let:row>
-          {#if cell.key === "title"}
-            <div class={"title"}>
-              <NetworkIcon name={row.network} minimal />
-              <div class="textContainer">
-                <TextWithNetworkIcon
-                  className={row.ispurgatory ? "purgatory" : ""}
-                  text={cell.value}
-                  url={row.action}
-                  textColor={row.ispurgatory
-                    ? "var(--brand-alert-red)"
-                    : "var(--brand-black)"}
-                  tooltipMessage={row.ispurgatory
-                    ? "Item in purgatory. Remove your allocations."
-                    : undefined}
-                />
-                {#if row.owner}
-                  <span class="ownerContainer">
-                    owned by
-                    <div class="ownerAddressContainer">
-                      <Link
-                        url={`https://market.oceanprotocol.com/profile/${row.owner}`}
-                        text={
-                          $userAddress.toLowerCase() === row.owner ? 'you' :`${row.owner.substr(0, 6)}...${row.owner.substr(row.owner.length - 6)}`
-                        }
-                        className="owner"
-                        hideIcon
-                      />
-                    </div>
-                  </span>
-                {/if}
+          <div class={getCellContainerClasses(row)}>
+            {#if cell.key === "title"}
+              <div class={"title"}> 
+                <NetworkIcon name={row.network} minimal />
+                <div class="textContainer">
+                  <TextWithNetworkIcon
+                    className={row.ispurgatory ? "purgatory" : ""}
+                    text={cell.value}
+                    url={row.action}
+                    textColor={row.ispurgatory
+                      ? "var(--brand-alert-red)"
+                      : "var(--brand-black)"}
+                    tooltipMessage={row.ispurgatory
+                      ? "Item in purgatory. Remove your allocations."
+                      : undefined}
+                  />
+                  {#if row.owner}
+                    <span class="ownerContainer">
+                      owned by
+                      <div class="ownerAddressContainer">
+                        <Link
+                          url={`https://market.oceanprotocol.com/profile/${row.owner}`}
+                          text={
+                            $userAddress.toLowerCase() === row.owner ? 'you' :`${row.owner.substr(0, 6)}...${row.owner.substr(row.owner.length - 6)}`
+                          }
+                          className="owner"
+                          hideIcon
+                        />
+                      </div>
+                    </span>
+                  {/if}
+                </div>
               </div>
-            </div>
-          {:else if cell.key === "myallocation"}
-            <ShareInput
-              currentValue={cell.value}
-              available={row.ispurgatory
-                ? parseInt(
-                    $dataAllocations.find((d) => d.nftAddress == row.nftaddress)
-                      ?.allocated
-                  ) / 100
-                : totalAvailable}
-              onChange={(id, value, step) =>
-                onTotalAvailableAllocationChange(id, value, step)}
-              onBlur={updateTotalAllocation}
-              onFocus={subtractCurrAllocationsFromTotal}
-              dataId={row.id}
-              showAvailable={false}
-            />
-          {:else if cell.key === "publishersreward"}
-            {#if cell.value}
-                <CustomTooltip
-                  text={"Publishers now receive 2x effective reward! All veOCEAN allocated to an asset you’ve published is treated as 2x stake for the rewards calculation."}
-                  direction="bottom"
-                  size="small"
-                />
-              {/if}
-          {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
+            {:else if cell.key === "myallocation"}
+              <ShareInput
+                currentValue={cell.value}
+                available={row.ispurgatory
+                  ? parseInt(
+                      $dataAllocations.find((d) => d.nftAddress == row.nftaddress)
+                        ?.allocated
+                    ) / 100
+                  : totalAvailable}
+                onChange={(id, value, step) =>
+                  onTotalAvailableAllocationChange(id, value, step)}
+                onBlur={updateTotalAllocation}
+                onFocus={subtractCurrAllocationsFromTotal}
+                dataId={row.id}
+                showAvailable={false}
+              />
+            {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
+          </div>
         </svelte:fragment>
       </DataTable>
     </div>
@@ -455,10 +458,13 @@
     justify-content: flex-start;
     align-items: center;
   }
-  :global(.headerContainer .bx--tooltip__label) {
+  :global(.bx--tooltip__label) {
     background-color: transparent !important;
-    width: 18px !important;
+    width: 20px !important;
+    text-align: center;
+    display: flex;
   }
+
   .title {
     display: flex;
     justify-content: center;
@@ -475,36 +481,42 @@
   tr {
     background-color: var(--brand-white);
   }
-  tr[data-row*="owned"] {
+  .cellContainer {
+    padding: calc(var(--spacer) / 4);
+    height: 54px;
+    display: flex;
+    align-items: center;
+  }
+
+  .cellContainer.owned {
     background-color: var(--brand-rank-red-bg);
   }
 
-  tr[data-row*="owned"]:hover {
+  .cellContainer.owned:hover {
     background-color: var(--brand-rank-red-bg) !important; 
   }
 
-  tr[data-row*="allocated"] {
+  .cellContainer.allocated {
     background-color: var(--brand-rank-gray-bg);
   }
 
-  tr[data-row*="allocated"]:hover {
+  .cellContainer.allocated:hover {
     background-color: var(--brand-rank-gray-bg) !important; 
   }
 
-  tr[data-row*="2xers"] {
+  .cellContainer.bonus {
     background-color: var(--brand-rank-yellow-bg);
-  }
-
-  tr[data-row*="2xers"]:hover {
-    background-color: var(--brand-rank-yellow-bg) !important; 
-  }
-  tr[data-row*="2xers"] .ownerContainer,
-  tr[data-row*="2xers"] .ownerContainer span,
-  tr[data-row*="2xers"] td {
     color: var(--brand-black);
     font-weight: 800;
   }
 
+  .cellContainer.bonus:hover {
+    background-color: var(--brand-rank-yellow-bg) !important; 
+  }
+
+  .cellContainer.bonus:first-child {
+    font-weight: 400;
+  } 
   .ownerContainer {
     display: flex;
     color: var(--brand-grey-light);
@@ -537,6 +549,10 @@
   td {
     border-top: 0 !important;
     background-color: transparent !important;
+  }
+
+  .bx--data-table td, .bx--data-table tbody th{
+    padding: 0 !important;
   }
 
   :global(.tableContainer thead) {

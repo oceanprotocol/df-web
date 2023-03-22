@@ -59,6 +59,11 @@
         {/if}
       </div>
     </svelte:fragment>
+    <svelte:fragment slot="cell" let:cell let:row>
+      <div class='cellContainer'>
+        {cell.value}
+      </div>
+    </svelte:fragment>
   </DataTable>
 </div>
   <Pagination
@@ -81,6 +86,10 @@
   :global(.epochHistoryTableContainer thead) {
     position: sticky;
     inset-block-start: 0;
+  }
+
+  .cellContainer {
+    height: auto;
   }
   .epochHistoryContainer{
     width: 100%;

@@ -10,7 +10,7 @@ export let datasets = writable("");
 
 export const columnsData = [
   { key: "network", value: "Network" },
-  { key: "title", value: "Title" },
+  { key: "title", value: "Title", tooltip: descriptions.default.tooltip_datafarming_title },
   { key: "symbol", value: "Symbol" },
   { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
   { key: "lastRoundAPY", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
@@ -25,10 +25,11 @@ export const columnsData = [
   { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
   { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
   { key: "ownerallocation", value:"OwnerAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_veocean_owner_allocation},
+  { key: "myveocean", value:"MyVeOcean", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_my_ve_allocation },
   { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
 ]
 
-export const defaultColumns = ["Title", "RoundVolume", "RoundAPY","LastRoundAPY","CurrentAllocation", "OwnerAllocation", "MyAllocation"]
+export const defaultColumns = ["Title", "RoundVolume", "RoundAPY","LastRoundAPY","CurrentAllocation", "OwnerAllocation", "MyVeOcean", "MyAllocation"]
 
 async function getDatasets(api,roundNumber) {
   let res;
@@ -79,6 +80,7 @@ function getRow(dataInfo, key) {
     allocated: dataInfo.allocation,
     roundvolume: parseFloat(dataInfo.volume).toFixed(3),
     ownerallocation: parseFloat(dataInfo.ve_allocated_realtime_owner).toFixed(3),
+    myveocean: parseFloat(dataInfo.ve_allocated_realtime * dataInfo.allocation / 100).toFixed(3), // TODO: check formula used is correct
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
     publishersreward: dataInfo.ownerallocation > 0 || isowner && dataInfo.allocation > 0
   };
