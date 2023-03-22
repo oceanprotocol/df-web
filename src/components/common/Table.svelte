@@ -428,6 +428,12 @@
     max-height: calc(100vh - 115px - var(--spacer) * 3.7);
     overflow-y: scroll;
   }
+  .tableContainer .bx--tooltip__label {
+    width: 18px !important;
+  }
+  .bx--table-expand__button {
+    width: 30px !important;
+  }
   .tableCustomHeader > div {
     padding: calc(var(--spacer) / 6) 0 !important;
   }
