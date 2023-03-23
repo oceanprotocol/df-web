@@ -13,7 +13,7 @@ export const columnsData = [
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
   { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-  { key: "lastRoundAPY", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+  { key: "lastroundapy", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
   {
     key: "roundvolume",
     value: "RoundVolume",
@@ -21,7 +21,7 @@ export const columnsData = [
     tooltip: descriptions.default.tooltip_datafarming_round_consume
   },
   {
-    key: "lastRoundVolume",
+    key: "lastroundvolume",
     value: "LastRoundVolume",
     display: (volume) => '$' + volume,
     tooltip: descriptions.default.tooltip_datafarming_last_round_consume
@@ -68,7 +68,7 @@ function getRow(dataInfo, key) {
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
     owner: dataInfo.owner_addr,
-    lastRoundAPY: dataInfo.lastRoundAPY,
+    lastroundapy: dataInfo.lastRoundAPY,
     roundapy: dataInfo.apy,
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
@@ -79,7 +79,7 @@ function getRow(dataInfo, key) {
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
     roundvolume: parseFloat(dataInfo.volume).toFixed(3),
-    lastRoundVolume: parseFloat(dataInfo.lastRoundVolume).toFixed(3),
+    lastroundvolume: parseFloat(dataInfo.lastRoundVolume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }
