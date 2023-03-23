@@ -84,23 +84,57 @@ export const getActiveAPY = async (userAddress) => {
 export const getRoundAPY = async (userAddress) => {
   let res;
   try {
-    res = await fetch(`${process.env.BACKEND_API}/rewards_summary`, {
+    res = await fetch(`${process.env.BACKEND_API}/rewardsSummary`, {
       method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
+        body: userAddress ? JSON.stringify({
           "query":{
-            "LP_addr": userAddress ? userAddress.toLowerCase() : ''
+            "LP_addr": userAddress.toLowerCase()
           }
-        }),
+        }) : '',
     });
   } catch (error) {
     console.log(error);
     return 0;
   }
   let data = await res.json();
-  return data.apy ? data.apy * 100: 0;
+  return data
+}
+
+export const getVeOceanBal = async (userAddress) => {
+  let res;
+  try {
+    res = await fetch(`${process.env.BACKEND_API}/vebals`, {
+      method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "fields": [
+              {
+                "expression": {
+                  "pattern": "sum(balance)"
+                },
+              },
+              "round"
+            ],
+            "group": "round"
+          })
+        }
+    );
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
+  let data = await res.json();
+  return data
+}
+
+export const calcActiveAPY = (allo, distributedReward) => {
+  
+  return rewardsSummary
 }
 
 export const calcTotalAPY = (activeAPY, passiveAPY) => {

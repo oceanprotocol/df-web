@@ -1,7 +1,7 @@
 <script>
   import { DataTable, Pagination } from "carbon-components-svelte";
   import * as epochs from "../../utils/metadata/epochs/epochs.json";
-  import { getRoundAPY } from "../../utils/rewards";
+  import { getRoundAPY, getVeOceanBal } from "../../utils/rewards";
   import { userAddress } from "../../stores/web3";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
@@ -23,7 +23,7 @@
     { key: "activeAPY", value: "Active APY" },
   ];
 
-  const init = () => {
+  const init = async () => {
     rows = JSON.parse(
       JSON.stringify(
         epochs.default.filter((epoch) =>
@@ -31,7 +31,9 @@
         )
       )
     );
-    let apys = getRoundAPY();
+    let veBals = await getVeOceanBal();
+    let apys = await getRoundAPY();
+    console.log(apys, veBals);
     rows.forEach((row) => {
       row.date_start = moment(row.date_start).format("DD-MMM-YYYY");
       row.passive = `${row.passive} OCEAN`;
@@ -45,13 +47,6 @@
   };
 
   init();
-
-  const addUserAPYs = () => {
-    let userAPYs = getRoundAPY($userAddress);
-    console.log(userAPYs);
-  };
-
-  $: $userAddress && addUserAPYs();
 </script>
 
 <h2 class="title">Data Farming History</h2>
