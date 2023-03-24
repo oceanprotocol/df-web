@@ -89,11 +89,27 @@ export const getRoundAPY = async (userAddress) => {
         headers: {
           "Content-Type": "application/json"
         },
-        body: userAddress ? JSON.stringify({
+         body: JSON.stringify({
           "query":{
-            "LP_addr": userAddress.toLowerCase()
-          }
-        }) : '',
+            "round": {
+              "$gt":-1
+            }
+          },
+          "fields": [
+            {
+              "expression": {
+                "pattern": "sum(curating_amt)"
+              },
+            },
+            {
+              "expression": {
+                "pattern": "sum(passive_amt)"
+              },
+            },
+            "round",
+          ],
+          "group": "round"
+          })
     });
   } catch (error) {
     console.log(error);
@@ -112,15 +128,54 @@ export const getVeOceanBal = async (userAddress) => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            "fields": [
-              {
-                "expression": {
-                  "pattern": "sum(balance)"
-                },
+          "query":{
+            "round": {
+              "$gt":-1
+            }
+          },
+          "fields": [
+            {
+              "expression": {
+                "pattern": "sum(balance)"
               },
-              "round"
-            ],
-            "group": "round"
+            },
+            "round",
+          ],
+          "group": "round"
+          })
+        }
+    );
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
+  let data = await res.json();
+  return data
+}
+
+export const getDFallocations = async (userAddress) => {
+  let res;
+  try {
+    res = await fetch(`${process.env.BACKEND_API}/nftinfo`, {
+      method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "query":{
+            "round": {
+              "$gt":-1
+            }
+          },
+          "fields": [
+            {
+              "expression": {
+                "pattern": "sum(ocean_allocated)"
+              },
+            },
+            "round",
+          ],
+          "group": "round"
           })
         }
     );

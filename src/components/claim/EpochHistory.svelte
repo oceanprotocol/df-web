@@ -1,7 +1,12 @@
 <script>
   import { DataTable, Pagination } from "carbon-components-svelte";
+  import { convertWPRtoAPY } from "../../utils/rewards.js";
   import * as epochs from "../../utils/metadata/epochs/epochs.json";
-  import { getRoundAPY, getVeOceanBal } from "../../utils/rewards";
+  import {
+    getRoundAPY,
+    getVeOceanBal,
+    getDFallocations,
+  } from "../../utils/rewards";
   import { userAddress } from "../../stores/web3";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
@@ -18,9 +23,9 @@
     },
     { key: "date_start", value: "Start Date" },
     { key: "passive", value: "Passive Rewards" },
-    { key: "passiveAPY", value: "Passive APY" },
+    { key: "passiveapy", value: "Passive APY AVG" },
     { key: "active", value: "Active Rewards" },
-    { key: "activeAPY", value: "Active APY" },
+    { key: "activeapy", value: "Active APY AVG" },
   ];
 
   const init = async () => {
@@ -32,13 +37,36 @@
       )
     );
     let veBals = await getVeOceanBal();
+    let dfAllocation = await getDFallocations($userAddress);
     let apys = await getRoundAPY();
-    console.log(apys, veBals);
+    let newRows = [];
     rows.forEach((row) => {
-      row.date_start = moment(row.date_start).format("DD-MMM-YYYY");
-      row.passive = `${row.passive} OCEAN`;
-      row.active = `${row.active} OCEAN`;
+      let veBal = veBals.find((vb) => vb.round == row.id);
+      let allocation = dfAllocation.find((r) => r.round == row.id);
+      let rewards = apys.find((r) => r.round == row.id);
+      newRows.push({
+        id: row.id,
+        date_start: moment(row.date_start).format("DD-MMM-YYYY"),
+        passiveapy: `${parseFloat(
+          rewards && veBal
+            ? convertWPRtoAPY(
+                rewards["sum(passive_amt)"] / veBal["sum(balance)"]
+              )
+            : 0
+        ).toFixed(2)} %`,
+        activeapy: `${parseFloat(
+          rewards && allocation
+            ? convertWPRtoAPY(
+                rewards["sum(curating_amt)"] /
+                  allocation["sum(ocean_allocated)"]
+              )
+            : 0
+        ).toFixed(2)} %`,
+        passive: `${row.passive} OCEAN`,
+        active: `${row.active} OCEAN`,
+      });
     });
+    rows = newRows;
     rows.sort((first, second) => {
       return second.id - first.id;
     });
