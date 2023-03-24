@@ -4,12 +4,16 @@
   import Toolbar from "carbon-components-svelte/src/DataTable/Toolbar.svelte";
   import ToolbarContent from "carbon-components-svelte/src/DataTable/ToolbarContent.svelte";
   import ToolbarSearch from "carbon-components-svelte/src/DataTable/ToolbarSearch.svelte";
-  import "carbon-components/scss/components/_data-table.scss"
+  import "carbon-components/scss/components/_data-table.scss";
   import Button from "./Button.svelte";
-  import 'carbon-'
+  import "carbon-";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
-  import { filterDataByUserAllocation, filterDataByOwner, filterOptions } from "../../utils/data";
+  import {
+    filterDataByUserAllocation,
+    filterDataByOwner,
+    filterOptions,
+  } from "../../utils/data";
   import {
     dataAllocations,
     totalUserAllocation,
@@ -37,7 +41,6 @@
   import CustomTooltip from "./CustomTooltip.svelte";
   import { navigate } from "svelte-navigator";
   import * as descriptions from "../../utils/metadata/descriptions.json";
-  
 
   // TODO - Fix RowData vs. LPData
   // TODO - RowData == View Only (Network, Datatoken, TVL, DCV)
@@ -53,33 +56,37 @@
   let loading = undefined;
   let tooltipMessage = undefined;
   let tooltipState = undefined;
+  let visibleColData = colData.slice();
   let filterOption = "0";
 
   let columns = {};
   let pagination = { pageSize: 100, page: 1 };
 
-  $:if(filterOption) {
-    filterTable(filterOption)
-  } 
+  $: if (filterOption) {
+    filterTable(filterOption);
+  }
 
   loadVisibleColumns();
 
   function getColumnsFromLocalStorage() {
     columns = JSON.parse(localStorage.getItem("datasetsDisplayedColumns"));
-    colData.forEach((col) => {
+    visibleColData.forEach((col) => {
       if (!columns[col.value] && notHidableColumns.indexOf(col.value) === -1) {
-        colData = colData.filter((colD) => colD.key !== col.key);
+        visibleColData = visibleColData.filter((colD) => colD.key !== col.key);
       }
     });
   }
 
-  function filterTable(option){
+  function filterTable(option) {
     switch (option) {
       case "0":
-        filteredDatasets = undefined
+        filteredDatasets = undefined;
         break;
       case "1":
-        filteredDatasets = filterDataByUserAllocation(rowData, $dataAllocations);
+        filteredDatasets = filterDataByUserAllocation(
+          rowData,
+          $dataAllocations
+        );
         break;
       case "2":
         filteredDatasets = filterDataByOwner(rowData, $userAddress);
@@ -91,7 +98,9 @@
 
   function checkLocalColumnsEqualLocalStorageColumns() {
     if (!localStorage.getItem("allColumns")) return false;
-    return localStorage.getItem("allColumns") === JSON.stringify(colData);
+    return (
+      localStorage.getItem("allColumns") === JSON.stringify(visibleColData)
+    );
   }
 
   function loadVisibleColumns() {
@@ -101,8 +110,8 @@
     ) {
       getColumnsFromLocalStorage();
     } else {
-      localStorage.setItem("allColumns", JSON.stringify(colData));
-      colData.forEach((col) => {
+      localStorage.setItem("allColumns", JSON.stringify(visibleColData));
+      visibleColData.forEach((col) => {
         columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
       });
       localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
@@ -116,10 +125,14 @@
   function onCheck(key, value) {
     columns[key] = value;
     if (value) {
-      colData.splice(2, 0, { key: key.toLowerCase(), value: key });
-      colData = colData;
+      visibleColData.splice(
+        2,
+        0,
+        colData.find((d) => d.value === key)
+      );
+      visibleColData = visibleColData;
     } else {
-      colData = colData.filter((col) => col.value !== key);
+      visibleColData = visibleColData.filter((col) => col.value !== key);
     }
     localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
   }
@@ -263,7 +276,7 @@
   updateDisable();
 </script>
 
-{#if colData && rowData}
+{#if visibleColData && rowData}
   <div>
     <div class="tableCustomHeader">
       <div class="headerValuesContainer">
@@ -307,17 +320,14 @@
         {/if}
       </div>
       <div class="tableActionsContainer">
-        <Dropdown 
-          options={filterOptions}
-          bind:selectedOption={filterOption}
-        />
+        <Dropdown options={filterOptions} bind:selectedOption={filterOption} />
         <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
       </div>
     </div>
     <div class="tableContainer">
       <DataTable
         sortable
-        headers={colData}
+        headers={visibleColData}
         pageSize={pagination.pageSize}
         page={pagination.page}
         rows={filteredDatasets ? filteredDatasets : rowData}
@@ -344,37 +354,46 @@
         </svelte:fragment>
         <svelte:fragment slot="cell" let:cell let:row>
           {#if cell.key === "title"}
-          <div class="title">
-            <NetworkIcon name={row.network} minimal/>
-            <div class="textContainer">
-              <TextWithNetworkIcon
-                className={row.ispurgatory ? "purgatory" : ""}
-                text={cell.value}
-                url={row.action}
-                textColor={row.ispurgatory ? 'var(--brand-alert-red)' : 'var(--brand-black)'}
-                tooltipMessage={row.ispurgatory ? "Item in purgatory. Remove your allocations." : undefined}
-              />
-              {#if row.owner}
-              <span class="ownerContainer">
-                owned by
-                <div class="ownerAddressContainer">
-                  <Link 
-                    url={`https://market.oceanprotocol.com/profile/${row.owner}`} 
-                    text= {row.owner?.substr(0, 6)}...{row.owner?.substr(
-                            row.owner?.length - 6
-                          )}
-                    className="owner plausible-event-name=Link+to+ocean+market+profile"
-                    hideIcon
-                  />
-                </div>
-              </span>
-              {/if}
+            <div class="title">
+              <NetworkIcon name={row.network} minimal />
+              <div class="textContainer">
+                <TextWithNetworkIcon
+                  className={row.ispurgatory ? "purgatory" : ""}
+                  text={cell.value}
+                  url={row.action}
+                  textColor={row.ispurgatory
+                    ? "var(--brand-alert-red)"
+                    : "var(--brand-black)"}
+                  tooltipMessage={row.ispurgatory
+                    ? "Item in purgatory. Remove your allocations."
+                    : undefined}
+                />
+                {#if row.owner}
+                  <span class="ownerContainer">
+                    owned by
+                    <div class="ownerAddressContainer">
+                      <Link
+                        url={`https://market.oceanprotocol.com/profile/${row.owner}`}
+                        text="{row.owner?.substr(0, 6)}...{row.owner?.substr(
+                          row.owner?.length - 6
+                        )}"
+                        className="owner plausible-event-name=Link+to+ocean+market+profile"
+                        hideIcon
+                      />
+                    </div>
+                  </span>
+                {/if}
+              </div>
             </div>
-          </div>
           {:else if cell.key === "myallocation"}
             <ShareInput
               currentValue={cell.value}
-              available={row.ispurgatory ? parseInt($dataAllocations.find((d) =>d.nftAddress == row.nftaddress)?.allocated)/100 : totalAvailable}
+              available={row.ispurgatory
+                ? parseInt(
+                    $dataAllocations.find((d) => d.nftAddress == row.nftaddress)
+                      ?.allocated
+                  ) / 100
+                : totalAvailable}
               onChange={(id, value, step) =>
                 onTotalAvailableAllocationChange(id, value, step)}
               onBlur={updateTotalAllocation}
@@ -389,9 +408,7 @@
     <Pagination
       bind:pageSize={pagination.pageSize}
       bind:page={pagination.page}
-      totalItems={filteredDatasets
-        ? filteredDatasets.length
-        : rowData.length}
+      totalItems={filteredDatasets ? filteredDatasets.length : rowData.length}
       pageSizeInputDisabled
     />
   </div>
@@ -424,7 +441,7 @@
     padding: 0 calc(var(--spacer) / 3);
     margin: 0;
   }
-  .headerContainer{
+  .headerContainer {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -433,28 +450,28 @@
     background-color: transparent !important;
     width: 18px !important;
   }
-  .title{
+  .title {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  .textContainer{
+  .textContainer {
     width: 100%;
-    margin-left: calc(var(--spacer)/8)
+    margin-left: calc(var(--spacer) / 8);
   }
   .purgatory {
     font-size: var(--font-size-small);
     color: var(--brand-alert-red);
   }
-  .ownerContainer{
+  .ownerContainer {
     display: block;
     color: var(--brand-grey-light);
     font-size: var(--font-size-small);
   }
-  .ownerAddressContainer{
+  .ownerAddressContainer {
     display: inline-block;
   }
-  :global(.ownerContainer .owner){
+  :global(.ownerContainer .owner) {
     color: var(--brand-color-primary);
     font-size: var(--font-size-small);
   }
@@ -510,7 +527,7 @@
   .tableContainer .bx--data-table {
     margin-top: calc(var(--spacer) / 2);
   }
-  :global(.bx--search-input){
+  :global(.bx--search-input) {
     font-size: var(--font-size-base);
   }
   :global(tr:has(.purgatory) > td) {
