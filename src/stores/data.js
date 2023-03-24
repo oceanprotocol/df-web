@@ -80,7 +80,7 @@ function getRow(dataInfo, key) {
     allocated: dataInfo.allocation,
     roundvolume: parseFloat(dataInfo.volume).toFixed(3),
     ownerallocation: parseFloat(dataInfo.ve_allocated_realtime_owner).toFixed(3),
-    myveocean: parseFloat(dataInfo.ve_allocated_realtime * dataInfo.allocation / 100).toFixed(3), // TODO: check formula used is correct
+    myveocean: dataInfo.allocation,
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
     publishersreward: dataInfo.ownerallocation > 0 || isowner && dataInfo.allocation > 0
   };

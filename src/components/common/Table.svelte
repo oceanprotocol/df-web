@@ -37,7 +37,7 @@
     userAddress,
   } from "../../stores/web3";
   import Link from "./Link.svelte";
-  import { oceanUnlockDate } from "../../stores/veOcean";
+  import { oceanUnlockDate, veOceanWithDelegations } from "../../stores/veOcean";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import CustomTooltip from "./CustomTooltip.svelte";
   import { navigate } from "svelte-navigator";
@@ -281,7 +281,6 @@
 
   // init the page state
   updateDisable();
-  
 </script>
 
 {#if colData && rowData}
@@ -396,7 +395,9 @@
                   {/if}
                 </div>
               </div>
-            {:else if cell.key === "myallocation"}
+              {:else if cell.key === "myveocean"}
+                {cell.display(parseFloat($veOceanWithDelegations * cell.value / 100).toFixed(3))}
+              {:else if cell.key === "myallocation"}
               <ShareInput
                 currentValue={cell.value}
                 available={row.ispurgatory
