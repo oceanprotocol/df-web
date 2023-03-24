@@ -8,6 +8,7 @@
 "tooltip_veocean_owner_allocation": "veOCEAN amount currently allocated to a dataset by the owner.",
     "tooltip_datafarming_title": "If you're interested in identifying high-performing publishers, you can easily see those who are earning 2x publish reward by the Gold background.",
     "tooltip_datafarming_round_consume": "Total Data Consume Volume of a dataset for the current Data Farming round.",
+    "tooltip_datafarming_last_round_consume": "Total Data Consume Volume of a dataset for the previous round of Data Farming.",
     "tooltip_datafarming_round_apy": "Annual yield of a dataset based on consume volume, compounded weekly.\n\nThis changes every Data Farming round.",
     "tooltip_datafarming_alloc_amt_no_lock": "To access Data Farming and earn Active Rewards, you need veOCEAN.\n\nPlease visit the veOCEAN page and lock OCEAN tokens.",
     "tooltip_datafarming_alloc_amt_has_lock": "veOCEAN percent you have currently allocated.\n\nAllocate veOCEAN to curate good datasets with consume volume and earn Active Rewards.",

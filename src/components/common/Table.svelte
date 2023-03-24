@@ -57,6 +57,7 @@
   let loading = undefined;
   let tooltipMessage = undefined;
   let tooltipState = undefined;
+  let visibleColData = colData.slice();
   let filterOption = "0";
 
   let columns = {};
@@ -70,9 +71,9 @@
 
   function getColumnsFromLocalStorage() {
     columns = JSON.parse(localStorage.getItem("datasetsDisplayedColumns"));
-    colData.forEach((col) => {
+    visibleColData.forEach((col) => {
       if (!columns[col.value] && notHidableColumns.indexOf(col.value) === -1) {
-        colData = colData.filter((colD) => colD.key !== col.key);
+        visibleColData = visibleColData.filter((colD) => colD.key !== col.key);
       }
     });
   }
@@ -101,7 +102,9 @@
 
   function checkLocalColumnsEqualLocalStorageColumns() {
     if (!localStorage.getItem("allColumns")) return false;
-    return localStorage.getItem("allColumns") === JSON.stringify(colData);
+    return (
+      localStorage.getItem("allColumns") === JSON.stringify(visibleColData)
+    );
   }
 
   function loadVisibleColumns() {
@@ -111,8 +114,8 @@
     ) {
       getColumnsFromLocalStorage();
     } else {
-      localStorage.setItem("allColumns", JSON.stringify(colData));
-      colData.forEach((col) => {
+      localStorage.setItem("allColumns", JSON.stringify(visibleColData));
+      visibleColData.forEach((col) => {
         columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
       });
       localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
@@ -126,10 +129,14 @@
   function onCheck(key, value) {
     columns[key] = value;
     if (value) {
-      colData.splice(2, 0, { key: key.toLowerCase(), value: key });
-      colData = colData;
+      visibleColData.splice(
+        2,
+        0,
+        colData.find((d) => d.value === key)
+      );
+      visibleColData = visibleColData;
     } else {
-      colData = colData.filter((col) => col.value !== key);
+      visibleColData = visibleColData.filter((col) => col.value !== key);
     }
     localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
   }
@@ -283,7 +290,7 @@
   updateDisable();
 </script>
 
-{#if colData && rowData}
+{#if visibleColData && rowData}
   <div>
     <div class="tableCustomHeader">
       <div class="headerValuesContainer">
@@ -334,7 +341,7 @@
     <div class="tableContainer">
       <DataTable
         sortable
-        headers={colData}
+        headers={visibleColData}
         pageSize={pagination.pageSize}
         page={pagination.page}
         rows={filteredDatasets ? filteredDatasets : rowData}
@@ -387,7 +394,7 @@
                           text={
                             $userAddress.toLowerCase() === row.owner ? 'you' :`${row.owner.substr(0, 6)}...${row.owner.substr(row.owner.length - 6)}`
                           }
-                          className="owner"
+                          className="owner plausible-event-name=Link+to+ocean+market+profile"
                           hideIcon
                         />
                       </div>

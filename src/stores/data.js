@@ -13,12 +13,18 @@ export const columnsData = [
   { key: "title", value: "Title", tooltip: descriptions.default.tooltip_datafarming_title },
   { key: "symbol", value: "Symbol" },
   { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-  { key: "lastRoundAPY", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+  { key: "lastroundapy", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
   {
     key: "roundvolume",
     value: "RoundVolume",
     display: (volume) => '$' + volume,
     tooltip: descriptions.default.tooltip_datafarming_round_consume
+  },
+  {
+    key: "lastroundvolume",
+    value: "LastRoundVolume",
+    display: (volume) => '$' + volume,
+    tooltip: descriptions.default.tooltip_datafarming_last_round_consume
   },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
@@ -68,7 +74,7 @@ function getRow(dataInfo, key) {
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
     owner: dataInfo.owner_addr,
-    lastRoundAPY: dataInfo.lastRoundAPY,
+    lastroundapy: dataInfo.lastRoundAPY,
     roundapy: dataInfo.apy,
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
@@ -81,6 +87,7 @@ function getRow(dataInfo, key) {
     roundvolume: parseFloat(dataInfo.volume).toFixed(3),
     ownerallocation: parseFloat(dataInfo.ve_allocated_realtime_owner).toFixed(3),
     myveocean: dataInfo.allocation,
+    lastroundvolume: parseFloat(dataInfo.lastRoundVolume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
     publishersreward: dataInfo.ownerallocation > 0 || isowner && dataInfo.allocation > 0
   };
@@ -113,6 +120,8 @@ export async function loadDatasets(nftsApi, allocations) {
   currentRoundDatasets.forEach((datasetInfo, key) => {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apy
+    datasetInfo.lastRoundVolume = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.volume
+    datasetInfo.lastRoundVolume = datasetInfo.lastRoundVolume > 0 ? datasetInfo.lastRoundVolume : 0.00
     newDatasets.push(getRow(datasetInfo, key));
   });
   datasets.set(newDatasets);
