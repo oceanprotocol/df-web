@@ -16,6 +16,7 @@
     "tooltip_datafarming_round_allocation": "veOCEAN amount allocated to dataset across all users, is sampled and used in DF Rewards calculation.\n\nThis number is the same to what is currently allocated in the system.",
     "tooltip_datafarming_my_allocation": "This number represents the percentage of your veOCEAN allocated towards each dataset.\n\nYour veOCEAN goes down over time but your allocation remain consistent.",
     "tooltip_datafarming_my_ve_allocation": "This number represents the total amount of your veOCEAN allocated towards each dataset.",
+    "tooltip_datafarming_double_APY": "Data Farming Double Asset Rewards APY relative to veOCEAN allocated and consume volume.\n\nThis asset is receiving 2x APY bonus.",
     "tooltip_datafarming_last_round_asset_APY": "Data Farming Last Round Per Asset Rewards APY relative to veOCEAN allocated and consume volume.\n\nGives an overview on how the assets performed in the last round.",
     "tooltip_datafarming_current_round_asset_APY": "Data Farming Current Round Per Asset Rewards APY resets each Round and it is relative to veOCEAN allocated and consume volume.\n\nThe higher the consume volume and lower the allocation, the higher the APY will be.",
     "tooltip_rewards_history_rounds": "Data Farming rewards distribution rounds. Rounds happen every week starting and ending each Thursday.",

@@ -26,6 +26,7 @@ export const columnsData = [
     display: (volume) => '$' + volume,
     tooltip: descriptions.default.tooltip_datafarming_last_round_consume
   },
+  // { key: "doubleapy", value: "DoubleAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_double_APY }, // TODO: enable after discussion around it
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
   { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
@@ -75,6 +76,7 @@ function getRow(dataInfo, key) {
     symbol: dataInfo.symbol,
     owner: dataInfo.owner_addr,
     lastroundapy: dataInfo.lastRoundAPY,
+    // doubleapy: parseFloat(dataInfo.apy * 2).toFixed(3), // TODO: enable after discussion around it
     roundapy: dataInfo.apy,
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
