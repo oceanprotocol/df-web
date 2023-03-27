@@ -12,17 +12,23 @@ export const columnsData = [
   { key: "network", value: "Network" },
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
-  { key: "roundAPY", value: "RoundAPY", display: (roundapy) => parseFloat(roundapy ? roundapy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-  { key: "roundAPR", value: "RoundAPR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-  { key: "roundYield", value: "RoundYield", display: (roundYield) => parseFloat(roundYield ? roundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_yield },
-  { key: "lastRoundAPY", value: "LastRoundAPY", display: (lastRoundAPY) => parseFloat(lastRoundAPY ? lastRoundAPY * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
-  { key: "lastRoundAPR", value: "LastRoundAPR", display: (lastRoundAPR) => parseFloat(lastRoundAPR ? lastRoundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
-  { key: "lastRoundYield", value: "LastRoundYield", display: (lastRoundYield) => parseFloat(lastRoundYield ? lastRoundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_yield},
+  { key: "roundapy", value: "RoundAPY", display: (roundapy) => parseFloat(roundapy ? roundapy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+  { key: "roundapr", value: "RoundAPR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+  { key: "roundyield", value: "RoundYield", display: (roundYield) => parseFloat(roundYield ? roundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_yield },
+  { key: "lastroundapy", value: "LastRoundAPY", display: (lastRoundAPY) => parseFloat(lastRoundAPY ? lastRoundAPY * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+  { key: "lastroundapr", value: "LastRoundAPR", display: (lastRoundAPR) => parseFloat(lastRoundAPR ? lastRoundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+  { key: "lastroundyield", value: "LastRoundYield", display: (lastRoundYield) => parseFloat(lastRoundYield ? lastRoundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_yield},
   {
     key: "roundvolume",
     value: "RoundVolume",
     display: (volume) => '$' + volume,
     tooltip: descriptions.default.tooltip_datafarming_round_consume
+  },
+  {
+    key: "lastroundvolume",
+    value: "LastRoundVolume",
+    display: (volume) => '$' + volume,
+    tooltip: descriptions.default.tooltip_datafarming_last_round_consume
   },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
@@ -66,12 +72,12 @@ function getRow(dataInfo, key) {
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
     owner: dataInfo.owner_addr,
-    lastRoundAPY: dataInfo.lastRoundAPY,
-    lastRoundAPR: dataInfo.lastRoundAPR,
-    lastRoundYield: dataInfo.lastRoundAPR / 52,
-    roundAPY: dataInfo.apy,
-    roundAPR: dataInfo.apr,
-    roundYield: dataInfo.apr / 52,
+    lastroundapy: dataInfo.lastRoundAPY,
+    lastroundapr: dataInfo.lastRoundAPR,
+    lastroundyield: dataInfo.lastRoundAPR / 52,
+    roundapy: dataInfo.apy,
+    roundapr: dataInfo.apr,
+    roundyield: dataInfo.apr / 52,
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
@@ -81,6 +87,7 @@ function getRow(dataInfo, key) {
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
     roundvolume: parseFloat(dataInfo.volume).toFixed(3),
+    lastroundvolume: parseFloat(dataInfo.lastRoundVolume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
   };
 }
@@ -113,6 +120,8 @@ export async function loadDatasets(nftsApi, allocations) {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apy
     datasetInfo.lastRoundAPR = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apr
+    datasetInfo.lastRoundVolume = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.volume
+    datasetInfo.lastRoundVolume = datasetInfo.lastRoundVolume > 0 ? datasetInfo.lastRoundVolume : 0.00
     newDatasets.push(getRow(datasetInfo, key));
   });
   datasets.set(newDatasets);
