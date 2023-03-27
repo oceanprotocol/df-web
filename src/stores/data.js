@@ -3,6 +3,7 @@ import { getNetworkDataById, userAddress } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
 import * as descriptions from "../utils/metadata/descriptions.json";
 import { getEpoch } from "../utils/epochs";
+import {convertWPRtoDoubleAPY} from "../utils/rewards.js"
 
 let networksData = networksDataArray.default
 
@@ -26,7 +27,7 @@ export const columnsData = [
     display: (volume) => '$' + volume,
     tooltip: descriptions.default.tooltip_datafarming_last_round_consume
   },
-  { key: "doubleapy", value: "DoubleAPY", display: (doubleapy) => parseFloat(doubleapy ? doubleapy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_double_APY },
+  { key: "doubleapy", value: "DoubleAPY", display: (doubleapy) => parseFloat(doubleapy ? doubleapy : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_double_APY },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
   { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
@@ -76,7 +77,7 @@ function getRow(dataInfo, key) {
     symbol: dataInfo.symbol,
     owner: dataInfo.owner_addr,
     lastroundapy: dataInfo.lastRoundAPY,
-    doubleapy: parseFloat((1+(dataInfo.apr * 2)/52)**52 - 1).toFixed(3),
+    doubleapy: convertWPRtoDoubleAPY(dataInfo.apr),
     roundapy: dataInfo.apy,
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
