@@ -8,17 +8,19 @@
     getDFallocations,
     getUserDFallocations,
     getUserVeOceanBal,
+    getRoundAPYUser,
   } from "../../utils/rewards";
   import { userAddress } from "../../stores/web3";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
 
   let rows = [];
+  let initialRows = [];
   let pagination = { pageSize: 100, page: 1 };
   let loading = true;
 
   // Tooltips dropped for now, they'll be back
-  const headers = [
+  let headers = [
     {
       key: "id",
       value: "Round",
@@ -29,6 +31,7 @@
     { key: "active", value: "Active Rewards" },
     { key: "activeapy", value: "Active APY AVG" },
   ];
+  let initialHeaders = headers;
 
   const init = async () => {
     rows = JSON.parse(
@@ -39,7 +42,7 @@
       )
     );
     let veBals = await getVeOceanBal();
-    let dfAllocation = await getDFallocations($userAddress);
+    let dfAllocation = await getDFallocations();
     let apys = await getRoundAPY();
     let newRows = [];
     rows.forEach((row) => {
@@ -55,15 +58,14 @@
                 rewards["sum(passive_amt)"] / veBal["sum(balance)"]
               )
             : 0
-        ).toFixed(2)} %`,
+        ).toFixed(2)}%`,
         activeapy: `${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
-                rewards["sum(curating_amt)"] /
-                  allocation["sum(ocean_allocated)"]
+                rewards["sum(curating_amt)"] / allocation["sum(ve_allocated)"]
               )
             : 0
-        ).toFixed(2)} %`,
+        ).toFixed(2)}%`,
         passive: `${row.passive} OCEAN`,
         active: `${row.active} OCEAN`,
       });
@@ -72,14 +74,45 @@
     rows.sort((first, second) => {
       return second.id - first.id;
     });
-
+    initialRows = rows;
     loading = false;
   };
 
   const getUserRoundAPY = async () => {
     let allocations = await getUserDFallocations($userAddress);
     let veBals = await getUserVeOceanBal($userAddress);
-    console.log(allocations, veBals);
+    let apys = await getRoundAPYUser($userAddress);
+    rows = JSON.parse(JSON.stringify(initialRows));
+    rows.forEach((row) => {
+      let veBal = veBals.find((vb) => vb.round == row.id);
+      let allocation = allocations.find((r) => r.round == row.id);
+      let rewards = apys.find((r) => r.round == row.id);
+      row.passiveapy =
+        row.passiveapy?.toString() +
+        ` / ${parseFloat(
+          rewards && veBal
+            ? convertWPRtoAPY(
+                rewards["sum(passive_amt)"] / veBal["sum(balance)"]
+              )
+            : 0
+        ).toFixed(2)}%`;
+      row.activeapy =
+        row.activeapy?.toString() +
+        ` / ${parseFloat(
+          rewards && allocation
+            ? convertWPRtoAPY(
+                rewards["sum(curating_amt)"] / allocation["sum(ve_amt)"]
+              )
+            : 0
+        ).toFixed(2)}%`;
+    });
+    rows = JSON.parse(JSON.stringify(rows));
+    headers = JSON.parse(JSON.stringify(initialHeaders));
+    headers.forEach((h) => {
+      if (h.key == "activeapy" || h.key == "passiveapy")
+        h.value = h.value + " / USER";
+    });
+    headers = JSON.parse(JSON.stringify(headers));
   };
 
   init();

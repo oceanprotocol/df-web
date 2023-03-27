@@ -81,7 +81,7 @@ export const getActiveAPY = async (userAddress) => {
   return data.apy ? data.apy * 100: 0;
 }
 
-export const getRoundAPY = async (userAddress) => {
+export const getRoundAPY = async () => {
   let res;
   try {
     res = await fetch(`${process.env.BACKEND_API}/rewardsSummary`, {
@@ -94,6 +94,45 @@ export const getRoundAPY = async (userAddress) => {
             "round": {
               "$gt":-1
             }
+          },
+          "fields": [
+            {
+              "expression": {
+                "pattern": "sum(curating_amt)"
+              },
+            },
+            {
+              "expression": {
+                "pattern": "sum(passive_amt)"
+              },
+            },
+            "round",
+          ],
+          "group": "round"
+          })
+    });
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
+  let data = await res.json();
+  return data
+}
+
+export const getRoundAPYUser = async (userAddress) => {
+  let res;
+  try {
+    res = await fetch(`${process.env.BACKEND_API}/rewardsSummary`, {
+      method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+         body: JSON.stringify({
+          "query":{
+            "round": {
+              "$gt":-1
+            },
+            "LP_addr": userAddress.toLowerCase()
           },
           "fields": [
             {
@@ -132,7 +171,7 @@ export const getUserVeOceanBal = async (userAddress) => {
             "round": {
               "$gt":-1
             },
-            "LP_addr": userAddress
+            "LP_addr": userAddress.toLowerCase()
           },
           "fields": [
             {
@@ -157,25 +196,26 @@ export const getUserVeOceanBal = async (userAddress) => {
 export const getUserDFallocations = async (userAddress) => {
   let res;
   try {
-    res = await fetch(`${process.env.BACKEND_API}/nftinfo`, {
+    res = await fetch(`${process.env.BACKEND_API}/allocations`, {
       method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           "query":{
-            "round": {
-              "$gt":-1
-            },
-            "LP_addr": userAddress
+              "round": {
+                "$gt":-1
+              },
+              "LP_addr": userAddress.toLowerCase()
+            
           },
           "fields": [
             {
               "expression": {
-                "pattern": "sum(ocean_allocated)"
+                "pattern": "sum(ve_amt)"
               },
             },
-            "round",
+            "round"
           ],
           "group": "round"
           })
@@ -240,7 +280,7 @@ export const getDFallocations = async (userAddress) => {
           "fields": [
             {
               "expression": {
-                "pattern": "sum(ocean_allocated)"
+                "pattern": "sum(ve_allocated)"
               },
             },
             "round",
