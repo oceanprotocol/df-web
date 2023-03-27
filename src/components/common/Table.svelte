@@ -4,6 +4,7 @@
   import Toolbar from "carbon-components-svelte/src/DataTable/Toolbar.svelte";
   import ToolbarContent from "carbon-components-svelte/src/DataTable/ToolbarContent.svelte";
   import ToolbarSearch from "carbon-components-svelte/src/DataTable/ToolbarSearch.svelte";
+  import { Tabs, Tab, TabContent } from "carbon-components-svelte";
   import "carbon-components/scss/components/_data-table.scss";
   import Button from "./Button.svelte";
   import "carbon-";
@@ -59,11 +60,19 @@
   let visibleColData = colData.slice();
   let filterOption = "0";
 
+  export let tabSelected = 'alloc';
+  export let tabSelection = undefined;
+
   let columns = {};
   let pagination = { pageSize: 100, page: 1 };
 
   $: if (filterOption) {
     filterTable(filterOption);
+  }
+
+  $: if (colData) {
+    visibleColData = colData.slice()
+    loadVisibleColumns();
   }
 
   loadVisibleColumns();
@@ -111,8 +120,9 @@
       getColumnsFromLocalStorage();
     } else {
       localStorage.setItem("allColumns", JSON.stringify(visibleColData));
+      columns = {};
       visibleColData.forEach((col) => {
-        columns[col.value] = defaultColumns.indexOf(col.value) !== -1;
+        columns[col.value] = defaultColumns[tabSelected].indexOf(col.value) !== -1;
       });
       localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
       getColumnsFromLocalStorage();
@@ -278,6 +288,18 @@
 
 {#if visibleColData && rowData}
   <div>
+    <div class="tableTabs">
+      <Tabs>
+        <Tab label="Allocations" on:click={tabSelection('alloc')} />
+        <Tab label="DCV" on:click={tabSelection('dcv')} />
+        <Tab label="APY" on:click={tabSelection('apy')} />
+        <svelte:fragment slot="content">
+          <TabContent></TabContent>
+          <TabContent></TabContent>
+          <TabContent></TabContent>
+        </svelte:fragment>
+      </Tabs>
+    </div>
     <div class="tableCustomHeader">
       <div class="headerValuesContainer">
         <ItemWithLabel
@@ -533,6 +555,31 @@
   :global(tr:has(.purgatory) > td) {
     color: var(--brand-alert-red) !important;
   }
+
+  .tableTabs .bx--tabs .bx--tabs-trigger{
+    display: none;
+  }
+
+  .tableTabs .bx--tabs .bx--tabs__nav{
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item{
+    flex: 1;
+    padding: 1rem;
+    border: 1px solid var(--brand-grey-dimmed);
+    cursor: pointer;
+  }
+  
+  .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item a{
+    text-decoration: none;
+  }
+
+  .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item.bx--tabs__nav-item--selected{
+    background: var(--background-body);
+  }
+
   @media (min-width: 640px) {
     .tableCustomHeader {
       flex-direction: row;

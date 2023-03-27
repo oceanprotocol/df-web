@@ -8,32 +8,48 @@ let networksData = networksDataArray.default
 
 export let datasets = writable("");
 
-export const columnsData = [
-  { key: "network", value: "Network" },
-  { key: "title", value: "Title" },
-  { key: "symbol", value: "Symbol" },
-  { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-  { key: "lastroundapy", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
-  {
-    key: "roundvolume",
-    value: "RoundVolume",
-    display: (volume) => '$' + volume,
-    tooltip: descriptions.default.tooltip_datafarming_round_consume
-  },
-  {
-    key: "lastroundvolume",
-    value: "LastRoundVolume",
-    display: (volume) => '$' + volume,
-    tooltip: descriptions.default.tooltip_datafarming_last_round_consume
-  },
-  { key: "nftaddress", value: "NFTAddress" },
-  { key: "did", value: "DID" },
-  { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
-  { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
-  { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
-]
+export const columnsData = {
+  'alloc': [
+    { key: "network", value: "Network" },
+    { key: "title", value: "Title" },
+    { key: "symbol", value: "Symbol" },
+    { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
+    { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
+    { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
+  ],
+  'dcv': [
+    { key: "network", value: "Network" },
+    { key: "title", value: "Title" },
+    { key: "symbol", value: "Symbol" },
+    {
+      key: "roundvolume",
+      value: "RoundVolume",
+      display: (volume) => '$' + volume,
+      tooltip: descriptions.default.tooltip_datafarming_round_consume
+    },
+    {
+      key: "lastroundvolume",
+      value: "LastRoundVolume",
+      display: (volume) => '$' + volume,
+      tooltip: descriptions.default.tooltip_datafarming_last_round_consume
+    },
+    { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
+  ],
+  'apy': [
+    { key: "network", value: "Network" },
+    { key: "title", value: "Title" },
+    { key: "symbol", value: "Symbol" },
+    { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+    { key: "lastroundapy", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+    { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
+  ]
+}
 
-export const defaultColumns = ["Title", "RoundVolume", "RoundAPY","LastRoundAPY","CurrentAllocation", "MyAllocation"]
+export const defaultColumns = {
+  'alloc': ["Title", "RoundAllocation", "CurrentAllocation", "MyAllocation"],
+  'dcv': ["Title", "RoundVolume", "LastRoundVolume", "MyAllocation"],
+  'apy': ["Title", "RoundAPY", "LastRoundAPY", "MyAllocation"],
+}
 
 async function getDatasets(api,roundNumber) {
   let res;
