@@ -119,6 +119,76 @@ export const getRoundAPY = async (userAddress) => {
   return data
 }
 
+export const getUserVeOceanBal = async (userAddress) => {
+  let res;
+  try {
+    res = await fetch(`${process.env.BACKEND_API}/vebals`, {
+      method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "query":{
+            "round": {
+              "$gt":-1
+            },
+            "LP_addr": userAddress
+          },
+          "fields": [
+            {
+              "expression": {
+                "pattern": "sum(balance)"
+              },
+            },
+            "round",
+          ],
+          "group": "round"
+          })
+        }
+    );
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
+  let data = await res.json();
+  return data
+}
+
+export const getUserDFallocations = async (userAddress) => {
+  let res;
+  try {
+    res = await fetch(`${process.env.BACKEND_API}/nftinfo`, {
+      method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "query":{
+            "round": {
+              "$gt":-1
+            },
+            "LP_addr": userAddress
+          },
+          "fields": [
+            {
+              "expression": {
+                "pattern": "sum(ocean_allocated)"
+              },
+            },
+            "round",
+          ],
+          "group": "round"
+          })
+        }
+    );
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
+  let data = await res.json();
+  return data
+}
+
 export const getVeOceanBal = async (userAddress) => {
   let res;
   try {

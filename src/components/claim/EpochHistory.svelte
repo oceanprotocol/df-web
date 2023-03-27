@@ -6,6 +6,8 @@
     getRoundAPY,
     getVeOceanBal,
     getDFallocations,
+    getUserDFallocations,
+    getUserVeOceanBal,
   } from "../../utils/rewards";
   import { userAddress } from "../../stores/web3";
   import moment from "moment";
@@ -74,7 +76,17 @@
     loading = false;
   };
 
+  const getUserRoundAPY = async () => {
+    let allocations = await getUserDFallocations($userAddress);
+    let veBals = await getUserVeOceanBal($userAddress);
+    console.log(allocations, veBals);
+  };
+
   init();
+
+  $: if ($userAddress) {
+    getUserRoundAPY();
+  }
 </script>
 
 <h2 class="title">Data Farming History</h2>
