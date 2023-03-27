@@ -18,7 +18,6 @@
     dataAllocations,
     totalUserAllocation,
   } from "../../stores/dataAllocations";
-  import ExtraDatasetInfo from "../data/ExtraDatasetInfo.svelte";
   import TextWithNetworkIcon from "./TextWithNetworkIcon.svelte";
   import NetworkIcon from "./NetworkIcon.svelte";
   import ShareInput from "./ShareInput.svelte";
@@ -320,7 +319,6 @@
     <div class="tableContainer">
       <DataTable
         sortable
-        expandable
         headers={colData}
         pageSize={pagination.pageSize}
         page={pagination.page}
@@ -397,9 +395,6 @@
             />
           {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
         </svelte:fragment>
-        <svelte:fragment slot="expanded-row" let:row>
-          <ExtraDatasetInfo dataset={row} />
-        </svelte:fragment>
       </DataTable>
     </div>
     <Pagination
@@ -430,9 +425,6 @@
   }
   .tableContainer .bx--tooltip__label {
     width: 18px !important;
-  }
-  .bx--table-expand__button {
-    width: 30px !important;
   }
   .tableCustomHeader > div {
     padding: calc(var(--spacer) / 6) 0 !important;
