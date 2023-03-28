@@ -12,6 +12,7 @@
   import {
     filterDataByUserAllocation,
     filterDataByOwner,
+    filterDataBy2xers,
     filterOptions,
   } from "../../utils/data";
   import {
@@ -36,7 +37,7 @@
     userAddress,
   } from "../../stores/web3";
   import Link from "./Link.svelte";
-  import { oceanUnlockDate } from "../../stores/veOcean";
+  import { oceanUnlockDate, veOceanWithDelegations } from "../../stores/veOcean";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import CustomTooltip from "./CustomTooltip.svelte";
   import { navigate } from "svelte-navigator";
@@ -89,6 +90,9 @@
         );
         break;
       case "2":
+        filteredDatasets = filterDataBy2xers(rowData, $userAddress);
+        break;
+      case "3":
         filteredDatasets = filterDataByOwner(rowData, $userAddress);
         break;
       default:
@@ -139,8 +143,8 @@
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailableTemporary = totalAvailable + step;
-    rowData[rowData.findIndex((element) => element.id === id)].myallocation =
-      value;
+    rowData[rowData.findIndex((element) => element.id === id)].myallocation = value;
+    rowData[rowData.findIndex((element) => element.id === id)].myveocean = parseFloat(rowData[rowData.findIndex((element) => element.id === id)].currentallocation * value / 100).toFixed(3);
   };
 
   const updateTotalAllocation = (id, value) => {
@@ -231,6 +235,16 @@
   $: if (!$oceanUnlockDate) {
     updateDisable();
   }
+
+
+  function getCellContainerClasses(row) {
+    const { id, owner, myallocation, ownerallocation } = row;
+    const isOwned = owner === $userAddress?.toLowerCase();
+    const hasAllocated = myallocation > 0;
+    const hasBonusAllocation = ownerallocation > 0 || (isOwned && hasAllocated);
+
+    return `cellContainer ${isOwned ? 'owned ' : ''}${hasAllocated ? 'allocated ' : ''}${hasBonusAllocation ? 'bonus' : ''}`;
+  };
 
   function updateDisable() {
     disabled =
@@ -348,60 +362,66 @@
           <div class="headerContainer">
             {header.value}
             {#if header.tooltip}
-              <CustomTooltip text={header.tooltip} direction="bottom" />
+              <CustomTooltip text={header.tooltip} direction={
+                header.value === "Title" ? "right" : "bottom"
+              } />
             {/if}
           </div>
         </svelte:fragment>
         <svelte:fragment slot="cell" let:cell let:row>
-          {#if cell.key === "title"}
-            <div class="title">
-              <NetworkIcon name={row.network} minimal />
-              <div class="textContainer">
-                <TextWithNetworkIcon
-                  className={row.ispurgatory ? "purgatory" : ""}
-                  text={cell.value}
-                  url={row.action}
-                  textColor={row.ispurgatory
-                    ? "var(--brand-alert-red)"
-                    : "var(--brand-black)"}
-                  tooltipMessage={row.ispurgatory
-                    ? "Item in purgatory. Remove your allocations."
-                    : undefined}
-                />
-                {#if row.owner}
-                  <span class="ownerContainer">
-                    owned by
-                    <div class="ownerAddressContainer">
-                      <Link
-                        url={`https://market.oceanprotocol.com/profile/${row.owner}`}
-                        text="{row.owner?.substr(0, 6)}...{row.owner?.substr(
-                          row.owner?.length - 6
-                        )}"
-                        className="owner plausible-event-name=Link+to+ocean+market+profile"
-                        hideIcon
-                      />
-                    </div>
-                  </span>
-                {/if}
+          <div class={getCellContainerClasses(row)}>
+            {#if cell.key === "title"}
+              <div class={"title"}> 
+                <NetworkIcon name={row.network} minimal />
+                <div class="textContainer">
+                  <TextWithNetworkIcon
+                    className={row.ispurgatory ? "purgatory" : ""}
+                    text={cell.value}
+                    url={row.action}
+                    textColor={row.ispurgatory
+                      ? "var(--brand-alert-red)"
+                      : "var(--brand-black)"}
+                    tooltipMessage={row.ispurgatory
+                      ? "Item in purgatory. Remove your allocations."
+                      : undefined}
+                  />
+                  {#if row.owner}
+                    <span class="ownerContainer">
+                      owned by
+                      <div class="ownerAddressContainer">
+                        <Link
+                          url={`https://market.oceanprotocol.com/profile/${row.owner}`}
+                          text={
+                            $userAddress.toLowerCase() === row.owner ? 'you' :`${row.owner.substr(0, 6)}...${row.owner.substr(row.owner.length - 6)}`
+                          }
+                          className="owner plausible-event-name=Link+to+ocean+market+profile"
+                          hideIcon
+                        />
+                      </div>
+                    </span>
+                  {/if}
+                </div>
               </div>
-            </div>
-          {:else if cell.key === "myallocation"}
-            <ShareInput
-              currentValue={cell.value}
-              available={row.ispurgatory
-                ? parseInt(
-                    $dataAllocations.find((d) => d.nftAddress == row.nftaddress)
-                      ?.allocated
-                  ) / 100
-                : totalAvailable}
-              onChange={(id, value, step) =>
-                onTotalAvailableAllocationChange(id, value, step)}
-              onBlur={updateTotalAllocation}
-              onFocus={subtractCurrAllocationsFromTotal}
-              dataId={row.id}
-              showAvailable={false}
-            />
-          {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
+              {:else if cell.key === "myveocean"}
+                {cell.display(parseFloat($veOceanWithDelegations * cell.value / 100).toFixed(3))}
+              {:else if cell.key === "myallocation"}
+              <ShareInput
+                currentValue={cell.value}
+                available={row.ispurgatory
+                  ? parseInt(
+                      $dataAllocations.find((d) => d.nftAddress == row.nftaddress)
+                        ?.allocated
+                    ) / 100
+                  : totalAvailable}
+                onChange={(id, value, step) =>
+                  onTotalAvailableAllocationChange(id, value, step)}
+                onBlur={updateTotalAllocation}
+                onFocus={subtractCurrAllocationsFromTotal}
+                dataId={row.id}
+                showAvailable={false}
+              />
+            {:else}{cell.display ? cell.display(cell.value) : cell.value}{/if}
+          </div>
         </svelte:fragment>
       </DataTable>
     </div>
@@ -446,10 +466,13 @@
     justify-content: flex-start;
     align-items: center;
   }
-  :global(.headerContainer .bx--tooltip__label) {
+  :global(.bx--tooltip__label) {
     background-color: transparent !important;
-    width: 18px !important;
+    width: 20px !important;
+    text-align: center;
+    display: flex;
   }
+
   .title {
     display: flex;
     justify-content: center;
@@ -463,13 +486,51 @@
     font-size: var(--font-size-small);
     color: var(--brand-alert-red);
   }
+  tr {
+    background-color: var(--brand-white);
+  }
+  .cellContainer {
+    padding: calc(var(--spacer) / 4);
+    height: 54px;
+    display: flex;
+    align-items: center;
+  }
+  .cellContainer.owned {
+    background-color: var(--brand-rank-red-bg);
+  }
+
+  .cellContainer.owned:hover {
+    background-color: var(--brand-rank-red-bg) !important; 
+  }
+
+  .cellContainer.allocated {
+    background-color: var(--brand-rank-gray-bg);
+  }
+
+  .cellContainer.allocated:hover {
+    background-color: var(--brand-rank-gray-bg) !important; 
+  }
+
+  .cellContainer.bonus {
+    background-color: var(--brand-rank-yellow-bg);
+    color: var(--brand-black);
+    font-weight: 800;
+  }
+  .bonus .title{
+    font-weight: 400;
+  }
+
+  .cellContainer.bonus:hover {
+    background-color: var(--brand-rank-yellow-bg) !important; 
+  }
   .ownerContainer {
-    display: block;
+    display: flex;
     color: var(--brand-grey-light);
     font-size: var(--font-size-small);
   }
   .ownerAddressContainer {
     display: inline-block;
+    margin-left: 3px;
   }
   :global(.ownerContainer .owner) {
     color: var(--brand-color-primary);
@@ -492,8 +553,20 @@
     background-color: var(--brand-white) !important;
   }
   td {
-    background: var(--brand-white) !important;
     border-top: 0 !important;
+    background-color: transparent !important;
+  }
+
+  .bx--data-table td, .bx--data-table tbody th{
+    padding: 0 !important;
+  }
+
+  .bx--data-table tbody tr:hover{
+    background: #e5e5e5 !important;
+  }
+
+  .bx--data-table tbody tr:hover .cellContainer .container{
+    border: 1px solid var(--brand-grey-darker);
   }
 
   :global(.tableContainer thead) {
