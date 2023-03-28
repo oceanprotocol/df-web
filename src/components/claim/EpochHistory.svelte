@@ -8,6 +8,12 @@
     getDFallocations,
   } from "../../utils/rewards";
   import { userAddress } from "../../stores/web3";
+  import { veBalances, veUserBalances } from "../../stores/veOcean";
+  import {
+    veAllocations,
+    veUserAllocations,
+  } from "../../stores/dataAllocations";
+  import { oceanRewards, oceanUserRewards } from "../../stores/airdrops";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
 
@@ -38,15 +44,23 @@
         )
       )
     );
-    let veBals = await getVeOceanBal();
-    let dfAllocation = await getDFallocations();
-    let apys = await getRoundAPY();
-    console.log();
+    if (!$veBalances || !$veAllocations || !$oceanRewards) {
+      let veBals = await getVeOceanBal();
+      let dfAllocation = await getDFallocations();
+      let apys = await getRoundAPY();
+      veBalances.update(() => veBals);
+      veAllocations.update(() => dfAllocation);
+      oceanRewards.update(() => apys);
+    } else {
+      let allocations = $veBalances;
+      let veBals = $veAllocations;
+      let apys = $oceanRewards;
+    }
     let newRows = [];
     rows.forEach((row) => {
-      let veBal = veBals.find((vb) => vb.round == row.id);
-      let allocation = dfAllocation.find((r) => r.round == row.id);
-      let rewards = apys.find((r) => r.round == row.id);
+      let veBal = $veBalances.find((vb) => vb.round == row.id);
+      let allocation = $veAllocations.find((r) => r.round == row.id);
+      let rewards = $oceanRewards.find((r) => r.round == row.id);
       newRows.push({
         id: row.id,
         date_start: moment(row.date_start).format("DD-MMM-YYYY"),
@@ -80,11 +94,14 @@
     let allocations = await getDFallocations($userAddress);
     let veBals = await getVeOceanBal($userAddress);
     let apys = await getRoundAPY($userAddress);
+    veUserBalances.update(() => veBals);
+    veUserAllocations.update(() => allocations);
+    oceanUserRewards.update(() => apys);
     rows = JSON.parse(JSON.stringify(initialRows));
     rows.forEach((row) => {
-      let veBal = veBals.find((vb) => vb.round == row.id);
-      let allocation = allocations.find((r) => r.round == row.id);
-      let rewards = apys.find((r) => r.round == row.id);
+      let veBal = $veUserBalances.find((vb) => vb.round == row.id);
+      let allocation = $veUserAllocations.find((r) => r.round == row.id);
+      let rewards = $oceanUserRewards.find((r) => r.round == row.id);
       row.passiveapy =
         row.passiveapy?.toString() +
         ` / ${parseFloat(
