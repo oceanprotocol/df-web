@@ -134,22 +134,25 @@
 </script>
 
 <h2 class="title">Data Farming History</h2>
-<div class="epochHistoryContainer">
-  <div class="epochHistoryTableContainer">
-    <DataTable sortable {headers} {rows} class="customTable">
-      <svelte:fragment slot="cell-header" let:header>
-        <div class="headerContainer">
-          {header.value}
-          {#if header.tooltip}
-            <CustomTooltip
-              text={header.tooltip}
-              direction="bottom"
-            />
-          {/if}
-        </div>
-      </svelte:fragment>
-    </DataTable>
-  </div>
+<div class="epochHistoryTableContainer">
+  <DataTable sortable {headers} {rows} class="customTable">
+    <svelte:fragment slot="cell-header" let:header>
+      <div class="headerContainer">
+        {header.value}
+        {#if header.tooltip}
+          <CustomTooltip
+            text={header.tooltip}
+            direction="bottom"
+          />
+        {/if}
+      </div>
+    </svelte:fragment>
+    <svelte:fragment slot="cell" let:cell let:row>
+      <div class='cellContainer'>
+        {cell.value}
+      </div>
+    </svelte:fragment>
+  </DataTable>
   <Pagination
     bind:pageSize={pagination.pageSize}
     bind:page={pagination.page}
@@ -171,11 +174,8 @@
     position: sticky;
     inset-block-start: 0;
   }
-  .epochHistoryContainer {
-    width: 100%;
-    margin: calc(var(--spacer) / 2) 0;
-    background-color: var(--brand-white);
-    box-shadow: var(--box-shadow);
+  .cellContainer {
+    height: auto;
   }
   .title {
     font-weight: bold;
@@ -185,8 +185,5 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  :global(.epochHistoryContainer .bx--data-table-container) {
-    padding-top: 0 !important;
   }
 </style>
