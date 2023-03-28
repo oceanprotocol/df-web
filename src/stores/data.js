@@ -74,10 +74,10 @@ function getRow(dataInfo, key) {
     owner: dataInfo.owner_addr,
     lastroundapy: dataInfo.lastRoundAPY,
     lastroundapr: dataInfo.lastRoundAPR,
-    lastroundyield: dataInfo.lastRoundAPR / 52,
+    lastroundyield: dataInfo.lastRoundYield,
     roundapy: dataInfo.apy,
     roundapr: dataInfo.apr,
-    roundyield: dataInfo.apr / 52,
+    roundyield: dataInfo.roundYield,
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
@@ -120,6 +120,7 @@ export async function loadDatasets(nftsApi, allocations) {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apy
     datasetInfo.lastRoundAPR = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apr
+    datasetInfo.lastRoundYield = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.roundYield
     datasetInfo.lastRoundVolume = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.volume
     datasetInfo.lastRoundVolume = datasetInfo.lastRoundVolume > 0 ? datasetInfo.lastRoundVolume : 0.00
     newDatasets.push(getRow(datasetInfo, key));
