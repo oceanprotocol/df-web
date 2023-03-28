@@ -16,6 +16,7 @@
   import { oceanRewards, oceanUserRewards } from "../../stores/airdrops";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
+  import * as descriptions from "../../utils/metadata/descriptions.json";
 
   let rows = [];
   let initialRows = [];
@@ -30,9 +31,9 @@
     },
     { key: "date_start", value: "Start Date" },
     { key: "passive", value: "Passive Rewards" },
-    { key: "passiveapy", value: "Passive APY AVG" },
+    { key: "passiveapy", value: "Passive APY", tooltip: descriptions.default.tooltip_rewards_apy_passive_history},
     { key: "active", value: "Active Rewards" },
-    { key: "activeapy", value: "Active APY AVG" },
+    { key: "activeapy", value: "Active APY", tooltip: descriptions.default.tooltip_rewards_apy_active_history},
   ];
   let initialHeaders = headers;
 
@@ -123,11 +124,6 @@
     });
     rows = JSON.parse(JSON.stringify(rows));
     headers = JSON.parse(JSON.stringify(initialHeaders));
-    headers.forEach((h) => {
-      if (h.key == "activeapy" || h.key == "passiveapy")
-        h.value = h.value + " / USER";
-    });
-    headers = JSON.parse(JSON.stringify(headers));
   };
 
   init();
@@ -147,9 +143,7 @@
           {#if header.tooltip}
             <CustomTooltip
               text={header.tooltip}
-              direction={header.tooltipDirection
-                ? header.tooltipDirection
-                : "top"}
+              direction="bottom"
             />
           {/if}
         </div>
