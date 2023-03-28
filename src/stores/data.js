@@ -3,7 +3,7 @@ import { getNetworkDataById, userAddress } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
 import * as descriptions from "../utils/metadata/descriptions.json";
 import { getEpoch } from "../utils/epochs";
-import {convertWPRtoDoubleAPY} from "../utils/rewards.js"
+import {convertWPRtoAPY} from "../utils/rewards.js"
 
 let networksData = networksDataArray.default
 
@@ -77,7 +77,7 @@ function getRow(dataInfo, key) {
     symbol: dataInfo.symbol,
     owner: dataInfo.owner_addr,
     lastroundapy: dataInfo.lastRoundAPY,
-    doubleapy: convertWPRtoDoubleAPY(dataInfo.apr),
+    doubleapy: convertWPRtoAPY(dataInfo.apr*2),
     roundapy: dataInfo.apy,
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,

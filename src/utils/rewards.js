@@ -15,13 +15,6 @@ export const convertWPRtoAPY = (wpr) =>{
   return apy_passiv
 }
 
-export const convertWPRtoDoubleAPY = (wpr) =>{
-  const weeks = 52
-  const double_apr = wpr * 2;
-  const double_apy = ((1 + double_apr / weeks) ** 52 - 1) * 100
-  return double_apy
-}
-
 export const getRewards = async(userAddress) => {
   let res;
   try {
