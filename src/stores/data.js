@@ -1,8 +1,9 @@
 import { writable } from "svelte/store";
-import { getNetworkDataById } from "./web3";
+import { getNetworkDataById, userAddress } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
 import * as descriptions from "../utils/metadata/descriptions.json";
 import { getEpoch } from "../utils/epochs";
+import {convertWPRtoAPY} from "../utils/rewards.js"
 
 let networksData = networksDataArray.default
 
@@ -10,7 +11,7 @@ export let datasets = writable("");
 
 export const columnsData = [
   { key: "network", value: "Network" },
-  { key: "title", value: "Title" },
+  { key: "title", value: "Title", tooltip: descriptions.default.tooltip_datafarming_title },
   { key: "symbol", value: "Symbol" },
   { key: "roundapy", value: "RoundAPY", display: (roundapy) => parseFloat(roundapy ? roundapy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
   { key: "roundapr", value: "RoundAPR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APR },
@@ -35,9 +36,11 @@ export const columnsData = [
   { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
   { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
   { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
+  { key: "ownerallocation", value:"OwnerAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_veocean_owner_allocation},
+  { key: "myveocean", value:"MyVeOcean", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_my_ve_allocation }
 ]
 
-export const defaultColumns = ["Title","RoundVolume","RoundAPY","LastRoundAPY","CurrentAllocation","MyAllocation"]
+export const defaultColumns = ["Title", "RoundVolume", "RoundAPY", "LastRoundAPY", "CurrentAllocation", "MyAllocation", "OwnerAllocation", "MyVeOcean"]
 
 async function getDatasets(api,roundNumber) {
   let res;
@@ -66,6 +69,10 @@ async function getDatasets(api,roundNumber) {
 }
 
 function getRow(dataInfo, key) {
+  let userId;
+  userAddress.subscribe(id => (userId = id));
+  const isowner = userId.toLowerCase() === dataInfo.owner_addr
+
   return {
     id: key,
     title: dataInfo.name,
@@ -87,8 +94,11 @@ function getRow(dataInfo, key) {
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
     roundvolume: parseFloat(dataInfo.volume).toFixed(3),
+    ownerallocation: parseFloat(dataInfo.ve_allocated_realtime_owner).toFixed(3),
+    myveocean: dataInfo.allocation,
     lastroundvolume: parseFloat(dataInfo.lastRoundVolume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
+    publishersreward: dataInfo.ownerallocation > 0 || isowner && dataInfo.allocation > 0
   };
 }
 
