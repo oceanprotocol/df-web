@@ -19,7 +19,6 @@
     dataAllocations,
     totalUserAllocation,
   } from "../../stores/dataAllocations";
-  import Input from "./Input.svelte";
   import TextWithNetworkIcon from "./TextWithNetworkIcon.svelte";
   import NetworkIcon from "./NetworkIcon.svelte";
   import ShareInput from "./ShareInput.svelte";
@@ -450,6 +449,9 @@
     width: 100%;
     max-height: calc(100vh - 115px - var(--spacer) * 3.7);
     overflow-y: scroll;
+  }
+  .tableContainer .bx--tooltip__label {
+    width: 18px !important;
   }
   .tableCustomHeader > div {
     padding: calc(var(--spacer) / 6) 0 !important;
