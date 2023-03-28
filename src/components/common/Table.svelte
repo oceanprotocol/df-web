@@ -561,6 +561,14 @@
     padding: 0 !important;
   }
 
+  .bx--data-table tbody tr:hover{
+    background: #e5e5e5 !important;
+  }
+
+  .bx--data-table tbody tr:hover .cellContainer .container{
+    border: 1px solid var(--brand-grey-darker);
+  }
+
   :global(.tableContainer thead) {
     background-color: var(--brand-white) !important;
     position: sticky;
