@@ -13,10 +13,10 @@ export const columnsData = [
   { key: "title", value: "Title" },
   { key: "symbol", value: "Symbol" },
   { key: "roundapy", value: "RoundAPY", display: (roundapy) => parseFloat(roundapy ? roundapy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-  { key: "roundapr", value: "RoundAPR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+  { key: "roundapr", value: "RoundAPR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APR },
   { key: "roundyield", value: "RoundYield", display: (roundYield) => parseFloat(roundYield ? roundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_yield },
   { key: "lastroundapy", value: "LastRoundAPY", display: (lastRoundAPY) => parseFloat(lastRoundAPY ? lastRoundAPY * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
-  { key: "lastroundapr", value: "LastRoundAPR", display: (lastRoundAPR) => parseFloat(lastRoundAPR ? lastRoundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+  { key: "lastroundapr", value: "LastRoundAPR", display: (lastRoundAPR) => parseFloat(lastRoundAPR ? lastRoundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APR},
   { key: "lastroundyield", value: "LastRoundYield", display: (lastRoundYield) => parseFloat(lastRoundYield ? lastRoundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_yield},
   {
     key: "roundvolume",
