@@ -81,7 +81,7 @@ export const getActiveAPY = async (userAddress) => {
   return data.apy ? data.apy * 100: 0;
 }
 
-export const getRoundAPY = async () => {
+export const getRoundAPY = async (userAddress) => {
   let res;
   try {
     res = await fetch(`${process.env.BACKEND_API}/rewardsSummary`, {
@@ -90,11 +90,14 @@ export const getRoundAPY = async () => {
           "Content-Type": "application/json"
         },
          body: JSON.stringify({
-          "query":{
+          "query":userAddress ? {
             "round": {
               "$gt":-1
-            }
-          },
+            },
+            "LP_addr": userAddress.toLowerCase()
+          } : {"round": {
+            "$gt":-1
+          }},
           "fields": [
             {
               "expression": {
@@ -111,116 +114,6 @@ export const getRoundAPY = async () => {
           "group": "round"
           })
     });
-  } catch (error) {
-    console.log(error);
-    return 0;
-  }
-  let data = await res.json();
-  return data
-}
-
-export const getRoundAPYUser = async (userAddress) => {
-  let res;
-  try {
-    res = await fetch(`${process.env.BACKEND_API}/rewardsSummary`, {
-      method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-         body: JSON.stringify({
-          "query":{
-            "round": {
-              "$gt":-1
-            },
-            "LP_addr": userAddress.toLowerCase()
-          },
-          "fields": [
-            {
-              "expression": {
-                "pattern": "sum(curating_amt)"
-              },
-            },
-            {
-              "expression": {
-                "pattern": "sum(passive_amt)"
-              },
-            },
-            "round",
-          ],
-          "group": "round"
-          })
-    });
-  } catch (error) {
-    console.log(error);
-    return 0;
-  }
-  let data = await res.json();
-  return data
-}
-
-export const getUserVeOceanBal = async (userAddress) => {
-  let res;
-  try {
-    res = await fetch(`${process.env.BACKEND_API}/vebals`, {
-      method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          "query":{
-            "round": {
-              "$gt":-1
-            },
-            "LP_addr": userAddress.toLowerCase()
-          },
-          "fields": [
-            {
-              "expression": {
-                "pattern": "sum(balance)"
-              },
-            },
-            "round",
-          ],
-          "group": "round"
-          })
-        }
-    );
-  } catch (error) {
-    console.log(error);
-    return 0;
-  }
-  let data = await res.json();
-  return data
-}
-
-export const getUserDFallocations = async (userAddress) => {
-  let res;
-  try {
-    res = await fetch(`${process.env.BACKEND_API}/allocations`, {
-      method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          "query":{
-              "round": {
-                "$gt":-1
-              },
-              "LP_addr": userAddress.toLowerCase()
-            
-          },
-          "fields": [
-            {
-              "expression": {
-                "pattern": "sum(ve_amt)"
-              },
-            },
-            "round"
-          ],
-          "group": "round"
-          })
-        }
-    );
   } catch (error) {
     console.log(error);
     return 0;
@@ -238,7 +131,12 @@ export const getVeOceanBal = async (userAddress) => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          "query":{
+          "query":userAddress ? {
+            "round": {
+              "$gt":-1
+            },
+            "LP_addr": userAddress.toLowerCase()
+          } : {
             "round": {
               "$gt":-1
             }
@@ -266,26 +164,33 @@ export const getVeOceanBal = async (userAddress) => {
 export const getDFallocations = async (userAddress) => {
   let res;
   try {
-    res = await fetch(`${process.env.BACKEND_API}/nftinfo`, {
+    res = await fetch(`${process.env.BACKEND_API}/allocations`, {
       method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          "query":{
+          "query": userAddress ? {
             "round": {
               "$gt":-1
-            }
-          },
-          "fields": [
-            {
-              "expression": {
-                "pattern": "sum(ve_allocated)"
-              },
             },
-            "round",
-          ],
-          "group": "round"
+            "LP_addr": userAddress.toLowerCase()
+          
+        } :  {
+          "round": {
+            "$gt":-1
+          }
+        
+      },
+        "fields": [
+          {
+            "expression": {
+              "pattern": "sum(ve_amt)"
+            },
+          },
+          "round"
+        ],
+        "group": "round"
           })
         }
     );
@@ -295,11 +200,6 @@ export const getDFallocations = async (userAddress) => {
   }
   let data = await res.json();
   return data
-}
-
-export const calcActiveAPY = (allo, distributedReward) => {
-  
-  return rewardsSummary
 }
 
 export const calcTotalAPY = (activeAPY, passiveAPY) => {

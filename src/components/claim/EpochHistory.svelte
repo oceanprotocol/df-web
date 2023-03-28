@@ -6,9 +6,6 @@
     getRoundAPY,
     getVeOceanBal,
     getDFallocations,
-    getUserDFallocations,
-    getUserVeOceanBal,
-    getRoundAPYUser,
   } from "../../utils/rewards";
   import { userAddress } from "../../stores/web3";
   import moment from "moment";
@@ -44,6 +41,7 @@
     let veBals = await getVeOceanBal();
     let dfAllocation = await getDFallocations();
     let apys = await getRoundAPY();
+    console.log();
     let newRows = [];
     rows.forEach((row) => {
       let veBal = veBals.find((vb) => vb.round == row.id);
@@ -62,7 +60,7 @@
         activeapy: `${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
-                rewards["sum(curating_amt)"] / allocation["sum(ve_allocated)"]
+                rewards["sum(curating_amt)"] / allocation["sum(ve_amt)"]
               )
             : 0
         ).toFixed(2)}%`,
@@ -79,9 +77,9 @@
   };
 
   const getUserRoundAPY = async () => {
-    let allocations = await getUserDFallocations($userAddress);
-    let veBals = await getUserVeOceanBal($userAddress);
-    let apys = await getRoundAPYUser($userAddress);
+    let allocations = await getDFallocations($userAddress);
+    let veBals = await getVeOceanBal($userAddress);
+    let apys = await getRoundAPY($userAddress);
     rows = JSON.parse(JSON.stringify(initialRows));
     rows.forEach((row) => {
       let veBal = veBals.find((vb) => vb.round == row.id);
