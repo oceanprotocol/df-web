@@ -1,8 +1,9 @@
 import { writable } from "svelte/store";
-import { getNetworkDataById } from "./web3";
+import { getNetworkDataById, userAddress } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
 import * as descriptions from "../utils/metadata/descriptions.json";
 import { getEpoch } from "../utils/epochs";
+import {convertWPRtoAPY} from "../utils/rewards.js"
 
 let networksData = networksDataArray.default
 
@@ -40,6 +41,8 @@ export const columnsData = {
     { key: "network", value: "Network" },
     { key: "title", value: "Title" },
     { key: "symbol", value: "Symbol" },
+    { key: "roundapr", value: "RoundAPR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APR },
+    { key: "roundyield", value: "RoundYield", display: (roundYield) => parseFloat(roundYield ? roundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_yield },
     { key: "last10roundavgapy", value: "10RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
     { key: "last5roundavgapy", value: "5RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
     { key: "last3roundavgapy", value: "3RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
@@ -52,7 +55,7 @@ export const columnsData = {
 export const defaultColumns = {
   'alloc': ["Title", "5RoundAllocation", "3RoundAllocation", "RoundAllocation", "CurrentAllocation", "MyAllocation"],
   'dcv': ["Title", "5RoundDCV", "3RoundDCV", "RoundVolume", "LastRoundVolume", "MyAllocation"],
-  'apy': ["Title", "10RoundAPY", "5RoundAPY", "3RoundAPY", "RoundAPY", "LastRoundAPY", "MyAllocation"],
+  'apy': ["Title", "10RoundAPY", "5RoundAPY", "3RoundAPY", "RoundAPY", "LastRoundAPY", "RoundYield", "MyAllocation"],
 }
 
 async function getDatasets(api,roundNumber) {
@@ -161,6 +164,10 @@ async function getDatasets(api,roundNumber) {
 }
 
 function getRow(dataInfo, key) {
+  let userId;
+  userAddress.subscribe(id => (userId = id));
+  const isowner = userId.toLowerCase() === dataInfo.owner_addr
+
   return {
     id: key,
     title: dataInfo.name,
@@ -168,7 +175,11 @@ function getRow(dataInfo, key) {
     symbol: dataInfo.symbol,
     owner: dataInfo.owner_addr,
     lastroundapy: dataInfo.lastRoundAPY,
+    lastroundapr: dataInfo.lastRoundAPR,
+    lastroundyield: dataInfo.lastRoundYield,
     roundapy: dataInfo.apy,
+    roundapr: dataInfo.apr,
+    roundyield: dataInfo.roundYield,
     last10roundavgapy: dataInfo['10_round_avg_apy'],
     last3roundavgapy: dataInfo['3_round_avg_apy'],
     last5roundavgapy: dataInfo['5_round_avg_apy'],
@@ -188,8 +199,11 @@ function getRow(dataInfo, key) {
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
     roundvolume: parseFloat(dataInfo.volume).toFixed(3),
+    ownerallocation: parseFloat(dataInfo.ve_allocated_realtime_owner).toFixed(3),
+    myveocean: dataInfo.allocation,
     lastroundvolume: parseFloat(dataInfo.lastRoundVolume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
+    publishersreward: dataInfo.ownerallocation > 0 || isowner && dataInfo.allocation > 0
   };
 }
 
@@ -220,6 +234,8 @@ export async function loadDatasets(nftsApi, allocations) {
   currentRoundDatasets.forEach((datasetInfo, key) => {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apy
+    datasetInfo.lastRoundAPR = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apr
+    datasetInfo.lastRoundYield = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.roundYield
     datasetInfo.lastRoundVolume = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.volume
     datasetInfo.lastRoundVolume = datasetInfo.lastRoundVolume > 0 ? datasetInfo.lastRoundVolume : 0.00
     newDatasets.push(getRow(datasetInfo, key));
