@@ -41,8 +41,8 @@ export const columnsData = {
     { key: "title", value: "Title" },
     { key: "symbol", value: "Symbol" },
     { key: "last10roundavgapy", value: "10RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-    { key: "last10roundavgapy", value: "5RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-    { key: "last10roundavgapy", value: "3RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+    { key: "last5roundavgapy", value: "5RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+    { key: "last3roundavgapy", value: "3RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
     { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
     { key: "lastroundapy", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
     { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
@@ -50,7 +50,7 @@ export const columnsData = {
 }
 
 export const defaultColumns = {
-  'alloc': ["Title", "10RoundAllocation", "5RoundAllocation", "3RoundAllocation", "RoundAllocation", "CurrentAllocation", "MyAllocation"],
+  'alloc': ["Title", "5RoundAllocation", "3RoundAllocation", "RoundAllocation", "CurrentAllocation", "MyAllocation"],
   'dcv': ["Title", "10RoundDCV", "5RoundDCV", "3RoundDCV", "RoundVolume", "LastRoundVolume", "MyAllocation"],
   'apy': ["Title", "10RoundAPY", "5RoundAPY", "3RoundAPY", "RoundAPY", "LastRoundAPY", "MyAllocation"],
 }
