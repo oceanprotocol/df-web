@@ -80,10 +80,10 @@
   <Card title="Reward Programs">
     <p>
       Ocean Emissions are designed to take place over the course of decades
-      while incentivizing active protocol contributors to flourish. Sed sit amet
-      libero ornare, ultricies metus eu, gravida libero. Nulla facilisi. Nullam
-      dignissim sem et quam aliquet ultrices. Aliquam lacus est, sollicitudin
-      mattis bibendum sed, convallis vel lacus.
+      while incentivizing active protocol contributors to flourish. Ocean
+      holders can earn passive rewards by locking their OCEAN tokens in exchange
+      for veOCEAN, and active rewards by allocating those veOCEAN tokens to
+      consumed datasets.
     </p>
     <div class="rewardsContainer">
       <ClaimItem
