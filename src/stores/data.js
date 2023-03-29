@@ -51,7 +51,7 @@ export const columnsData = {
 
 export const defaultColumns = {
   'alloc': ["Title", "5RoundAllocation", "3RoundAllocation", "RoundAllocation", "CurrentAllocation", "MyAllocation"],
-  'dcv': ["Title", "10RoundDCV", "5RoundDCV", "3RoundDCV", "RoundVolume", "LastRoundVolume", "MyAllocation"],
+  'dcv': ["Title", "5RoundDCV", "3RoundDCV", "RoundVolume", "LastRoundVolume", "MyAllocation"],
   'apy': ["Title", "10RoundAPY", "5RoundAPY", "3RoundAPY", "RoundAPY", "LastRoundAPY", "MyAllocation"],
 }
 
@@ -161,7 +161,6 @@ async function getDatasets(api,roundNumber) {
 }
 
 function getRow(dataInfo, key) {
-  console.log(dataInfo['10_round_avg_dcv']);
   return {
     id: key,
     title: dataInfo.name,
