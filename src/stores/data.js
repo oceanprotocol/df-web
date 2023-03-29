@@ -13,6 +13,9 @@ export const columnsData = {
     { key: "network", value: "Network" },
     { key: "title", value: "Title" },
     { key: "symbol", value: "Symbol" },
+    { key: "last10roundavgalloc", value:"10RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
+    { key: "last5roundavgalloc", value:"5RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
+    { key: "last3roundavgalloc", value:"3RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
     { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
     { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
     { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
@@ -21,24 +24,25 @@ export const columnsData = {
     { key: "network", value: "Network" },
     { key: "title", value: "Title" },
     { key: "symbol", value: "Symbol" },
+    { key: "last10roundavgdcv", value:"10RoundDCV", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_last_round_consume },
+    { key: "last5roundavgdcv", value:"5RoundDCV", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_last_round_consume },
+    { key: "last3roundavgdcv", value:"3RoundDCV", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_last_round_consume },
     {
       key: "roundvolume",
       value: "RoundVolume",
       display: (volume) => '$' + volume,
       tooltip: descriptions.default.tooltip_datafarming_round_consume
     },
-    {
-      key: "lastroundvolume",
-      value: "LastRoundVolume",
-      display: (volume) => '$' + volume,
-      tooltip: descriptions.default.tooltip_datafarming_last_round_consume
-    },
+    { key: "lastroundvolume", value: "LastRoundVolume", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_last_round_consume },
     { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
   ],
   'apy': [
     { key: "network", value: "Network" },
     { key: "title", value: "Title" },
     { key: "symbol", value: "Symbol" },
+    { key: "last10roundavgapy", value: "10RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+    { key: "last10roundavgapy", value: "5RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+    { key: "last10roundavgapy", value: "3RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
     { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
     { key: "lastroundapy", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
     { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
@@ -46,13 +50,14 @@ export const columnsData = {
 }
 
 export const defaultColumns = {
-  'alloc': ["Title", "RoundAllocation", "CurrentAllocation", "MyAllocation"],
-  'dcv': ["Title", "RoundVolume", "LastRoundVolume", "MyAllocation"],
-  'apy': ["Title", "RoundAPY", "LastRoundAPY", "MyAllocation"],
+  'alloc': ["Title", "10RoundAllocation", "5RoundAllocation", "3RoundAllocation", "RoundAllocation", "CurrentAllocation", "MyAllocation"],
+  'dcv': ["Title", "10RoundDCV", "5RoundDCV", "3RoundDCV", "RoundVolume", "LastRoundVolume", "MyAllocation"],
+  'apy': ["Title", "10RoundAPY", "5RoundAPY", "3RoundAPY", "RoundAPY", "LastRoundAPY", "MyAllocation"],
 }
 
 async function getDatasets(api,roundNumber) {
   let res;
+  // TODO: make rounds dynamic L75
   try {
     res = await fetch(api, {
       method: "POST",
@@ -64,8 +69,86 @@ async function getDatasets(api,roundNumber) {
         "query":{
           round:roundNumber
         },
-        "sort":{
-          "volume":-1
+        "fields": [
+            "*",
+            {
+                "expression": {
+                    "pattern": "avg(case when round in (26,27,28) then apy else 0 end)"
+                },
+                "alias": "3_round_avg_apy"
+            },
+            {
+                "expression": {
+                    "pattern": "avg(case when round in (24,25,26,27,28) then apy else 0 end)"
+                },
+                "alias": "5_round_avg_apy"
+            },
+            {
+                "expression": {
+                    "pattern": "avg(case when round in (19,20,21,22,23,24,25,26,27,28) then apy else 0 end)"
+                },
+                "alias": "10_round_avg_apy"
+            },
+            {
+                "expression": {
+                    "pattern": "avg(case when round in (26,27,28) then volume else 0 end)"
+                },
+                "alias": "3_round_avg_dcv"
+            },
+            {
+                "expression": {
+                    "pattern": "avg(case when round in (24,25,26,27,28) then volume else 0 end)"
+                },
+                "alias": "5_round_avg_dcv"
+            },
+            {
+                "expression": {
+                    "pattern": "avg(case when round in (19,20,21,22,23,24,25,26,27,28) then volume else 0 end)"
+                },
+                "alias": "10_round_avg_dcv"
+            },
+            {
+              "expression": {
+                  "pattern": "avg(case when round in (24,25,26,27,28) then ve_allocated else 0 end)"
+              },
+              "alias": "3_round_avg_alloc"
+            },
+            {
+                "expression": {
+                    "pattern": "avg(case when round in (24,25,26,27,28) then ve_allocated else 0 end)"
+                },
+                "alias": "5_round_avg_alloc"
+            },
+            {
+                "expression": {
+                    "pattern": "avg(case when round in (19,20,21,22,23,24,25,26,27,28) then ve_allocated else 0 end)"
+                },
+                "alias": "10_round_avg_alloc"
+            },
+        ],
+        "group": [
+            "did",
+            "nft_addr",
+            "chainID",
+            "symbol",
+            "name",
+            "ve_allocated",
+            "ocean_allocated",
+            "ve_allocated_owner",
+            "ocean_allocated_owner",
+            "ve_allocated_realtime",
+            "ocean_allocated_realtime",
+            "ve_allocated_realtime_owner",
+            "ocean_allocated_realtime_owner",
+            "volume",
+            "is_purgatory",
+            "apr",
+            "apy",
+            "owner_addr",
+            "round"
+        ],
+        "sort": {
+            "volume": -1
         }
       })
     });
@@ -78,6 +161,7 @@ async function getDatasets(api,roundNumber) {
 }
 
 function getRow(dataInfo, key) {
+  console.log(dataInfo['10_round_avg_dcv']);
   return {
     id: key,
     title: dataInfo.name,
@@ -86,10 +170,20 @@ function getRow(dataInfo, key) {
     owner: dataInfo.owner_addr,
     lastroundapy: dataInfo.lastRoundAPY,
     roundapy: dataInfo.apy,
+    last10roundavgapy: dataInfo['10_round_avg_apy'],
+    last3roundavgapy: dataInfo['3_round_avg_apy'],
+    last5roundavgapy: dataInfo['5_round_avg_apy'],
+    last3roundavgdcv: dataInfo['5_round_avg_dcv'],
+    last5roundavgdcv: dataInfo['3_round_avg_dcv'],
+    last10roundavgdcv: dataInfo['10_round_avg_dcv'],
+    last3roundavgalloc: dataInfo['5_round_avg_alloc'],
+    last5roundavgalloc: dataInfo['3_round_avg_alloc'],
+    last10roundavgalloc: dataInfo['3_round_avg_alloc'],
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
     chainId: dataInfo.chainID,
+    last_7_round_avg_allocation: dataInfo['7_round_avg_allocation'],
     currentallocation: parseFloat(dataInfo.ve_allocated_realtime).toFixed(3),
     roundallocation: parseFloat(dataInfo.ve_allocated).toFixed(3),
     myallocation: dataInfo.allocation,

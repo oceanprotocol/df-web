@@ -288,18 +288,6 @@
 
 {#if visibleColData && rowData}
   <div>
-    <div class="tableTabs">
-      <Tabs>
-        <Tab label="Allocations" on:click={tabSelection('alloc')} />
-        <Tab label="DCV" on:click={tabSelection('dcv')} />
-        <Tab label="APY" on:click={tabSelection('apy')} />
-        <svelte:fragment slot="content">
-          <TabContent></TabContent>
-          <TabContent></TabContent>
-          <TabContent></TabContent>
-        </svelte:fragment>
-      </Tabs>
-    </div>
     <div class="tableCustomHeader">
       <div class="headerValuesContainer">
         <ItemWithLabel
@@ -343,7 +331,18 @@
       </div>
       <div class="tableActionsContainer">
         <Dropdown options={filterOptions} bind:selectedOption={filterOption} />
-        <ChecklistDropdown options={columns} title={"Columns"} {onCheck} />
+        <div class="tableTabs">
+          <Tabs>
+            <Tab label="Allocations" on:click={tabSelection('alloc')} />
+            <Tab label="DCV" on:click={tabSelection('dcv')} />
+            <Tab label="APY" on:click={tabSelection('apy')} />
+            <svelte:fragment slot="content">
+              <TabContent></TabContent>
+              <TabContent></TabContent>
+              <TabContent></TabContent>
+            </svelte:fragment>
+          </Tabs>
+        </div>
       </div>
     </div>
     <div class="tableContainer">
@@ -507,6 +506,7 @@
   .tableActionsContainer {
     display: flex !important;
     justify-content: space-between !important;
+    align-items: center !important;
   }
 
   .customTable {
@@ -570,6 +570,14 @@
     padding: 1rem;
     border: 1px solid var(--brand-grey-dimmed);
     cursor: pointer;
+  }
+
+  .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item:first-child{
+    border-right: none;
+  }
+
+  .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item:last-child{
+    border-left: none;
   }
   
   .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item a{
