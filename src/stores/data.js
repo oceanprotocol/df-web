@@ -3,7 +3,7 @@ import { getNetworkDataById, userAddress } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
 import * as descriptions from "../utils/metadata/descriptions.json";
 import { getEpoch } from "../utils/epochs";
-import {convertWPRtoAPY} from "../utils/rewards.js"
+import { getRoundsDatafarm } from "../utils/functions";
 
 let networksData = networksDataArray.default
 
@@ -14,53 +14,53 @@ export const columnsData = {
     { key: "network", value: "Network" },
     { key: "title", value: "Title" },
     { key: "symbol", value: "Symbol" },
-    { key: "last10roundavgalloc", value:"10RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
-    { key: "last5roundavgalloc", value:"5RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
-    { key: "last3roundavgalloc", value:"3RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
-    { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
-    { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
-    { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
+    { key: "last10roundavgalloc", value:"Ro10 Avg Alloc", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_10_round_allocation},
+    { key: "last5roundavgalloc", value:"Ro5 Avg Alloc", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_5_round_allocation},
+    { key: "last3roundavgalloc", value:"Ro3 Avg Alloc", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_3_round_allocation},
+    { key: "roundallocation", value:"Ro Alloc", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
+    { key: "currentallocation", value:"Curr Alloc", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
+    { key: "myallocation", value:"My Allocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
   ],
   'dcv': [
     { key: "network", value: "Network" },
     { key: "title", value: "Title" },
     { key: "symbol", value: "Symbol" },
-    { key: "last10roundavgdcv", value:"10RoundDCV", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_last_round_consume },
-    { key: "last5roundavgdcv", value:"5RoundDCV", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_last_round_consume },
-    { key: "last3roundavgdcv", value:"3RoundDCV", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_last_round_consume },
+    { key: "last10roundavgdcv", value:"Ro10 DCV", display: (last10roundavgdcv) => '$' + last10roundavgdcv, tooltip: descriptions.default.tooltip_datafarming_10_round_consume },
+    { key: "last5roundavgdcv", value:"Ro5 DCV", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_5_round_consume },
+    { key: "last3roundavgdcv", value:"Ro3 DCV", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_3_round_consume },
     {
       key: "roundvolume",
-      value: "RoundVolume",
+      value: "Ro Volume",
       display: (volume) => '$' + volume,
       tooltip: descriptions.default.tooltip_datafarming_round_consume
     },
-    { key: "lastroundvolume", value: "LastRoundVolume", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_last_round_consume },
-    { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
+    { key: "lastroundvolume", value: "Last Ro Volume", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_last_round_consume },
+    { key: "myallocation", value:"My Allocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
   ],
   'apy': [
     { key: "network", value: "Network" },
     { key: "title", value: "Title" },
     { key: "symbol", value: "Symbol" },
-    { key: "roundapr", value: "RoundAPR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APR },
-    { key: "roundyield", value: "RoundYield", display: (roundYield) => parseFloat(roundYield ? roundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_yield },
-    { key: "last10roundavgapy", value: "10RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-    { key: "last5roundavgapy", value: "5RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-    { key: "last3roundavgapy", value: "3RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-    { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-    { key: "lastroundapy", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
-    { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
+    { key: "last10roundavgapy", value: "Ro10 APY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_10_round_asset_APY },
+    { key: "last5roundavgapy", value: "Ro5 APY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_5_round_asset_APY },
+    { key: "last3roundavgapy", value: "Ro3 APY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_3_round_asset_APY },
+    { key: "roundapr", value: "Ro APR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APR },
+    { key: "roundapy", value: "Ro APY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+    { key: "lastroundapy", value: "Last Ro APY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+    { key: "roundyield", value: "Ro Yield", display: (roundYield) => parseFloat(roundYield ? roundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_yield },
+    { key: "myallocation", value:"My Allocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
   ]
 }
 
 export const defaultColumns = {
-  'alloc': ["Title", "5RoundAllocation", "3RoundAllocation", "RoundAllocation", "CurrentAllocation", "MyAllocation"],
-  'dcv': ["Title", "5RoundDCV", "3RoundDCV", "RoundVolume", "LastRoundVolume", "MyAllocation"],
-  'apy': ["Title", "10RoundAPY", "5RoundAPY", "3RoundAPY", "RoundAPY", "LastRoundAPY", "RoundYield", "MyAllocation"],
+  'alloc': ["Title", "Ro5 Avg Alloc", "Ro3 Avg Alloc", "Ro Alloc", "Curr Alloc", "My Allocation"],
+  'dcv': ["Title", "Ro10 DCV", "Ro5 DCV", "Ro3 DCV", "Ro Volume", "Last Ro Volume", "My Allocation"],
+  'apy': ["Title", "Ro5 APY", "Ro3 APY", "Ro APY", "Last Ro APY", "Ro Yield", "My Allocation"],
 }
 
 async function getDatasets(api,roundNumber) {
   let res;
-  // TODO: make rounds dynamic L75
+  
   try {
     res = await fetch(api, {
       method: "POST",
@@ -70,7 +70,9 @@ async function getDatasets(api,roundNumber) {
       },
       body: JSON.stringify({
         "query":{
-          round:roundNumber
+          "round": {
+            "$in": getRoundsDatafarm(roundNumber)
+          }
         },
         "fields": [
             "*",
@@ -167,6 +169,8 @@ function getRow(dataInfo, key) {
   let userId;
   userAddress.subscribe(id => (userId = id));
   const isowner = userId.toLowerCase() === dataInfo.owner_addr
+
+  console.log(dataInfo['10_round_avg_dcv']);
 
   return {
     id: key,

@@ -488,6 +488,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    white-space: nowrap;
   }
   :global(.bx--tooltip__label) {
     background-color: transparent !important;
