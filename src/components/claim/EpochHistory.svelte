@@ -185,6 +185,7 @@
   .title {
     font-weight: bold;
     width: 100%;
+    margin-bottom: calc(var(--spacer) / 2);
   }
   .headerContainer {
     display: flex;
