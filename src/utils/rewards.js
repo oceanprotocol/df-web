@@ -144,7 +144,7 @@ export const getVeOceanBal = async (userAddress) => {
           "fields": [
             {
               "expression": {
-                "pattern": "sum(balance)"
+                "pattern": "sum(locked_amt)"
               },
             },
             "round",
@@ -185,7 +185,7 @@ export const getDFallocations = async (userAddress) => {
         "fields": [
           {
             "expression": {
-              "pattern": "sum(ve_amt)"
+              "pattern": "sum(ocean_amt)"
             },
           },
           "round"

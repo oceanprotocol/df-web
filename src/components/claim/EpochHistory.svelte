@@ -31,9 +31,17 @@
     },
     { key: "date_start", value: "Start Date" },
     { key: "passive", value: "Passive Rewards" },
-    { key: "passiveapy", value: "Passive APY", tooltip: descriptions.default.tooltip_rewards_apy_passive_history},
+    {
+      key: "passiveapy",
+      value: "Passive APY",
+      tooltip: descriptions.default.tooltip_rewards_apy_passive_history,
+    },
     { key: "active", value: "Active Rewards" },
-    { key: "activeapy", value: "Active APY", tooltip: descriptions.default.tooltip_rewards_apy_active_history},
+    {
+      key: "activeapy",
+      value: "Active APY",
+      tooltip: descriptions.default.tooltip_rewards_apy_active_history,
+    },
   ];
   let initialHeaders = headers;
 
@@ -68,14 +76,14 @@
         passiveapy: `${parseFloat(
           rewards && veBal
             ? convertWPRtoAPY(
-                rewards["sum(passive_amt)"] / veBal["sum(balance)"]
+                rewards["sum(passive_amt)"] / veBal["sum(locked_amt)"]
               )
             : 0
         ).toFixed(2)}%`,
         activeapy: `${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
-                rewards["sum(curating_amt)"] / allocation["sum(ve_amt)"]
+                rewards["sum(curating_amt)"] / allocation["sum(ocean_amt)"]
               )
             : 0
         ).toFixed(2)}%`,
@@ -108,7 +116,7 @@
         ` / ${parseFloat(
           rewards && veBal
             ? convertWPRtoAPY(
-                rewards["sum(passive_amt)"] / veBal["sum(balance)"]
+                rewards["sum(passive_amt)"] / veBal["sum(locked_amt)"]
               )
             : 0
         ).toFixed(2)}%`;
@@ -117,7 +125,7 @@
         ` / ${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
-                rewards["sum(curating_amt)"] / allocation["sum(ve_amt)"]
+                rewards["sum(curating_amt)"] / allocation["sum(ocean_amt)"]
               )
             : 0
         ).toFixed(2)}%`;
@@ -140,15 +148,12 @@
       <div class="headerContainer">
         {header.value}
         {#if header.tooltip}
-          <CustomTooltip
-            text={header.tooltip}
-            direction="bottom"
-          />
+          <CustomTooltip text={header.tooltip} direction="bottom" />
         {/if}
       </div>
     </svelte:fragment>
     <svelte:fragment slot="cell" let:cell let:row>
-      <div class='cellContainer'>
+      <div class="cellContainer">
         {cell.value}
       </div>
     </svelte:fragment>
