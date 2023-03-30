@@ -27,7 +27,7 @@ export const setupAppConfig = () => {
         case "staging":
             console.log("NODE_ENV has been set to staging")
             process.env.SUPPORTED_CHAIN_IDS = "[5]"
-            process.env.BACKEND_API = "https://df-sql.oceandao.org"
+            process.env.BACKEND_API = "https://test-df-sql.oceandao.org"
             process.env.SUBGRAPH_API = "https://v4.subgraph.goerli.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph"
             process.env.VE_SUPPORTED_CHAINID = 5
             process.env.DEBUGGING = "enabled"
