@@ -3,7 +3,7 @@
   import NetworkSelection from "./NetworkSelection.svelte";
   import { Link, useLocation } from "svelte-navigator";
 
-  let aboutURL = "https://docs.oceanprotocol.com/veocean-data-farming-tutorial";
+  let aboutURL = "https://docs.oceanprotocol.com/veocean-data-farming";
   const location = useLocation();
 </script>
 
