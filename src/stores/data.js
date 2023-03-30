@@ -54,7 +54,7 @@ export const columnsData = {
 
 export const defaultColumns = {
   'alloc': ["Title", "Ro5 Avg Alloc", "Ro3 Avg Alloc", "Ro Alloc", "Curr Alloc", "My Allocation"],
-  'dcv': ["Title", "Ro10 DCV", "Ro5 DCV", "Ro3 DCV", "Ro Volume", "Last Ro Volume", "My Allocation"],
+  'dcv': ["Title", "Ro10 DCV", "Ro5 DCV", "Ro3 DCV", "Last Ro Volume", "Ro Volume", "My Allocation"],
   'apy': ["Title", "Ro5 APY", "Ro3 APY", "Ro APY", "Last Ro APY", "Ro Yield", "My Allocation"],
 }
 
