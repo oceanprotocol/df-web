@@ -211,15 +211,15 @@ function getRow(dataInfo, key) {
     roundapy: dataInfo.apy,
     roundapr: dataInfo.apr,
     roundyield: dataInfo.roundYield,
-    last10roundavgapy: dataInfo['10_round_avg_apy'],
-    last3roundavgapy: dataInfo['3_round_avg_apy'],
-    last5roundavgapy: dataInfo['5_round_avg_apy'],
-    last3roundavgdcv: parseFloat(dataInfo['3_round_avg_dcv']).toFixed(3),
-    last5roundavgdcv: parseFloat(dataInfo['5_round_avg_dcv']).toFixed(3),
-    last10roundavgdcv: parseFloat(dataInfo['10_round_avg_dcv']).toFixed(3),
-    last3roundavgalloc: dataInfo['3_round_avg_alloc'],
-    last5roundavgalloc: dataInfo['5_round_avg_alloc'],
-    last10roundavgalloc: dataInfo['10_round_avg_alloc'],
+    last10roundavgapy: dataInfo.last10roundavgapy,
+    last3roundavgapy: dataInfo.last3roundavgapy,
+    last5roundavgapy: dataInfo.last5roundavgapy,
+    last3roundavgdcv: parseFloat(dataInfo.last3roundavgdcv).toFixed(3),
+    last5roundavgdcv: parseFloat(dataInfo.last5roundavgdcv).toFixed(3),
+    last10roundavgdcv: parseFloat(dataInfo.last10roundavgdcv).toFixed(3),
+    last3roundavgalloc: dataInfo.last3roundavgalloc,
+    last5roundavgalloc: dataInfo.last5roundavgalloc,
+    last10roundavgalloc: dataInfo.last10roundavgalloc,
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
@@ -272,18 +272,18 @@ export async function loadDatasets(nftsApi, allocations) {
     datasetInfo.lastRoundYield = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.roundYield
     datasetInfo.lastRoundVolume = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.volume
     datasetInfo.lastRoundVolume = datasetInfo.lastRoundVolume > 0 ? datasetInfo.lastRoundVolume : 0.00
+    
+    datasetInfo.last3roundavgalloc = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['3_round_avg_alloc'] || 0
+    datasetInfo.last3roundavgdcv = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['3_round_avg_dcv'] || 0
+    datasetInfo.last3roundavgapy = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['3_round_avg_apy'] || 0
 
-    datasetInfo['3_round_avg_alloc'] = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)['3_round_avg_alloc']
-    datasetInfo['3_round_avg_dcv'] = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)['3_round_avg_dcv']
-    datasetInfo['3_round_avg_apy'] = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)['3_round_avg_apy']
+    datasetInfo.last5roundavgalloc = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['5_round_avg_alloc'] || 0
+    datasetInfo.last5roundavgdcv = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['5_round_avg_dcv'] || 0
+    datasetInfo.last5roundavgapy = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['5_round_avg_apy'] || 0
 
-    datasetInfo['5_round_avg_alloc'] = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)['5_round_avg_alloc']
-    datasetInfo['5_round_avg_dcv'] = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)['5_round_avg_dcv']
-    datasetInfo['5_round_avg_apy'] = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)['5_round_avg_apy']
-
-    datasetInfo['10_round_avg_alloc'] = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)['10_round_avg_alloc']
-    datasetInfo['10_round_avg_dcv'] = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)['10_round_avg_dcv']
-    datasetInfo['10_round_avg_apy'] = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)['10_round_avg_apy']
+    datasetInfo.last10roundavgalloc = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['10_round_avg_alloc'] || 0
+    datasetInfo.last10roundavgdcv = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['10_round_avg_dcv'] || 0
+    datasetInfo.last10roundavgapy = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['10_round_avg_apy'] || 0
 
     newDatasets.push(getRow(datasetInfo, key));
   });
