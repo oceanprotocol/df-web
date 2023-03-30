@@ -197,8 +197,6 @@ function getRow(dataInfo, key) {
   userAddress.subscribe(id => (userId = id));
   const isowner = userId.toLowerCase() === dataInfo.owner_addr
 
-  console.log(dataInfo);
-
   return {
     id: key,
     title: dataInfo.name,
@@ -217,9 +215,9 @@ function getRow(dataInfo, key) {
     last3roundavgdcv: parseFloat(dataInfo.last3roundavgdcv).toFixed(3),
     last5roundavgdcv: parseFloat(dataInfo.last5roundavgdcv).toFixed(3),
     last10roundavgdcv: parseFloat(dataInfo.last10roundavgdcv).toFixed(3),
-    last3roundavgalloc: dataInfo.last3roundavgalloc,
-    last5roundavgalloc: dataInfo.last5roundavgalloc,
-    last10roundavgalloc: dataInfo.last10roundavgalloc,
+    last3roundavgalloc: parseFloat(dataInfo.last3roundavgalloc).toFixed(3),
+    last5roundavgalloc: parseFloat(dataInfo.last5roundavgalloc).toFixed(3),
+    last10roundavgalloc: parseFloat(dataInfo.last10roundavgalloc).toFixed(3),
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
