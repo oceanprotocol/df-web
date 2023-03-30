@@ -32,7 +32,7 @@ export const getThursdayOffset = (day, days, max) => {
 }
 
 export const getRoundsDatafarm = (roundNumber) => {
-    // return a string of number from roundNumber to roundNumber-10
+    // return an array of numbers from roundNumber to (roundNumber-10)
     const rounds = [];
     for (let i = roundNumber; i >= roundNumber - 10; i--) {
       rounds.push(i);
