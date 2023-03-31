@@ -64,7 +64,7 @@
     return moment.utc(getThursdayOffset(moment().utc(), MAXDAYS, max));
   };
 
-  let schema, fields, form, errors
+  let schema, fields, form, errors;
   var handleSubmit;
   const initForm = () => {
     schema = yup.object().shape({
@@ -78,7 +78,7 @@
         .date()
         .min(
           $oceanUnlockDate
-            ? $oceanUnlockDate.add('1','week').format("YYYY-MM-DD")
+            ? $oceanUnlockDate.add("1", "week").format("YYYY-MM-DD")
             : getThursdayDate(moment().utc())
         )
         .max(getMaxDate().format("YYYY-MM-DD"))
@@ -103,16 +103,16 @@
       validationSchema: schema,
       onSubmit: (values) => onFormSubmit(values),
     });
-    form = resp.form
-    errors = resp.errors
-    handleSubmit = resp.handleSubmit
-  }
-  initForm()
+    form = resp.form;
+    errors = resp.errors;
+    handleSubmit = resp.handleSubmit;
+  };
+  initForm();
 
   async function init() {
     await updateUserBalanceOcean($userAddress, $web3Provider);
     oceanBalance = getOceanBalance($connectedChainId);
-    initForm()
+    initForm();
   }
 
   $: if ($userAddress) {
@@ -214,7 +214,7 @@
       ).toFixed(3);
       calculatedVotingPower = (
         (msDelta / getMaxDate().diff(today)) *
-        $form.amount
+        ($form.amount + parseFloat($lockedOceanAmount))
       ).toFixed(3);
     } else {
       calculatedVotingPower = 0;
@@ -237,10 +237,13 @@
   <Card
     title={$oceanUnlockDate ? `Update veOCEAN Lock` : `Lock OCEAN, get veOCEAN`}
   >
-    <form class="content" on:submit={(event) => {
-      event.preventDefault()
-      handleSubmit()
-      }}>
+    <form
+      class="content"
+      on:submit={(event) => {
+        event.preventDefault();
+        handleSubmit();
+      }}
+    >
       <div class="item">
         <Input
           type="number"
@@ -271,7 +274,8 @@
           min={$oceanUnlockDate
             ? $oceanUnlockDate.format("YYYY-MM-DD")
             : getThursdayDate(moment().utc().add(7, "days"))}
-          disabled={getOceanBalance($connectedChainId) < 0 || ($oceanUnlockDate && $oceanUnlockDate.isBefore(moment()))}
+          disabled={getOceanBalance($connectedChainId) < 0 ||
+            ($oceanUnlockDate && $oceanUnlockDate.isBefore(moment()))}
           max={getMaxDate().format("YYYY-MM-DD")}
           bind:value={$form.unlockDate}
         />
@@ -281,7 +285,8 @@
           <ItemWithLabel
             title={`Lock Multiplier`}
             value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
-            tooltipMessage={descriptions.default.tooltip_veocean_lock_multiplier}
+            tooltipMessage={descriptions.default
+              .tooltip_veocean_lock_multiplier}
           />
           <ItemWithLabel
             title={`Receive`}
