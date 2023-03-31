@@ -60,7 +60,6 @@ export const defaultColumns = {
 
 async function getDatasetsAvgs(api,roundNumber) {
   let res;
-  
   try {
     res = await fetch(api, {
       method: "POST",
@@ -71,62 +70,62 @@ async function getDatasetsAvgs(api,roundNumber) {
       body: JSON.stringify({
         "query":{
           "round": {
-            "$in": getRoundsDatafarm(roundNumber)
+            "$in": getRoundsDatafarm(roundNumber, roundNumber)
           }
         },
         "fields": [
             "*",
             {
                 "expression": {
-                    "pattern": "avg(case when round in (26,27,28) then apy else 0 end)"
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 2).join(",")}) then apy else 0 end)`
                 },
                 "alias": "3_round_avg_apy"
             },
             {
                 "expression": {
-                    "pattern": "avg(case when round in (24,25,26,27,28) then apy else 0 end)"
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 4).join(",")}) then apy else 0 end)`
                 },
                 "alias": "5_round_avg_apy"
             },
             {
                 "expression": {
-                    "pattern": "avg(case when round in (19,20,21,22,23,24,25,26,27,28) then apy else 0 end)"
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 9).join(",")}) then apy else 0 end)`
                 },
                 "alias": "10_round_avg_apy"
             },
             {
                 "expression": {
-                    "pattern": "avg(case when round in (26,27,28) then volume else 0 end)"
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 2).join(",")}) then volume else 0 end)`
                 },
                 "alias": "3_round_avg_dcv"
             },
             {
                 "expression": {
-                    "pattern": "avg(case when round in (24,25,26,27,28) then volume else 0 end)"
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 4).join(",")}) then volume else 0 end)`
                 },
                 "alias": "5_round_avg_dcv"
             },
             {
                 "expression": {
-                    "pattern": "avg(case when round in (19,20,21,22,23,24,25,26,27,28) then volume else 0 end)"
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 9).join(",")}) then volume else 0 end)`
                 },
                 "alias": "10_round_avg_dcv"
             },
             {
               "expression": {
-                  "pattern": "avg(case when round in (24,25,26,27,28) then ve_allocated else 0 end)"
+                  "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 2).join(",")}) then ve_allocated else 0 end)`
               },
               "alias": "3_round_avg_alloc"
             },
             {
                 "expression": {
-                    "pattern": "avg(case when round in (24,25,26,27,28) then ve_allocated else 0 end)"
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 4).join(",")}) then ve_allocated else 0 end)`
                 },
                 "alias": "5_round_avg_alloc"
             },
             {
                 "expression": {
-                    "pattern": "avg(case when round in (19,20,21,22,23,24,25,26,27,28) then ve_allocated else 0 end)"
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 9).join(",")}) then ve_allocated else 0 end)`
                 },
                 "alias": "10_round_avg_alloc"
             },
@@ -250,12 +249,12 @@ function filterPurgatoryDatasetsWithoutAllocations(datasets,allocations){
 export async function loadDatasets(nftsApi, allocations) {
   let curRound = getEpoch().id;
   //current round number is 0
-  let currentRoundDatasets = await getDatasets(nftsApi,0);
+  let [currentRoundDatasets, lastRoundDatasets, avgsRoundDatasets] = await Promise.all([getDatasets(nftsApi,0), getDatasets(nftsApi,curRound-1), getDatasetsAvgs(nftsApi,curRound)]);
+  
   let purgatoryDatasetsWithAllocation = filterPurgatoryDatasetsWithoutAllocations(currentRoundDatasets, allocations)
   currentRoundDatasets = currentRoundDatasets.filter((d) => d.is_purgatory === 0)
   currentRoundDatasets = purgatoryDatasetsWithAllocation.concat(currentRoundDatasets)
-  const lastRoundDatasets = await getDatasets(nftsApi,curRound-1)
-  const avgsRoundDatasets = await getDatasetsAvgs(nftsApi,curRound);
+
   if (currentRoundDatasets.length === 0) {
     datasets.set([]);
     return;
@@ -265,23 +264,26 @@ export async function loadDatasets(nftsApi, allocations) {
     
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     
-    datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apy
-    datasetInfo.lastRoundAPR = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apr
-    datasetInfo.lastRoundYield = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.roundYield
-    datasetInfo.lastRoundVolume = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.volume
+    const lastRoundDataset = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
+    datasetInfo.lastRoundAPY = lastRoundDataset?.apy
+    datasetInfo.lastRoundAPR = lastRoundDataset?.apr
+    datasetInfo.lastRoundYield = lastRoundDataset?.roundYield
+    datasetInfo.lastRoundVolume = lastRoundDataset?.volume
+    
     datasetInfo.lastRoundVolume = datasetInfo.lastRoundVolume > 0 ? datasetInfo.lastRoundVolume : 0.00
     
-    datasetInfo.last3roundavgalloc = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['3_round_avg_alloc'] || 0
-    datasetInfo.last3roundavgdcv = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['3_round_avg_dcv'] || 0
-    datasetInfo.last3roundavgapy = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['3_round_avg_apy'] || 0
+    const avgsRoundDataset = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
+    datasetInfo.last3roundavgalloc = avgsRoundDataset?.['3_round_avg_alloc'] || 0
+    datasetInfo.last3roundavgdcv = avgsRoundDataset?.['3_round_avg_dcv'] || 0
+    datasetInfo.last3roundavgapy = avgsRoundDataset?.['3_round_avg_apy'] || 0
 
-    datasetInfo.last5roundavgalloc = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['5_round_avg_alloc'] || 0
-    datasetInfo.last5roundavgdcv = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['5_round_avg_dcv'] || 0
-    datasetInfo.last5roundavgapy = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['5_round_avg_apy'] || 0
+    datasetInfo.last5roundavgalloc = avgsRoundDataset?.['5_round_avg_alloc'] || 0
+    datasetInfo.last5roundavgdcv = avgsRoundDataset?.['5_round_avg_dcv'] || 0
+    datasetInfo.last5roundavgapy = avgsRoundDataset?.['5_round_avg_apy'] || 0
 
-    datasetInfo.last10roundavgalloc = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['10_round_avg_alloc'] || 0
-    datasetInfo.last10roundavgdcv = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['10_round_avg_dcv'] || 0
-    datasetInfo.last10roundavgapy = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.['10_round_avg_apy'] || 0
+    datasetInfo.last10roundavgalloc = avgsRoundDataset?.['10_round_avg_alloc'] || 0
+    datasetInfo.last10roundavgdcv = avgsRoundDataset?.['10_round_avg_dcv'] || 0
+    datasetInfo.last10roundavgapy = avgsRoundDataset?.['10_round_avg_apy'] || 0
 
     newDatasets.push(getRow(datasetInfo, key));
   });
