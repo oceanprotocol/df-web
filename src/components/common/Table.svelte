@@ -661,7 +661,7 @@
   }
 
   .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item.bx--tabs__nav-item--selected{
-    background: var(--background-body);
+    background: #f4f4f4;
   }
 
   @media (min-width: 640px) {
