@@ -58,7 +58,10 @@ export const defaultColumns = {
   'apy': ["Title", "Rnd5 APY", "Rnd3 APY", "Last Rnd APY", "Rnd APY", "Rnd Yield", "My Allocation"],
 }
 
+console.log(getRoundsDatafarm(31, 5))
+
 async function getDatasetsAvgs(api,roundNumber) {
+  console.log(roundNumber)
   let res;
   try {
     res = await fetch(api, {
@@ -70,65 +73,23 @@ async function getDatasetsAvgs(api,roundNumber) {
       body: JSON.stringify({
         "query":{
           "round": {
-            "$in": getRoundsDatafarm(roundNumber, roundNumber)
+            "$in": getRoundsDatafarm(roundNumber, 5)
           }
         },
         "fields": [
-            "*",
-            {
-                "expression": {
-                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 2).join(",")}) then apy else 0 end)`
-                },
-                "alias": "3_round_avg_apy"
-            },
-            {
-                "expression": {
-                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 4).join(",")}) then apy else 0 end)`
-                },
-                "alias": "5_round_avg_apy"
-            },
-            {
-                "expression": {
-                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 9).join(",")}) then apy else 0 end)`
-                },
-                "alias": "10_round_avg_apy"
-            },
-            {
-                "expression": {
-                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 2).join(",")}) then volume else 0 end)`
-                },
-                "alias": "3_round_avg_dcv"
-            },
-            {
-                "expression": {
-                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 4).join(",")}) then volume else 0 end)`
-                },
-                "alias": "5_round_avg_dcv"
-            },
-            {
-                "expression": {
-                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 9).join(",")}) then volume else 0 end)`
-                },
-                "alias": "10_round_avg_dcv"
-            },
+            "nft_addr",
             {
               "expression": {
-                  "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 2).join(",")}) then ve_allocated else 0 end)`
+                  "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 3).join(",")}) then ve_allocated else 0 end)`
               },
               "alias": "3_round_avg_alloc"
             },
             {
                 "expression": {
-                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 4).join(",")}) then ve_allocated else 0 end)`
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 5).join(",")}) then ve_allocated else 0 end)`
                 },
                 "alias": "5_round_avg_alloc"
-            },
-            {
-                "expression": {
-                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 9).join(",")}) then ve_allocated else 0 end)`
-                },
-                "alias": "10_round_avg_alloc"
-            },
+            }
         ],
         "group": [
             "did",
