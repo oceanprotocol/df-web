@@ -18,7 +18,7 @@
 </svelte:head>
 <header>
   <h1 class="logo">
-    <Link to="/" class="link plausible-event-name=Link+to+df-homepage">
+    <Link to="/" class="link">
       <img src={"/logo-ocean-svg.svg"} alt="SvelteKit" />
     </Link>
   </h1>
@@ -27,19 +27,19 @@
       <li class:active={$location.pathname === "/veocean"}>
         <Link
           to="/veocean"
-          class="link plausible-event-name=Link+to+veOcean+page">veOCEAN</Link
+          class="link">veOCEAN</Link
         >
       </li>
       <li class:active={$location.pathname === "/datafarming"}>
         <Link
           to="/datafarming"
-          class="link plausible-event-name=Link+to+datafarming+page">FARMS</Link
+          class="link">FARMS</Link
         >
       </li>
       <li class:active={$location.pathname === "/activerewards"}>
         <Link
           to="/activerewards"
-          class="link plausible-event-name=Link+to+activerewards+page"
+          class="link"
           >REWARDS</Link
         >
       </li>
@@ -47,7 +47,7 @@
         <a
           href={aboutURL}
           target="_blank"
-          class="link plausible-event-name=Link+external+to+about+blog+post"
+          class="link"
           >ABOUT</a
         >
       </li>
