@@ -45,9 +45,9 @@
 >
   <Countdown />
   <p class="cardFooter">
-    Data Farming Rounds start and end every Thursday at midnight GMT.
+    Data Farming rounds start and end every Thursday at midnight GMT.
     Rewards are paid in OCEAN and distributed every week on Thursday.
-    Ocean Emissions are designed to take place over the course of decades
+    Ocean emissions are designed to take place over decades
     while incentivizing active protocol contributors to flourish.
   </p>
 </Card>
