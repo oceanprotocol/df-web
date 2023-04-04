@@ -15,6 +15,8 @@ export let veEstimate = writable(0);
 export let veClaimables = writable(0);
 export let dfEstimate = writable(0);
 export let dfClaimables = writable(0);
+export let oceanRewards = writable(null);
+export let oceanUserRewards = writable(null);
 
 export const getTokenAddress = (chainId, tokenName, airdropsConfig) => {
     if (!chainId || !tokenName) return null;
