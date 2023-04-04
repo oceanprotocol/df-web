@@ -19,9 +19,8 @@
 </script>
 
 <Card
-  title={`Round ${roundInfo?.id}  -  ${
-    parseInt(roundInfo?.passive) + parseInt(roundInfo?.active)
-  } OCEAN`}
+  title={`Round ${roundInfo?.id}`}
+  subtitle={`${parseInt(roundInfo?.passive) + parseInt(roundInfo?.active)} OCEAN`}
   tag={`${
     $APYs
       ? totalApy > 10000
@@ -43,7 +42,21 @@
       : ""
   }`}
   tooltipMessage={descriptions.default.tooltip_rewards_overview}
-  className="rewardsOverview"
 >
   <Countdown />
+  <p class="cardFooter">
+    Data Farming Rounds start and end every Thursday at midnight GMT.
+    Rewards are paid in OCEAN and distributed every week on Thursday.
+    Ocean Emissions are designed to take place over the course of decades
+    while incentivizing active protocol contributors to flourish.
+  </p>
 </Card>
+
+<style>
+  .cardFooter {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-top: calc(var(--spacer) / 2);
+  }
+</style>

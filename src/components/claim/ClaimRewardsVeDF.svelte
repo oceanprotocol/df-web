@@ -79,16 +79,15 @@
 <div class="container">
   <Card title="Reward Programs">
     <p>
-      Ocean Emissions are designed to take place over the course of decades
-      while incentivizing active protocol contributors to flourish. Ocean
-      holders can earn passive rewards by locking their OCEAN tokens in exchange
-      for veOCEAN, and active rewards by allocating those veOCEAN tokens to
-      consumed datasets.
+      Data Farming consists of two reward programs. 
+      Each reward program is unique and offers different ways for 
+      participants to get engaged. To access Reward Programs, 
+      participants are required to hold veOCEAN.
     </p>
     <div class="rewardsContainer">
       <ClaimItem
         title="Passive"
-        description="<p>Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>.</p><p>Current round passive rewards are distributed for <strong>last round</strong> holding.</p>"
+        description="<p>Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>.</p><p><strong>Earn more Rewards</strong> by locking more OCEAN or increasing your unlock time.</p>"
         distributedAmount={roundInfo?.passive}
         apy={`${
           $APYs
