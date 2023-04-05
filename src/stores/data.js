@@ -14,7 +14,6 @@ export const columnsData = {
     { key: "network", value: "Network" },
     { key: "title", value: "Title", tooltip: descriptions.default.tooltip_datafarming_title},
     { key: "symbol", value: "Symbol" },
-    { key: "last10roundavgalloc", value:"Rnd10 Avg Alloc", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_10_round_allocation},
     { key: "last5roundavgalloc", value:"Rnd5 Avg Alloc", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_5_round_allocation},
     { key: "last3roundavgalloc", value:"Rnd3 Avg Alloc", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_3_round_allocation},
     { key: "roundallocation", value:"Rnd Alloc", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
@@ -25,7 +24,6 @@ export const columnsData = {
     { key: "network", value: "Network" },
     { key: "title", value: "Title", tooltip: descriptions.default.tooltip_datafarming_title},
     { key: "symbol", value: "Symbol" },
-    { key: "last10roundavgdcv", value:"Rnd10 DCV", display: (last10roundavgdcv) => '$' + last10roundavgdcv, tooltip: descriptions.default.tooltip_datafarming_10_round_consume },
     { key: "last5roundavgdcv", value:"Rnd5 DCV", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_5_round_consume },
     { key: "last3roundavgdcv", value:"Rnd3 DCV", display: (volume) => '$' + volume, tooltip: descriptions.default.tooltip_datafarming_3_round_consume },
     {
@@ -41,7 +39,6 @@ export const columnsData = {
     { key: "network", value: "Network" },
     { key: "title", value: "Title", tooltip: descriptions.default.tooltip_datafarming_title},
     { key: "symbol", value: "Symbol" },
-    { key: "last10roundavgapy", value: "Rnd10 APY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_10_round_asset_APY },
     { key: "last5roundavgapy", value: "Rnd5 APY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_5_round_asset_APY },
     { key: "last3roundavgapy", value: "Rnd3 APY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_3_round_asset_APY },
     { key: "roundapr", value: "Rnd APR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APR },
@@ -60,7 +57,7 @@ export const defaultColumns = {
 
 console.log(getRoundsDatafarm(31, 5))
 
-async function getDatasetsAvgs(api,roundNumber) {
+async function getDatasetsAllocationAvgs(api,roundNumber) {
   console.log(roundNumber)
   let res;
   try {
@@ -89,6 +86,136 @@ async function getDatasetsAvgs(api,roundNumber) {
                     "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 5).join(",")}) then ve_allocated else 0 end)`
                 },
                 "alias": "5_round_avg_alloc"
+            }
+        ],
+        "group": [
+            "did",
+            "nft_addr",
+            "chainID",
+            "symbol",
+            "name",
+            "ve_allocated",
+            "ocean_allocated",
+            "ve_allocated_owner",
+            "ocean_allocated_owner",
+            "ve_allocated_realtime",
+            "ocean_allocated_realtime",
+            "ve_allocated_realtime_owner",
+            "ocean_allocated_realtime_owner",
+            "volume",
+            "is_purgatory",
+            "apr",
+            "apy",
+            "owner_addr",
+            "round"
+        ],
+        "sort": {
+            "volume": -1
+        }
+      })
+    });
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+  let data = await res.json();
+  return data;
+}
+
+async function getDatasetsDCVAvgs(api,roundNumber) {
+  console.log(roundNumber)
+  let res;
+  try {
+    res = await fetch(api, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "query":{
+          "round": {
+            "$in": getRoundsDatafarm(roundNumber, 5)
+          }
+        },
+        "fields": [
+            "nft_addr",
+            {
+              "expression": {
+                  "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 3).join(",")}) then volume else 0 end)`
+              },
+              "alias": "3_round_avg_dcv"
+            },
+            {
+                "expression": {
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 5).join(",")}) then volume else 0 end)`
+                },
+                "alias": "5_round_avg_dcv"
+            }
+        ],
+        "group": [
+            "did",
+            "nft_addr",
+            "chainID",
+            "symbol",
+            "name",
+            "ve_allocated",
+            "ocean_allocated",
+            "ve_allocated_owner",
+            "ocean_allocated_owner",
+            "ve_allocated_realtime",
+            "ocean_allocated_realtime",
+            "ve_allocated_realtime_owner",
+            "ocean_allocated_realtime_owner",
+            "volume",
+            "is_purgatory",
+            "apr",
+            "apy",
+            "owner_addr",
+            "round"
+        ],
+        "sort": {
+            "volume": -1
+        }
+      })
+    });
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+  let data = await res.json();
+  return data;
+}
+
+async function getDatasetsApyAvgs(api,roundNumber) {
+  console.log(roundNumber)
+  let res;
+  try {
+    res = await fetch(api, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "query":{
+          "round": {
+            "$in": getRoundsDatafarm(roundNumber, 5)
+          }
+        },
+        "fields": [
+            "nft_addr",
+            {
+              "expression": {
+                  "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 3).join(",")}) then apy else 0 end)`
+              },
+              "alias": "3_round_avg_apy"
+            },
+            {
+                "expression": {
+                    "pattern": `avg(case when round in (${getRoundsDatafarm(roundNumber, 5).join(",")}) then apy else 0 end)`
+                },
+                "alias": "5_round_avg_apy"
             }
         ],
         "group": [
@@ -169,15 +296,12 @@ function getRow(dataInfo, key) {
     roundapy: dataInfo.apy,
     roundapr: dataInfo.apr,
     roundyield: dataInfo.roundYield,
-    last10roundavgapy: dataInfo.last10roundavgapy,
     last3roundavgapy: dataInfo.last3roundavgapy,
     last5roundavgapy: dataInfo.last5roundavgapy,
     last3roundavgdcv: parseFloat(dataInfo.last3roundavgdcv).toFixed(3),
     last5roundavgdcv: parseFloat(dataInfo.last5roundavgdcv).toFixed(3),
-    last10roundavgdcv: parseFloat(dataInfo.last10roundavgdcv).toFixed(3),
     last3roundavgalloc: parseFloat(dataInfo.last3roundavgalloc).toFixed(3),
     last5roundavgalloc: parseFloat(dataInfo.last5roundavgalloc).toFixed(3),
-    last10roundavgalloc: parseFloat(dataInfo.last10roundavgalloc).toFixed(3),
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
@@ -210,7 +334,7 @@ function filterPurgatoryDatasetsWithoutAllocations(datasets,allocations){
 export async function loadDatasets(nftsApi, allocations) {
   let curRound = getEpoch().id;
   //current round number is 0
-  let [currentRoundDatasets, lastRoundDatasets, avgsRoundDatasets] = await Promise.all([getDatasets(nftsApi,0), getDatasets(nftsApi,curRound-1), getDatasetsAvgs(nftsApi,curRound)]);
+  let [currentRoundDatasets, lastRoundDatasets, allocationAvgs, dcvAvgs, apyAvgs] = await Promise.all([getDatasets(nftsApi,0), getDatasets(nftsApi,curRound-1), getDatasetsAllocationAvgs(nftsApi,curRound), getDatasetsDCVAvgs(nftsApi,curRound), getDatasetsApyAvgs(nftsApi,curRound)]);
   
   let purgatoryDatasetsWithAllocation = filterPurgatoryDatasetsWithoutAllocations(currentRoundDatasets, allocations)
   currentRoundDatasets = currentRoundDatasets.filter((d) => d.is_purgatory === 0)
@@ -233,18 +357,16 @@ export async function loadDatasets(nftsApi, allocations) {
     
     datasetInfo.lastRoundVolume = datasetInfo.lastRoundVolume > 0 ? datasetInfo.lastRoundVolume : 0.00
     
-    const avgsRoundDataset = avgsRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
-    datasetInfo.last3roundavgalloc = avgsRoundDataset?.['3_round_avg_alloc'] || 0
-    datasetInfo.last3roundavgdcv = avgsRoundDataset?.['3_round_avg_dcv'] || 0
-    datasetInfo.last3roundavgapy = avgsRoundDataset?.['3_round_avg_apy'] || 0
+    const allocationAvg = allocationAvgs.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
+    const dcvAvg = dcvAvgs.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
+    const apyAvg = apyAvgs.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
+    datasetInfo.last3roundavgalloc = allocationAvg?.['3_round_avg_alloc'] || 0
+    datasetInfo.last3roundavgdcv = dcvAvg?.['3_round_avg_dcv'] || 0
+    datasetInfo.last3roundavgapy = apyAvg?.['3_round_avg_apy'] || 0
 
-    datasetInfo.last5roundavgalloc = avgsRoundDataset?.['5_round_avg_alloc'] || 0
-    datasetInfo.last5roundavgdcv = avgsRoundDataset?.['5_round_avg_dcv'] || 0
-    datasetInfo.last5roundavgapy = avgsRoundDataset?.['5_round_avg_apy'] || 0
-
-    datasetInfo.last10roundavgalloc = avgsRoundDataset?.['10_round_avg_alloc'] || 0
-    datasetInfo.last10roundavgdcv = avgsRoundDataset?.['10_round_avg_dcv'] || 0
-    datasetInfo.last10roundavgapy = avgsRoundDataset?.['10_round_avg_apy'] || 0
+    datasetInfo.last5roundavgalloc = allocationAvg?.['5_round_avg_alloc'] || 0
+    datasetInfo.last5roundavgdcv = dcvAvg?.['5_round_avg_dcv'] || 0
+    datasetInfo.last5roundavgapy = apyAvg?.['5_round_avg_apy'] || 0
 
     newDatasets.push(getRow(datasetInfo, key));
   });
