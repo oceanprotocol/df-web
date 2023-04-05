@@ -19,7 +19,7 @@
 </script>
 
 <Card
-  title={`Round ${roundInfo?.id}`}
+  title={`Data Farming Round ${roundInfo?.id}`}
   subtitle={`${parseInt(roundInfo?.passive) + parseInt(roundInfo?.active)} OCEAN`}
   tag={`${
     $APYs
