@@ -166,12 +166,18 @@
   />
 </div>
 
-<style>
+<style lang="scss" global>
+  @import "carbon-components/scss/components/data-table/_data-table.scss";
+  @import "carbon-components/scss/components/data-table/_data-table-sort.scss";
+  @import "carbon-components/scss/components/toolbar/_toolbar.scss";
+  @import "carbon-components/scss/components/pagination/_pagination.scss";
+
   .epochHistoryTableContainer {
     width: 100%;
     background-color: var(--brand-white);
     transform: translate3d(0, -0.05rem, 0);
     border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
     max-height: calc(50vh);
     overflow-y: scroll;
   }
