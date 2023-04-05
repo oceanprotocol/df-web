@@ -44,19 +44,4 @@
   tooltipMessage={descriptions.default.tooltip_rewards_overview}
 >
   <Countdown />
-  <p class="cardFooter">
-    Data Farming rounds start and end every Thursday at midnight GMT.
-    Rewards are paid in OCEAN and distributed every week on Thursday.
-    Ocean emissions are designed to take place over decades
-    while incentivizing active protocol contributors to flourish.
-  </p>
 </Card>
-
-<style>
-  .cardFooter {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    margin-top: calc(var(--spacer) / 2);
-  }
-</style>
