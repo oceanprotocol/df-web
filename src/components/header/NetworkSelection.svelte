@@ -64,7 +64,7 @@
           getNetworkDataById(networksData, parseInt($selectedNetworks[0]))?.name
         }`}
         onclick={() => switchWalletNetwork(parseInt($selectedNetworks[0]))}
-        className="switchNetworkHeaderButton plausible-event-name=Button+Switch+Network+to..."
+        className="switchNetworkHeaderButton"
         textOnly
         disabled={!$userAddress}
       />
