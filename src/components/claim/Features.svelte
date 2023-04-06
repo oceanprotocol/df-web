@@ -5,7 +5,7 @@
 
 <div class={`container`}>
   {#each features.default as card}
-    <Card title={card.title} className="featureCard">
+    <Card title={card.title} className="featureCard" priority="secondary">
       <div class="featureContent">
         <img src={card.image} alt={card.title} />
         <p>{card.description}</p>

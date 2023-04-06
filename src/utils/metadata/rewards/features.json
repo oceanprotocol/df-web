@@ -2,16 +2,16 @@
     {
         "title": "Ranked Rewards",
         "description": "Rewards are distributed exponentially to the fist 50 assets with consume volume",
-        "image": "/images/features/bsc.svg"
+        "image": "/images/features/podium.png"
     },
     {
         "title": "Publisher 2x",
         "description": "Publisher gets 2x allocation power when allocation on his own assets",
-        "image": "/images/features/bsc.svg"
+        "image": "/images/features/exchange.png"
     },
     {
         "title": "No IL",
         "description": "You won't lose any OCEAN tokens when locking in echange for veOCEAN",
-        "image": "/images/features/bsc.svg"
+        "image": "/images/features/safe.png"
     }
 ]
