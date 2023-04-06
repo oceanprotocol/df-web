@@ -14,6 +14,7 @@
   import { getVeOceanBalance } from "../../utils/ve";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import EpochHistory from "./EpochHistory.svelte";
+  import Features from "./Features.svelte";
   import RewardOverview from "./RewardOverview.svelte";
   import moment from "moment";
   import { getEpoch } from "../../utils/epochs";
@@ -78,6 +79,7 @@
 
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
+  <Features />
   <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} {loading} />
   <EpochHistory />
 </div>
