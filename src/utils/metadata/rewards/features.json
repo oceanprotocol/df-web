@@ -10,7 +10,7 @@
         "image": "/images/features/exchange.png"
     },
     {
-        "title": "No IL",
+        "title": "No Impermanent Loss",
         "description": "No OCEAN tokens lost when locking in echange for veOCEAN",
         "image": "/images/features/safe.png"
     }
