@@ -2,16 +2,19 @@
     {
         "title": "Ranked Rewards",
         "description": "Reward amounts are distributed exponentially to the fist 50 assets with consume volume",
-        "image": "/images/features/podium.png"
+        "image": "/images/features/podium.png",
+        "link": "https://docs.oceanprotocol.com/veocean-data-farming/df-intro#ranked-rewards"
     },
     {
         "title": "Publisher 2X Stake",
         "description": "Publisher gets 2x allocation power when allocating on his own assets",
-        "image": "/images/features/exchange.png"
+        "image": "/images/features/exchange.png",
+        "link": "https://docs.oceanprotocol.com/veocean-data-farming/df-intro#publisher-rewards-2x-stake"
     },
     {
         "title": "No Impermanent Loss",
         "description": "No OCEAN tokens lost when locking in echange for veOCEAN",
-        "image": "/images/features/safe.png"
+        "image": "/images/features/safe.png",
+        "link": "https://docs.oceanprotocol.com/veocean-data-farming/veocean#security"
     }
 ]

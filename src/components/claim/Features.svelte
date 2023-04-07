@@ -1,16 +1,22 @@
 <script>
   import Card from "../common/Card.svelte";
   import * as features from "../../utils/metadata/rewards/features.json";
+  const ExternalIcon = "/images/external.svg";
 </script>
 
 <div class={`container`}>
   {#each features.default as card}
-    <Card title={card.title} className="featureCard" priority="secondary">
-      <div class="featureContent">
-        <img src={card.image} alt={card.title} />
-        <p>{card.description}</p>
-      </div>
-    </Card>
+    <a href={card.link} target="_blank" rel="noreferrer">
+      <Card title={card.title} className="featureCard" priority="secondary">
+        <div class="featureContent">
+          <img src={card.image} alt={card.title} />
+          <p>{card.description}</p>
+        </div>
+        <div class="externalLinkIcon">
+          <img src={ExternalIcon} alt="external link icon" />
+        </div>
+      </Card>
+    </a>
   {/each}
 </div>
 
@@ -25,15 +31,35 @@
     margin-top: calc(var(--spacer) * 2);
   }
 
+  .container a {
+    text-decoration: none;
+    width: 100%;
+  }
+
   :global(.featureCard) {
+    position: relative !important;
     transition: all 0.3s ease-in-out;
     height: 220px !important;
     justify-content: center !important;
+    overflow: hidden !important;
   }
 
   :global(.featureCard):hover {
     transform: scale(1.1);
     cursor: pointer;
+  }
+
+  :global(.featureCard):hover .externalLinkIcon {
+    transform: translateY(+200%);
+  }
+
+  .externalLinkIcon {
+    position: absolute;
+    top: -16px;
+    right: 20px;
+    height: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
   }
 
   .featureContent {
@@ -50,6 +76,11 @@
     object-fit: contain;
     margin: auto;
     margin-bottom: calc(var(--spacer) / 4);
+  }
+
+  .externalLinkIcon img {
+    height: 100%;
+    margin: 0;
   }
 
   @media (min-width: 640px) {
