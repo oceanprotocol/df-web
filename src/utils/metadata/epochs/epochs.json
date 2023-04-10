@@ -254,5 +254,29 @@
     "passive": 75000,
     "active": 75000,
     "total": 150000
+  },
+  {
+    "id": 33,
+    "date_start": "2023-04-13",
+    "date_end": "2023-04-20",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 34,
+    "date_start": "2023-04-20",
+    "date_end": "2023-04-27",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 35,
+    "date_start": "2023-04-27",
+    "date_end": "2023-05-04",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
   }
 ]
