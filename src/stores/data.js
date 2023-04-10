@@ -55,10 +55,7 @@ export const defaultColumns = {
   'apy': ["Title", "Rnd5 APY", "Rnd3 APY", "Last Rnd APY", "Rnd APY", "Rnd Yield", "My Allocation"],
 }
 
-console.log(getRoundsDatafarm(31, 5))
-
 async function getDatasetsAllocationAvgs(api,roundNumber) {
-  console.log(roundNumber)
   let res;
   try {
     res = await fetch(api, {
@@ -123,7 +120,6 @@ async function getDatasetsAllocationAvgs(api,roundNumber) {
 }
 
 async function getDatasetsDCVAvgs(api,roundNumber) {
-  console.log(roundNumber)
   let res;
   try {
     res = await fetch(api, {
@@ -188,7 +184,6 @@ async function getDatasetsDCVAvgs(api,roundNumber) {
 }
 
 async function getDatasetsApyAvgs(api,roundNumber) {
-  console.log(roundNumber)
   let res;
   try {
     res = await fetch(api, {
@@ -254,7 +249,6 @@ async function getDatasetsApyAvgs(api,roundNumber) {
 
 async function getDatasets(api,roundNumber) {
   let res;
-  
   try {
     res = await fetch(api, {
       method: "POST",
@@ -306,7 +300,6 @@ function getRow(dataInfo, key) {
     ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
     chainId: dataInfo.chainID,
-    last_7_round_avg_allocation: dataInfo['7_round_avg_allocation'],
     currentallocation: parseFloat(dataInfo.ve_allocated_realtime).toFixed(3),
     roundallocation: parseFloat(dataInfo.ve_allocated).toFixed(3),
     myallocation: dataInfo.allocation,
@@ -360,6 +353,7 @@ export async function loadDatasets(nftsApi, allocations) {
     const allocationAvg = allocationAvgs.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
     const dcvAvg = dcvAvgs.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
     const apyAvg = apyAvgs.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
+
     datasetInfo.last3roundavgalloc = allocationAvg?.['3_round_avg_alloc'] || 0
     datasetInfo.last3roundavgdcv = dcvAvg?.['3_round_avg_dcv'] || 0
     datasetInfo.last3roundavgapy = apyAvg?.['3_round_avg_apy'] || 0
