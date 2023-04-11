@@ -7,7 +7,7 @@
     },
     {
         "title": "Publisher 2X Stake",
-        "description": "Publisher gets 2x allocation power when allocating on his own assets",
+        "description": "Publishers get 2x allocation power when allocating on their own assets",
         "image": "/images/features/exchange.png",
         "link": "https://docs.oceanprotocol.com/veocean-data-farming/df-intro#publisher-rewards-2x-stake"
     },
