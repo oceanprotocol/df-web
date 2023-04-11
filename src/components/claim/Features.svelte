@@ -50,6 +50,8 @@
 
   :global(.featureCard):hover .externalLinkIcon {
     transform: translateY(+200%);
+    opacity: 1;
+    transition: all 0.3s ease, opacity 1s linear;
   }
 
   .externalLinkIcon {
@@ -58,7 +60,8 @@
     right: 20px;
     height: 16px;
     text-align: center;
-    transition: all 0.3s ease;
+    opacity: 0;
+    transition: all 0.3s ease, opacity 1s linear;
   }
 
   .featureContent {
