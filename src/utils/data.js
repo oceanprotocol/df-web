@@ -1,7 +1,7 @@
 export const filterOptions = [
     { id: "0", text: "All datasets" },
     { id: "1", text: "My allocations" },
-    { id: "2", text: "2X Publishers" },
+    { id: "2", text: "2X Stake" },
     { id: "3", text: "My published" },
 ]
 
