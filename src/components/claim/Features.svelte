@@ -39,6 +39,7 @@
   :global(.featureCard) {
     position: relative !important;
     transition: all 0.3s ease-in-out;
+    padding: calc(var(--spacer) / 2) var(--spacer) !important;
     height: 220px !important;
     justify-content: center !important;
     overflow: hidden !important;
