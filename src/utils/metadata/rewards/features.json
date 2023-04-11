@@ -13,7 +13,7 @@
     },
     {
         "title": "No Impermanent Loss",
-        "description": "No OCEAN tokens lost when locking in echange for veOCEAN",
+        "description": "No OCEAN tokens lost when locking in exchange for veOCEAN",
         "image": "/images/features/safe.png",
         "link": "https://docs.oceanprotocol.com/veocean-data-farming/veocean#security"
     }
