@@ -1,7 +1,7 @@
 [
     {
         "title": "Ranked Rewards",
-        "description": "Reward amounts are distributed exponentially to the fist 50 assets with consume volume",
+        "description": "Reward amounts are distributed exponentially to the first 50 assets with consume volume",
         "image": "/images/features/podium.png",
         "link": "https://docs.oceanprotocol.com/veocean-data-farming/df-intro#ranked-rewards"
     },
