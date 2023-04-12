@@ -2,19 +2,19 @@
     {
         "title": "veOCEAN",
         "description": "Safe, 500m behind CRV. Focus on safety.",
-        "image": "/images/features/podium.png",
+        "image": "/images/features/safe.png",
         "link": "https://docs.oceanprotocol.com/veocean-data-farming/df-intro#ranked-rewards"
     },
     {
         "title": "Weekly Rewards",
         "description": "Emphasizes weekly schedule Focus on cadence & growth.",
-        "image": "/images/features/exchange.png",
+        "image": "/images/features/receiveCash.png",
         "link": "https://docs.oceanprotocol.com/veocean-data-farming/df-intro#publisher-rewards-2x-stake"
     },
     {
         "title": "For Everyone",
         "description": "Many different participants can benefit Focus on all participants benefiting.",
-        "image": "/images/features/safe.png",
+        "image": "/images/features/crowd.png",
         "link": "https://docs.oceanprotocol.com/veocean-data-farming/veocean#security"
     },
     {
