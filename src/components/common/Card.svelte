@@ -5,6 +5,7 @@
   export let subtitle = undefined;
   export let className = undefined;
   export let tag = undefined;
+  export let priority = "primary";
 
   // tooltip
   export let tooltipMessage = undefined;
@@ -15,7 +16,9 @@
 
 <div class={`container ${className ? className : ""}`}>
   <div class="cardHeader">
-    {#if title}
+    {#if title && priority == "primary"}
+      <h2 class="title">{title}</h2>
+    {:else if title && priority == "secondary"}
       <h3 class="title">{title}</h3>
     {/if}
     {#if subtitle}
