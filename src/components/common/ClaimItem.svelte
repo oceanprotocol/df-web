@@ -22,7 +22,8 @@
 
 <div class={`container`}>
   <Card
-    title={`${title} Rewards - ${distributedAmount} OCEAN`}
+    title={`${title} Rewards`}
+    subtitle={`${distributedAmount} OCEAN`}
     tag={apy}
     tooltipMessage={apyTooltip}
     priority="secondary"
