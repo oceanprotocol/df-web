@@ -30,13 +30,21 @@
       value: "Round",
     },
     { key: "date_start", value: "Start Date" },
-    { key: "passive", value: "Passive Rewards" },
+    {
+      key: "passive",
+      value: "Passive Rewards",
+      tooltip: descriptions.default.tooltip_rewards_passive_history,
+    },
     {
       key: "passiveapy",
       value: "Passive APY",
       tooltip: descriptions.default.tooltip_rewards_apy_passive_history,
     },
-    { key: "active", value: "Active Rewards" },
+    {
+      key: "active",
+      value: "Active Rewards",
+      tooltip: descriptions.default.tooltip_rewards_active_history,
+    },
     {
       key: "activeapy",
       value: "Active APY",
@@ -87,8 +95,15 @@
               )
             : 0
         ).toFixed(2)}%`,
-        passive: `${row.passive} OCEAN`,
-        active: `${row.active} OCEAN`,
+        activerewards: rewards ? rewards["sum(curating_amt)"] : 0,
+        passive: `${
+          rewards ? parseFloat(rewards["sum(passive_amt)"]).toFixed(2) : 0
+        } / ${row.passive}
+        OCEAN`,
+        active: `${
+          rewards ? parseFloat(rewards["sum(curating_amt)"]).toFixed(2) : 0
+        } / ${row.active}
+        OCEAN`,
       });
     });
     rows = newRows;
