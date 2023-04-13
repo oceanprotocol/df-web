@@ -21,7 +21,13 @@
 </script>
 
 <div class={`container`}>
-  <Card title={`${title} Rewards - ${distributedAmount} OCEAN`} tag={apy} tooltipMessage={apyTooltip}>
+  <Card
+    title={`${title} Rewards`}
+    subtitle={`${distributedAmount} OCEAN`}
+    tag={apy}
+    tooltipMessage={apyTooltip}
+    priority="secondary"
+  >
     <div class="description">{@html description}</div>
     <div class="metrics">
       {#each metrics as metric}
