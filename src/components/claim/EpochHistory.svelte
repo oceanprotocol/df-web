@@ -31,19 +31,19 @@
     },
     { key: "date_start", value: "Start Date" },
     {
-      key: "passive",
-      value: "Passive Rewards",
-      tooltip: descriptions.default.tooltip_rewards_passive_history,
+      key: "available",
+      value: "Available Rewards",
+      tooltip: descriptions.default.tooltip_rewards_available_history,
+    },
+    {
+      key: "distributed",
+      value: "Distributed Rewards",
+      tooltip: descriptions.default.tooltip_rewards_distributed_history,
     },
     {
       key: "passiveapy",
       value: "Passive APY",
       tooltip: descriptions.default.tooltip_rewards_apy_passive_history,
-    },
-    {
-      key: "active",
-      value: "Active Rewards",
-      tooltip: descriptions.default.tooltip_rewards_active_history,
     },
     {
       key: "activeapy",
@@ -88,6 +88,7 @@
               )
             : 0
         ).toFixed(2)}%`,
+        available: `${row.passive} | ${row.active} OCEAN`,
         activeapy: `${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
@@ -95,15 +96,11 @@
               )
             : 0
         ).toFixed(2)}%`,
-        activerewards: rewards ? rewards["sum(curating_amt)"] : 0,
-        passive: `${
+        distributed: `${
           rewards ? parseFloat(rewards["sum(passive_amt)"]).toFixed(2) : 0
-        } / ${row.passive}
-        OCEAN`,
-        active: `${
+        } | ${
           rewards ? parseFloat(rewards["sum(curating_amt)"]).toFixed(2) : 0
-        } / ${row.active}
-        OCEAN`,
+        } OCEAN`,
       });
     });
     rows = newRows;
@@ -128,7 +125,7 @@
       let rewards = $oceanUserRewards.find((r) => r.round == row.id);
       row.passiveapy =
         row.passiveapy?.toString() +
-        ` / ${parseFloat(
+        ` | ${parseFloat(
           rewards && veBal
             ? convertWPRtoAPY(
                 rewards["sum(passive_amt)"] / veBal["sum(locked_amt)"]
@@ -137,7 +134,7 @@
         ).toFixed(2)}%`;
       row.activeapy =
         row.activeapy?.toString() +
-        ` / ${parseFloat(
+        ` | ${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
                 rewards["sum(curating_amt)"] / allocation["sum(ocean_amt)"]
@@ -194,7 +191,7 @@
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     max-height: calc(50vh);
-    overflow-y: scroll;
+    overflow: scroll;
   }
   :global(.epochHistoryTableContainer thead) {
     position: sticky;
