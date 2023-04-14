@@ -258,7 +258,7 @@ export async function loadDatasets(nftsApi, allocations) {
     
     const avg3Round = avgs3Rounds.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
     const avg5Round = avgs5Rounds.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
-    console.log(avg5Round);
+    
     datasetInfo.last3roundavgalloc = avg3Round?.['3_round_avg_alloc'] || 0
     datasetInfo.last3roundavgdcv = avg3Round?.['3_round_avg_dcv'] || 0
     datasetInfo.last3roundavgapy = avg3Round?.['3_round_avg_apy'] || 0
