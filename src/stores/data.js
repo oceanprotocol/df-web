@@ -104,32 +104,6 @@ async function getDatasetsAvgs3Rounds(api,roundNumber) {
   return data;
 }
 
-async function getDatasetsRoundValues(api,roundNumber) {
-  let res;
-  try {
-    res = await fetch(api, {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "query":{
-          "round": {
-            "$in": getRoundsDatafarm(roundNumber, 5)
-          },
-          "nft_addr":"0x9723488dc1524849a82917a61a38bbe24a8219c1"
-        }
-      })
-    });
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
-  let data = await res.json();
-  return data;
-}
-
 async function getDatasetsAvgs5Rounds(api,roundNumber) {
   let res;
   try {
@@ -259,8 +233,6 @@ function filterPurgatoryDatasetsWithoutAllocations(datasets,allocations){
 export async function loadDatasets(nftsApi, allocations) {
   let curRound = getEpoch().id;
   //current round number is 0
-  let result = await getDatasetsRoundValues(nftsApi,curRound)
-  console.log(result)
   let [currentRoundDatasets, lastRoundDatasets, avgs3Rounds, avgs5Rounds] = await Promise.all([getDatasets(nftsApi,0), getDatasets(nftsApi,curRound-1), getDatasetsAvgs3Rounds(nftsApi,curRound), getDatasetsAvgs5Rounds(nftsApi,curRound)]);
   
   let purgatoryDatasetsWithAllocation = filterPurgatoryDatasetsWithoutAllocations(currentRoundDatasets, allocations)
@@ -286,7 +258,7 @@ export async function loadDatasets(nftsApi, allocations) {
     
     const avg3Round = avgs3Rounds.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
     const avg5Round = avgs5Rounds.find((ld) => ld.nft_addr === datasetInfo.nft_addr)
-
+    console.log(avg5Round);
     datasetInfo.last3roundavgalloc = avg3Round?.['3_round_avg_alloc'] || 0
     datasetInfo.last3roundavgdcv = avg3Round?.['3_round_avg_dcv'] || 0
     datasetInfo.last3roundavgapy = avg3Round?.['3_round_avg_apy'] || 0
