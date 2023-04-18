@@ -18,40 +18,26 @@
 </svelte:head>
 <header>
   <h1 class="logo">
-    <Link to="/" class="link plausible-event-name=Link+to+df-homepage">
+    <Link to="/" class="link">
       <img src={"/logo-ocean-svg.svg"} alt="SvelteKit" />
     </Link>
   </h1>
   <nav>
     <ul>
       <li class:active={$location.pathname === "/veocean"}>
-        <Link
-          to="/veocean"
-          class="link plausible-event-name=Link+to+veOcean+page">veOCEAN</Link
-        >
+        <Link to="/veocean" class="link">veOCEAN</Link>
       </li>
       <li class:active={$location.pathname === "/datafarming"}>
-        <Link
-          to="/datafarming"
-          class="link plausible-event-name=Link+to+datafarming+page">FARMS</Link
-        >
+        <Link to="/datafarming" class="link">FARMS</Link>
       </li>
       <li class:active={$location.pathname === "/activerewards"}>
-        <Link
-          to="/activerewards"
-          class="link plausible-event-name=Link+to+activerewards+page"
-          >REWARDS</Link
-        >
+        <Link to="/activerewards" class="link">REWARDS</Link>
       </li>
       <li class:active={$location.pathname === "/delegation"}>
         <Link to="/delegation" class="link">DELEGATE</Link>
       </li>
       <li class:active={false}>
-        <a
-          href={aboutURL}
-          target="_blank"
-          rel="noreferrer"
-          class="link plausible-event-name=Link+external+to+about+blog+post"
+        <a href={aboutURL} target="_blank" rel="noreferrer" class="link"
           >ABOUT</a
         >
       </li>

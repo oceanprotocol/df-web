@@ -306,14 +306,14 @@
         {#if $veOceanWithDelegations > 0}
           <Button
             text={"Update allocations"}
-            className="updateAllocationsBtton plausible-event-name=Button+Update+Allocations"
+            className="updateAllocationsBtton"
             onclick={() => updateAllocations()}
             disabled={disabled || loading}
             loading={loading === "UPDATE"}
           />
           <Button
             text={"Reset allocations"}
-            className="updateAllocationsBtton plausible-event-name=Button+Reset+Allocations"
+            className="updateAllocationsBtton"
             onclick={() => updateAllocations(true)}
             disabled={disabled || loading || $totalUserAllocation < 1}
             secondary
@@ -322,7 +322,7 @@
         {:else}
           <Button
             text={"Get allocations"}
-            className="updateAllocationsBtton plausible-event-name=Button+Get+Allocations"
+            className="updateAllocationsBtton"
             onclick={() => navigate("veocean")}
           />
         {/if}
@@ -388,7 +388,7 @@
                           text={
                             $userAddress.toLowerCase() === row.owner ? 'you' :`${row.owner.substr(0, 6)}...${row.owner.substr(row.owner.length - 6)}`
                           }
-                          className="owner plausible-event-name=Link+to+ocean+market+profile"
+                          className="owner"
                           hideIcon
                         />
                       </div>

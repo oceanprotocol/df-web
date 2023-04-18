@@ -21,7 +21,13 @@
 </script>
 
 <div class={`container`}>
-  <Card title={`${title} Rewards - ${distributedAmount} OCEAN`} tag={apy} tooltipMessage={apyTooltip}>
+  <Card
+    title={`${title} Rewards`}
+    subtitle={`${distributedAmount} OCEAN`}
+    tag={apy}
+    tooltipMessage={apyTooltip}
+    priority="secondary"
+  >
     <div class="description">{@html description}</div>
     <div class="metrics">
       {#each metrics as metric}
@@ -39,7 +45,6 @@
         text={redirectLink.text}
         onclick={() => navigate(redirectLink.url)}
         disabled={disableRedirect}
-        className="plausible-event-name=Button+Redirect+to+veOCEAN+link"
       />
     {:else}
       <Button
@@ -47,7 +52,6 @@
         text={loading ? "Loading..." : `Claim ${disabled ? "" : amount}`}
         onclick={() => onClick()}
         disabled={loading || disabled}
-        className="plausible-event-name=Button+Claim"
       />
     {/if}
   </Card>

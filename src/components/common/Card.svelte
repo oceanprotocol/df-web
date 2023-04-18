@@ -2,8 +2,10 @@
   import CustomTooltip from "./CustomTooltip.svelte";
 
   export let title = undefined;
+  export let subtitle = undefined;
   export let className = undefined;
   export let tag = undefined;
+  export let priority = "primary";
 
   // tooltip
   export let tooltipMessage = undefined;
@@ -14,11 +16,16 @@
 
 <div class={`container ${className ? className : ""}`}>
   <div class="cardHeader">
-    {#if title}
+    {#if title && priority == "primary"}
+      <h2 class="title">{title}</h2>
+    {:else if title && priority == "secondary"}
       <h3 class="title">{title}</h3>
     {/if}
+    {#if subtitle}
+      <h4 class="subtitle">{subtitle}</h4>
+    {/if}
     {#if tag}
-      <div class="subtitle">
+      <div class="cta">
         <span class="tag">{tag}</span>
         {#if tooltipMessage}
           <CustomTooltip
@@ -46,7 +53,7 @@
     background-color: var(--background-content);
     box-shadow: var(--box-shadow);
   }
-  .subtitle {
+  .cta {
     margin-top: calc(var(--spacer) / 6);
     height: fit-content !important;
     display: flex;
@@ -60,6 +67,9 @@
     margin-bottom: calc(var(--spacer) / 2);
   }
   .title {
+    margin-bottom: 0;
+  }
+  .subtitle {
     margin-bottom: 0;
   }
   .tag {
