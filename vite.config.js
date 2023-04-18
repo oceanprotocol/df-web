@@ -11,10 +11,9 @@ export default ({ mode }) => {
   plugins: [svelte(), nodePolyfills({
     include: ['node_modules/**/*.js', new RegExp('node_modules/.vite/.*js')]
   })],
-  optimizeDeps:{
-    include: [
-      'node_modules/**/*.js'
-    ]
+  server: {
+    port: 3000, // Replace with the port number you want to use
+    host: 'localhost' // Replace with the host name you want to use
   },
   define: {
     "global": {},

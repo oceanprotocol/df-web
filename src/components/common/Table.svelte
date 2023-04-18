@@ -4,9 +4,7 @@
   import Toolbar from "carbon-components-svelte/src/DataTable/Toolbar.svelte";
   import ToolbarContent from "carbon-components-svelte/src/DataTable/ToolbarContent.svelte";
   import ToolbarSearch from "carbon-components-svelte/src/DataTable/ToolbarSearch.svelte";
-  import "carbon-components/scss/components/_data-table.scss";
   import Button from "./Button.svelte";
-  import "carbon-";
   import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
   import {

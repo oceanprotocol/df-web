@@ -10,7 +10,7 @@
     userAddress,
     connectWallet,
     selectedNetworks,
-    connectedChainId
+    connectedChainId,
   } from "./stores/web3";
   import { Router, Route } from "svelte-navigator";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
@@ -48,12 +48,8 @@
   import moment from "moment";
   import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
   import { totalUserAllocation } from "./stores/dataAllocations";
-<<<<<<< HEAD
   import { Buffer } from "buffer";
-  import '@oceanprotocol/typographies/css/ocean-typo.css';
-=======
   import "@oceanprotocol/typographies/css/ocean-typo.css";
->>>>>>> main
 
   // @ts-ignore
   window.Buffer = Buffer;
@@ -79,7 +75,10 @@
       $userAddress &&
       $lockedOceanAmount &&
       $userBalances[
-        getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")
+        getAddressByChainIdKey(
+          import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+          "veOCEAN"
+        )
       ] > 0
         ? await getPassiveUserAPY(
             $userBalances[
@@ -112,17 +111,13 @@
   async function initRewards() {
     let lockedOceans = await getLockedOceanAmount($userAddress);
     lockedOceanAmount.update(() => lockedOceans);
-    let unlockDateMilliseconds = await getLockedEndTime(
-      $userAddress
-    );
+    let unlockDateMilliseconds = await getLockedEndTime($userAddress);
     await oceanUnlockDate.update(() =>
       unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
     );
 
     if (unlockDateMilliseconds) {
-      let newAllocation = await getTotalAllocatedVeOcean(
-        $userAddress
-      );
+      let newAllocation = await getTotalAllocatedVeOcean($userAddress);
       totalUserAllocation.update(() => newAllocation);
     }
 
