@@ -1,8 +1,9 @@
 import { writable } from "svelte/store";
-import { getNetworkDataById } from "./web3";
+import { getNetworkDataById, userAddress } from "./web3";
 import * as networksDataArray from "../networks-metadata.json";
 import * as descriptions from "../utils/metadata/descriptions.json";
 import { getEpoch } from "../utils/epochs";
+import {convertWPRtoAPY} from "../utils/rewards.js"
 
 let networksData = networksDataArray.default
 
@@ -10,24 +11,36 @@ export let datasets = writable("");
 
 export const columnsData = [
   { key: "network", value: "Network" },
-  { key: "title", value: "Title" },
+  { key: "title", value: "Title", tooltip: descriptions.default.tooltip_datafarming_title },
   { key: "symbol", value: "Symbol" },
-  { key: "roundapy", value: "RoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
-  { key: "lastRoundAPY", value: "LastRoundAPY", display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+  { key: "roundapy", value: "RoundAPY", display: (roundapy) => parseFloat(roundapy ? roundapy * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY },
+  { key: "roundapr", value: "RoundAPR", display: (roundAPR) => parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APR },
+  { key: "roundyield", value: "RoundYield", display: (roundYield) => parseFloat(roundYield ? roundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_current_round_asset_yield },
+  { key: "lastroundapy", value: "LastRoundAPY", display: (lastRoundAPY) => parseFloat(lastRoundAPY ? lastRoundAPY * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY},
+  { key: "lastroundapr", value: "LastRoundAPR", display: (lastRoundAPR) => parseFloat(lastRoundAPR ? lastRoundAPR * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APR},
+  { key: "lastroundyield", value: "LastRoundYield", display: (lastRoundYield) => parseFloat(lastRoundYield ? lastRoundYield * 100 : 0).toFixed(2) + '%', tooltip: descriptions.default.tooltip_datafarming_last_round_asset_yield},
   {
     key: "roundvolume",
     value: "RoundVolume",
     display: (volume) => '$' + volume,
     tooltip: descriptions.default.tooltip_datafarming_round_consume
   },
+  {
+    key: "lastroundvolume",
+    value: "LastRoundVolume",
+    display: (volume) => '$' + volume,
+    tooltip: descriptions.default.tooltip_datafarming_last_round_consume
+  },
   { key: "nftaddress", value: "NFTAddress" },
   { key: "did", value: "DID" },
   { key: "roundallocation", value:"RoundAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_round_allocation},
   { key: "currentallocation", value:"CurrentAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_current_allocation},
   { key: "myallocation", value:"MyAllocation", tooltip: descriptions.default.tooltip_datafarming_my_allocation },
+  { key: "ownerallocation", value:"OwnerAllocation", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_veocean_owner_allocation},
+  { key: "myveocean", value:"MyVeOcean", display: (allocated) => allocated + ' veOCEAN', tooltip: descriptions.default.tooltip_datafarming_my_ve_allocation }
 ]
 
-export const defaultColumns = ["Title", "RoundVolume", "RoundAPY","LastRoundAPY","CurrentAllocation", "MyAllocation"]
+export const defaultColumns = ["Title", "RoundVolume", "RoundAPY", "LastRoundAPY", "CurrentAllocation", "MyAllocation", "OwnerAllocation", "MyVeOcean"]
 
 async function getDatasets(api,roundNumber) {
   let res;
@@ -56,14 +69,22 @@ async function getDatasets(api,roundNumber) {
 }
 
 function getRow(dataInfo, key) {
+  let userId;
+  userAddress.subscribe(id => (userId = id));
+  const isowner = userId.toLowerCase() === dataInfo.owner_addr
+
   return {
     id: key,
     title: dataInfo.name,
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
     owner: dataInfo.owner_addr,
-    lastRoundAPY: dataInfo.lastRoundAPY,
+    lastroundapy: dataInfo.lastRoundAPY,
+    lastroundapr: dataInfo.lastRoundAPR,
+    lastroundyield: dataInfo.lastRoundYield,
     roundapy: dataInfo.apy,
+    roundapr: dataInfo.apr,
+    roundyield: dataInfo.roundYield,
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
@@ -73,7 +94,11 @@ function getRow(dataInfo, key) {
     myallocation: dataInfo.allocation,
     allocated: dataInfo.allocation,
     roundvolume: parseFloat(dataInfo.volume).toFixed(3),
+    ownerallocation: parseFloat(dataInfo.ve_allocated_realtime_owner).toFixed(3),
+    myveocean: dataInfo.allocation,
+    lastroundvolume: parseFloat(dataInfo.lastRoundVolume).toFixed(3),
     action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
+    publishersreward: dataInfo.ownerallocation > 0 || isowner && dataInfo.allocation > 0
   };
 }
 
@@ -104,6 +129,10 @@ export async function loadDatasets(nftsApi, allocations) {
   currentRoundDatasets.forEach((datasetInfo, key) => {
     datasetInfo.allocation = allocations.find((allocation) => allocation.nftAddress === datasetInfo.nft_addr)?.allocated/100 || 0
     datasetInfo.lastRoundAPY = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apy
+    datasetInfo.lastRoundAPR = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.apr
+    datasetInfo.lastRoundYield = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.roundYield
+    datasetInfo.lastRoundVolume = lastRoundDatasets.find((ld) => ld.nft_addr === datasetInfo.nft_addr)?.volume
+    datasetInfo.lastRoundVolume = datasetInfo.lastRoundVolume > 0 ? datasetInfo.lastRoundVolume : 0.00
     newDatasets.push(getRow(datasetInfo, key));
   });
   datasets.set(newDatasets);

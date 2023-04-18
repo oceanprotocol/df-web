@@ -10,8 +10,8 @@ export const getEpoch = (date) => {
     for(let i=0; i<epochs.default.length; i++) {
       epoch = epochs.default[i];
       
-      let dateStart = moment(epoch.date_start,"YYYY-MM-DD")
-      let dateEnd = moment(epoch.date_end,"YYYY-MM-DD")
+      let dateStart = moment.utc(epoch.date_start,"YYYY-MM-DD")
+      let dateEnd = moment.utc(epoch.date_end,"YYYY-MM-DD")
       
       if(dateStart.isBefore(date) && dateEnd.isAfter(date)) {
         // Numbers enforced in test environments to produce a verifiable apy

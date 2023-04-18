@@ -13,6 +13,7 @@
   import { getVeOceanBalance } from "../../utils/ve";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import EpochHistory from "./EpochHistory.svelte";
+  import Features from "./Features.svelte";
   import RewardOverview from "./RewardOverview.svelte";
   import moment from "moment";
   import { getEpoch } from "../../utils/epochs";
@@ -22,7 +23,7 @@
   let veBalance = 0.0;
   let canClaimVE = true;
   let canClaimDF = true;
-  const now = moment();
+  const now = moment.utc();
   let curEpoch = getEpoch(now);
 
   async function initClaimables() {
@@ -77,7 +78,8 @@
 
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
-  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} />
+  <Features />
+  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} {loading} />
   <EpochHistory />
 </div>
 

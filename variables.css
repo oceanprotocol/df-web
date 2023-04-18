@@ -20,6 +20,18 @@
   --brand-alert-orange: #b35f36;
   --brand-alert-yellow: #eac146;
 
+  --brand-rank-green: #5fb359;
+  --brand-rank-red: #C54186;
+  --brand-rank-gray: #8A98A8;
+  --brand-rank-orange: #b35f36;
+  --brand-rank-yellow: #E8C64D;
+
+  --brand-rank-green-bg: #5fb359;
+  --brand-rank-red-bg: rgb(251 186 214 / 20%);
+  --brand-rank-gray-bg: rgba(217, 217, 217, 0.29);
+  --brand-rank-orange-bg: #b35f36;
+  --brand-rank-yellow-bg: rgba(232, 198, 77, 0.17);
+
   --color-primary: #ff4092;
   --color-secondary: #8b98a9;
 

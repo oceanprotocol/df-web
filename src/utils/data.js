@@ -1,7 +1,8 @@
 export const filterOptions = [
     { id: "0", text: "All datasets" },
     { id: "1", text: "My allocations" },
-    { id: "2", text: "My published" },
+    { id: "2", text: "2X Stake" },
+    { id: "3", text: "My published" },
 ]
 
 export let filterDataByUserAllocation = (datasets, allocations) => {
@@ -16,6 +17,14 @@ export let filterDataByUserAllocation = (datasets, allocations) => {
                 filteredDatasets.push(dataset)
             }
         })
+    })
+    return filteredDatasets
+}
+
+export let filterDataBy2xers = (datasets, ownerAddress) => {
+    let filteredDatasets = []
+    filteredDatasets = datasets.filter((d) => {
+        return d.owner === ownerAddress.toLowerCase() && d.myallocation > 0 || d.ownerallocation > 0
     })
     return filteredDatasets
 }

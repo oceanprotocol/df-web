@@ -2,10 +2,8 @@
   import WalletConnect from "./WalletConnect.svelte";
   import NetworkSelection from "./NetworkSelection.svelte";
   import { Link, useLocation } from "svelte-navigator";
-  import { oceanUnlockDate } from "../../stores/veOcean";
-  import moment from "moment";
 
-  let aboutURL = "https://docs.oceanprotocol.com/veocean-data-farming-tutorial";
+  let aboutURL = "https://docs.oceanprotocol.com/veocean-data-farming";
   const location = useLocation();
 </script>
 
@@ -27,13 +25,23 @@
   <nav>
     <ul>
       <li class:active={$location.pathname === "/veocean"}>
-        <Link to="/veocean" class="link">veOCEAN</Link>
+        <Link
+          to="/veocean"
+          class="link">veOCEAN</Link
+        >
       </li>
       <li class:active={$location.pathname === "/datafarming"}>
-        <Link to="/datafarming" class="link">FARMS</Link>
+        <Link
+          to="/datafarming"
+          class="link">FARMS</Link
+        >
       </li>
       <li class:active={$location.pathname === "/activerewards"}>
-        <Link to="/activerewards" class="link">REWARDS</Link>
+        <Link
+          to="/activerewards"
+          class="link"
+          >REWARDS</Link
+        >
       </li>
       <li class:active={false}>
         <a href={aboutURL} target="_blank" class="link" rel="noreferrer">ABOUT</a>
@@ -60,7 +68,7 @@
     display: flex;
   }
 
-  .logo{
+  .logo {
     margin-bottom: 0;
   }
 

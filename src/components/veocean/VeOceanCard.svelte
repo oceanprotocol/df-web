@@ -71,9 +71,9 @@
         {loading}
       />
       <ItemWithLabel
-        title={`Lock ends`}
+        title={`Lock ends`} 
         value={`${
-          $oceanUnlockDate ? $oceanUnlockDate.format("DD-MM-YYYY") : "-"
+          $oceanUnlockDate ? $oceanUnlockDate.format("DD-MMM-YYYY") : "-"
         }`}
         tooltipMessage={descriptions.default.tooltip_veocean_my_lock_ends}
         {loading}

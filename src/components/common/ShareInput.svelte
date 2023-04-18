@@ -14,7 +14,7 @@
 
   $: $userAddress && resetValues();
 
-  function validator(node, value) {
+  function validator(node) {
     return {
       update(value) {
         if (available === 0) return;
@@ -92,6 +92,7 @@
     color: var(--brand-black);
     border: 0;
     width: 30px;
+    background-color: transparent;
   }
   .allocationInput::-webkit-inner-spin-button,
   .allocationInput::-webkit-outer-spin-button {

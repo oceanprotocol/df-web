@@ -19,9 +19,8 @@
 </script>
 
 <Card
-  title={`Round ${roundInfo?.id}  -  ${
-    parseInt(roundInfo?.passive) + parseInt(roundInfo?.active)
-  } OCEAN`}
+  title={`Data Farming Round ${roundInfo?.id}`}
+  subtitle={`${parseInt(roundInfo?.passive) + parseInt(roundInfo?.active)} OCEAN`}
   tag={`${
     $APYs
       ? totalApy > 10000
@@ -46,7 +45,6 @@
       : ""
   }`}
   tooltipMessage={descriptions.default.tooltip_rewards_overview}
-  className="rewardsOverview"
 >
   <Countdown />
 </Card>
