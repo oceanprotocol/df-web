@@ -1,19 +1,37 @@
 [
     {
+        "title": "veOCEAN",
+        "description": "Fork of veCRV contracts which have been battle-tested over years.",
+        "image": "/images/features/safe.png",
+        "link": "https://docs.oceanprotocol.com/veocean-data-farming/veocean"
+    },
+    {
+        "title": "Weekly Rewards",
+        "description": "Data Farming Rounds run weekly, with rewards distributed at the end of each round.",
+        "image": "/images/features/receiveCash.png",
+        "link": "https://docs.oceanprotocol.com/veocean-data-farming/df-intro#when-to-claim"
+    },
+    {
+        "title": "For Everyone",
+        "description": "Numerous participants can benefit from the different reward programs available.",
+        "image": "/images/features/crowd.png",
+        "link": "https://docs.oceanprotocol.com/veocean-data-farming/veocean#what-can-i-do-with-veocean"
+    },
+    {
         "title": "Ranked Rewards",
-        "description": "Reward amounts are distributed exponentially to the first 50 assets with consume volume",
+        "description": "Rewards are distributed by rank to the top 100 assets.",
         "image": "/images/features/podium.png",
         "link": "https://docs.oceanprotocol.com/veocean-data-farming/df-intro#ranked-rewards"
     },
     {
         "title": "Publisher 2X Stake",
-        "description": "Publishers get 2x allocation power when allocating on their own assets",
+        "description": "Publishers get an effective 2x stake when allocating on their own assets.",
         "image": "/images/features/exchange.png",
         "link": "https://docs.oceanprotocol.com/veocean-data-farming/df-intro#publisher-rewards-2x-stake"
     },
     {
         "title": "No Impermanent Loss",
-        "description": "No OCEAN tokens lost when locking in exchange for veOCEAN",
+        "description": "veOCEAN holders do not suffer imperative losses from LP/AMM mechanisms.",
         "image": "/images/features/safe.png",
         "link": "https://docs.oceanprotocol.com/veocean-data-farming/veocean#security"
     }

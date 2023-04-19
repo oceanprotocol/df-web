@@ -32,7 +32,7 @@
     "tooltip_datafarming_current_round_asset_yield": "Data Farming Current Round Per Asset Rewards Yield represents the ROI for the round.\n\nroundYield = rewards Amount / ocean allocated",
     "tooltip_datafarming_my_ve_allocation": "This number represents the total amount of your veOCEAN allocated towards each dataset.",
     "tooltip_rewards_history_rounds": "Data Farming rewards distribution rounds. Rounds happen every week starting and ending each Thursday.",
-    "tooltip_rewards_overview": "Data Farming APY for both Passive & Active Rewards.\n\nRounds happen every week starting and ending each Thursday.",
+    "tooltip_rewards_overview": "Data Farming APY for both Passive & Active Rewards.\n\nRounds happen every week starting and <a href=https://docs.oceanprotocol.com/veocean-data-farming/df-intro#when-to-claim target=_blank>ending each Thursday at midnight GMT.</a>",
     "tooltip_rewards_apy_passive": "Data Farming Passive Rewards APY is calculated relative to your Ocean locked.\n\nThe longer you lock, the higher your APY will be.",
     "tooltip_rewards_apy_active": "Data Farming Active Rewards APY resets each Round and is relative to your Ocean locked and DataNFT curation.\n\nThe longer you lock, and the better you curate, the higher your APY will be.",
     "tooltip_rewards_history_active_rewards": "Rewards distributed for active curation of datasets. Active rewards are emitted based on Data Consume Volume.<br/><br/>Please check the docs for more info.",
