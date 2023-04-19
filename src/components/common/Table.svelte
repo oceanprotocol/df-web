@@ -540,7 +540,13 @@
     color: var(--brand-black);
     font-weight: 800;
   }
-  .bonus .title{
+
+  .cellContainer .title {
+    font-weight: 400;
+    margin: 0;
+  }
+  
+  .cellContainer.bonus .title{
     font-weight: 400;
   }
 

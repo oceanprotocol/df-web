@@ -11,7 +11,8 @@
 <a
   href={url}
   target="_blank"
-  style={color ? `color:${color}`: undefined}
+  style={color ? `color:${color}` : undefined}
+  rel="noreferrer"
   class={`link ${className ? className : undefined}`}
 >
   {#if text}
@@ -19,7 +20,7 @@
   {/if}
   <slot />
   {#if !hideIcon}
-    <img src={ExternalIcon} alt="external link"/>
+    <img src={ExternalIcon} alt="external link" />
   {/if}
 </a>
 
@@ -27,9 +28,8 @@
   .link {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-decoration: none;
-    width: fit-content;
     height: fit-content;
   }
   a {
