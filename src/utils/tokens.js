@@ -40,9 +40,7 @@ export const isTokenAmountApproved = async (tokenAddress, amount,
     }
     try {
     const allowedAmount = await allowance(tokenAddress, owner, spender, signer)
-    const allowedAmountFormated = ethers.utils.formatEther(allowedAmount);
-
-    return new Decimal(allowedAmountFormated).greaterThanOrEqualTo(amount)
+    return new Decimal(allowedAmount).greaterThanOrEqualTo(amount)
   }catch (err) {
     console.error(err);
   }
@@ -56,8 +54,8 @@ export const allowance = async (
   signer
 ) => {
   const datatoken = new ethers.Contract(datatokenAdress, TokenABI.default, signer);
-
-  return datatoken.allowance(owner, spender);
+  const amt = await datatoken.allowance(owner, spender)
+  return ethers.utils.formatEther(amt);
 }
 
 // Tx

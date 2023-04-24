@@ -27,7 +27,7 @@
   const onClick = async () => {
     loading = true;
     approving = true;
-     Swal.fire({title: "Approve Token Spending", html: approvalModalMessage, icon:"warning", showCancelButton: true,
+     Swal.fire({title: "Approve Token Spending", html: approvalModalMessage, icon:"warning", showCancelButton: true, confirmButtonColor: "#ff4092",
       confirmButtonText: 'Approve',
       cancelButtonText: 'Cancel'}).then(
       async (result) => {
