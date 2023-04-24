@@ -89,3 +89,22 @@ export const approve = async (
       throw e;
   }
 }
+
+export const setTokenAllowanceTo0 = async (tokenAddress, spender, userAddress, networkSigner) => {
+  let approvedAmt = await allowance(
+    tokenAddress,
+    userAddress,
+    spender,
+    networkSigner
+  )
+  let approvedAmtFormated = ethers.utils.formatEther(approvedAmt)
+  if(approvedAmtFormated>0){
+    let tx = await approve(
+      tokenAddress,
+      spender,
+      0,
+      networkSigner
+    );
+    await tx.wait();
+  }
+}

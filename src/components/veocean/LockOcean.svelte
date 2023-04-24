@@ -15,6 +15,9 @@
   import TokenApproval from "../common/TokenApproval.svelte";
   import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
   import {
+    setTokenAllowanceTo0
+  } from "../../utils/tokens";
+  import {
     getOceanBalance,
     updateUserBalanceOcean,
     updateUserBalanceVeOcean,
@@ -135,12 +138,23 @@
       } else {
         await lockOcean(values.amount, unlockTimestamp, $networkSigner);
       }
+      await setTokenAllowanceTo0(
+        getAddressByChainIdKey($connectedChainId, "Ocean"),
+        getAddressByChainIdKey(
+            process.env.VE_SUPPORTED_CHAINID,
+            "veOCEAN"
+          ),
+        $userAddress,
+        $networkSigner
+      )
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
       currentStep = 1;
       return;
     }
+    
+
     Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
       async () => {
         loading = false;
@@ -166,6 +180,7 @@
         veOceanWithDelegations.update(() => newVeOceansWithDelegations);
         loading = false;
       }
+
     );
   };
 

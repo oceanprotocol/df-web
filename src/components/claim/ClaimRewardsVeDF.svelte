@@ -22,6 +22,9 @@
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import { oceanUnlockDate } from "../../stores/veOcean";
   import * as descriptions from "../../utils/metadata/descriptions.json";
+  import {
+    setTokenAllowanceTo0,
+  } from "../../utils/tokens";
 
   export let canClaimVE = true;
   export let canClaimDF = true;
@@ -36,6 +39,15 @@
         $userAddress,
         getAddressByChainIdKey($connectedChainId, "Ocean")
       );
+      await setTokenAllowanceTo0(
+        getAddressByChainIdKey($connectedChainId, "Ocean"),
+        getAddressByChainIdKey(
+            process.env.VE_SUPPORTED_CHAINID,
+            "veOCEAN"
+          ),
+        $userAddress,
+        $networkSigner
+      )
       Swal.fire(
         "Success!",
         `You've claimed your Data Farming rewards!`,
@@ -59,6 +71,15 @@
     claiming = "VE_REWARDS";
     try {
       await claimVERewards($userAddress, $networkSigner);
+      await setTokenAllowanceTo0(
+        getAddressByChainIdKey($connectedChainId, "Ocean"),
+        getAddressByChainIdKey(
+            process.env.VE_SUPPORTED_CHAINID,
+            "veOCEAN"
+          ),
+        $userAddress,
+        $networkSigner
+      )
       Swal.fire("Success!", `You've claimed your VE rewards!`, "success").then(
         async () => {
           const claimableEstimate = await getRewardsFeeEstimate(
