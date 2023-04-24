@@ -113,7 +113,6 @@
   }
 
   :global(.dismissAllowanceButton){
-    margin: auto !important;
     margin-bottom: calc(var(--spacer)/3) !important;
   }
 

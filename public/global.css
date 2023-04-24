@@ -201,3 +201,7 @@ body button:focus {
 .bx--toast-notification__caption{
   display: none;
 }
+
+.bx--toast-notification__subtitle, .bx--toast-notification__title{
+  text-align: left;
+}
