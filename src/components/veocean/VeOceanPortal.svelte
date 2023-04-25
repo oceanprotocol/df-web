@@ -16,6 +16,7 @@
 
   let loading = false;
   let showDismissAllowance = false;
+  let allowedTokenAmt = 0;
 
   const loadValues = async () => {
     loading = true;
@@ -60,8 +61,10 @@
     ).then((allowedAmt) => {
       console.log(allowedAmt)
       if(allowedAmt>0){
+        allowedTokenAmt = allowedAmt
         showDismissAllowance = true
       }else{
+        allowedTokenAmt = 0
         showDismissAllowance = false
       }
     })
@@ -74,12 +77,12 @@
     <ToastNotification
       lowContrast
       kind="warning"
-      title="You have approved tokens left"
-      subtitle="If you don't want to lock your tokens then dismiss token approval now!"
+      title={`You have ${parseFloat(allowedTokenAmt).toFixed(2)} approved tokens that are not locked`}
+      subtitle="If you don't want to lock your tokens then please dismiss token approval now! Otherwhise other people may be able lock your approved tokens."
     >
       <Button
         className="dismissAllowanceButton"
-        text={"Dismiss allowance"}
+        text={"Dismiss token approval"}
         onclick={dismissTokenApproval}
       />
     </ToastNotification>
