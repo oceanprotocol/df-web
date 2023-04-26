@@ -77,7 +77,7 @@
     <ToastNotification
       lowContrast
       kind="warning"
-      title={`You have ${parseFloat(allowedTokenAmt).toFixed(2)} approved tokens that are not locked.`}
+      title={`You have ${allowedTokenAmt > 1000000 ? '>1000000.00' : parseFloat(allowedTokenAmt).toFixed(2)} approved tokens that are not locked.`}
       subtitle="If you don't want to lock your tokens then please dismiss token approval now! Otherwhise other people may be able lock your approved tokens."
     >
       <Button
