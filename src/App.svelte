@@ -251,6 +251,9 @@
   $css--reset: false;
   $css--default-type: false;
   $css--plex: false;
+
+ @import "carbon-components/scss/components/notification/_toast-notification.scss";
+
   main {
     text-align: center;
     max-width: 240px;

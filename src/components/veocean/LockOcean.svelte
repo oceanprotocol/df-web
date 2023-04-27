@@ -335,6 +335,7 @@
           <TokenApproval
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
+            approvalModalMessage="Approve only if you are going to lock right away.<br> Make sure you only approve the amount that you are going to lock."
             spender={getAddressByChainIdKey(
               process.env.VE_SUPPORTED_CHAINID,
               "veOCEAN"
