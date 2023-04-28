@@ -15,7 +15,7 @@
   import TokenApproval from "../common/TokenApproval.svelte";
   import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
   import {
-    setTokenAllowanceTo0
+    allowance
   } from "../../utils/tokens";
   import {
     getOceanBalance,
@@ -44,8 +44,9 @@
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import StepsComponent from "../common/StepsComponent.svelte";
 
-  let networksData = networksDataArray.default;
+  export let setShowApprovalNotification;
 
+  let networksData = networksDataArray.default;
   let oceanBalance = 0;
   let calculatedVotingPower = 0;
   let calculatedMultiplier = 0;
@@ -127,6 +128,18 @@
     loading = true;
     const unlockTimestamp = moment.utc(values.unlockDate).unix();
     currentStep = 2;
+    let allowedAmountLeft = await allowance(
+        getAddressByChainIdKey($connectedChainId, "Ocean"),
+        $userAddress,
+        getAddressByChainIdKey(
+        process.env.VE_SUPPORTED_CHAINID,
+        "veOCEAN"
+        ),
+        $networkSigner
+      )
+    console.log('----',allowedAmountLeft)
+    if(allowedAmountLeft>0) setShowApprovalNotification(true, allowedAmountLeft)
+    return
     try {
       if ($oceanUnlockDate) {
         if (values.amount > 0) {
@@ -138,22 +151,12 @@
       } else {
         await lockOcean(values.amount, unlockTimestamp, $networkSigner);
       }
-      await setTokenAllowanceTo0(
-        getAddressByChainIdKey($connectedChainId, "Ocean"),
-        getAddressByChainIdKey(
-            process.env.VE_SUPPORTED_CHAINID,
-            "veOCEAN"
-          ),
-        $userAddress,
-        $networkSigner
-      )
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
       currentStep = 1;
       return;
     }
-    
 
     Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
       async () => {

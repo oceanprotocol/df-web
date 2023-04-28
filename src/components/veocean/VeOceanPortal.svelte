@@ -18,6 +18,12 @@
   let showDismissAllowance = false;
   let allowedTokenAmt = 0;
 
+  const setShowApprovalNotification = async(value, allowedTokens) => {
+    console.log(value, allowedTokens)
+    allowedTokenAmt=allowedTokens
+    showDismissAllowance=value
+  }
+
   const loadValues = async () => {
     loading = true;
     let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
@@ -69,6 +75,8 @@
       }
     })
   }
+
+  $:if(showDismissAllowance) console.log('shooowww')
 </script>
 
 {#if !loading}
@@ -88,7 +96,7 @@
     </ToastNotification>
   {/if}
     <VeOceanCard />
-    <LockOcean />
+    <LockOcean setShowApprovalNotification={setShowApprovalNotification}/>
     <OceanSummary />
   </div>
 {:else}
