@@ -19,7 +19,6 @@
   let allowedTokenAmt = 0;
 
   const setShowApprovalNotification = async(value, allowedTokens) => {
-    console.log(value, allowedTokens)
     allowedTokenAmt=allowedTokens
     showDismissAllowance=value
   }
@@ -65,7 +64,6 @@
      ),
      $networkSigner
     ).then((allowedAmt) => {
-      console.log(allowedAmt)
       if(allowedAmt>0){
         allowedTokenAmt = allowedAmt
         showDismissAllowance = true
@@ -75,8 +73,6 @@
       }
     })
   }
-
-  $:if(showDismissAllowance) console.log('shooowww')
 </script>
 
 {#if !loading}
@@ -87,6 +83,10 @@
       kind="warning"
       title={`You have ${allowedTokenAmt > 1000000 ? '>1000000.00' : parseFloat(allowedTokenAmt).toFixed(2)} approved tokens that are not locked.`}
       subtitle="If you don't want to lock your tokens then please dismiss token approval now! Otherwhise other people may be able lock your approved tokens."
+      on:close={(e) => {
+        e.preventDefault();
+        showDismissAllowance = false;
+      }}
     >
       <Button
         className="dismissAllowanceButton"

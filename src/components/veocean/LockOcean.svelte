@@ -82,8 +82,8 @@
         .date()
         .min(
           $oceanUnlockDate
-            ? $oceanUnlockDate.add("1", "week").format("YYYY-MM-DD")
-            : getThursdayDate(moment().utc())
+            ? $oceanUnlockDate.format("YYYY-MM-DD")
+            : getThursdayDate(moment().utc().add(7, "days"))
         )
         .max(getMaxDate().format("YYYY-MM-DD"))
         .required("Unlock date is requred")
@@ -128,18 +128,6 @@
     loading = true;
     const unlockTimestamp = moment.utc(values.unlockDate).unix();
     currentStep = 2;
-    let allowedAmountLeft = await allowance(
-        getAddressByChainIdKey($connectedChainId, "Ocean"),
-        $userAddress,
-        getAddressByChainIdKey(
-        process.env.VE_SUPPORTED_CHAINID,
-        "veOCEAN"
-        ),
-        $networkSigner
-      )
-    console.log('----',allowedAmountLeft)
-    if(allowedAmountLeft>0) setShowApprovalNotification(true, allowedAmountLeft)
-    return
     try {
       if ($oceanUnlockDate) {
         if (values.amount > 0) {
@@ -151,6 +139,16 @@
       } else {
         await lockOcean(values.amount, unlockTimestamp, $networkSigner);
       }
+      let allowedAmountLeft = await allowance(
+        getAddressByChainIdKey($connectedChainId, "Ocean"),
+        $userAddress,
+        getAddressByChainIdKey(
+        process.env.VE_SUPPORTED_CHAINID,
+        "veOCEAN"
+        ),
+        $networkSigner
+      )
+      if(allowedAmountLeft>0) setShowApprovalNotification(true, allowedAmountLeft)
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
