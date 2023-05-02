@@ -18,6 +18,11 @@
   let showDismissAllowance = false;
   let allowedTokenAmt = 0;
 
+  const setShowApprovalNotification = async(value, allowedTokens) => {
+    allowedTokenAmt=allowedTokens
+    showDismissAllowance=value
+  }
+
   const loadValues = async () => {
     loading = true;
     let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
@@ -59,7 +64,6 @@
      ),
      $networkSigner
     ).then((allowedAmt) => {
-      console.log(allowedAmt)
       if(allowedAmt>0){
         allowedTokenAmt = allowedAmt
         showDismissAllowance = true
@@ -78,7 +82,11 @@
       lowContrast
       kind="warning"
       title={`You have ${allowedTokenAmt > 1000000 ? '>1000000.00' : parseFloat(allowedTokenAmt).toFixed(2)} approved tokens that are not locked.`}
-      subtitle="If you don't want to lock your tokens then please dismiss token approval now! Otherwhise other people may be able lock your approved tokens."
+      subtitle="If you don't want to lock your tokens then please dismiss token approval now! Otherwhise other people may be able lock your approved tokens for you."
+      on:close={(e) => {
+        e.preventDefault();
+        showDismissAllowance = false;
+      }}
     >
       <Button
         className="dismissAllowanceButton"
@@ -88,7 +96,7 @@
     </ToastNotification>
   {/if}
     <VeOceanCard />
-    <LockOcean />
+    <LockOcean setShowApprovalNotification={setShowApprovalNotification}/>
     <OceanSummary />
   </div>
 {:else}
