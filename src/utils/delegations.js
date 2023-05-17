@@ -10,19 +10,21 @@ const veDelegationABI = VeDelegationABI.default
 
 export const GET_USER_LAST_DELEGATION = gql`
   query userDelegation($userAddress: String!) {
-    veDelegations(where: {delegator_contains: $userAddress}, orderBy: block, orderDirection: desc){
-      id
-      delegator{
+    veDelegations(where: {delegator_contains: "0x6f356fccac3b56d9d772d7dc2e23062475d9279d" } )
+       {
         id
+        receiver {
+          id
+        }
+        tokenId
+        updates(orderBy:timestamp orderDirection:desc){
+          timestamp
+          sender
+          amount
+          type
+        }
       }
-      receiver{
-        id
-      }
-      amount
-      expireTime
-      tokenId
     }
-  }
 `;
 
 export const getUserVotingPowerWithDelegations = async(userAddress) => {
@@ -104,8 +106,9 @@ export const getTokenId = async(userAddress, id) => {
 }
 
 export const delegate = async(delegator, receiver, oceanUnlockDate, signer, tokenId) => {
-  const id = tokenId + 1
+  const id = tokenId ? tokenId : 1
   try {
+    console.log('herrre')
     const contract = new ethers.Contract(
       getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
       veDelegationABI, 

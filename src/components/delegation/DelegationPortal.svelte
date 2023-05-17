@@ -31,10 +31,16 @@
   }
 
   $: if ($delegation?.data) {
+    console.log($delegation?.data);
+    let activeDelegation = $delegation?.data.veDelegations.find(
+      (d) => parseInt(d.updates[0].amount) > 0
+    );
+
+    console.log(activeDelegation, activeDelegation?.updates?.length);
     veDelegation.update(() => {
       return {
-        ...$delegation?.data.veDelegations[0],
-        createId: $delegation?.data.veDelegations.length,
+        ...activeDelegation,
+        createId: activeDelegation?.updates?.length,
       };
     });
   }

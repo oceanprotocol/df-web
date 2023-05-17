@@ -56,9 +56,10 @@
         values.walletAddress,
         $oceanUnlockDate,
         $networkSigner,
-        $veDelegation.createId
+        $veDelegation?.createId
       );
     } catch (error) {
+      console.error(error);
       Swal.fire("Error!", "Delegation failed.", "error");
       loading = false;
       return;
@@ -83,6 +84,7 @@
     try {
       await cancelDelegation($veDelegation.tokenId, $networkSigner);
     } catch (error) {
+      console.error(error);
       Swal.fire("Error!", "Cancel delegation failed.", "error");
       loading = false;
       return;
