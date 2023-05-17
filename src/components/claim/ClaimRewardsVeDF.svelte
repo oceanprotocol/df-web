@@ -13,7 +13,6 @@
     APYs,
   } from "../../stores/airdrops";
   import ClaimItem from "../common/ClaimItem.svelte";
-  import Card from "../common/Card.svelte";
   import Swal from "sweetalert2";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import { updateUserBalanceOcean, userBalances } from "../../stores/tokens";
@@ -26,7 +25,6 @@
   export let canClaimVE = true;
   export let canClaimDF = true;
   export let roundInfo;
-  export let loading = false;
   let claiming;
 
   async function onClaimDfRewards() {

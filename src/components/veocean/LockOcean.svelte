@@ -15,6 +15,9 @@
   import TokenApproval from "../common/TokenApproval.svelte";
   import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
   import {
+    allowance
+  } from "../../utils/tokens";
+  import {
     getOceanBalance,
     updateUserBalanceOcean,
     updateUserBalanceVeOcean,
@@ -41,8 +44,9 @@
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import StepsComponent from "../common/StepsComponent.svelte";
 
-  let networksData = networksDataArray.default;
+  export let setShowApprovalNotification;
 
+  let networksData = networksDataArray.default;
   let oceanBalance = 0;
   let calculatedVotingPower = 0;
   let calculatedMultiplier = 0;
@@ -78,8 +82,8 @@
         .date()
         .min(
           $oceanUnlockDate
-            ? $oceanUnlockDate.add("1", "week").format("YYYY-MM-DD")
-            : getThursdayDate(moment().utc())
+            ? $oceanUnlockDate.format("YYYY-MM-DD")
+            : getThursdayDate(moment().utc().add(7, "days"))
         )
         .max(getMaxDate().format("YYYY-MM-DD"))
         .required("Unlock date is requred")
@@ -135,12 +139,23 @@
       } else {
         await lockOcean(values.amount, unlockTimestamp, $networkSigner);
       }
+      let allowedAmountLeft = await allowance(
+        getAddressByChainIdKey($connectedChainId, "Ocean"),
+        $userAddress,
+        getAddressByChainIdKey(
+        process.env.VE_SUPPORTED_CHAINID,
+        "veOCEAN"
+        ),
+        $networkSigner
+      )
+      if(allowedAmountLeft>0) setShowApprovalNotification(true, allowedAmountLeft)
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
       currentStep = 1;
       return;
     }
+
     Swal.fire("Success!", "OCEAN tokens successfully locked.", "success").then(
       async () => {
         loading = false;
@@ -166,6 +181,7 @@
         veOceanWithDelegations.update(() => newVeOceansWithDelegations);
         loading = false;
       }
+
     );
   };
 
@@ -320,6 +336,7 @@
           <TokenApproval
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
+            approvalModalMessage="Approve only if you are going to lock right away.<br> Make sure you only approve the amount that you are going to lock."
             spender={getAddressByChainIdKey(
               process.env.VE_SUPPORTED_CHAINID,
               "veOCEAN"
