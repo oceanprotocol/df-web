@@ -58,9 +58,9 @@
   <DelegationMetrics />
   <Delegate
     onDelegationChange={async () => {
-      await setTimeout(5000);
-      await delegation.refetch();
       await new Promise((resolve) => setTimeout(resolve, 5000));
+      await delegation.refetch();
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       console.log("subgraph refetch");
     }}
   />

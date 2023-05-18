@@ -106,10 +106,8 @@ export const getTokenId = async(userAddress, id) => {
   }
 }
 
-export const delegate = async(delegator, receiver, oceanUnlockDate, signer, tokenId) => {
-  const id = tokenId
+export const delegate = async(delegator, receiver, oceanUnlockDate, signer, id) => {
   try {
-    console.log(id)
     const contract = new ethers.Contract(
       getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
       veDelegationABI, 

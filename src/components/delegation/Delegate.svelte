@@ -64,7 +64,6 @@
       loading = false;
       return;
     }
-    await new Promise((resolve) => setTimeout(resolve, 5000));
     await onDelegationChange();
     let newDelegated = await getDelegatedVeOcean($userAddress);
     delegated.update(() => newDelegated);
@@ -91,7 +90,6 @@
       return;
     }
     await onDelegationChange();
-    await new Promise((resolve) => setTimeout(resolve, 5000));
     let newDelegated = await getDelegatedVeOcean($userAddress);
     delegated.update(() => newDelegated);
     let newVeOceansWithDelegations = await getUserVotingPowerWithDelegations(
