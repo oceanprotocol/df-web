@@ -38,7 +38,6 @@
     $delegation?.data.veDelegations.forEach((delegation) => {
       createId += delegation.updates.length;
     });
-    console.log($delegation?.data.veDelegations);
     veDelegation.update(() => {
       return {
         ...activeDelegation,

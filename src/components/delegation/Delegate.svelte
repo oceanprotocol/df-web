@@ -134,7 +134,7 @@
             Delegated to
             <b>
               {`${
-                $veDelegation
+                $veDelegation?.receiver
                   ? `${$veDelegation.receiver.id?.substr(
                       0,
                       6
