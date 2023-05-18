@@ -31,16 +31,18 @@
   }
 
   $: if ($delegation?.data) {
-    console.log($delegation?.data);
     let activeDelegation = $delegation?.data.veDelegations.find(
       (d) => parseInt(d.updates[0].amount) > 0
     );
-
-    console.log(activeDelegation, activeDelegation?.updates?.length);
+    let createId = 1;
+    $delegation?.data.veDelegations.forEach((delegation) => {
+      createId += delegation.updates.length;
+    });
+    console.log($delegation?.data.veDelegations);
     veDelegation.update(() => {
       return {
         ...activeDelegation,
-        createId: activeDelegation?.updates?.length,
+        createId: createId,
       };
     });
   }
@@ -58,7 +60,9 @@
   <Delegate
     onDelegationChange={async () => {
       await setTimeout(5000);
-      delegation.refetch();
+      await delegation.refetch();
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      console.log("subgraph refetch");
     }}
   />
 </div>

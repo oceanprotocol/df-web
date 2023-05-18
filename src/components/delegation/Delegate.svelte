@@ -56,7 +56,7 @@
         values.walletAddress,
         $oceanUnlockDate,
         $networkSigner,
-        $veDelegation?.createId
+        $veDelegation.createId
       );
     } catch (error) {
       console.error(error);
@@ -64,13 +64,14 @@
       loading = false;
       return;
     }
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await onDelegationChange();
     let newDelegated = await getDelegatedVeOcean($userAddress);
     delegated.update(() => newDelegated);
     let newVeOceansWithDelegations = await getUserVotingPowerWithDelegations(
       $userAddress
     );
     veOceanWithDelegations.update(() => newVeOceansWithDelegations);
-    onDelegationChange();
     Swal.fire(
       "Success!",
       `You've delegated your veOCEAN allocation!`,
@@ -89,13 +90,14 @@
       loading = false;
       return;
     }
+    await onDelegationChange();
+    await new Promise((resolve) => setTimeout(resolve, 5000));
     let newDelegated = await getDelegatedVeOcean($userAddress);
     delegated.update(() => newDelegated);
     let newVeOceansWithDelegations = await getUserVotingPowerWithDelegations(
       $userAddress
     );
     veOceanWithDelegations.update(() => newVeOceansWithDelegations);
-    onDelegationChange();
     Swal.fire(
       "Success!",
       `You've canceled your veOCEAN allocation!`,
