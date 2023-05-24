@@ -119,11 +119,13 @@
   <Card title="Delegate">
     <p class="message">
       You will delegate your entire veOCEAN allocation until your current lock
-      will end, and you can cancel at any time.
+      ends. You can cancel at any time.
     </p>
     <p class="message">
-      The wallet address you delegate to is going to receive 100% of your
-      rewards.
+      The wallet address you delegate to is going to receive 100% of your Active
+      Rewards.<br />
+      If you update your lock and obtain more veOCEAN, you must update your delegation
+      to remain 100% delegated.
     </p>
     <div class="delegateContainer">
       {#if $delegated > 0}
