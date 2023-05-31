@@ -53,7 +53,7 @@
   </h2>
   <p class="message">
     Maximize your Active APY and skip transaction fees by delegating to a wallet
-    that efficiently manages your allocation power.
+    that efficiently manages your allocation power. <br/><a href=https://docs.oceanprotocol.com/veocean-data-farming/delegation target=_blank rel="noreferrer" >Read more about delegation.</a>
   </p>
   <DelegationMetrics />
   <Delegate
