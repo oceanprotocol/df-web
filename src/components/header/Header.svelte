@@ -25,29 +25,19 @@
   <nav>
     <ul>
       <li class:active={$location.pathname === "/veocean"}>
-        <Link
-          to="/veocean"
-          class="link">veOCEAN</Link
-        >
+        <Link to="/veocean" class="link">veOCEAN</Link>
       </li>
       <li class:active={$location.pathname === "/datafarming"}>
-        <Link
-          to="/datafarming"
-          class="link">FARMS</Link
-        >
+        <Link to="/datafarming" class="link">FARMS</Link>
       </li>
       <li class:active={$location.pathname === "/activerewards"}>
-        <Link
-          to="/activerewards"
-          class="link"
-          >REWARDS</Link
-        >
+        <Link to="/activerewards" class="link">REWARDS</Link>
+      </li>
+      <li class:active={$location.pathname === "/delegation"}>
+        <Link to="/delegation" class="link">DELEGATE</Link>
       </li>
       <li class:active={false}>
-        <a
-          href={aboutURL}
-          target="_blank"
-          class="link"
+        <a href={aboutURL} target="_blank" rel="noreferrer" class="link"
           >ABOUT</a
         >
       </li>

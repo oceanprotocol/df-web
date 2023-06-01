@@ -224,6 +224,7 @@
 
   $: $userAddress && updateTotalAvailableAllocations();
   $: $totalUserAllocation && updateTotalAvailableAllocations();
+  $: $veOceanWithDelegations && updateTotalAvailableAllocations();
   $: !$oceanUnlockDate && updateTotalAvailableAllocations();
   $: $oceanUnlockDate && updateTotalAvailableAllocations();
 
@@ -257,12 +258,9 @@
 
   function updateDisable() {
     disabled =
-      $userBalances[
-        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
-      ] === undefined ||
       !$userAddress ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
-      !$oceanUnlockDate;
+      $veOceanWithDelegations <= 0 ||
+      $connectedChainId != process.env.VE_SUPPORTED_CHAINID;
 
     updateTooltip();
   }
@@ -287,12 +285,9 @@
 
   $: if ($userAddress && $connectedChainId) {
     disabled =
-      $userBalances[
-        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
-      ] === undefined ||
       !$userAddress ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID ||
-      !$oceanUnlockDate;
+      $veOceanWithDelegations <= 0 ||
+      $connectedChainId != process.env.VE_SUPPORTED_CHAINID;
   }
 
   // init the page state
@@ -305,7 +300,7 @@
       <div class="headerValuesContainer">
         <ItemWithLabel
           title="Allocated amount"
-          value={!$oceanUnlockDate
+          value={$veOceanWithDelegations <= 0
             ? "No available allocation"
             : totalAvailable >= 0
             ? `${
@@ -318,7 +313,7 @@
           {tooltipMessage}
           {tooltipState}
         />
-        {#if $oceanUnlockDate}
+        {#if $veOceanWithDelegations > 0}
           <Button
             text={"Update allocations"}
             className="updateAllocationsBtton"
