@@ -238,7 +238,7 @@
     <Route path="/veocean" primary={false}>
       <VeOceanPortal />
     </Route>
-    <Route path="/delegation" primary={false}>
+    <Route path="/delegate" primary={false}>
       <DelegationPortal />
     </Route>
     <Route path="/*" primary={false}>
