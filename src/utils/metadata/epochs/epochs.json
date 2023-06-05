@@ -303,24 +303,192 @@
     "active": 75000,
     "total": 150000
   },
-  {"id": 39, "date_start": "2023-05-25", "date_end": "2023-06-01", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 40, "date_start": "2023-06-01", "date_end": "2023-06-08", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 41, "date_start": "2023-06-08", "date_end": "2023-06-15", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 42, "date_start": "2023-06-15", "date_end": "2023-06-22", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 43, "date_start": "2023-06-22", "date_end": "2023-06-29", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 44, "date_start": "2023-06-29", "date_end": "2023-07-06", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 45, "date_start": "2023-07-06", "date_end": "2023-07-13", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 46, "date_start": "2023-07-13", "date_end": "2023-07-20", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 47, "date_start": "2023-07-20", "date_end": "2023-07-27", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 48, "date_start": "2023-07-27", "date_end": "2023-08-03", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 49, "date_start": "2023-08-03", "date_end": "2023-08-10", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 50, "date_start": "2023-08-10", "date_end": "2023-08-17", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 51, "date_start": "2023-08-17", "date_end": "2023-08-24", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 52, "date_start": "2023-08-24", "date_end": "2023-08-31", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 53, "date_start": "2023-08-31", "date_end": "2023-09-07", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 54, "date_start": "2023-09-07", "date_end": "2023-09-14", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 55, "date_start": "2023-09-14", "date_end": "2023-09-21", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 56, "date_start": "2023-09-21", "date_end": "2023-09-28", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 57, "date_start": "2023-09-28", "date_end": "2023-10-05", "passive": 75000, "active": 75000, "total": 150000},
-  {"id": 58, "date_start": "2023-10-05", "date_end": "2023-10-12", "passive": 75000, "active": 75000, "total": 150000}
+  {
+    "id": 39,
+    "date_start": "2023-05-25",
+    "date_end": "2023-06-01",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 40,
+    "date_start": "2023-06-01",
+    "date_end": "2023-06-08",
+    "streams": [
+      {
+        "name": "passive",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "description": "Earn by locking OCEAN into veOCEAN Earn by locking OCEAN into veOCEAN"
+          }
+        ]
+      },
+      {
+        "name": "active",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "volume DF",
+            "description": "Earn by allocating veOCEAN to high-DCV assets; or delegating veOCEAN to others."
+          },
+          {
+            "name": "predictions",
+            "description": "Earn by doing Predictoor actions (submit predictions every 5 min and stake OCEAN with that); or delegating OCEAN (not veOCEAN) to Predictoors."
+          },
+          {
+            "name": "challenges",
+            "description": "Earn by doing Contestant actions (submit predictions once a week to the Predict-ETH Data Challenge)."
+          }
+        ]
+      }
+    ],
+    "total": 150000
+  },
+  {
+    "id": 41,
+    "date_start": "2023-06-08",
+    "date_end": "2023-06-15",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 42,
+    "date_start": "2023-06-15",
+    "date_end": "2023-06-22",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 43,
+    "date_start": "2023-06-22",
+    "date_end": "2023-06-29",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 44,
+    "date_start": "2023-06-29",
+    "date_end": "2023-07-06",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 45,
+    "date_start": "2023-07-06",
+    "date_end": "2023-07-13",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 46,
+    "date_start": "2023-07-13",
+    "date_end": "2023-07-20",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 47,
+    "date_start": "2023-07-20",
+    "date_end": "2023-07-27",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 48,
+    "date_start": "2023-07-27",
+    "date_end": "2023-08-03",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 49,
+    "date_start": "2023-08-03",
+    "date_end": "2023-08-10",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 50,
+    "date_start": "2023-08-10",
+    "date_end": "2023-08-17",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 51,
+    "date_start": "2023-08-17",
+    "date_end": "2023-08-24",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 52,
+    "date_start": "2023-08-24",
+    "date_end": "2023-08-31",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 53,
+    "date_start": "2023-08-31",
+    "date_end": "2023-09-07",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 54,
+    "date_start": "2023-09-07",
+    "date_end": "2023-09-14",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 55,
+    "date_start": "2023-09-14",
+    "date_end": "2023-09-21",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 56,
+    "date_start": "2023-09-21",
+    "date_end": "2023-09-28",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 57,
+    "date_start": "2023-09-28",
+    "date_end": "2023-10-05",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  },
+  {
+    "id": 58,
+    "date_start": "2023-10-05",
+    "date_end": "2023-10-12",
+    "passive": 75000,
+    "active": 75000,
+    "total": 150000
+  }
 ]

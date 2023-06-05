@@ -4,6 +4,7 @@
     import ItemWithLabel from "../common/ItemWithLabel.svelte";
   
     export let title = undefined;
+    export let description = undefined;
     export let rewardAmount = 0;
     export let rewards = 0;
     export let apy = undefined;
@@ -22,7 +23,7 @@
     {#if apy}
         <span class="apy"></span>
     {/if}
-    <p class="description"></p>
+    <p class="description">{description}</p>
     <div class="action">
         <Button 
         fullWidth
