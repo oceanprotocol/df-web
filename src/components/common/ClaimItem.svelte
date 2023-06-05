@@ -1,8 +1,10 @@
 <script>
+  import { each } from "svelte/internal";
   import Button from "./Button.svelte";
   import Card from "./Card.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
   import { navigate } from "svelte-navigator";
+  import Substream from "../claim/Substream.svelte";
 
   export let title;
   export let amount;
@@ -18,6 +20,7 @@
   export let disableRedirect = false;
   export let apy = undefined;
   export let apyTooltip = undefined;
+  export let substreams = undefined;
 </script>
 
 <div class={`container`}>
@@ -54,6 +57,11 @@
         disabled={loading || disabled}
       />
     {/if}
+    {#if substreams}
+      {#each substreams as substream}
+        <Substream title={substream.title}/>
+      {/each}
+    {/if}
   </Card>
 </div>
 
@@ -72,15 +80,5 @@
     text-align: start;
     margin-bottom: calc(var(--spacer) / 3);
     font-size: var(--font-size-small);
-  }
-  @media (min-width: 640px) {
-    .container {
-      width: 45%;
-    }
-  }
-  @media (min-width: 820px) {
-    .container {
-      width: 48%;
-    }
   }
 </style>

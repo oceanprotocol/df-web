@@ -131,6 +131,7 @@
       ]}
       loading={claiming === "VE_REWARDS"}
       onClick={onClaimVeRewards}
+      substreams={[{title: "veOCEAN"}]}
       disabled={canClaimVE === false ||
         claiming !== undefined ||
         $veClaimables <= 0}
@@ -180,21 +181,15 @@
   .rewardsContainer {
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    gap: calc(var(--spacer) / 2);
-    flex-direction: row;
+    flex-direction: column;
     margin-top: calc(var(--spacer) / 2);
   }
   .title {
     margin-bottom: calc(var(--spacer) / 2);
   }
   .description {
-    max-width: 600px;
     margin: auto;
   }
   @media (min-width: 640px) {
-    .rewardsContainer {
-      gap: calc(var(--spacer) / 2);
-    }
   }
 </style>
