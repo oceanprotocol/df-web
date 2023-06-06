@@ -1,9 +1,7 @@
 <script>
-  import { each } from "svelte/internal";
   import Button from "./Button.svelte";
   import Card from "./Card.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
-  import { navigate } from "svelte-navigator";
   import Substream from "../claim/Substream.svelte";
 
   export let title;
@@ -13,20 +11,16 @@
   export let disabled = false;
   export let showRedirectLink;
   export let onClick;
-  export let metrics;
   export let rewardTooltip = undefined;
-  export let disableRedirect = false;
   export let apy = undefined;
-  export let apyTooltip = undefined;
   export let substreams = undefined;
 </script>
 
 <div class={`container`}>
   <Card
-    title={`${title} Rewards`}
-    subtitle={`${distributedAmount} OCEAN`}
-    tag={apy}
-    tooltipMessage={apyTooltip}
+    title={`${title} Rewards - ${distributedAmount} OCEAN`}
+    tag={apy?.value}
+    tooltipMessage={apy?.tooltip}
     priority="secondary"
   >
   {#if substreams}
@@ -58,17 +52,13 @@
 <style>
   .container {
     width: 100%;
+    margin: calc(var(--spacer)/2) 0;
   }
   .claimRewards {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: calc(var(--spacer) / 3);
-  }
-  .description {
-    text-align: start;
-    margin-bottom: calc(var(--spacer) / 3);
-    font-size: var(--font-size-small);
+    margin: calc(var(--spacer) / 3) 0;
   }
 </style>

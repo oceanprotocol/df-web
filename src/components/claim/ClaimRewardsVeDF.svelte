@@ -72,22 +72,11 @@
     }
     claiming = undefined;
   }
-</script>
 
-<div class="container">
-  <h2 class="title">Reward Programs</h2>
-  <p class="description">
-    Data Farming consists of two reward programs. Each reward program is unique
-    and offers different ways for participants to get engaged. To access Reward
-    Programs, participants are required to hold veOCEAN.
-  </p>
-  <div class="rewardsContainer">
-  {#each roundInfo?.streams as stream}
-    <ClaimItem
-      title="Passive"
-      description="<p>Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>.</p><p><strong>Earn more Rewards</strong> by locking more OCEAN or increasing your unlock time.</p>"
-      distributedAmount={stream?.rewards}
-      apy={`${
+  function getAPY(type){
+    let apy={}
+    if(type=='passive'){
+      apy.value = `${
         $APYs
           ? $APYs?.passive > 10000
             ? "over 10000"
@@ -103,42 +92,33 @@
                 : parseFloat(0).toFixed(2)
             }% Your APY`
           : ""
-      }`}
-      apyTooltip={descriptions.default.tooltip_rewards_apy_passive}
-      showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
-      redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
-      amount={`${parseFloat($veClaimables).toFixed(2)} OCEAN`}
-      metrics={[
-        {
-          name: "balance",
-          value: `${
-            $userBalances[
-              getAddressByChainIdKey(
-                process.env.VE_SUPPORTED_CHAINID,
-                "veOCEAN"
-              )
-            ]
-              ? parseFloat(
-                  $userBalances[
-                    getAddressByChainIdKey(
-                      process.env.VE_SUPPORTED_CHAINID,
-                      "veOCEAN"
-                    )
-                  ]
-                ).toFixed(3)
-              : 0
-          } veOCEAN`,
-        },
-      ]}
-      loading={claiming === "VE_REWARDS"}
-      onClick={onClaimVeRewards}
-      substreams={stream.substreams}
-      disabled={canClaimVE === false ||
-        claiming !== undefined ||
-        $veClaimables <= 0}
-    />
-    {/each}
-   <ClaimItem
+      }`
+      apy.tooltip = descriptions.default.tooltip_rewards_apy_passive
+    }else{
+      apy.value = `${
+        $APYs
+          ? $APYs?.active > 10000
+            ? "over 10000"
+            : `${$APYs?.active.toFixed(2)}`
+          : parseFloat(0).toFixed(2)
+      }% Avg APY ${
+        $userAddress
+          ? `| ${
+              $APYs
+                ? $APYs?.activeUser > 10000
+                  ? "over 10000"
+                  : `${$APYs?.activeUser.toFixed(2)}`
+                : parseFloat(0).toFixed(2)
+            }% Your APY`
+          : ""
+      }`
+      apy.tooltip = descriptions.default.tooltip_active_rewards
+    }
+    return apy
+  }
+
+  /*
+  <ClaimItem
       title="Active"
       apy={`${
         $APYs
@@ -172,6 +152,51 @@
         $dfClaimables <= 0}
       disableRedirect={!$oceanUnlockDate}
     />
+  */
+  console.log(getAPY('passive'))
+</script>
+
+<div class="container">
+  <h2 class="title">Reward Programs</h2>
+  <div class="rewardsContainer">
+  {#each roundInfo?.streams as stream}
+    <ClaimItem
+      title={stream.name}
+      distributedAmount={stream?.rewards}
+      apy={getAPY(stream.name.toLowerCase())}
+      showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
+      redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
+      amount={`${parseFloat($veClaimables).toFixed(2)} OCEAN`}
+      metrics={[
+        {
+          name: "balance",
+          value: `${
+            $userBalances[
+              getAddressByChainIdKey(
+                process.env.VE_SUPPORTED_CHAINID,
+                "veOCEAN"
+              )
+            ]
+              ? parseFloat(
+                  $userBalances[
+                    getAddressByChainIdKey(
+                      process.env.VE_SUPPORTED_CHAINID,
+                      "veOCEAN"
+                    )
+                  ]
+                ).toFixed(3)
+              : 0
+          } veOCEAN`,
+        },
+      ]}
+      loading={claiming === "VE_REWARDS"}
+      onClick={onClaimVeRewards}
+      substreams={stream.substreams}
+      disabled={canClaimVE === false ||
+        claiming !== undefined ||
+        $veClaimables <= 0}
+    />
+    {/each}
   </div>
 </div>
 
@@ -187,9 +212,6 @@
   }
   .title {
     margin-bottom: calc(var(--spacer) / 2);
-  }
-  .description {
-    margin: auto;
   }
   @media (min-width: 640px) {
   }

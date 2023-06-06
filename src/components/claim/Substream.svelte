@@ -14,10 +14,7 @@
   
 <div class="container">
     <div class="title">
-        <div class="titleSection">
-            <h4>{title}</h4>
-            <span class="availableRewards">{`${availableRewards} OCEAN`}</span>
-        </div>
+        <h4 class="titleSection">{`${title} - ${availableRewards} OCEAN`}</h4>
         <ItemWithLabel title="rewards" value={rewards} direction="row"/>
     </div>
     {#if apy}
@@ -52,10 +49,7 @@
         display: flex;
         align-items: center;
     }
-    .availableRewards{
-        font-size: var(--font-size-large);
-    }
-    .titleSection h4{
+    h4{
         margin-right: calc(var(--spacer)/4);
     }
     .description{
