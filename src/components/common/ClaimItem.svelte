@@ -11,8 +11,6 @@
   export let distributedAmount;
   export let loading = false;
   export let disabled = false;
-  export let description;
-  export let redirectLink;
   export let showRedirectLink;
   export let onClick;
   export let metrics;
@@ -31,37 +29,29 @@
     tooltipMessage={apyTooltip}
     priority="secondary"
   >
-    <div class="description">{@html description}</div>
-    <div class="metrics">
-      {#each metrics as metric}
-        <ItemWithLabel title={metric.name} value={metric.value} />
-      {/each}
+  {#if substreams}
+    {#each substreams as substream}
+      <Substream 
+        title={substream.name}
+        availableRewards={substream.rewards}
+        description={substream.description}
+        action={substream.action}
+        metric={substream.metric}
+      />
+    {/each}
+  {/if}
+    <div class="claimRewards">
       <ItemWithLabel
         title="rewards"
         value={!showRedirectLink ? amount : "..."}
         tooltipMessage={rewardTooltip ? rewardTooltip : undefined}
       />
-    </div>
-    {#if showRedirectLink}
       <Button
-        fullWidth
-        text={redirectLink.text}
-        onclick={() => navigate(redirectLink.url)}
-        disabled={disableRedirect}
-      />
-    {:else}
-      <Button
-        fullWidth
-        text={loading ? "Loading..." : `Claim ${disabled ? "" : amount}`}
+        text={loading ? "Loading..." : `Claim Rewards${disabled ? "" : amount}`}
         onclick={() => onClick()}
         disabled={loading || disabled}
       />
-    {/if}
-    {#if substreams}
-      {#each substreams as substream}
-        <Substream title={substream.title}/>
-      {/each}
-    {/if}
+    </div>
   </Card>
 </div>
 
@@ -69,7 +59,7 @@
   .container {
     width: 100%;
   }
-  .metrics {
+  .claimRewards {
     width: 100%;
     display: flex;
     align-items: center;

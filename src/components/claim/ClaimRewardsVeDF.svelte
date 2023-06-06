@@ -82,10 +82,11 @@
     Programs, participants are required to hold veOCEAN.
   </p>
   <div class="rewardsContainer">
+  {#each roundInfo?.streams as stream}
     <ClaimItem
       title="Passive"
       description="<p>Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>.</p><p><strong>Earn more Rewards</strong> by locking more OCEAN or increasing your unlock time.</p>"
-      distributedAmount={roundInfo?.passive}
+      distributedAmount={stream?.rewards}
       apy={`${
         $APYs
           ? $APYs?.passive > 10000
@@ -131,12 +132,13 @@
       ]}
       loading={claiming === "VE_REWARDS"}
       onClick={onClaimVeRewards}
-      substreams={[{title: "veOCEAN"}]}
+      substreams={stream.substreams}
       disabled={canClaimVE === false ||
         claiming !== undefined ||
         $veClaimables <= 0}
     />
-    <ClaimItem
+    {/each}
+   <ClaimItem
       title="Active"
       apy={`${
         $APYs
@@ -156,7 +158,6 @@
           : ""
       }`}
       apyTooltip={descriptions.default.tooltip_rewards_apy_active}
-      description="<p>Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>.</p><p>Get <strong>2X Rewards by publishing</strong> your own datasets and allocating to them.</p>"
       amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
       rewardTooltip={descriptions.default.tooltip_active_rewards}
       metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}

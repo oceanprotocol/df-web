@@ -5,20 +5,20 @@
   
     export let title = undefined;
     export let description = undefined;
-    export let rewardAmount = 0;
+    export let availableRewards = 0;
     export let rewards = 0;
     export let apy = undefined;
     export let metric = {};
     export let action = {}
 </script>
   
-<div>
+<div class="container">
     <div class="title">
         <div class="titleSection">
             <h4>{title}</h4>
-            <span class="rewardAmount">{rewardAmount}</span>
+            <span class="availableRewards">{`${availableRewards} OCEAN`}</span>
         </div>
-        <ItemWithLabel title="rewards" value={rewards}/>
+        <ItemWithLabel title="rewards" value={rewards} direction="row"/>
     </div>
     {#if apy}
         <span class="apy"></span>
@@ -26,10 +26,46 @@
     <p class="description">{description}</p>
     <div class="action">
         <Button 
-        fullWidth
-        text={action.text}
-        onclick={() => navigate(action.location)}
+            text={action.text}
+            onclick={() => navigate(action.location)}
+            secondary
         />
-        <ItemWithLabel title={metric.name} value={metric.name}/>
+        <ItemWithLabel title={metric.name} value={metric.value} direction="row"/>
     </div>
 </div>
+
+<style>
+    .container{
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        margin: calc(var(--spacer)/3) 0;
+    }
+    .title, .action{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .titleSection{
+        display: flex;
+        align-items: center;
+    }
+    .availableRewards{
+        font-size: var(--font-size-large);
+    }
+    .titleSection h4{
+        margin-right: calc(var(--spacer)/4);
+    }
+    .description{
+        text-align: start;
+    }
+    .action{
+     justify-content: flex-start;
+    }
+    :global(.action .button){
+        margin-right: calc(var(--spacer)/3);
+        width: 150px;
+    }
+</style>
