@@ -28,8 +28,6 @@
   let curEpoch = getEpoch(now);
 
   async function initClaimables() {
-    // userAddress.set("0x0000000000........")
-    // console.log("userAddress", $userAddress)
 
     if (!userAddress || !oceanUnlockDate) {
       veClaimables.set(0);
@@ -50,12 +48,6 @@
     );
     dfClaimables.set(dfRewards);
 
-    /*const veRewards = 20;
-    const dfRewards = 20;
-
-    veClaimables.set(veRewards);
-    dfClaimables.set(dfRewards);*/
-
     if (veRewards <= 0) {
       canClaimVE = false;
     }
@@ -63,11 +55,6 @@
     if (dfRewards <= 0) {
       canClaimDF = false;
     }
-
-    // console.log("canClaimVE", canClaimVE)
-    // console.log("canClaimDF", canClaimDF)
-    // console.log("veClaimables", $veClaimables)
-    // console.log("dfClaimables", $dfClaimables)
 
     loading = false;
   }
@@ -80,7 +67,7 @@
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
   <Features />
-  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} {loading} />
+  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch}/>
   <EpochHistory />
 </div>
 

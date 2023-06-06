@@ -9,7 +9,6 @@
   export let distributedAmount;
   export let loading = false;
   export let disabled = false;
-  export let showRedirectLink;
   export let onClick;
   export let rewardTooltip = undefined;
   export let apy = undefined;
@@ -37,7 +36,7 @@
     <div class="claimRewards">
       <ItemWithLabel
         title="rewards"
-        value={!showRedirectLink ? amount : "..."}
+        value={amount ? amount : "..."}
         tooltipMessage={rewardTooltip ? rewardTooltip : undefined}
       />
       <Button

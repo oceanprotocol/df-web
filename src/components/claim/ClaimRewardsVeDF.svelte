@@ -151,22 +151,6 @@
         claiming !== undefined ||
         $dfClaimables <= 0}
       disableRedirect={!$oceanUnlockDate}
-    />
-  */
-  console.log(getAPY('passive'))
-</script>
-
-<div class="container">
-  <h2 class="title">Reward Programs</h2>
-  <div class="rewardsContainer">
-  {#each roundInfo?.streams as stream}
-    <ClaimItem
-      title={stream.name}
-      distributedAmount={stream?.rewards}
-      apy={getAPY(stream.name.toLowerCase())}
-      showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
-      redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
-      amount={`${parseFloat($veClaimables).toFixed(2)} OCEAN`}
       metrics={[
         {
           name: "balance",
@@ -189,12 +173,36 @@
           } veOCEAN`,
         },
       ]}
-      loading={claiming === "VE_REWARDS"}
-      onClick={onClaimVeRewards}
-      substreams={stream.substreams}
-      disabled={canClaimVE === false ||
+    />
+  */
+
+  function canClaim(type){
+    if(type.toLowerCase() == 'passive'){
+      return canClaimVE === false ||
         claiming !== undefined ||
-        $veClaimables <= 0}
+        $veClaimables <= 0
+    }else{
+      return canClaimDF === false ||
+        claiming !== undefined ||
+        $dfClaimables <= 0
+    }
+  }
+  console.log(getAPY('passive'))
+</script>
+
+<div class="container">
+  <h2 class="title">Reward Programs</h2>
+  <div class="rewardsContainer">
+  {#each roundInfo?.streams as stream}
+    <ClaimItem
+      title={stream.name}
+      distributedAmount={stream?.rewards}
+      apy={getAPY(stream.name.toLowerCase())}
+      amount={`${parseFloat(stream.name.toLowerCase() == 'passive' ? $veClaimables : $dfClaimables).toFixed(2)} OCEAN`}
+      loading={stream.name.toLowerCase() == 'passive' ? claiming === "VE_REWARDS" : claiming === "DF_REWARDS"}
+      onClick={stream.name.toLowerCase() == 'passive' ? onClaimVeRewards : onClaimDfRewards}
+      substreams={stream.substreams}
+      disabled={canClaim(stream.name)}
     />
     {/each}
   </div>
