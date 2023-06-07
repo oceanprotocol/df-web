@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import { DataTable, Pagination } from "carbon-components-svelte";
   import { convertWPRtoAPY } from "../../utils/rewards.js";
   import * as epochs from "../../utils/metadata/epochs/epochs.json";
@@ -16,7 +17,7 @@
   import { oceanRewards, oceanUserRewards } from "../../stores/airdrops";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
-  import * as descriptions from "../../utils/metadata/descriptions.json";
+  import  * as descriptions from "../../utils/metadata/descriptions.json";
   import ChecklistDropdown from "../common/ChecklistDropdown.svelte";
 
   let rows = [];
@@ -47,18 +48,20 @@
     { key: "veocean", value: "veOCEAN Rewards" },
     { key: "volumedf", value: "VolumeDF Rewards" },
     { key: "predictoor", value: "Predictoor Rewards" },
-    { key: "chalange", value: "Chalange Rewards" },
+    { key: "challengee", value: "Challenge Rewards" },
   ];
-  let headers = JSON.parse(JSON.stringify(allHeaders.slice(0,-4)))
-  let initialHeaders = headers;
+  let headers = [...allHeaders.slice(0, -4)]
+  let initialHeaders = [...headers];
 
-  function createDropdownOptions(){
+  const createDropdownOptions = () => {
     allHeaders.forEach((header) => {
-      dropdownOptions[header.value] = headers.find((h) => h.key==header.key)!==undefined
-      })
+      dropdownOptions[header.value] = headers.some(
+        (h) => h.key === header.key
+      );
+    });
   }
 
-  function onDropdownCheck(value, checked){
+  const onDropdownCheck = (value, checked) => {
     if(!checked){
       headers = headers.filter((header) => header.value !== value)
     }else{
@@ -69,20 +72,17 @@
   }
 
   const init = async () => {
-    rows = JSON.parse(
-      JSON.stringify(
-        epochs.default.filter((epoch) =>
+    rows = [...epochs.default.filter((epoch) =>
           moment(epoch.date_end).isBefore(moment())
         )
-      )
-    );
+    ]
     if (!$veBalances || !$veAllocations || !$oceanRewards) {
       let veBals = await getVeOceanBal();
       let dfAllocation = await getDFallocations();
       let apys = await getRoundAPY();
-      veBalances.update(() => veBals);
-      veAllocations.update(() => dfAllocation);
-      oceanRewards.update(() => apys);
+      veBalances.set(veBals);
+      veAllocations.set(dfAllocation);
+      oceanRewards.set(apys);
     } else {
       let allocations = $veBalances;
       let veBals = $veAllocations;
@@ -135,8 +135,7 @@
       let allocation = $veUserAllocations.find((r) => r.round == row.id);
       let rewards = $oceanUserRewards.find((r) => r.round == row.id);
       row.passiveapy =
-        row.passiveapy?.toString() +
-        ` / ${parseFloat(
+        `${row.passiveapy?.toString()} / ${parseFloat(
           rewards && veBal
             ? convertWPRtoAPY(
                 rewards["sum(passive_amt)"] / veBal["sum(locked_amt)"]
@@ -144,8 +143,7 @@
             : 0
         ).toFixed(2)}%`;
       row.volumeapy =
-        row.volumeapy?.toString() +
-        ` / ${parseFloat(
+        `${row.volumeapy?.toString()} / ${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
                 rewards["sum(curating_amt)"] / allocation["sum(ocean_amt)"]
@@ -157,7 +155,7 @@
     headers = JSON.parse(JSON.stringify(initialHeaders));
   };
 
-  init();
+  onMount(init);
 
   $: createDropdownOptions()
   $: if ($userAddress) {

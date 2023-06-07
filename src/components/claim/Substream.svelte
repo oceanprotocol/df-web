@@ -3,11 +3,11 @@
     import Button from "../common/Button.svelte";
     import ItemWithLabel from "../common/ItemWithLabel.svelte";
   
-    export let title = undefined;
-    export let description = undefined;
+    export let title;
+    export let description;
     export let availableRewards = 0;
     export let rewards = 0;
-    export let apy = undefined;
+    export let apy;
     export let metric = {};
     export let action = {}
 </script>

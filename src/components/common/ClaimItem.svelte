@@ -12,7 +12,7 @@
   export let onClick;
   export let rewardTooltip = undefined;
   export let apy = undefined;
-  export let substreams = undefined;
+  export let substreams;
 </script>
 
 <div class={`container`}>
@@ -37,12 +37,12 @@
     <div class="claimRewards">
       <ItemWithLabel
         title="total rewards"
-        value={amount ? amount : "..."}
-        tooltipMessage={rewardTooltip ? rewardTooltip : undefined}
+        value={amount || "..."}
+        tooltipMessage={rewardTooltip || undefined}
       />
       <Button
         text={loading ? "Loading..." : `Claim Rewards${disabled ? "" : amount}`}
-        onclick={() => onClick()}
+        onclick={onClick}
         disabled={loading || disabled}
       />
     </div>
