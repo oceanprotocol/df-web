@@ -38,9 +38,9 @@
     },
     { key: "active", value: "Active Rewards" },
     {
-      key: "activeapy",
-      value: "Active APY",
-      tooltip: descriptions.default.tooltip_rewards_apy_active_history,
+      key: "volumeapy",
+      value: "VolumeDF APY",
+      tooltip: descriptions.default.tooltip_rewards_apy_volume_history,
     },
   ];
   let initialHeaders = headers;
@@ -80,7 +80,7 @@
               )
             : 0
         ).toFixed(2)}%`,
-        activeapy: `${parseFloat(
+        volumeapy: `${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
                 rewards["sum(curating_amt)"] / allocation["sum(ocean_amt)"]
@@ -120,8 +120,8 @@
               )
             : 0
         ).toFixed(2)}%`;
-      row.activeapy =
-        row.activeapy?.toString() +
+      row.volumeapy =
+        row.volumeapy?.toString() +
         ` / ${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
