@@ -19,6 +19,7 @@
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { claim as claimVERewards } from "../../utils/feeDistributor";
   import * as descriptions from "../../utils/metadata/descriptions.json";
+  import { totalUserAllocation } from "../../stores/dataAllocations";
 
   export let canClaimVE = true;
   export let canClaimDF = true;
@@ -71,7 +72,7 @@
     claiming = undefined;
   }
 
-  function getAPY(){
+  function addAPYs(){
     streams[0].substreams[0].apy = {value: `${
         $APYs
           ? $APYs?.passive > 10000
@@ -112,6 +113,25 @@
     }
   }
 
+  function addAllocated(){
+    streams[1].substreams[0].metric.value = $totalUserAllocation + '%'
+  }
+
+  function addVeOceanBalance(){
+    streams[0].substreams[0].metric.value = `${$userBalances[
+        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+      ]
+      ? parseFloat(
+          $userBalances[
+            getAddressByChainIdKey(
+              process.env.VE_SUPPORTED_CHAINID,
+              "veOCEAN"
+            )
+          ]
+        ).toFixed(2)
+      : parseFloat("0").toFixed(2)} veOCEAN`
+  }
+
   function canClaim(type){
     if(type.toLowerCase() == 'passive'){
       return canClaimVE === false ||
@@ -124,8 +144,9 @@
     }
   }
 
-  $:if($APYs) getAPY()
-  $:if($userAddress) getAPY()
+  $:if($APYs) addAPYs()
+  $:if($totalUserAllocation) addAllocated()
+  $:if($userBalances) addVeOceanBalance()
 </script>
 
 <div class="container">

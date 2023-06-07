@@ -14,7 +14,7 @@
           },
           "metric": {
             "name": "balance",
-            "value": "20 veOCEAN"
+            "value": "0 veOCEAN"
           }
         }
       ]
@@ -33,7 +33,7 @@
           },
           "metric": {
             "name": "allocated",
-            "value": "20%"
+            "value": "0%"
           }
         },
         {
@@ -46,7 +46,7 @@
           },
           "metric": {
             "name": "correct predictions",
-            "value": "200"
+            "value": "0"
           }
         },
         {
@@ -59,7 +59,7 @@
           },
           "metric": {
             "name": "completed",
-            "value": "2"
+            "value": "0"
           }
         }
       ]
