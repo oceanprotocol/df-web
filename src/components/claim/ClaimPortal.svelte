@@ -19,6 +19,7 @@
   import moment from "moment";
   import { getEpoch } from "../../utils/epochs";
   import { oceanUnlockDate } from "../../stores/veOcean";
+  import * as streamsData from "../../utils/metadata/rewards/streams.json"
 
   let loading = false;
   let veBalance = 0.0;
@@ -26,6 +27,17 @@
   let canClaimDF = true;
   const now = moment.utc();
   let curEpoch = getEpoch(now);
+  let streams = streamsData.default.streams
+
+  function populateStreamsWithRewardsFromCurrentEpoch(){
+    streams.forEach((stream,indexStream) => {
+      stream.rewards = curEpoch.streams[indexStream].rewards
+      stream.substreams.forEach((substream, indexSubstream) => {
+        substream.rewards = curEpoch.streams[indexStream].substreams[indexSubstream].rewards
+      })
+    })
+  }
+  populateStreamsWithRewardsFromCurrentEpoch()
 
   async function initClaimables() {
 
@@ -67,7 +79,7 @@
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
   <Features />
-  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch}/>
+  <ClaimRewards {canClaimVE} {canClaimDF} streams={streams}/>
   <EpochHistory />
 </div>
 

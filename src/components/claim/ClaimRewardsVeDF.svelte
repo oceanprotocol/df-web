@@ -22,9 +22,8 @@
 
   export let canClaimVE = true;
   export let canClaimDF = true;
-  export let roundInfo;
+  export let streams;
   let claiming;
-  let loading = false;
 
   async function onClaimDfRewards() {
     claiming = "DF_REWARDS";
@@ -73,7 +72,7 @@
   }
 
   function getAPY(){
-    roundInfo.streams[0].substreams[0].apy = {value: `${
+    streams[0].substreams[0].apy = {value: `${
         $APYs
           ? $APYs?.passive > 10000
             ? "over 10000"
@@ -92,7 +91,7 @@
       }`,
       tooltip: descriptions.default.tooltip_rewards_apy_passive}
 
-    roundInfo.streams[1].substreams[0].apy ={value: `${
+    streams[1].substreams[0].apy ={value: `${
         $APYs
           ? $APYs?.active > 10000
             ? "over 10000"
@@ -132,7 +131,7 @@
 <div class="container">
   <h2 class="title">Reward Programs</h2>
   <div class="rewardsContainer">
-  {#each roundInfo?.streams as stream}
+  {#each streams as stream}
     <ClaimItem
       title={stream.name}
       distributedAmount={stream?.rewards}

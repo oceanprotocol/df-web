@@ -1,0 +1,69 @@
+{
+  "streams": [
+    {
+      "name": "Passive",
+      "rewards": 0,
+      "substreams": [
+        {
+          "name": "veOCEAN",
+          "rewards": 0,
+          "description": "Earn by locking OCEAN into veOCEAN Earn by locking OCEAN into veOCEAN",
+          "action": {
+            "text": "Get veOCEAN",
+            "location": "/veOCEAN"
+          },
+          "metric": {
+            "name": "balance",
+            "value": "20 veOCEAN"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Active",
+      "rewards": 0,
+      "substreams": [
+        {
+          "name": "Volume DF",
+          "rewards": 0,
+          "description": "Earn by allocating veOCEAN to high-DCV assets; or delegating veOCEAN to others.",
+          "action": {
+            "text": "Set allocation",
+            "location": "/veOCEAN"
+          },
+          "metric": {
+            "name": "allocated",
+            "value": "20%"
+          }
+        },
+        {
+          "name": "Predictoor",
+          "rewards": 0,
+          "description": "Earn by doing Predictoor actions (submit predictions every 5 min and stake OCEAN with that); or delegating OCEAN (not veOCEAN) to Predictoors.",
+          "action": {
+            "text": "Predict",
+            "location": "/veOCEAN"
+          },
+          "metric": {
+            "name": "correct predictions",
+            "value": "200"
+          }
+        },
+        {
+          "name": "Challenge",
+          "rewards": 0,
+          "description": "Earn by doing Contestant actions (submit predictions once a week to the Predict-ETH Data Challenge).",
+          "action": {
+            "text": "Participate",
+            "location": "/veOCEAN"
+          },
+          "metric": {
+            "name": "completed",
+            "value": "2"
+          }
+        }
+      ]
+    }
+  ],
+  "total": 150000
+}
