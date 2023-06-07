@@ -17,14 +17,16 @@
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
   import * as descriptions from "../../utils/metadata/descriptions.json";
+  import ChecklistDropdown from "../common/ChecklistDropdown.svelte";
 
   let rows = [];
   let initialRows = [];
   let pagination = { pageSize: 100, page: 1 };
+  let dropdownOptions = {};
   let loading = true;
 
   // Tooltips dropped for now, they'll be back
-  let headers = [
+  let allHeaders = [
     {
       key: "id",
       value: "Round",
@@ -42,8 +44,29 @@
       value: "VolumeDF APY",
       tooltip: descriptions.default.tooltip_rewards_apy_volume_history,
     },
+    { key: "veocean", value: "veOCEAN Rewards" },
+    { key: "volumedf", value: "VolumeDF Rewards" },
+    { key: "predictoor", value: "Predictoor Rewards" },
+    { key: "chalange", value: "Chalange Rewards" },
   ];
+  let headers = JSON.parse(JSON.stringify(allHeaders.slice(0,-4)))
   let initialHeaders = headers;
+
+  function createDropdownOptions(){
+    allHeaders.forEach((header) => {
+      dropdownOptions[header.value] = headers.find((h) => h.key==header.key)!==undefined
+      })
+  }
+
+  function onDropdownCheck(value, checked){
+    if(!checked){
+      headers = headers.filter((header) => header.value !== value)
+    }else{
+      headers.push(allHeaders.find((header) => header.value == value))
+      headers = headers
+    }
+    dropdownOptions[value] = checked
+  }
 
   const init = async () => {
     rows = JSON.parse(
@@ -136,6 +159,7 @@
 
   init();
 
+  $: createDropdownOptions()
   $: if ($userAddress) {
     getUserRoundAPY();
   }
@@ -143,6 +167,10 @@
 
 <h2 class="historyTableTitle">Data Farming History</h2>
 <div class="epochHistoryTableContainer">
+  <div class="tableCustomHeader">
+    <ChecklistDropdown title="Select displayed columns" options={dropdownOptions} onCheck={onDropdownCheck}/>
+  </div>
+  <div class="tableBody">
   <DataTable sortable {headers} {rows} class="customTable">
     <svelte:fragment slot="cell-header" let:header>
       <div class="headerContainer">
@@ -165,6 +193,7 @@
     pageSizeInputDisabled
   />
 </div>
+</div>
 
 <style lang="scss" global>
   @import "carbon-components/scss/components/data-table/_data-table.scss";
@@ -178,8 +207,7 @@
     transform: translate3d(0, -0.05rem, 0);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    max-height: calc(50vh);
-    overflow-y: scroll;
+    margin-bottom: calc(var(--spacev)/4);
   }
   :global(.epochHistoryTableContainer thead) {
     position: sticky;
@@ -197,5 +225,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .epochHistoryTableContainer .tableCustomHeader{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: calc(var(--spacer) / 6) calc(var(--spacer) / 3);
+    margin: 0;
+  }
+  .tableBody{
+    max-height: calc(50vh);
+    overflow-y: scroll;
   }
 </style>
