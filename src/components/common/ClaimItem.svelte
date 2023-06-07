@@ -36,7 +36,7 @@
   {/if}
     <div class="claimRewards">
       <ItemWithLabel
-        title="rewards"
+        title="total rewards"
         value={amount ? amount : "..."}
         tooltipMessage={rewardTooltip ? rewardTooltip : undefined}
       />

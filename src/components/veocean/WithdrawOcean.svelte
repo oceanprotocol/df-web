@@ -92,7 +92,6 @@
         : withdrawing
         ? "Withdrawing..."
         : "Withdraw all locked"}
-      secondary
       disabled={loading ||
         withdrawing ||
         !$oceanUnlockDate ||
