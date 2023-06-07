@@ -10,7 +10,7 @@
           "description": "Earn by locking OCEAN into veOCEAN Earn by locking OCEAN into veOCEAN",
           "action": {
             "text": "Get veOCEAN",
-            "location": "/veOCEAN"
+            "location": "/veocean"
           },
           "metric": {
             "name": "balance",
@@ -29,7 +29,7 @@
           "description": "Earn by allocating veOCEAN to high-DCV assets; or delegating veOCEAN to others.",
           "action": {
             "text": "Set allocation",
-            "location": "/veOCEAN"
+            "location": "/datafarming"
           },
           "metric": {
             "name": "allocated",
@@ -42,7 +42,7 @@
           "description": "Earn by doing Predictoor actions (submit predictions every 5 min and stake OCEAN with that); or delegating OCEAN (not veOCEAN) to Predictoors.",
           "action": {
             "text": "Predict",
-            "location": "/veOCEAN"
+            "location": "/veocean"
           },
           "metric": {
             "name": "correct predictions",
@@ -55,7 +55,7 @@
           "description": "Earn by doing Contestant actions (submit predictions once a week to the Predict-ETH Data Challenge).",
           "action": {
             "text": "Participate",
-            "location": "/veOCEAN"
+            "location": "/veocean"
           },
           "metric": {
             "name": "completed",
