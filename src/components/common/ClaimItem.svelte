@@ -30,6 +30,7 @@
         description={substream.description}
         action={substream.action}
         metric={substream.metric}
+        apy={substream?.apy}
       />
     {/each}
   {/if}

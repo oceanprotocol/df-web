@@ -14,12 +14,14 @@
   
 <div class="container">
     <div class="title">
-        <h4 class="titleSection">{`${title} - ${availableRewards} OCEAN`}</h4>
+        <div class="titleSection">
+        <h4>{`${title} - ${availableRewards} OCEAN`}</h4>
+        {#if apy}
+            <span class="apy">{apy.value}</span>
+        {/if}
+        </div>
         <ItemWithLabel title="rewards" value={rewards} direction="row"/>
     </div>
-    {#if apy}
-        <span class="apy"></span>
-    {/if}
     <p class="description">{description}</p>
     <div class="action">
         <Button 
@@ -51,6 +53,10 @@
     }
     h4{
         margin-right: calc(var(--spacer)/4);
+    }
+    .apy {
+        color: var(--color-primary);
+        font-weight: bold;
     }
     .description{
         text-align: start;

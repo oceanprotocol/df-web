@@ -18,14 +18,13 @@
   import { updateUserBalanceOcean, userBalances } from "../../stores/tokens";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { claim as claimVERewards } from "../../utils/feeDistributor";
-  import { totalUserAllocation } from "../../stores/dataAllocations";
-  import { oceanUnlockDate } from "../../stores/veOcean";
   import * as descriptions from "../../utils/metadata/descriptions.json";
 
   export let canClaimVE = true;
   export let canClaimDF = true;
   export let roundInfo;
   let claiming;
+  let loading = false;
 
   async function onClaimDfRewards() {
     claiming = "DF_REWARDS";
@@ -73,10 +72,8 @@
     claiming = undefined;
   }
 
-  function getAPY(type){
-    let apy={}
-    if(type=='passive'){
-      apy.value = `${
+  function getAPY(){
+    roundInfo.streams[0].substreams[0].apy = {value: `${
         $APYs
           ? $APYs?.passive > 10000
             ? "over 10000"
@@ -92,10 +89,10 @@
                 : parseFloat(0).toFixed(2)
             }% Your APY`
           : ""
-      }`
-      apy.tooltip = descriptions.default.tooltip_rewards_apy_passive
-    }else{
-      apy.value = `${
+      }`,
+      tooltip: descriptions.default.tooltip_rewards_apy_passive}
+
+    roundInfo.streams[1].substreams[0].apy ={value: `${
         $APYs
           ? $APYs?.active > 10000
             ? "over 10000"
@@ -111,70 +108,10 @@
                 : parseFloat(0).toFixed(2)
             }% Your APY`
           : ""
-      }`
-      apy.tooltip = descriptions.default.tooltip_active_rewards
+      }`,
+    tooltip: descriptions.default.tooltip_active_rewards
     }
-    return apy
   }
-
-  /*
-  <ClaimItem
-      title="Active"
-      apy={`${
-        $APYs
-          ? $APYs?.active > 10000
-            ? "over 10000"
-            : `${$APYs?.active.toFixed(2)}`
-          : 0
-      }% Avg APY ${
-        $userAddress
-          ? `| ${
-              $APYs
-                ? $APYs?.activeUser > 10000
-                  ? "over 10000"
-                  : `${$APYs?.activeUser.toFixed(2)}`
-                : 0
-            }% Your APY`
-          : ""
-      }`}
-      apyTooltip={descriptions.default.tooltip_rewards_apy_active}
-      amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
-      rewardTooltip={descriptions.default.tooltip_active_rewards}
-      metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
-      showRedirectLink={(!$oceanUnlockDate || $totalUserAllocation <= 0) &&
-        $dfClaimables <= 0}
-      redirectLink={{ text: "Set allocations", url: "datafarming" }}
-      distributedAmount={roundInfo?.active}
-      loading={claiming === "DF_REWARDS"}
-      onClick={onClaimDfRewards}
-      disabled={canClaimDF === false ||
-        claiming !== undefined ||
-        $dfClaimables <= 0}
-      disableRedirect={!$oceanUnlockDate}
-      metrics={[
-        {
-          name: "balance",
-          value: `${
-            $userBalances[
-              getAddressByChainIdKey(
-                process.env.VE_SUPPORTED_CHAINID,
-                "veOCEAN"
-              )
-            ]
-              ? parseFloat(
-                  $userBalances[
-                    getAddressByChainIdKey(
-                      process.env.VE_SUPPORTED_CHAINID,
-                      "veOCEAN"
-                    )
-                  ]
-                ).toFixed(3)
-              : 0
-          } veOCEAN`,
-        },
-      ]}
-    />
-  */
 
   function canClaim(type){
     if(type.toLowerCase() == 'passive'){
@@ -187,7 +124,9 @@
         $dfClaimables <= 0
     }
   }
-  console.log(getAPY('passive'))
+
+  $:if($APYs) getAPY()
+  $:if($userAddress) getAPY()
 </script>
 
 <div class="container">
@@ -197,7 +136,6 @@
     <ClaimItem
       title={stream.name}
       distributedAmount={stream?.rewards}
-      apy={getAPY(stream.name.toLowerCase())}
       amount={`${parseFloat(stream.name.toLowerCase() == 'passive' ? $veClaimables : $dfClaimables).toFixed(2)} OCEAN`}
       loading={stream.name.toLowerCase() == 'passive' ? claiming === "VE_REWARDS" : claiming === "DF_REWARDS"}
       onClick={stream.name.toLowerCase() == 'passive' ? onClaimVeRewards : onClaimDfRewards}
