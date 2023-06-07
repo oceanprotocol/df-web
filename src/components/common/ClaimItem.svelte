@@ -59,6 +59,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: calc(var(--spacer) / 3) 0;
+    margin-top: calc(var(--spacer) / 2);
   }
 </style>

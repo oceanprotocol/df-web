@@ -179,6 +179,4 @@
   .title {
     margin-bottom: calc(var(--spacer) / 2);
   }
-  @media (min-width: 640px) {
-  }
 </style>

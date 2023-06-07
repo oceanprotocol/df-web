@@ -15,10 +15,10 @@
 <div class="container">
     <div class="title">
         <div class="titleSection">
-        <h4>{`${title} - ${availableRewards} OCEAN`}</h4>
-        {#if apy}
-            <span class="apy">{apy.value}</span>
-        {/if}
+            <h4>{`${title} - ${availableRewards} OCEAN`}</h4>
+            {#if apy}
+                <span class="apy">{apy.value}</span>
+            {/if}
         </div>
         <ItemWithLabel title="rewards" value={rewards} direction="row"/>
     </div>
@@ -49,7 +49,9 @@
     }
     .titleSection{
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: calc(var(--spacer)/6);
     }
     h4{
         margin-right: calc(var(--spacer)/4);
@@ -67,5 +69,12 @@
     :global(.action .button){
         margin-right: calc(var(--spacer)/3);
         width: 150px;
+    }
+    @media (min-width: 640px) {
+        .titleSection{
+            flex-direction: row;
+            align-items: center;
+            margin: 0;
+        }
     }
 </style>
