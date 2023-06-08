@@ -30,8 +30,9 @@
   let streams = streamsData.default.streams
 
   function populateStreamsWithRewardsFromCurrentEpoch(){
-    streams.forEach((stream,indexStream) => {
-      stream.rewards = curEpoch.streams[indexStream].rewards
+    streams?.forEach((stream,indexStream) => {
+      if(!curEpoch?.streams) return
+      stream.rewards = curEpoch?.streams[indexStream]?.rewards
       stream.substreams.forEach((substream, indexSubstream) => {
         substream.rewards = curEpoch.streams[indexStream].substreams[indexSubstream].rewards
       })

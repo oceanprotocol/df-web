@@ -19,7 +19,7 @@
 
   function getTotalRewards(){
     let totalRewards = 0
-    roundInfo?.streams.forEach((stream) => {
+    roundInfo?.streams?.forEach((stream) => {
       totalRewards+=parseInt(stream.rewards)
     })
     return `${totalRewards} OCEAN`
