@@ -229,10 +229,10 @@
   <WalletConnectModal />
   <main>
     <Header />
-    <Route path="/activerewards" primary={false}>
+    <Route path="/rewards" primary={false}>
       <ClaimPortal />
     </Route>
-    <Route path="/datafarming" primary={false}>
+    <Route path="/volumedf" primary={false}>
       <DataPortal />
     </Route>
     <Route path="/veocean" primary={false}>
