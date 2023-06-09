@@ -51,7 +51,7 @@
                   )
                 ]
               ).toFixed(3)
-            : parseFloat('0').toFixed(3)
+            : parseFloat("0").toFixed(3)
         } veOCEAN`}
         tooltipMessage={descriptions.default.tooltip_veocean_my_balance}
         {loading}
@@ -71,7 +71,7 @@
         {loading}
       />
       <ItemWithLabel
-        title={`Lock ends`} 
+        title={`Lock ends`}
         value={`${
           $oceanUnlockDate ? $oceanUnlockDate.format("DD-MMM-YYYY") : "-"
         }`}

@@ -141,7 +141,7 @@
   }
 </script>
 
-<h2 class="title">Data Farming History</h2>
+<h2 class="historyTableTitle">Data Farming History</h2>
 <div class="epochHistoryTableContainer">
   <DataTable sortable {headers} {rows} class="customTable">
     <svelte:fragment slot="cell-header" let:header>
@@ -188,7 +188,7 @@
   .cellContainer {
     height: auto;
   }
-  .title {
+  .historyTableTitle {
     font-weight: bold;
     width: 100%;
     margin-bottom: calc(var(--spacer) / 2);

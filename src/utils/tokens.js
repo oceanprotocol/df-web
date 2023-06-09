@@ -1,6 +1,10 @@
-import { Decimal } from 'decimal.js';
+import { Decimal } from "decimal.js";
 import { ethers } from "ethers";
-import { getRpcUrlByChainId, GASLIMIT_DEFAULT, getGasFeeEstimate } from "./web3";
+import {
+  getRpcUrlByChainId,
+  GASLIMIT_DEFAULT,
+  getGasFeeEstimate,
+} from "./web3";
 import { prepareWriteContract, readContract, writeContract } from "@wagmi/core";
 import * as TokenABI from "./abis/tokenABI";
 
@@ -8,14 +12,14 @@ import * as TokenABI from "./abis/tokenABI";
 export const getTokenContract = async (chainId, address, signer) => {
   try {
     const rpcURL = await getRpcUrlByChainId(chainId);
-    if( rpcURL ) {
+    if (rpcURL) {
       return new ethers.Contract(address, TokenABI.default, signer);
     }
   } catch (err) {
     console.error(err);
   }
   return null;
-}
+};
 
 //TODO - Standardize function calls & Params to follow ocean.js
 export const balanceOf = async (balances, tokenAddress, account) => {
@@ -27,44 +31,43 @@ export const balanceOf = async (balances, tokenAddress, account) => {
       address: tokenAddress,
       args: [account],
       abi: TokenABI.default,
-      functionName: 'balanceOf',
-    })
+      functionName: "balanceOf",
+    });
     return balance;
-  } catch(err) {
+  } catch (err) {
     console.error(err);
   }
-}
+};
 
-export const isTokenAmountApproved = async (tokenAddress, amount,
-  owner,
-  spender)=>{
-    if(amount <= 0) {
-      return false;
-    }
-    try {
-    const allowedAmount = await allowance(tokenAddress, owner, spender)
-    const allowedAmountFormated = ethers.utils.formatEther(allowedAmount);
-
-    return new Decimal(allowedAmountFormated).greaterThanOrEqualTo(amount)
-  }catch (err) {
-    console.error(err);
-  }
-}
-
-// Getter/View
-export const allowance = async (
-  datatokenAdress,
+export const isTokenAmountApproved = async (
+  tokenAddress,
+  amount,
   owner,
   spender
 ) => {
+  if (amount <= 0) {
+    return false;
+  }
+  try {
+    const allowedAmount = await allowance(tokenAddress, owner, spender);
+    const allowedAmountFormated = ethers.utils.formatEther(allowedAmount);
+
+    return new Decimal(allowedAmountFormated).greaterThanOrEqualTo(amount);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// Getter/View
+export const allowance = async (datatokenAdress, owner, spender) => {
   const datatoken = await readContract({
     address: datatokenAdress,
     args: [owner, spender],
     abi: TokenABI.default,
-    functionName: 'allowance',
-  })
-  return datatoken
-}
+    functionName: "allowance",
+  });
+  return datatoken;
+};
 
 // Tx
 // what: helper function to approve a certain tx, returns approval amount
@@ -72,26 +75,32 @@ export const allowance = async (
 export const approve = async (
   datatokenAddress,
   spender, //bpool is spender
-  amount,
-  signer,
-  force = false
+  amount
 ) => {
   try {
-      // TODO - Override gas price & limit
-      // let gasPrice = getFairGasPrice();
-      const gasLimit = await getGasFeeEstimate(datatokenAddress,TokenABI.default,'approve',[spender,ethers.utils.parseEther(amount.toString())])
-      const config = await prepareWriteContract({
-        address: datatokenAddress,
-        args: [spender,ethers.utils.parseEther(amount.toString())],
-        abi: TokenABI.default,
-        functionName: 'approve',
-        overrides:{
-          gasLimit:gasLimit
-        }})
-      const tx = await writeContract(config)
-      return tx;
+    // TODO - Override gas price & limit
+    // let gasPrice = getFairGasPrice();
+    const gasLimit = await getGasFeeEstimate(
+      datatokenAddress,
+      TokenABI.default,
+      "approve",
+      [spender, ethers.utils.parseEther(amount.toString())]
+    );
+    const config = await prepareWriteContract({
+      address: datatokenAddress,
+      args: [spender, ethers.utils.parseEther(amount.toString())],
+      abi: TokenABI.default,
+      functionName: "approve",
+      overrides: {
+        gasLimit: gasLimit,
+      },
+    });
+    const tx = await writeContract(config);
+    return tx;
   } catch (e) {
-      console.log(`ERRPR: Failed to approve spender to spend tokens : ${e.message}`)
-      throw e;
+    console.log(
+      `ERRPR: Failed to approve spender to spend tokens : ${e.message}`
+    );
+    throw e;
   }
-}
+};

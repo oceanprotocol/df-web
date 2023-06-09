@@ -191,3 +191,25 @@ body button:focus {
 .bx--pagination {
   background-color: var(--brand-white) !important;
 }
+
+.bx--toast-notification {
+  position: fixed;
+  z-index: 1001;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+}
+
+.bx--toast-notification__caption{
+  display: none;
+}
+
+.bx--toast-notification__subtitle, .bx--toast-notification__title{
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .bx--toast-notification {
+    width: 50vw !important;;
+  }
+}

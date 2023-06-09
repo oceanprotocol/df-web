@@ -18,6 +18,7 @@
   export let approving = false;
   export let approved = false;
   export let hasLock = false;
+  export let approvalModalMessage;
 
   export let agreed = false;
 
@@ -26,26 +27,36 @@
   const onClick = async () => {
     loading = true;
     approving = true;
-    try {
-      let tx = await approveToken(
-        tokenAddress,
-        spender,
-        infiniteAmount ? 2 ** 53 - 1 : amount
-      );
-      const receipt = await tx.wait();
-    } catch (e) {
-      Swal.fire("Error!", e.message, "error").then(() => {
-        loading = false;
-        approving = false;
-      });
-      return;
-    }
-    Swal.fire("Success!", "Tokens succesfully approved.", "success").then(
-      async () => {
-        isAmountApproved = true;
-        approved = true;
-        loading = false;
-        approving = false;
+     Swal.fire({title: "Approve Token Spending", html: approvalModalMessage, icon:"warning", showCancelButton: true, confirmButtonColor: "#ff4092",
+      confirmButtonText: 'Approve',
+      cancelButtonText: 'Cancel'}).then(
+      async (result) => {
+        if (result.isConfirmed){
+          try {
+            let tx = await approveToken(
+              tokenAddress,
+              spender,
+              infiniteAmount ? 2 ** 53 - 1 : amount
+            );
+            const receipt = await tx.wait();
+            } catch (e) {
+              Swal.fire("Error!", e.message, "error").then(() => {
+                loading = false;
+                approving = false;
+              });
+              return;
+            }
+            Swal.fire("Success!", "Tokens succesfully approved.", "success").then(
+              async () => {
+                isAmountApproved = true;
+                approved = true;
+                loading = false;
+                approving = false;
+              }
+            );
+          }
+      loading = false;
+      approving = false;
       }
     );
   };

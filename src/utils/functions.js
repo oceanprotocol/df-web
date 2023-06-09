@@ -30,3 +30,13 @@ export const getThursdayOffset = (day, days, max) => {
 
   return target.format("YYYY-MM-DD");
 }
+
+export const getRoundsDatafarm = (currentRound, limit) => {
+    currentRound
+    // return an array of numbers from currentRound to (currentRound-10)
+    const rounds = [];
+    for (let i = currentRound-1; i >= currentRound - limit; i--) {
+      rounds.push(i);
+    }
+    return rounds;
+}

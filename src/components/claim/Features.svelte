@@ -2,10 +2,23 @@
   import Card from "../common/Card.svelte";
   import * as features from "../../utils/metadata/rewards/features.json";
   const ExternalIcon = "/images/external.svg";
+  import { oceanUnlockDate } from "../../stores/veOcean";
+
+  let displayedFeatures;
+
+  const chageDisplayedFeatures = () => {
+    displayedFeatures = !$oceanUnlockDate
+      ? features.default.slice(0, 3)
+      : features.default.slice(3, 6);
+  };
+
+  $: $oceanUnlockDate && chageDisplayedFeatures();
+
+  chageDisplayedFeatures();
 </script>
 
 <div class={`container`}>
-  {#each features.default as card}
+  {#each displayedFeatures as card}
     <a href={card.link} target="_blank" rel="noreferrer">
       <Card title={card.title} className="featureCard" priority="secondary">
         <div class="featureContent">

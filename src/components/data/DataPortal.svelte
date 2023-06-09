@@ -20,6 +20,8 @@
   let allocations;
   let message = undefined;
 
+  let tabSelected = "alloc";
+
   const loadTotalAllocation = async () => {
     let newAllocation = await getTotalAllocatedVeOcean(
       $userAddress
@@ -46,6 +48,10 @@
       message = "";
     }
   };
+
+  export const changeTab = (tab) =>{
+    tabSelected = tab;
+  }
 
   $: (!$oceanUnlockDate ||
     $oceanUnlockDate ||
@@ -93,10 +99,12 @@
     <div class="wrapper">
       <h2 class="title">Curate Data to Earn OCEAN</h2>
       <div class="data">
-        <Table
-          colData={columnsData}
+        <Table 
+          colData={columnsData[tabSelected]}
           notHidableColumns={["Allocate"]}
           rowData={$datasets}
+          tabSelection={changeTab}
+          tabSelected={tabSelected}
         />
       </div>
     </div>

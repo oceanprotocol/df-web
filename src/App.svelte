@@ -2,6 +2,7 @@
   import Header from "../src/components/header/Header.svelte";
   import BannerMessage from "./components/common/BannerMessage.svelte";
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
+  import DelegationPortal from "./components/delegation/DelegationPortal.svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
   import DataPortal from "./components/data/DataPortal.svelte";
   import { setupAppConfig } from "./app.config";
@@ -226,6 +227,9 @@
     <Route path="/veocean" primary={false}>
       <VeOceanPortal />
     </Route>
+    <Route path="/delegate" primary={false}>
+      <DelegationPortal />
+    </Route>
     <Route path="/*" primary={false}>
       <ClaimPortal />
     </Route>
@@ -240,6 +244,9 @@
   $css--reset: false;
   $css--default-type: false;
   $css--plex: false;
+
+ @import "carbon-components/scss/components/notification/_toast-notification.scss";
+
   main {
     text-align: center;
     max-width: 1024px;
