@@ -16,9 +16,10 @@
     lockedOceanAmount,
     veOceanWithDelegations,
   } from "../../stores/veOcean";
-  import { fetchBlockNumber,getProvider } from '@wagmi/core'
+  import { fetchBlockNumber, getPublicClient } from '@wagmi/core'
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
   import moment from "moment";
+  import { ethers } from "ethers";
 
   let loading = true;
   let withdrawing = false;
@@ -27,8 +28,8 @@
 
   const updateBlockTimestamp = async () => {
     const blockNumber = await fetchBlockNumber();
-    const block = await getProvider().getBlock(blockNumber)
-    blockTimestamp = block.timestamp * 1000;
+    const block = await getPublicClient().getBlock(blockNumber)
+    blockTimestamp = ethers.utils.formatEther(BigInt(block.timestamp).toString(10)) * 1000;
   };
 
   const updateLockEndDate = async () => {

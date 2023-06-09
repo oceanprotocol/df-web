@@ -14,8 +14,8 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^4.0.0",
     "@sveltejs/vite-plugin-svelte": "^2.0.0",
-    "@web3modal/ethereum": "^2.1.1",
-    "@web3modal/html": "^2.1.1",
+    "@web3modal/ethereum": "^2.4.5",
+    "@web3modal/html": "^2.4.5",
     "apollo-boost": "^0.4.9",
     "bignumber.js": "^9.0.1",
     "carbon-components": "^10.58.3",
@@ -36,7 +36,7 @@
     "svelte-loading-spinners": "^0.1.7",
     "svelte-markdown": "^0.2.2",
     "svelte-navigator": "^3.1.5",
-    "svelte-preprocess": "^4.10.7",
+    "svelte-preprocess": "^5.0.4",
     "svelte-range-slider-pips": "^2.0.3",
     "svelte-steps": "^2.3.5",
     "svelte-web3": "^4.0.0",
@@ -45,13 +45,10 @@
     "walletconnect": "^1.7.8",
     "web3": "^1.7.3",
     "web3modal": "^1.9.10",
-    "yup": "^0.32.11"
-  },
-  "dependencies": {
-    "@wagmi/core": "^0.9.6",
-    "@web3modal/standalone": "^2.1.1",
+    "yup": "^0.32.11",
+    "@wagmi/core": "^1.1.1",
     "buffer": "^6.0.3",
-    "rollup-plugin-polyfill-node": "^0.11.0",
-    "svelte-preprocess": "^5.0.0"
-  }
+    "rollup-plugin-polyfill-node": "^0.11.0"
+  },
+  "dependencies": {}
 }

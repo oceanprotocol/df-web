@@ -242,13 +242,7 @@
   $css--plex: false;
   main {
     text-align: center;
-    width: 85vw;
+    max-width: 1024px;
     margin: 0 auto;
-  }
-
-  @media only screen and (max-width: 640px) {
-    main {
-      width: 90vw;
-    }
   }
 </style>

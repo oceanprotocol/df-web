@@ -274,7 +274,6 @@
           error={$errors.unlockDate}
           direction="column"
           disableKeyboardInput="return false"
-          disabled={$oceanUnlockDate && moment().isAfter($oceanUnlockDate)}
           min={$oceanUnlockDate
             ? $oceanUnlockDate.format("YYYY-MM-DD")
             : getThursdayDate(moment().utc().add(7, "days"))}
