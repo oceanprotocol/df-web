@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { gql } from "apollo-boost";
 import * as VeAllocateABI from "./abis/veAllocateABI";
-import { readContract } from "@wagmi/core";
+import { readContract, waitForTransaction } from "@wagmi/core";
 import { getAddressByChainIdKey } from "../utils/address/address";
 import { prepareWriteContract, writeContract } from "@wagmi/core";
 import { getGasFeeEstimate } from "./web3";
@@ -60,8 +60,7 @@ export const allocateVeOcean = async (amount, dataAddress, chainId, signer) => {
 export const allocateVeOceanToMultipleNFTs = async (
   amounts,
   dataAddresses,
-  chainIds,
-  signer
+  chainIds
 ) => {
   if (!amounts?.length > 0) {
     throw { message: "There are no allocations set" };
@@ -78,7 +77,7 @@ export const allocateVeOceanToMultipleNFTs = async (
       "setBatchAllocation",
       [formatedAmounts, dataAddresses, chainIds]
     );
-    const config = await prepareWriteContract({
+    const { request } = await prepareWriteContract({
       address: getAddressByChainIdKey(
         import.meta.env.VITE_VE_SUPPORTED_CHAINID,
         "veAllocate"
@@ -90,8 +89,8 @@ export const allocateVeOceanToMultipleNFTs = async (
         gasLimit: gasLimit,
       },
     });
-    const tx = await writeContract(config);
-    await tx.wait();
+    const { hash } = await writeContract(request);
+    const resp = await waitForTransaction({ hash });
   } catch (error) {
     throw error;
   }

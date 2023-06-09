@@ -45,12 +45,13 @@ export const getGasFeeEstimate = async (
   functionName,
   params
 ) => {
-  let signer = await getWalletClient();
+  console.log(params);
+  let client = await getWalletClient();
   const contract = getContract({
     address: contractAddress,
     abi: abi,
-    signerOrProvider: signer,
+    walletClient: client,
   });
-  const gas = await contract.estimateGas[functionName](...params);
+  const gas = await contract.estimateGas[functionName](params);
   return BigInt(gas) + BigInt(10000);
 };

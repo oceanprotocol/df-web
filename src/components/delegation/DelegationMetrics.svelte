@@ -29,7 +29,7 @@
                         parseFloat($userBalances?
                               $userBalances[
                                 getAddressByChainIdKey(
-                                  process.env.VE_SUPPORTED_CHAINID,
+                                  import.meta.env.VITE_VE_SUPPORTED_CHAINID,
                                   "veOCEAN"
                                 )
                               ]

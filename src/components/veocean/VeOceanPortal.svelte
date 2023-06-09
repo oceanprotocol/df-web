@@ -46,15 +46,14 @@
   })
 
   const dismissTokenApproval = async() =>{
-    let tx = await approveToken(
+    await approveToken(
      getAddressByChainIdKey($connectedChainId, "Ocean"),
      getAddressByChainIdKey(
        process.env.VE_SUPPORTED_CHAINID,
        "veOCEAN"
      ),
      0
-    );
-    await tx.wait();
+    )
   }
 
   $: if ($userAddress) {

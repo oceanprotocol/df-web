@@ -1,10 +1,15 @@
 import { ethers } from "ethers";
-import { get } from "svelte/store";
 import { gql } from "apollo-boost";
 import * as VeDelegationABI from "./abis/veDelegationABI";
-import { readContract } from "@wagmi/core";
+import {
+  prepareWriteContract,
+  readContract,
+  writeContract,
+  waitForTransaction,
+} from "@wagmi/core";
 import { getAddressByChainIdKey } from "../utils/address/address";
 import moment from "moment";
+import { getGasFeeEstimate } from "./web3.js";
 
 const veDelegationABI = VeDelegationABI.default;
 
@@ -50,11 +55,15 @@ export const getUserVotingPowerWithDelegations = async (userAddress) => {
 
 export const getDelegatedVeOcean = async (userAddress) => {
   try {
-    const contract = new ethers.Contract(
-      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
-      veDelegationABI
-    );
-    const delegated = await contract.delegated_boost(userAddress);
+    const delegated = await readContract({
+      address: getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "veDelegation"
+      ),
+      args: [userAddress],
+      abi: veDelegationABI,
+      functionName: "delegated_boost",
+    });
     const delegatedFormated = ethers.utils.formatEther(
       BigInt(delegated).toString(10)
     );
@@ -68,7 +77,10 @@ export const getDelegatedVeOcean = async (userAddress) => {
 export const getDelegatedExpiry = async (tokenId) => {
   try {
     const contract = new ethers.Contract(
-      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
+      getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "veDelegation"
+      ),
       veDelegationABI
     );
     const delegationExpiry = await contract.token_expiry(tokenId);
@@ -81,11 +93,15 @@ export const getDelegatedExpiry = async (tokenId) => {
 
 export const getReceivedDelegation = async (userAddress) => {
   try {
-    const contract = new ethers.Contract(
-      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
-      veDelegationABI
-    );
-    const received = await contract.received_boost(userAddress);
+    const received = await readContract({
+      address: getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "veDelegation"
+      ),
+      args: [userAddress],
+      abi: veDelegationABI,
+      functionName: "received_boost",
+    });
     const receivedFormated = ethers.utils.formatEther(
       BigInt(received).toString(10)
     );
@@ -99,7 +115,10 @@ export const getReceivedDelegation = async (userAddress) => {
 export const getTokenId = async (userAddress, id) => {
   try {
     const contract = new ethers.Contract(
-      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
+      getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "veDelegation"
+      ),
       veDelegationABI
     );
     const tokenId = await contract.get_token_id(userAddress, id);
@@ -110,37 +129,36 @@ export const getTokenId = async (userAddress, id) => {
   }
 };
 
-export const delegate = async (
-  delegator,
-  receiver,
-  oceanUnlockDate,
-  signer,
-  id
-) => {
+export const delegate = async (delegator, receiver, oceanUnlockDate, id) => {
   try {
-    const contract = new ethers.Contract(
-      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
+    const gasLimit = await getGasFeeEstimate(
+      getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "veDelegation"
+      ),
       veDelegationABI,
-      signer
+      "create_boost",
+      [delegator, receiver, 10000, moment().unix(), oceanUnlockDate.unix(), id]
     );
-    const calcGasLimit = await contract.estimateGas.create_boost(
-      delegator,
-      receiver,
-      10000,
-      moment().unix(),
-      oceanUnlockDate.unix(),
-      id
-    );
-    const resp = await contract.create_boost(
-      delegator,
-      receiver,
-      10000,
-      moment().unix(),
-      oceanUnlockDate.unix(),
-      id,
-      { gasLimit: BigInt(calcGasLimit) + BigInt(10000) }
-    );
-    await resp.wait();
+    const { request } = await prepareWriteContract({
+      address: getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "veDelegation"
+      ),
+      args: [
+        delegator,
+        receiver,
+        10000,
+        moment().unix(),
+        oceanUnlockDate.unix(),
+        id,
+      ],
+      abi: veDelegationABI,
+      functionName: "create_boost",
+      gas: gasLimit,
+    });
+    const { hash } = await writeContract(request);
+    const resp = await waitForTransaction({ hash });
     return id;
   } catch (error) {
     console.log(error);
@@ -148,39 +166,58 @@ export const delegate = async (
   }
 };
 
-export const removeDelegation = async (tokenId, signer) => {
+export const removeDelegation = async (tokenId) => {
   try {
-    const contract = new ethers.Contract(
+    const gasLimit = await getGasFeeEstimate(
       getAddressByChainIdKey(
         import.meta.env.VITE_VE_SUPPORTED_CHAINID,
         "veDelegation"
       ),
       veDelegationABI,
-      signer
+      "burn",
+      [tokenId]
     );
-    const calcGasLimit = await contract.estimateGas.burn(tokenId);
-    const resp = await contract.burn(tokenId, {
-      gasLimit: BigInt(calcGasLimit) + BigInt(10000),
+    const { request } = await prepareWriteContract({
+      address: getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "veDelegation"
+      ),
+      args: [tokenId],
+      abi: veDelegationABI,
+      functionName: "burn",
+      gas: gasLimit,
     });
-    await resp.wait();
+    const { hash } = await writeContract(request);
+    const resp = await waitForTransaction({ hash });
     return resp;
   } catch (error) {
     throw error;
   }
 };
 
-export const cancelDelegation = async (tokenId, signer) => {
+export const cancelDelegation = async (tokenId) => {
   try {
-    const contract = new ethers.Contract(
-      getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veDelegation"),
+    const gasLimit = await getGasFeeEstimate(
+      getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "veDelegation"
+      ),
       veDelegationABI,
-      signer
+      "cancel_boost",
+      [tokenId]
     );
-    const calcGasLimit = await contract.estimateGas.cancel_boost(tokenId);
-    const resp = await contract.cancel_boost(tokenId, {
-      gasLimit: BigInt(calcGasLimit) + BigInt(10000),
+    const { request } = await prepareWriteContract({
+      address: getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "veDelegation"
+      ),
+      args: [tokenId],
+      abi: veDelegationABI,
+      functionName: "cancel_boost",
+      gas: gasLimit,
     });
-    await resp.wait();
+    const { hash } = await writeContract(request);
+    const resp = await waitForTransaction({ hash });
     return resp;
   } catch (error) {
     console.log(error);

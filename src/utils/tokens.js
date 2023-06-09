@@ -5,7 +5,12 @@ import {
   GASLIMIT_DEFAULT,
   getGasFeeEstimate,
 } from "./web3";
-import { prepareWriteContract, readContract, writeContract } from "@wagmi/core";
+import {
+  prepareWriteContract,
+  readContract,
+  waitForTransaction,
+  writeContract,
+} from "@wagmi/core";
 import * as TokenABI from "./abis/tokenABI";
 
 //TODO - Standardize function calls & Params to follow ocean.js
@@ -86,7 +91,7 @@ export const approve = async (
       "approve",
       [spender, ethers.utils.parseEther(amount.toString())]
     );
-    const config = await prepareWriteContract({
+    const { request } = await prepareWriteContract({
       address: datatokenAddress,
       args: [spender, ethers.utils.parseEther(amount.toString())],
       abi: TokenABI.default,
@@ -95,8 +100,9 @@ export const approve = async (
         gasLimit: gasLimit,
       },
     });
-    const tx = await writeContract(config);
-    return tx;
+    const { hash } = await writeContract(request);
+    const resp = await waitForTransaction({ hash });
+    return resp;
   } catch (e) {
     console.log(
       `ERRPR: Failed to approve spender to spend tokens : ${e.message}`

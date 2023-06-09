@@ -33,12 +33,11 @@
       async (result) => {
         if (result.isConfirmed){
           try {
-            let tx = await approveToken(
+            await approveToken(
               tokenAddress,
               spender,
               infiniteAmount ? 2 ** 53 - 1 : amount
             );
-            const receipt = await tx.wait();
             } catch (e) {
               Swal.fire("Error!", e.message, "error").then(() => {
                 loading = false;
