@@ -47,10 +47,9 @@
     },
     { key: "veocean", value: "veOCEAN Rewards" },
     { key: "volumedf", value: "VolumeDF Rewards" },
-    { key: "predictoor", value: "Predictoor Rewards" },
     { key: "challengee", value: "Challenge Rewards" },
   ];
-  let headers = [...allHeaders.slice(0, -4)]
+  let headers = [...allHeaders.slice(0, -3)]
   let initialHeaders = [...headers];
 
   const createDropdownOptions = () => {
@@ -110,8 +109,8 @@
               )
             : 0
         ).toFixed(2)}%`,
-        passive: `${row.passive} OCEAN`,
-        active: `${row.active} OCEAN`,
+        passive: `${row.streams.find((s) => s.name=='Passive').rewards} OCEAN`,
+        active: `${row.streams.find((s) => s.name=='Active').rewards} OCEAN`,
       });
     });
     rows = newRows;

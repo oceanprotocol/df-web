@@ -169,6 +169,7 @@
 <style>
   .container {
     margin: calc(var(--spacer) * 2) 0;
+    width: 100%;
   }
   .rewardsContainer {
     width: 100%;
