@@ -422,6 +422,7 @@
   }
 
   .stepsContainer {
+    width: 360px !important;
     margin-top: calc(var(--spacer) / 5);
   }
 

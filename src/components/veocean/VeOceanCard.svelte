@@ -90,7 +90,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    grid-column: 1/3;
+    grid-column: 1 / 3;
     width: 100%;
   }
 
