@@ -140,4 +140,8 @@
   .invalid {
     border-color: red !important;
   }
+  input[type='checkbox'] {
+    accent-color: red;
+}
+
 </style>

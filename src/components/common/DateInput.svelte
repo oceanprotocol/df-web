@@ -106,4 +106,8 @@
     cursor: pointer;
     color: var(--color-primary);
   }
+  input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
 </style>
