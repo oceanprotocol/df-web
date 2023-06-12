@@ -45,7 +45,6 @@ export const getGasFeeEstimate = async (
   functionName,
   params
 ) => {
-  console.log(params);
   let client = await getWalletClient();
   const contract = getContract({
     address: contractAddress,
