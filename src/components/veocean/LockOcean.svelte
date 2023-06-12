@@ -136,7 +136,7 @@
     try {
       if ($oceanUnlockDate) {
         if (values.amount > 0) {
-          await updateLockedOceanAmount(values.amount, $userAddress);
+          await updateLockedOceanAmount(values.amount);
         }
         if (moment.utc(values.unlockDate).isAfter($oceanUnlockDate)) {
           await updateLockPeriod(unlockTimestamp);
@@ -148,12 +148,13 @@
         getAddressByChainIdKey($connectedChainId, "Ocean"),
         $userAddress,
         getAddressByChainIdKey(
-        process.env.VE_SUPPORTED_CHAINID,
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
         "veOCEAN"
         )
       )
       if(allowedAmountLeft>0) setShowApprovalNotification(true, allowedAmountLeft)
     } catch (error) {
+      console.log(error)
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
       currentStep = 1;
@@ -201,8 +202,14 @@
     }
   };
 
+  const updateLockButtonTextFunction = () => {
+    updateLockButtonText =  getUpdateLockButtonText()
+  }
+
+  $: loading && updateLockButtonTextFunction()
+
   $: if ($form) {
-    updateLockButtonText = getUpdateLockButtonText();
+    updateLockButtonTextFunction();
   }
 
   $: if (tokenApproved !== undefined) {

@@ -126,7 +126,7 @@ export const getTotalAllocatedVeOcean = async (userAddress) => {
       abi: veAllocateABI,
       functionName: "getTotalAllocation",
     });
-    return ethers.utils.formatEther(BigInt(allocatedAmount).toString(10)) / 100;
+    return BigInt(allocatedAmount).toString(10) / 100;
   } catch (error) {
     console.log(error);
     throw error;

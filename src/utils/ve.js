@@ -166,6 +166,7 @@ export const updateLockedOceanAmount = async (amount) => {
     const { hash } = await writeContract(request);
     const resp = await waitForTransaction({ hash });
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -180,6 +181,12 @@ export const updateLockPeriod = async (unlockDate) => {
       veOceanABI,
       "increase_unlock_time",
       [unlockDate]
+    );
+    console.log(
+      getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "veOCEAN"
+      )
     );
     const { request } = await prepareWriteContract({
       address: getAddressByChainIdKey(
@@ -196,6 +203,7 @@ export const updateLockPeriod = async (unlockDate) => {
     const { hash } = await writeContract(request);
     const resp = await waitForTransaction({ hash });
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

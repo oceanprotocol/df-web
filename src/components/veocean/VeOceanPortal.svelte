@@ -37,6 +37,7 @@
       let lockedOceans = await getLockedOceanAmount($userAddress);
       lockedOceanAmount.update(() => lockedOceans);
     }
+    loading = false
   };
 
   oceanUnlockDate.subscribe((v) => {
@@ -49,7 +50,7 @@
     await approveToken(
      getAddressByChainIdKey($connectedChainId, "Ocean"),
      getAddressByChainIdKey(
-       process.env.VE_SUPPORTED_CHAINID,
+       import.meta.env.VITE_VE_SUPPORTED_CHAINID,
        "veOCEAN"
      ),
      0
@@ -120,6 +121,7 @@
     align-items: center;
     color: var(--brand-grey-light);
     height: calc(100vh - 115px);
+    width: 100%;
   }
 
   .alignContentCenter {

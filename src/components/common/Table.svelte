@@ -52,7 +52,7 @@
   let loading = undefined;
   let tooltipMessage = undefined;
   let tooltipState = undefined;
-  let visibleColData = colData.slice();
+  let visibleColData = colData?.slice();
   let filterOption = "0";
 
   export let tabSelected = 'alloc';
@@ -128,21 +128,6 @@
         delete columns[column];
       });
     }
-  }
-
-  function onCheck(key, value) {
-    columns[key] = value;
-    if (value) {
-      visibleColData.splice(
-        2,
-        0,
-        colData.find((d) => d.value === key)
-      );
-      visibleColData = visibleColData;
-    } else {
-      visibleColData = visibleColData.filter((col) => col.value !== key);
-    }
-    localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
   }
 
   const onTotalAvailableAllocationChange = async (id, value, step) => {
@@ -225,8 +210,8 @@
     updateTotalAvailableAllocations();
   }
 
-  const updateTotalAvailableAllocations = () => {
-    updateDisable();
+  const updateTotalAvailableAllocations = async() => {
+    await updateDisable();
     totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
     totalAvailableTemporary = totalAvailable;
   };
@@ -253,8 +238,7 @@
     disabled =
       !$userAddress ||
       $veOceanWithDelegations <= 0 ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID;
-
+      $connectedChainId != import.meta.env.VITE_VE_SUPPORTED_CHAINID;
     updateTooltip();
   }
 
@@ -280,7 +264,7 @@
     disabled =
       !$userAddress ||
       $veOceanWithDelegations <= 0 ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID;
+      $connectedChainId != import.meta.env.VITE_VE_SUPPORTED_CHAINID;
   }
 
   // init the page state
