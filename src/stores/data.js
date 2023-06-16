@@ -8,6 +8,7 @@ import { getRoundsDatafarm } from "../utils/functions";
 let networksData = networksDataArray.default
 
 export let datasets = writable("");
+export let dataChallenges = writable("");
 
 export const columnsData = {
   'alloc': [
@@ -270,4 +271,20 @@ export async function loadDatasets(nftsApi, allocations) {
     newDatasets.push(getRow(datasetInfo, key));
   });
   datasets.set(newDatasets);
+}
+
+// Get all data challenges
+export async function loadDataChallenges(challengesApi) {
+  console.log(">>>> HELLO WORLD")
+  // let challenges = await getDatasets(challengesApi,0);
+  // console.log(">>>> challenges:", challenges)
+  // if (challenges.length === 0) {
+  //   challenges = [
+  //     [7, "$1250", "0x0abca", "$1250", "0x0abcb", "$1250", "0x0abc"],
+  //     [6, "$1250", "0x0abca", "$1250", "0x0abcb", "$1250", "0x0abc"],
+  //     [5, "$1250", "0x0abca", "$1250", "0x0abcb", "$1250", "0x0abc"],
+  //     [4, "$1250", "0x0abca", "$1250", "0x0abcb", "$1250", "0x0abc"]
+  //   ];
+  // }
+  // dataChallenges.set(challenges);
 }

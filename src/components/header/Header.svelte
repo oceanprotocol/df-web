@@ -36,6 +36,9 @@
       <li class:active={$location.pathname === "/delegate"}>
         <Link to="/delegate" class="link">DELEGATE</Link>
       </li>
+      <li class:active={$location.pathname === "/challenges"}>
+        <Link to="/challenges" class="link">CHALLENGES</Link>
+      </li>
       <li class:active={false}>
         <a href={aboutURL} target="_blank" rel="noreferrer" class="link"
           >ABOUT</a

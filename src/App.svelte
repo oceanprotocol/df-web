@@ -5,6 +5,7 @@
   import DelegationPortal from "./components/delegation/DelegationPortal.svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
   import DataPortal from "./components/data/DataPortal.svelte";
+  import ChallengesPortal from "./components/challenges/Portal.svelte";
   import { setupAppConfig } from "./app.config";
   import {
     isWalletConnectModalOpen,
@@ -240,6 +241,9 @@
     </Route>
     <Route path="/delegate" primary={false}>
       <DelegationPortal />
+    </Route>
+    <Route path="/challenges" primary={false}>
+      <ChallengesPortal />
     </Route>
     <Route path="/*" primary={false}>
       <ClaimPortal />
