@@ -8,7 +8,7 @@ import { getRoundsDatafarm } from "../utils/functions";
 let networksData = networksDataArray.default
 
 export let datasets = writable("");
-export let dataChallenges = writable("");
+export let dataChallenges = writable([]);
 
 export const columnsData = {
   'alloc': [
@@ -273,18 +273,110 @@ export async function loadDatasets(nftsApi, allocations) {
   datasets.set(newDatasets);
 }
 
-// Get all data challenges
-export async function loadDataChallenges(challengesApi) {
-  console.log(">>>> HELLO WORLD")
-  // let challenges = await getDatasets(challengesApi,0);
-  // console.log(">>>> challenges:", challenges)
-  // if (challenges.length === 0) {
-  //   challenges = [
-  //     [7, "$1250", "0x0abca", "$1250", "0x0abcb", "$1250", "0x0abc"],
-  //     [6, "$1250", "0x0abca", "$1250", "0x0abcb", "$1250", "0x0abc"],
-  //     [5, "$1250", "0x0abca", "$1250", "0x0abcb", "$1250", "0x0abc"],
-  //     [4, "$1250", "0x0abca", "$1250", "0x0abcb", "$1250", "0x0abc"]
-  //   ];
-  // }
-  // dataChallenges.set(challenges);
+// Get all data challenge winners
+async function getDataChallengeWinners(api,roundNumber) {
+  let res;
+  try {
+    res = await fetch(api, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "query":{
+          "round": roundNumber
+        },
+        "sort": {
+            "mnse": -1
+        }
+      })
+    });
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+  let data = await res.json();
+  return data;
+}
+
+// Get all rewards from the rounds (which should include df-challenge rewards)
+async function getRewardsSummary(api,roundNumber) {
+  let res;
+  try {
+    res = await fetch(api, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "query":{
+          "round": roundNumber
+        }
+      })
+    });
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+  let data = await res.json();
+  return data;
+}
+
+const dfChallengeRewardTableMaxRounds = 10;
+const dfChallengeRewardBaseRound = 5;
+
+export async function loadDFChallengeResults() {
+  try {
+    const curRound = getEpoch().id;
+    let limRound = 0;
+    
+    if( curRound - dfChallengeRewardTableMaxRounds > dfChallengeRewardBaseRound )
+      limRound = curRound - dfChallengeRewardTableMaxRounds;
+    else
+      limRound = dfChallengeRewardBaseRound;
+    let results = [];
+    
+    for(let i=curRound; i>=limRound; i--){
+      // TODO - Complete implementation after endpoints are ready
+      let winners = await getDataChallengeWinners(`${process.env.BACKEND_API}/challenge`,curRound);
+      let rewards = await getRewardsSummary(`${process.env.BACKEND_API}/rewards_summary`,curRound);
+      
+      // Sort winners in descending order of nmse
+      winners.sort((a, b) => b.nmse - a.nmse);
+
+      // Get the top 3 winners
+      const topWinners = winners.slice(0, 3);
+
+      // If fewer than three winners, add placeholders
+      while (topWinners.length < 3) {
+        topWinners.push({ LP_addr: "N/A" });
+      }
+
+      // Create a map of rewards by LP_addr for easy lookup
+      const rewardsMap = rewards.reduce((map, reward) => {
+        map[reward.LP_addr] = reward.dfChallengeReward;
+        return map;
+      }, {});
+
+      // Flatten roundResults into a single array
+      const roundResults = [i];
+      topWinners.forEach(winner => {
+        roundResults.push(rewardsMap[winner.LP_addr] || "$0", winner.LP_addr);
+      });
+
+      results.push(roundResults);
+    }
+
+    dataChallenges.set(results);
+  } catch (error) {
+    console.log("loadDataChallenges error:", error);
+    dataChallenges.set([
+        [7, "$1250", "0x0abca", "$750", "0x0abcb", "$500", "0x0abc"],
+        [6, "$1250", "0x0abca", "$750", "0x0abcb", "$500", "0x0abc"],
+        [5, "$1250", "0x0abca", "$750", "0x0abcb", "$500", "0x0abc"],
+        [4, "$1250", "0x0abca", "$750", "0x0abcb", "$500", "0x0abc"]
+    ]);
+  }
 }
