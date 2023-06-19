@@ -34,3 +34,25 @@ export const getEpoch = (date) => {
   }
   return null;
 }
+
+export const getUpcomingFirstWednesdayOfTheMonth = () => {
+  // Get current date
+  let currentDate = moment.utc();
+  
+  // If it's already Thursday or it's past the first Wednesday, move to the next month
+  if (currentDate.date() > 7 || currentDate.day() >= 4) {
+    currentDate = currentDate.add(1, 'month');
+  }
+
+  // Set date to first day of the month
+  currentDate.date(1);
+
+  // Find the first Wednesday of the month
+  let firstWednesday = currentDate.day() <= 3 ? currentDate.day(3) : currentDate.add(1, 'week').day(3);
+
+  // Set time to 23:59
+  firstWednesday.hour(23).minute(59).second(0).millisecond(0);
+
+  // Return the result
+  return firstWednesday;
+}
