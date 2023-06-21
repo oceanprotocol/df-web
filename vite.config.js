@@ -15,10 +15,6 @@ export default ({ mode }) => {
         transformMixedEsModules: true,
       }),
       nodePolyfills(),
-      {
-        ...nodeResolve(),
-        enforce: "post", // Run after other plugins
-      },
     ],
     server: {
       port: 3000, // Replace with the port number you want to use
@@ -26,10 +22,6 @@ export default ({ mode }) => {
     },
     define: {
       "window.global": {},
-    },
-    build: {
-      target: "es2020", // Set the target to ES2020
-      polyfillDynamicImport: false, // Disable dynamic import polyfill
     },
   });
 };
