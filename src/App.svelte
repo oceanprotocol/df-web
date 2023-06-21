@@ -51,7 +51,7 @@
   import { totalUserAllocation } from "./stores/dataAllocations";
   import { Buffer } from "buffer";
   import "@oceanprotocol/typographies/css/ocean-typo.css";
-
+  
   // @ts-ignore
   window.Buffer = Buffer;
 
