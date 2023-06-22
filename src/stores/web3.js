@@ -1,5 +1,4 @@
 import { writable } from "svelte/store";
-//import {Web3Modal} from "@web3modal/htmlstandalone"
 import { Web3Modal } from "@web3modal/html";
 import { configureChains, createConfig } from "@wagmi/core";
 import { mainnet, goerli } from "@wagmi/core/chains";
@@ -46,23 +45,12 @@ ethereumClient.watchAccount((data) => {
 ethereumClient.watchNetwork((network) => {
   connectedChainId.set(network?.chain?.id);
 });
-
-const onSessionConnect = (session) => {
-  console.log(session);
-};
-/*const web3Modal = new Web3Modal(
-  { projectId: import.meta.env.VITE_WALLET_CONNECT_KEY },
-  ethereumClient
-);*/
-
 const web3Modal = new Web3Modal(
   {
     projectId: import.meta.env.VITE_WALLET_CONNECT_KEY,
   },
-  // `standaloneChains` can also be specified when calling `web3Modal.openModal(...)` later on.
   ethereumClient
 );
-
 web3Modal.setTheme({
   themeMode: "light",
 });
@@ -73,11 +61,6 @@ export function getNetworkDataById(data, networkId) {
   const networkData = data.filter((chain) => chain.chainId === networkId);
   return networkData[0];
 }
-
-export const signMessage = async (msg, signer) => {
-  const signedMessage = await signer.signMessage(msg);
-  return signedMessage;
-};
 
 export const connectWallet = async () => {
   try {
