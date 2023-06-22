@@ -5,11 +5,8 @@
   import DelegationPortal from "./components/delegation/DelegationPortal.svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
   import DataPortal from "./components/data/DataPortal.svelte";
-  import { setupAppConfig } from "./app.config";
   import {
-    isWalletConnectModalOpen,
     userAddress,
-    connectWallet,
     selectedNetworks,
     connectedChainId,
   } from "./stores/web3";
@@ -54,8 +51,6 @@
   
   // @ts-ignore
   window.Buffer = Buffer;
-
-  //setupAppConfig();
 
   async function loadGeneralAPYs() {
     let activeAPY = $APYs?.active ? $APYs?.active : await getActiveAPY();
