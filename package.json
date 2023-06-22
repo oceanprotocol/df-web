@@ -47,8 +47,6 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
-    "@rollup/plugin-commonjs": "^25.0.2",
-    "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.1.0"
   }
 }
