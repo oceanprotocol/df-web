@@ -1,10 +1,5 @@
 import vitePreprocess from "svelte-preprocess";
-import { defineConfig, loadEnv } from "vite";
 
-export default ({ mode }) => {
-  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
-
-  return defineConfig({
-    preprocess: vitePreprocess(),
-  });
+export default {
+  preprocess: vitePreprocess(),
 };
