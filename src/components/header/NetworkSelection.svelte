@@ -14,6 +14,7 @@
   import * as networksDataArray from "../../networks-metadata.json";
 
   let networksData = networksDataArray.default;
+  const veSupportedChainIds = import.meta.env.VITE_SUPPORTED_CHAIN_IDS
 
   function onCheck(checked, value) {
     if (!checked) {
@@ -29,14 +30,14 @@
     if (!localStorage.getItem("SupportedChainIds")) {
       localStorage.setItem(
         "SupportedChainIds",
-        JSON.stringify(JSON.parse(import.meta.env.VITE_SUPPORTED_CHAIN_IDS))
+        JSON.stringify(JSON.parse(veSupportedChainIds))
       );
     } else {
       let localStorageSupportedChainIds = JSON.parse(
         localStorage.getItem("SupportedChainIds")
       );
       let envSupportedChainIds = JSON.parse(
-        import.meta.env.VITE_SUPPORTED_CHAIN_IDS
+        veSupportedChainIds
       );
       if (
         envSupportedChainIds.length != localStorageSupportedChainIds.length ||
@@ -78,7 +79,7 @@
     <span class="text"> Selected networks </span>
     <Tooltip icon={ChevronDown} align="end">
       {#if $selectedNetworks}
-        {#each JSON.parse(import.meta.env.VITE_SUPPORTED_CHAIN_IDS) as chainId}
+        {#each JSON.parse(veSupportedChainIds) as chainId}
           <NetworkItem
             {chainId}
             checked={$selectedNetworks.find((id) => id === chainId) !==
