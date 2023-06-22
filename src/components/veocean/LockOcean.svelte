@@ -326,7 +326,7 @@
         bind:value={$form.ageement}
       />
       <div class="item buttonContainer">
-        {#if $connectedChainId.toString() !== supportedChainId}
+        {#if $connectedChainId?.toString() !== supportedChainId}
           <Button
             text={!$userAddress
               ? "Connect Wallet"

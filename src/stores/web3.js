@@ -3,11 +3,8 @@ import { writable } from "svelte/store";
 import { Web3Modal } from "@web3modal/html";
 import { configureChains, createConfig } from "@wagmi/core";
 import { mainnet, goerli } from "@wagmi/core/chains";
-import {
-  EthereumClient,
-  w3mConnectors,
-  w3mProvider,
-} from "@web3modal/ethereum";
+import { infuraProvider } from "@wagmi/core/providers/infura";
+import { EthereumClient, w3mConnectors } from "@web3modal/ethereum";
 
 export let userAddress = writable("");
 export let poolContracts = writable("");
@@ -26,7 +23,7 @@ const chains = [mainnet, goerli];
 
 // Wagmi Core Client
 const { publicClient } = configureChains(chains, [
-  w3mProvider({ projectId: import.meta.env.VITE_WALLET_CONNECT_KEY }),
+  infuraProvider({ apiKey: import.meta.env.VITE_INFURA_KEY }),
 ]);
 
 const wagmiClient = createConfig({
