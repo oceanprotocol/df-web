@@ -53,6 +53,7 @@
   let tokenApproved = false;
 
   const MAXDAYS = 4 * 365;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
 
   let steps = [
     { text: "Approve OCEAN" },
@@ -148,7 +149,7 @@
         getAddressByChainIdKey($connectedChainId, "Ocean"),
         $userAddress,
         getAddressByChainIdKey(
-        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        supportedChainId,
         "veOCEAN"
         )
       )
@@ -325,18 +326,18 @@
         bind:value={$form.ageement}
       />
       <div class="item buttonContainer">
-        {#if $connectedChainId !== parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID)}
+        {#if $connectedChainId !== parseInt(supportedChainId)}
           <Button
             text={!$userAddress
               ? "Connect Wallet"
               : `Switch Network to ${
                   getNetworkDataById(
                     networksData,
-                    parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID)
+                    parseInt(supportedChainId)
                   )?.name
                 }`}
             onclick={() =>
-              switchWalletNetwork(import.meta.env.VITE_VE_SUPPORTED_CHAINID)}
+              switchWalletNetwork(supportedChainId)}
             fullWidth={true}
             disabled={!$userAddress}
           />
@@ -347,7 +348,7 @@
             tokenName={"OCEAN"}
             approvalModalMessage="Approve only if you are going to lock right away.<br> Make sure you only approve the amount that you are going to lock."
             spender={getAddressByChainIdKey(
-              import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+              supportedChainId,
               "veOCEAN"
             )}
             amount={$form.amount}

@@ -4,7 +4,6 @@
   import { query } from "svelte-apollo";
   import { TOTAL_LOCKED } from "../../utils/subgraph";
   import { veTotalLocked } from "../../stores/subgraph";
-  import moment from "moment";
 
   let summary = query(TOTAL_LOCKED);
   let totalLocked = 0;

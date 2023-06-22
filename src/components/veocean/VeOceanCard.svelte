@@ -15,6 +15,7 @@
   import * as descriptions from "../../utils/metadata/descriptions.json";
 
   let loading = false;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   const setValues = async () => {
     if (!$totalUserAllocation) {
@@ -39,14 +40,14 @@
         value={`${
           $userBalances[
             getAddressByChainIdKey(
-              import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+              supportedChainId,
               "veOCEAN"
             )
           ]
             ? parseFloat(
                 $userBalances[
                   getAddressByChainIdKey(
-                    import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+                    supportedChainId,
                     "veOCEAN"
                   )
                 ]

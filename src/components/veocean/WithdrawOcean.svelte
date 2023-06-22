@@ -25,6 +25,7 @@
   let withdrawing = false;
   let blockTimestamp = 0;
   let unlockTimestamp = 0;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   const updateBlockTimestamp = async () => {
     const blockNumber = await fetchBlockNumber();
@@ -95,7 +96,7 @@
       disabled={loading ||
         withdrawing ||
         !$oceanUnlockDate ||
-        parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID) !== $connectedChainId ||
+        parseInt(supportedChainId) !== $connectedChainId ||
         (moment().utc().isBefore($oceanUnlockDate) &&
           blockTimestamp <= unlockTimestamp)}
       onclick={() => withdraw()}

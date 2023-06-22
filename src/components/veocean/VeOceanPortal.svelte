@@ -17,6 +17,7 @@
   let loading = false;
   let showDismissAllowance = false;
   let allowedTokenAmt = 0;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
 
   const setShowApprovalNotification = async(value, allowedTokens) => {
     allowedTokenAmt=allowedTokens
@@ -50,7 +51,7 @@
     await approveToken(
      getAddressByChainIdKey($connectedChainId, "Ocean"),
      getAddressByChainIdKey(
-       import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+       supportedChainId,
        "veOCEAN"
      ),
      0
@@ -63,7 +64,7 @@
       getAddressByChainIdKey($connectedChainId, "Ocean"),
       $userAddress,
       getAddressByChainIdKey(
-       import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+       supportedChainId,
        "veOCEAN"
      )
     ).then((allowedAmt) => {
