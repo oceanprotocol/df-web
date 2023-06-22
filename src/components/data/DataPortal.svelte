@@ -21,6 +21,7 @@
   let message = undefined;
 
   let tabSelected = "alloc";
+  const chainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
 
   const loadTotalAllocation = async () => {
     let newAllocation = await getTotalAllocatedVeOcean(
@@ -95,7 +96,7 @@
     "alignContentCenter"
   }`}
 >
-  {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
+  {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(chainId, "veOCEAN")] !== undefined}
     <div class="wrapper">
       <h2 class="title">Curate Data to Earn OCEAN</h2>
       <div class="data">
