@@ -30,6 +30,7 @@
   let availableAllocation = undefined;
   let totalAllocationForUser = 100;
   let canAllocate = false;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   const updateBalance = async () => {
     let newTotalUserAllocation = $totalUserAllocation;
@@ -64,7 +65,7 @@
 
   $: if (
     $userAddress &&
-    parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID) === $connectedChainId
+    parseInt(supportedChainId) === $connectedChainId
   ) {
     updateBalance();
   }
@@ -109,7 +110,7 @@
     amountToAllocate = newValue;
     if (
       amountToAllocate > 0.0 &&
-      parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID) === $connectedChainId
+      parseInt(supportedChainId) === $connectedChainId
     ) {
       updateCanAllocate();
       loading = false;
@@ -127,7 +128,7 @@
   }
 
   async function switchNetwork() {
-    await switchWalletNetwork(import.meta.env.VITE_VE_SUPPORTED_CHAINID);
+    await switchWalletNetwork(supportedChainId);
   }
 
   $: if (availableAllocation) {
@@ -140,13 +141,13 @@
     <h4>Allocation</h4>
   </div>
   <div class="components-container">
-    {#if $userAddress && parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID) !== $connectedChainId}
+    {#if $userAddress && parseInt(supportedChainId) !== $connectedChainId}
       <div class="button">
         <Button
           text={`Switch Network to ${
             getNetworkDataById(
               networksData,
-              parseInt(import.meta.env.VITE_VE_SUPPORTED_CHAINID)
+              parseInt(supportedChainId)
             )?.name
           }`}
           onclick={() => switchNetwork()}

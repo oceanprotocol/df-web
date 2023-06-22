@@ -11,6 +11,7 @@
 
   export let roundInfo = undefined;
   let totalApy, totalApyUser;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   $: if ($APYs) {
     totalApy = calcTotalAPY($APYs.active, $APYs.passive);
@@ -33,7 +34,7 @@
           $APYs &&
           $userBalances[
             getAddressByChainIdKey(
-              import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+              supportedChainId,
               "veOCEAN"
             )
           ] > 0

@@ -24,6 +24,7 @@
   export let canClaimDF = true;
   export let roundInfo;
   let claiming;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   async function onClaimDfRewards() {
     claiming = "DF_REWARDS";
@@ -110,14 +111,14 @@
           value: `${
             $userBalances[
               getAddressByChainIdKey(
-                import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+                supportedChainId,
                 "veOCEAN"
               )
             ]
               ? parseFloat(
                   $userBalances[
                     getAddressByChainIdKey(
-                      import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+                      supportedChainId,
                       "veOCEAN"
                     )
                   ]
