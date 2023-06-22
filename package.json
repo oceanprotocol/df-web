@@ -22,7 +22,6 @@
     "carbon-icons-svelte": "^11.0.1",
     "croner": "^4.3.1",
     "decimal.js": "^10.3.1",
-    "dotenv": "^8.6.0",
     "ethers": "^5.7.2",
     "moment": "2.29.4",
     "node-sass": "^8.0.0",

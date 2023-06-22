@@ -1,11 +1,10 @@
-import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import vitePreprocess from "svelte-preprocess";
+import { defineConfig, loadEnv } from "vite";
 
-export default {
-  preprocess: vitePreprocess({
-    // Disable typing errors (typeCheck: false) if using TypeScript
-    typescript: {
-      // turn off type checking
-      typeCheck: false,
-    },
-  }),
+export default ({ mode }) => {
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+
+  return defineConfig({
+    preprocess: vitePreprocess(),
+  });
 };
