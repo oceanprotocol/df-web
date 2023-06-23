@@ -34,17 +34,22 @@
       />
     {/each}
   {/if}
-    <div class="claimRewards">
-      <ItemWithLabel
-        title="total rewards"
-        value={amount || "..."}
-        tooltipMessage={rewardTooltip || undefined}
-      />
-      <Button
-        text={loading ? "Loading..." : `Claim Rewards${disabled ? "" : amount}`}
-        onclick={onClick}
-        disabled={loading || disabled}
-      />
+    <div class="rewardsContainer">
+      <div class="claimRewards">
+        <ItemWithLabel
+          title="total rewards"
+          value={amount || "..."}
+          tooltipMessage={rewardTooltip || undefined}
+          direction="row"
+        />
+        <div class="buttonMargin">
+          <Button
+            text={loading ? "Loading..." : `Claim Rewards${disabled ? "" : amount}`}
+            onclick={onClick}
+            disabled={loading || disabled}
+          />
+        </div>
+      </div>
     </div>
   </Card>
 </div>
@@ -54,11 +59,18 @@
     width: 100%;
     margin: calc(var(--spacer)/2) 0;
   }
-  .claimRewards {
+  .rewardsContainer {
     width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: calc(var(--spacer) / 2);
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  .claimRewards {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .buttonMargin {
+    margin-top: calc(var(--spacer) / 4);
   }
 </style>
