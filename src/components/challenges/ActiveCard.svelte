@@ -20,9 +20,7 @@
     <p class="message">
       {description}
     </p>
-    <div class="cta-padding">
-      <ActiveCTA {challengeDetails} />
-    </div>
+    <ActiveCTA {challengeDetails} />
   </Card>
 </div>
 
@@ -34,8 +32,5 @@
     justify-content: flex-start;
     width: 100%;
     padding-top: calc(var(--spacer) * 2);
-  }
-  .cta-padding {
-    padding-top: calc(var(--spacer) / 4);
   }
 </style>

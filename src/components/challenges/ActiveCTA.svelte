@@ -23,13 +23,14 @@
 
 <style>
   .challenge-component {
-    width: 475px;
+    width: 100%;
     height: 175px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     border: 1px solid #D9D9D9;
+    margin-top: calc(var(--spacer) / 4);
   }
   .banner {
     width: 100%;
@@ -61,4 +62,10 @@
     padding: calc(var(--spacer) / 4);
     color: var(--brand-grey-light) !important;
   }
+
+  @media (min-width: 640px) {
+    .challenge-component {
+      width: 475px;
+    }
+  }  
 </style>
