@@ -71,12 +71,13 @@
             <svelte:fragment slot="cell" let:cell let:row>
               <div class="cellContainer">
                 {#if cell.key === 'first_place' || cell.key === 'second_place' || cell.key === 'third_place'}
-                  {cell.value.toLowerCase().substr(0, 6) + '...' + cell.value.toLowerCase().substr(cell.value.length - 6)}
                   <a
                     href={'https://etherscan.io/address/' + cell.value}
                     target="_blank"
                     rel="noreferrer"
+                    class="address"
                   >
+                    {cell.value.toLowerCase().substr(0, 6) + '...' + cell.value.toLowerCase().substr(cell.value.length - 6)}
                     <img class="externalLink" src={ExternalIcon} alt="external link" />
                   </a>
                 {:else}
@@ -103,9 +104,15 @@
   .title{
     margin-bottom: calc(var(--spacer) / 2);
   }
+  .address{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
   .externalLink {
-    width: 75%;
+    width: 10px;
     height: auto;
-    margin: 50%;
+    margin-left: calc(var(--spacer) / 6);
   }
 </style>
