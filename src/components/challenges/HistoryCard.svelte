@@ -1,6 +1,6 @@
 <script>
-  import Card from "../common/Card.svelte"
   import DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
+  import DataTableSkeleton from "carbon-components-svelte/src/DataTable/DataTableSkeleton.svelte";
   import { dataChallenges, loadDFChallengeResults } from "../../stores/data";
   import { get } from 'svelte/store';
 
@@ -8,7 +8,6 @@
 
   let loading = true;
   let title = "Past Challenges";
-  let description = "Learn about past Predict-Eth challenges and join the active one.";
   let headers = [
     { key: 'round', value: 'Round' },
     { key: 'first_prize', value: '1st Prize' },
@@ -60,12 +59,9 @@
 </script>
 
 <div class="container">
-  <Card title={title}>
-    <p class="message">
-        {description}
-    </p>
-      {#if $dataChallenges.length > 0 && !loading}
+    <h2 class="title">{title}</h2>
         <div class="epochHistoryTableContainer">
+          {#if $dataChallenges.length > 0 && !loading}
           <DataTable {headers} {rows} class="customTable">
             <svelte:fragment slot="cell-header" let:header>
               <div class="headerContainer">
@@ -89,11 +85,10 @@
               </div>
             </svelte:fragment>
           </DataTable>
+          {:else}
+          <DataTableSkeleton {headers} showHeader={false} showToolbar={false}/>
+        {/if}
         </div>
-      {:else}
-        <h3 class="loading">Loading...</h3>
-      {/if}
-  </Card>
 </div>
 
 <style>
@@ -105,10 +100,8 @@
     width: 100%;
     padding-top: calc(var(--spacer) * 2);
   }
-  :global(Card.container) {
-    padding: 0;
-    padding-top: calc(var(--spacer) / 2);
-    padding-bottom: calc(var(--spacer) / 2);
+  .title{
+    margin-bottom: calc(var(--spacer) / 2);
   }
   .externalLink {
     width: 75%;
