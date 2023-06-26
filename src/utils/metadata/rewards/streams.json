@@ -7,7 +7,7 @@
         {
           "name": "veOCEAN",
           "rewards": 0,
-          "description": "Earn by locking OCEAN into veOCEAN Earn by locking OCEAN into veOCEAN",
+          "description": "Earn rewards by locking OCEAN and holding veOCEAN. The longer you hold, the more you earn.",
           "action": {
             "text": "Get veOCEAN",
             "location": "/veocean"
@@ -26,7 +26,7 @@
         {
           "name": "Volume DF",
           "rewards": 0,
-          "description": "Earn by allocating veOCEAN to high-DCV assets; or delegating veOCEAN to others.",
+          "description": "Earn rewards by allocating veOCEAN to high-DCV assets; or delegating veOCEAN to market curators.",
           "action": {
             "text": "Set allocation",
             "location": "/datafarming"
@@ -37,9 +37,9 @@
           }
         },
         {
-          "name": "Challenge",
+          "name": "Challenge DF",
           "rewards": 0,
-          "description": "Earn by doing Contestant actions (submit predictions once a week to the Predict-ETH Data Challenge).",
+          "description": "Earn rewards by participating and submitting predictions to the weekly Predict-ETH challenge.",
           "action": {
             "text": "Participate",
             "location": "/veocean"
@@ -47,7 +47,8 @@
           "metric": {
             "name": "completed",
             "value": "0"
-          }
+          },
+          "showUSD": true
         }
       ]
     }

@@ -19,7 +19,9 @@
   import moment from "moment";
   import { getEpoch } from "../../utils/epochs";
   import { oceanUnlockDate } from "../../stores/veOcean";
+  import { getRate } from "../../utils/market_rates";
   import * as streamsData from "../../utils/metadata/rewards/streams.json"
+  import { onMount } from "svelte";
 
   let loading = false;
   let veBalance = 0.0;
@@ -27,21 +29,37 @@
   let canClaimDF = true;
   const now = moment.utc();
   let curEpoch = getEpoch(now);
-  let streams = streamsData.default.streams
+  let streams = null;
 
-  function populateStreamsWithRewardsFromCurrentEpoch(){
-    streams?.forEach((stream,indexStream) => {
-      if(!curEpoch?.streams) return
-      stream.rewards = curEpoch?.streams[indexStream]?.rewards
-      stream.substreams.forEach((substream, indexSubstream) => {
-        substream.rewards = curEpoch.streams[indexStream].substreams[indexSubstream].rewards
-      })
-    })
+  async function populateStreamsWithRewardsFromCurrentEpoch(){
+    // Calculate adjusted rewards for current epoch
+    const fxRate = await getRate('OCEAN', 'ocean-protocol');
+    const challengeDFReward = Math.round(
+      // TODO - Fix Magic Numbers
+      curEpoch.streams[1].substreams[1].rewards / fxRate, 2
+    );
+    const adjustedVolumeDFReward = curEpoch.streams[1].rewards - challengeDFReward;
+    
+    // Update curEpoch rewards
+    curEpoch.streams[1].substreams[0].rewards = adjustedVolumeDFReward;
+    curEpoch.streams[1].substreams[1].rewardsUSD = curEpoch.streams[1].substreams[1].rewards;
+    curEpoch.streams[1].substreams[1].rewards = challengeDFReward;
+
+    // Update streams with rewards from curEpoch
+    const modifiedStreams = streamsData.default.streams.map((stream, indexStream) => {
+        if(!curEpoch?.streams) return stream; // return the original stream if there is no current epoch
+        stream.rewards = curEpoch?.streams[indexStream]?.rewards;
+        stream.substreams.forEach((substream, indexSubstream) => {
+          substream.rewards = curEpoch.streams[indexStream].substreams[indexSubstream].rewards;
+          substream.rewardsUSD = substream.showUSD ? curEpoch.streams[indexStream].substreams[indexSubstream].rewardsUSD : 0;
+        });
+        return stream; // return the updated stream
+    });
+
+    streams = modifiedStreams;
   }
-  populateStreamsWithRewardsFromCurrentEpoch()
 
   async function initClaimables() {
-
     if (!userAddress || !oceanUnlockDate) {
       veClaimables.set(0);
       dfClaimables.set(0);
@@ -75,12 +93,18 @@
   $: if ($userAddress && $connectedChainId) {
     initClaimables();
   }
+
+  onMount(() => {
+    populateStreamsWithRewardsFromCurrentEpoch();
+  })
 </script>
 
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
   <Features />
-  <ClaimRewards {canClaimVE} {canClaimDF} streams={streams}/>
+  {#if streams !== null}
+    <ClaimRewards {canClaimVE} {canClaimDF} streams={streams}/>
+  {/if}
   <EpochHistory />
 </div>
 
