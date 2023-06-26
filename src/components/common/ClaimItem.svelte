@@ -27,12 +27,11 @@
       <Substream 
         title={substream.name}
         availableRewards={substream.rewards}
+        availableRewardsUSD={substream.rewardsUSD}
         description={substream.description}
         action={substream.action}
         metric={substream.metric}
         apy={substream?.apy}
-        showUSD={substream.showUSD}
-        amountUSD={substream.amountUSD}
       />
     {/each}
   {/if}

@@ -21,6 +21,7 @@
   import { oceanUnlockDate } from "../../stores/veOcean";
   import { getRate } from "../../utils/market_rates";
   import * as streamsData from "../../utils/metadata/rewards/streams.json"
+  import { onMount } from "svelte";
 
   let loading = false;
   let veBalance = 0.0;
@@ -41,7 +42,7 @@
     
     // Update curEpoch rewards
     curEpoch.streams[1].substreams[0].rewards = adjustedVolumeDFReward;
-    curEpoch.streams[1].substreams[1].amountUSD = curEpoch.streams[1].substreams[1].rewards;
+    curEpoch.streams[1].substreams[1].rewardsUSD = curEpoch.streams[1].substreams[1].rewards;
     curEpoch.streams[1].substreams[1].rewards = challengeDFReward;
 
     // Update streams with rewards from curEpoch
@@ -50,18 +51,15 @@
         stream.rewards = curEpoch?.streams[indexStream]?.rewards;
         stream.substreams.forEach((substream, indexSubstream) => {
           substream.rewards = curEpoch.streams[indexStream].substreams[indexSubstream].rewards;
-          substream.amountUSD = substream.showUSD ? curEpoch.streams[indexStream].substreams[indexSubstream].amountUSD : 0;
+          substream.rewardsUSD = substream.showUSD ? curEpoch.streams[indexStream].substreams[indexSubstream].rewardsUSD : 0;
         });
         return stream; // return the updated stream
     });
 
     streams = modifiedStreams;
   }
-  populateStreamsWithRewardsFromCurrentEpoch();
-
 
   async function initClaimables() {
-
     if (!userAddress || !oceanUnlockDate) {
       veClaimables.set(0);
       dfClaimables.set(0);
@@ -95,6 +93,10 @@
   $: if ($userAddress && $connectedChainId) {
     initClaimables();
   }
+
+  onMount(() => {
+    populateStreamsWithRewardsFromCurrentEpoch();
+  })
 </script>
 
 <div class={`container`}>
