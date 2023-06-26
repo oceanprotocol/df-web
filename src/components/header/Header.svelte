@@ -36,6 +36,9 @@
       <li class:active={$location.pathname === "/delegate"}>
         <Link to="/delegate" class="link">DELEGATE</Link>
       </li>
+      <li class:active={$location.pathname === "/challenges"}>
+        <Link to="/challenges" class="link">CHALLENGES</Link>
+      </li>
       <li class:active={false}>
         <a href={aboutURL} target="_blank" rel="noreferrer" class="link"
           >ABOUT</a
@@ -80,15 +83,16 @@
 
   ul {
     position: relative;
-    padding: 0;
+    padding: calc(var(--spacer)/3) 0;
     margin: 0;
-    height: 4em;
     display: flex;
     justify-content: center;
     align-items: center;
     list-style: none;
     background: var(--background);
     background-size: contain;
+    display: flex;
+    flex-wrap: wrap;
   }
 
   li {
@@ -96,14 +100,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
   }
 
   :global(nav a) {
     display: flex;
     height: 100%;
     align-items: center;
-    padding: 0 0.4em;
+    padding: 0 0.4rem;
+    padding-bottom: 1rem;
     color: var(--brand-grey-light);
     font-weight: 700;
     text-decoration: none;
@@ -133,7 +137,7 @@
       margin-top: calc(var(--spacer) / 2);
     }
     li > :global(a) {
-      padding: 0 1em;
+      padding: 0.5rem 1rem;
     }
     .logo img {
       width: 5rem;

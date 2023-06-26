@@ -1,5 +1,6 @@
 <script>
   import DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
+  import DataTableSkeleton from "carbon-components-svelte/src/DataTable/DataTableSkeleton.svelte";
   import Pagination from "carbon-components-svelte/src/Pagination/Pagination.svelte";
   import Toolbar from "carbon-components-svelte/src/DataTable/Toolbar.svelte";
   import ToolbarContent from "carbon-components-svelte/src/DataTable/ToolbarContent.svelte";
@@ -49,6 +50,7 @@
   export let colData = undefined;
   export let rowData = undefined;
   export let notHidableColumns = [];
+  export let dataAvailable = false
   let showDataWithAllocations = false;
   let filteredDatasets = undefined;
   let disabled = undefined;
@@ -294,7 +296,6 @@
   updateDisable();
 </script>
 
-{#if visibleColData && rowData}
   <div>
     <div class="tableCustomHeader">
       <div class="headerValuesContainer">
@@ -354,6 +355,7 @@
       </div>
     </div>
     <div class="tableContainer">
+      {#if dataAvailable}
       <DataTable
         sortable
         headers={visibleColData}
@@ -439,6 +441,9 @@
           </div>
         </svelte:fragment>
       </DataTable>
+      {:else}
+        <DataTableSkeleton {visibleColData} showHeader={false} showToolbar={false} rows={20}/>
+      {/if}
     </div>
     <Pagination
       bind:pageSize={pagination.pageSize}
@@ -446,8 +451,7 @@
       totalItems={filteredDatasets ? filteredDatasets.length : rowData.length}
       pageSizeInputDisabled
     />
-  </div>
-{/if}
+</div>
 
 <style lang="scss" global>
   @import "carbon-components/scss/components/data-table/_data-table.scss";
