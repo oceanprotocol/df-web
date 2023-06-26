@@ -9,13 +9,20 @@
     export let rewards = 0;
     export let apy;
     export let metric = {};
-    export let action = {}
+    export let action = {};
+    export let showUSD = false;
+    export let amountUSD = 0.0;
 </script>
-  
+
 <div class="container">
     <div class="title">
         <div class="titleSection">
-            <h4>{`${title} - ${availableRewards} OCEAN`}</h4>
+            {#if showUSD === true}
+                <h4>{`${title} - ${availableRewards} OCEAN - (${amountUSD} USD)`}</h4>
+            {:else}
+                <h4>{`${title} - ${availableRewards} OCEAN`}</h4>
+            {/if}
+            
             {#if apy}
                 <span class="apy">{apy.value}</span>
             {/if}
