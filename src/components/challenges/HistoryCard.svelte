@@ -75,9 +75,19 @@
                     href={'https://etherscan.io/address/' + cell.value}
                     target="_blank"
                     rel="noreferrer"
-                    class="address"
+                    class="link"
                   >
                     {cell.value.toLowerCase().substr(0, 6) + '...' + cell.value.toLowerCase().substr(cell.value.length - 6)}
+                    <img class="externalLink" src={ExternalIcon} alt="external link" />
+                  </a>
+                {:else if cell.key==='round'}
+                  <a
+                    href={`https://github.com/oceanprotocol/predict-eth/blob/main/challenges/main${cell.value}.md`}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="link"
+                  >
+                    {`Predict-ETH Round ${cell.value}`}
                     <img class="externalLink" src={ExternalIcon} alt="external link" />
                   </a>
                 {:else}
@@ -104,7 +114,7 @@
   .title{
     margin-bottom: calc(var(--spacer) / 2);
   }
-  .address{
+  .link{
     display: flex;
     align-items: center;
     justify-content: center;
