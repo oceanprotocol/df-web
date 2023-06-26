@@ -6,7 +6,7 @@
   let title = "Active Challenges";
   let description = "Crunch some code and participate in the active data challenge. Data Farming challenges are a substream of Ocean Protocol Active Rewards, running over periods of 1 week. You can claim your prize in the Rewards page.";
   let challengeDetails = {
-    bannerTitle: 'Predict-ETH',
+    bannerTitle: 'Predict-ETH Round 8',
     challengeDescription: 'Predict the price of Ethereum',
     reward: '$2500 Rewards',
     buttonText: 'PARTICIPATE',
