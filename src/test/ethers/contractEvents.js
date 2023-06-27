@@ -8,7 +8,7 @@ const account = "0xd6ae8250b8348c94847280928c79fb3b63ca453e";
 const datatokenAddress = "0x8967BCF84170c91B0d24D4302C2376283b0B3a07";
 
 const provider = ethers.getDefaultProvider('rinkeby');
-const signer = new ethers.Wallet(process.env.ETH_PRIVATE_KEY, provider);
+const signer = new ethers.Wallet(import.meta.env.VITE_ETH_PRIVATE_KEY, provider);
 
 const datatoken = new ethers.Contract(datatokenAddress, tokenABI, signer);
 

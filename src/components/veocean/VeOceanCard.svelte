@@ -1,5 +1,5 @@
 <script>
-  import { networkSigner, userAddress } from "../../stores/web3";
+  import { userAddress } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import { userBalances } from "../../stores/tokens";
@@ -15,12 +15,12 @@
   import * as descriptions from "../../utils/metadata/descriptions.json";
 
   let loading = false;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   const setValues = async () => {
     if (!$totalUserAllocation) {
       let newAllocation = await getTotalAllocatedVeOcean(
-        $userAddress,
-        $networkSigner
+        $userAddress
       );
       totalUserAllocation.update(() => newAllocation);
     }
@@ -39,12 +39,15 @@
         title={`Balance`}
         value={`${
           $userBalances[
-            getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+            getAddressByChainIdKey(
+              supportedChainId,
+              "veOCEAN"
+            )
           ]
             ? parseFloat(
                 $userBalances[
                   getAddressByChainIdKey(
-                    process.env.VE_SUPPORTED_CHAINID,
+                    supportedChainId,
                     "veOCEAN"
                   )
                 ]
@@ -88,7 +91,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    grid-column: 1/3;
+    grid-column: 1 / 3;
     width: 100%;
   }
 

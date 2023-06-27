@@ -2,10 +2,8 @@
   import {
     userAddress,
     connectedChainId,
-    networkSigner,
     switchWalletNetwork,
-    getNetworkDataById,
-    web3Provider,
+    getNetworkDataById
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
   import Card from "../common/Card.svelte";
@@ -55,6 +53,7 @@
   let tokenApproved = false;
 
   const MAXDAYS = 4 * 365;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
 
   let steps = [
     { text: "Approve OCEAN" },
@@ -114,10 +113,17 @@
   initForm();
 
   async function init() {
-    await updateUserBalanceOcean($userAddress, $web3Provider);
+    await updateUserBalanceOcean($userAddress);
     oceanBalance = getOceanBalance($connectedChainId);
     initForm();
   }
+
+  oceanUnlockDate.subscribe((unlockDate) => {
+    form.update((value) => {
+      value.unlockDate = unlockDate ? unlockDate.format('YYYY-MM-DD') : null
+      return value
+    })
+  })
 
   $: if ($userAddress) {
     loading = false;
@@ -131,25 +137,25 @@
     try {
       if ($oceanUnlockDate) {
         if (values.amount > 0) {
-          await updateLockedOceanAmount(values.amount, $networkSigner);
+          await updateLockedOceanAmount(values.amount);
         }
         if (moment.utc(values.unlockDate).isAfter($oceanUnlockDate)) {
-          await updateLockPeriod(unlockTimestamp, $networkSigner);
+          await updateLockPeriod(unlockTimestamp);
         }
       } else {
-        await lockOcean(values.amount, unlockTimestamp, $networkSigner);
+        await lockOcean(values.amount, unlockTimestamp);
       }
       let allowedAmountLeft = await allowance(
         getAddressByChainIdKey($connectedChainId, "Ocean"),
         $userAddress,
         getAddressByChainIdKey(
-        process.env.VE_SUPPORTED_CHAINID,
+        supportedChainId,
         "veOCEAN"
-        ),
-        $networkSigner
+        )
       )
       if(allowedAmountLeft>0) setShowApprovalNotification(true, allowedAmountLeft)
     } catch (error) {
+      console.log(error)
       Swal.fire("Error!", error.message, "error").then(() => {});
       loading = false;
       currentStep = 1;
@@ -160,15 +166,13 @@
       async () => {
         loading = false;
         $form.ageement = false;
-        await updateUserBalanceVeOcean($userAddress, $web3Provider);
-        await updateUserBalanceOcean($userAddress, $web3Provider);
+        await updateUserBalanceVeOcean($userAddress);
+        await updateUserBalanceOcean($userAddress);
         let unlockDateMilliseconds = await getLockedEndTime(
-          $userAddress,
-          $networkSigner
+          $userAddress
         );
         let lockedOceans = await getLockedOceanAmount(
-          $userAddress,
-          $networkSigner
+          $userAddress
         );
         lockedOceanAmount.update(() => lockedOceans);
         await oceanUnlockDate.update(() =>
@@ -199,8 +203,14 @@
     }
   };
 
+  const updateLockButtonTextFunction = () => {
+    updateLockButtonText =  getUpdateLockButtonText()
+  }
+
+  $: loading && updateLockButtonTextFunction()
+
   $: if ($form) {
-    updateLockButtonText = getUpdateLockButtonText();
+    updateLockButtonTextFunction();
   }
 
   $: if (tokenApproved !== undefined) {
@@ -316,18 +326,18 @@
         bind:value={$form.ageement}
       />
       <div class="item buttonContainer">
-        {#if $connectedChainId !== parseInt(process.env.VE_SUPPORTED_CHAINID)}
+        {#if $connectedChainId?.toString() !== supportedChainId}
           <Button
             text={!$userAddress
               ? "Connect Wallet"
               : `Switch Network to ${
                   getNetworkDataById(
                     networksData,
-                    parseInt(process.env.VE_SUPPORTED_CHAINID)
+                    parseInt(supportedChainId)
                   )?.name
                 }`}
             onclick={() =>
-              switchWalletNetwork(process.env.VE_SUPPORTED_CHAINID)}
+              switchWalletNetwork(supportedChainId)}
             fullWidth={true}
             disabled={!$userAddress}
           />
@@ -338,7 +348,7 @@
             tokenName={"OCEAN"}
             approvalModalMessage="Approve only if you are going to lock right away.<br> Make sure you only approve the amount that you are going to lock."
             spender={getAddressByChainIdKey(
-              process.env.VE_SUPPORTED_CHAINID,
+              supportedChainId,
               "veOCEAN"
             )}
             amount={$form.amount}
@@ -420,6 +430,7 @@
   }
 
   .stepsContainer {
+    width: 360px !important;
     margin-top: calc(var(--spacer) / 5);
   }
 

@@ -1,9 +1,7 @@
 <script>
   import {
     userAddress,
-    networkSigner,
     connectedChainId,
-    web3Provider,
   } from "../../stores/web3";
   import { updateUserBalanceOcean } from "../../stores/tokens";
   import Button from "../common/Button.svelte";
@@ -18,22 +16,25 @@
     lockedOceanAmount,
     veOceanWithDelegations,
   } from "../../stores/veOcean";
+  import { fetchBlockNumber, getPublicClient } from '@wagmi/core'
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
   import moment from "moment";
+  import { ethers } from "ethers";
 
   let loading = true;
   let withdrawing = false;
   let blockTimestamp = 0;
   let unlockTimestamp = 0;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   const updateBlockTimestamp = async () => {
-    const blockNumber = await $web3Provider.getBlockNumber();
-    blockTimestamp =
-      (await $web3Provider.getBlock(blockNumber)).timestamp * 1000;
+    const blockNumber = await fetchBlockNumber();
+    const block = await getPublicClient().getBlock(blockNumber)
+    blockTimestamp = ethers.utils.formatEther(BigInt(block.timestamp).toString(10)) * 1000;
   };
 
   const updateLockEndDate = async () => {
-    unlockTimestamp = await getLockedEndTime($userAddress, $networkSigner);
+    unlockTimestamp = await getLockedEndTime($userAddress);
     await oceanUnlockDate.update(() =>
       unlockTimestamp ? moment.utc(unlockTimestamp) : undefined
     );
@@ -48,14 +49,14 @@
     loading = false;
   };
 
-  $: if ($userAddress && $web3Provider) {
+  $: if ($userAddress) {
     init();
   }
 
   const withdraw = async () => {
     withdrawing = true;
     try {
-      await withdrawOcean($networkSigner);
+      await withdrawOcean();
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
       withdrawing = false;
@@ -67,10 +68,9 @@
       "success"
     ).then(async () => {
       withdrawing = false;
-      await updateUserBalanceOcean($userAddress, $web3Provider);
+      await updateUserBalanceOcean($userAddress);
       let lockedOceans = await getLockedOceanAmount(
-        $userAddress,
-        $networkSigner
+        $userAddress
       );
       lockedOceanAmount.update(() => lockedOceans);
       const newVeOceansWithDelegations =
@@ -96,7 +96,7 @@
       disabled={loading ||
         withdrawing ||
         !$oceanUnlockDate ||
-        parseInt(process.env.VE_SUPPORTED_CHAINID) !== $connectedChainId ||
+        parseInt(supportedChainId) !== $connectedChainId ||
         (moment().utc().isBefore($oceanUnlockDate) &&
           blockTimestamp <= unlockTimestamp)}
       onclick={() => withdraw()}

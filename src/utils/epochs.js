@@ -15,11 +15,11 @@ export const getEpoch = (date) => {
       
       if(dateStart.isBefore(date) && dateEnd.isAfter(date)) {
         // Numbers enforced in test environments to produce a verifiable apy
-        if(process.env.VE_SUPPORTED_CHAINID === GANACHE) {
+        if(import.meta.env.VITE_VE_SUPPORTED_CHAINID === GANACHE) {
           epoch.passive = 10;
           epoch.active = 10;
           epoch.total = 20;
-        } else if(process.env.VE_SUPPORTED_CHAINID === STAGING) {
+        } else if(import.meta.env.VITE_VE_SUPPORTED_CHAINID === STAGING) {
           epoch.passive = 100;
           epoch.active = 100;
           epoch.total = 200;

@@ -11,6 +11,7 @@
     import moment from "moment"
 
     let loading = false
+    const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 </script>
 
 <div class={`container`}>
@@ -29,7 +30,7 @@
                         parseFloat($userBalances?
                               $userBalances[
                                 getAddressByChainIdKey(
-                                  process.env.VE_SUPPORTED_CHAINID,
+                                  supportedChainId,
                                   "veOCEAN"
                                 )
                               ]

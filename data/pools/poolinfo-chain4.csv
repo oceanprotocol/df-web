@@ -1,4 +1,0 @@
-chainID,basetoken,pool_addr,vol_amt,stake_amt,nft_addr,DT_addr,DT_symbol,basetoken_addr,did,url
-4,OCEAN,0x9a11,500,10.2,0x911a,0x455e,MOON,0x9aa1,did:op:3a4,https://market.oceanprotocol.com/asset/did:op:7Bce67697eD2858d0683c631DdE7Af823b7eea38
-4,OCEAN,0x8b22,32.32,3,0x822b,0x566f,VERM,0x9bb2,did:op:0b0,https://market.oceanprotocol.com/asset/did:op:7Bce67697eD2858d0683c631DdE7Af823b7eea38
-4,H2O,0x7c33,2000.59,49.4,0x733c,0x377a,SHRMP,0x9cc3,did:op:fda,https://market.oceanprotocol.com/asset/did:op:7Bce67697eD2858d0683c631DdE7Af823b7eea38

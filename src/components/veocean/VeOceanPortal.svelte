@@ -1,5 +1,5 @@
 <script>
-  import { networkSigner, userAddress, connectedChainId } from "../../stores/web3";
+  import { userAddress, connectedChainId } from "../../stores/web3";
   import OceanSummary from "./OceanSummary.svelte";
   import VeOceanCard from "./VeOceanCard.svelte";
   import LockOcean from "./LockOcean.svelte";
@@ -17,6 +17,7 @@
   let loading = false;
   let showDismissAllowance = false;
   let allowedTokenAmt = 0;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
 
   const setShowApprovalNotification = async(value, allowedTokens) => {
     allowedTokenAmt=allowedTokens
@@ -25,32 +26,36 @@
 
   const loadValues = async () => {
     loading = true;
-    let lockedOceans = await getLockedOceanAmount($userAddress, $networkSigner);
+    let lockedOceans = await getLockedOceanAmount($userAddress);
     lockedOceanAmount.update(() => lockedOceans);
     if (!$oceanUnlockDate) {
       let unlockDateMilliseconds = await getLockedEndTime(
-        $userAddress,
-        $networkSigner
+        $userAddress
       );
       await oceanUnlockDate.update(() =>
         unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
       );
+      let lockedOceans = await getLockedOceanAmount($userAddress);
+      lockedOceanAmount.update(() => lockedOceans);
     }
-
-    loading = false;
+    loading = false
   };
 
+  oceanUnlockDate.subscribe((v) => {
+    if(v!==null) {
+      loading = false;
+    }
+  })
+
   const dismissTokenApproval = async() =>{
-    let tx = await approveToken(
+    await approveToken(
      getAddressByChainIdKey($connectedChainId, "Ocean"),
      getAddressByChainIdKey(
-       process.env.VE_SUPPORTED_CHAINID,
+       supportedChainId,
        "veOCEAN"
      ),
-     0,
-     $networkSigner
-    );
-    await tx.wait();
+     0
+    )
   }
 
   $: if ($userAddress) {
@@ -59,10 +64,9 @@
       getAddressByChainIdKey($connectedChainId, "Ocean"),
       $userAddress,
       getAddressByChainIdKey(
-       process.env.VE_SUPPORTED_CHAINID,
+       supportedChainId,
        "veOCEAN"
-     ),
-     $networkSigner
+     )
     ).then((allowedAmt) => {
       if(allowedAmt>0){
         allowedTokenAmt = allowedAmt
@@ -75,7 +79,7 @@
   }
 </script>
 
-{#if !loading}
+{#if !loading }
   <div class={`container`}>
   {#if showDismissAllowance}
     <ToastNotification
@@ -109,6 +113,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacer);
     padding-top: var(--spacer);
+    width: 100%;
   }
 
   .loading {
@@ -117,6 +122,7 @@
     align-items: center;
     color: var(--brand-grey-light);
     height: calc(100vh - 115px);
+    width: 100%;
   }
 
   .alignContentCenter {

@@ -9,7 +9,7 @@
     oceanUnlockDate,
     veOceanWithDelegations,
   } from "../../stores/veOcean.js";
-  import { userAddress, networkSigner } from "../../stores/web3.js";
+  import { userAddress } from "../../stores/web3.js";
   import { delegated, veDelegation } from "../../stores/delegation.js";
   import {
     delegate,
@@ -55,7 +55,6 @@
         $userAddress,
         values.walletAddress,
         $oceanUnlockDate,
-        $networkSigner,
         $veDelegation.createId
       );
     } catch (error) {
@@ -82,7 +81,7 @@
   const cancelVeOceanDelegation = async () => {
     loading = true;
     try {
-      await cancelDelegation($veDelegation.tokenId, $networkSigner);
+      await cancelDelegation($veDelegation.tokenId);
     } catch (error) {
       console.error(error);
       Swal.fire("Error!", "Cancel delegation failed.", "error");

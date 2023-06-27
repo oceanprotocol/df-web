@@ -59,7 +59,7 @@
   />
   <ul class="periodList">
     {#each periods as period, index}
-      <li class="periodItem" on:click={() => handleOnPeriodClick(period.days)}>
+      <li class="periodItem" on:click={() => handleOnPeriodClick(period.days)} on:keypress={()=>{}}>
         {period.label}
       </li>
     {/each}
@@ -75,10 +75,17 @@
     width: 100%;
   }
   .input {
+    background-color: var(--background-content);
+    color: var(--brand-black);
+    font-weight: bold;
     border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
     width: 100%;
+  }
+  .input:disabled {
+    background-color: var(--brand-grey-dimmed);
+    color: var(--brand-grey-light);
   }
   .inputError {
     color: var(--brand-alert-red);
@@ -99,4 +106,8 @@
     cursor: pointer;
     color: var(--color-primary);
   }
+  input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
 </style>
