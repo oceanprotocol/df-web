@@ -2,7 +2,6 @@
   import Button from "../common/Button.svelte";
   import {
     isWalletConnectModalOpen,
-    connectWalletFromLocalStorage,
     userAddress,
     connectedChainId,
   } from "../../stores/web3";
@@ -17,16 +16,7 @@
 
   // MODAL
   async function open() {
-    if ($userAddress === "") {
-      networkDisabled = true;
-      if (localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
-        connectWalletFromLocalStorage();
-      } else {
-        isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => true);
-      }
-    } else {
-      isOpen = true;
-    }
+  
   }
 
   function close() {
@@ -43,7 +33,7 @@
 
 <Button text="Allocate" onclick={() => open()} />
 {#if isOpen}
-  <div class="modal" on:keydown={keydown} tabindex={0}>
+  <div class="modal" on:keydown={keydown}>
     <div class="content-wrapper">
       <div class="button">
         <Button text="X" textOnly onclick={() => close()} disabled={loading} />

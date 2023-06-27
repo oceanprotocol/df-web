@@ -11,8 +11,8 @@
 <a
   href={url}
   target="_blank"
-  style={color ? `color:${color}` : undefined}
   rel="noreferrer"
+  style={color ? `color:${color}`: undefined}
   class={`link ${className ? className : undefined}`}
 >
   {#if text}

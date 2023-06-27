@@ -11,6 +11,7 @@
 
   export let roundInfo = undefined;
   let totalApy, totalApyUser;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   $: if ($APYs) {
     totalApy = calcTotalAPY($APYs.active, $APYs.passive);
@@ -40,7 +41,10 @@
       ? `| ${
           $APYs &&
           $userBalances[
-            getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+            getAddressByChainIdKey(
+              supportedChainId,
+              "veOCEAN"
+            )
           ] > 0
             ? totalApyUser > 10000
               ? "over 10000"

@@ -28,7 +28,7 @@
   }`}
 >
   {#if label}
-    <label class={`${direction === "column" && "margin-bottom"}`}>
+    <label class={`${direction === "column" && "margin-bottom"}`} for={name}>
       {label}
     </label>
   {/if}
@@ -100,7 +100,14 @@
     justify-content: center;
     width: 100%;
   }
+  .input:disabled {
+    background-color: var(--brand-grey-dimmed) !important;
+    color: var(--brand-grey-dimmed) !important;
+  }
   .input {
+    background-color: var(--background-content);
+    color: var(--brand-grey-light);
+    font-weight: bold;
     border: 1px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
@@ -127,8 +134,14 @@
   }
   .checkbox {
     width: auto;
+    background-color: var(--background-content);
+    color: var(--brand-grey-light);
   }
   .invalid {
     border-color: red !important;
   }
+  input[type='checkbox'] {
+    accent-color: red;
+}
+
 </style>

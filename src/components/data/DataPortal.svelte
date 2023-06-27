@@ -7,7 +7,6 @@
   } from "../../stores/dataAllocations";
   import {
     connectedChainId,
-    networkSigner,
     userAddress,
   } from "../../stores/web3";
   import Table from "../common/Table.svelte";
@@ -22,11 +21,11 @@
   let message = undefined;
 
   let tabSelected = "alloc";
+  const chainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
 
   const loadTotalAllocation = async () => {
     let newAllocation = await getTotalAllocatedVeOcean(
-      $userAddress,
-      $networkSigner
+      $userAddress
     );
     totalUserAllocation.update(() => newAllocation);
   };
@@ -83,7 +82,7 @@
   }
 
   $: if ($dataAllocations) {
-    loadDatasets(`${process.env.BACKEND_API}/nftinfo`, $dataAllocations);
+    loadDatasets(`${import.meta.env.VITE_BACKEND_API}/nftinfo`, $dataAllocations);
   }
 </script>
 
@@ -92,7 +91,7 @@
     (!$datasets ||
       $isAppLoading ||
       !$userBalances[
-        getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
+        getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")
       ]) &&
     "alignContentCenter"
   }`}
@@ -124,6 +123,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    width: 100%;
   }
 
   .title {

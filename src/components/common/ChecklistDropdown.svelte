@@ -59,6 +59,9 @@
     font-weight: bold;
   }
   input {
+    background-color: var(--background-content);
+    color: var(--brand-grey-light);
+    font-weight: bold;
     margin-right: calc(var(--spacer) / 6);
   }
   .value {

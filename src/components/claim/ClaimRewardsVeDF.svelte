@@ -1,9 +1,7 @@
 <script>
   import {
     userAddress,
-    networkSigner,
-    connectedChainId,
-    web3Provider,
+    connectedChainId
   } from "../../stores/web3";
   import {
     veClaimables,
@@ -25,6 +23,7 @@
   export let canClaimDF = true;
   export let streams;
   let claiming;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   async function onClaimDfRewards() {
     claiming = "DF_REWARDS";
@@ -44,7 +43,7 @@
             getAddressByChainIdKey($connectedChainId, "Ocean")
           )
         );
-        await updateUserBalanceOcean($userAddress, $web3Provider);
+        await updateUserBalanceOcean($userAddress);
       });
     } catch (error) {
       Swal.fire("Error!", error.message, "error");
@@ -55,15 +54,14 @@
   async function onClaimVeRewards() {
     claiming = "VE_REWARDS";
     try {
-      await claimVERewards($userAddress, $networkSigner);
+      await claimVERewards($userAddress);
       Swal.fire("Success!", `You've claimed your VE rewards!`, "success").then(
         async () => {
           const claimableEstimate = await getRewardsFeeEstimate(
-            $userAddress,
-            $web3Provider
+            $userAddress
           );
           veClaimables.set(claimableEstimate);
-          await updateUserBalanceOcean($userAddress, $web3Provider);
+          await updateUserBalanceOcean($userAddress);
         }
       );
     } catch (error) {

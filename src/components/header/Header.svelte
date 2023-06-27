@@ -40,9 +40,7 @@
         <Link to="/challenges" class="link">CHALLENGES</Link>
       </li>
       <li class:active={false}>
-        <a href={aboutURL} target="_blank" rel="noreferrer" class="link"
-          >ABOUT</a
-        >
+        <a href={aboutURL} target="_blank" class="link" rel="noreferrer">ABOUT</a>
       </li>
     </ul>
   </nav>

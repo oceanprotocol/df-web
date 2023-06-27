@@ -6,10 +6,7 @@
   import ToolbarContent from "carbon-components-svelte/src/DataTable/ToolbarContent.svelte";
   import ToolbarSearch from "carbon-components-svelte/src/DataTable/ToolbarSearch.svelte";
   import { Tabs, Tab, TabContent } from "carbon-components-svelte";
-  import "carbon-components/scss/components/_data-table.scss";
   import Button from "./Button.svelte";
-  import "carbon-";
-  import ChecklistDropdown from "./ChecklistDropdown.svelte";
   import { defaultColumns } from "../../stores/data";
   import {
     filterDataByUserAllocation,
@@ -26,7 +23,6 @@
   import ShareInput from "./ShareInput.svelte";
   import ItemWithLabel from "./ItemWithLabel.svelte";
   import Dropdown from "./Dropdown.svelte";
-  import { userBalances } from "../../stores/tokens";
   import {
     allocateVeOceanToMultipleNFTs,
     getTotalAllocatedVeOcean,
@@ -34,7 +30,6 @@
   import Swal from "sweetalert2";
   import {
     connectedChainId,
-    networkSigner,
     userAddress,
   } from "../../stores/web3";
   import Link from "./Link.svelte";
@@ -59,7 +54,7 @@
   let loading = undefined;
   let tooltipMessage = undefined;
   let tooltipState = undefined;
-  let visibleColData = colData.slice();
+  let visibleColData = colData?.slice();
   let filterOption = "0";
 
   export let tabSelected = 'alloc';
@@ -137,21 +132,6 @@
     }
   }
 
-  function onCheck(key, value) {
-    columns[key] = value;
-    if (value) {
-      visibleColData.splice(
-        2,
-        0,
-        colData.find((d) => d.value === key)
-      );
-      visibleColData = visibleColData;
-    } else {
-      visibleColData = visibleColData.filter((col) => col.value !== key);
-    }
-    localStorage.setItem("datasetsDisplayedColumns", JSON.stringify(columns));
-  }
-
   const onTotalAvailableAllocationChange = async (id, value, step) => {
     totalAvailableTemporary = totalAvailable + step;
     rowData[rowData.findIndex((element) => element.id === id)].myallocation = value;
@@ -204,8 +184,7 @@
       await allocateVeOceanToMultipleNFTs(
         amounts,
         nftAddresses,
-        chainIds,
-        $networkSigner
+        chainIds
       );
     } catch (error) {
       Swal.fire("Error!", error.message, "error").then(() => {});
@@ -215,8 +194,7 @@
     Swal.fire("Success!", "Allocation successfully updated.", "success").then(
       async () => {
         let newAllocation = await getTotalAllocatedVeOcean(
-          $userAddress,
-          $networkSigner
+          $userAddress
         );
         totalUserAllocation.update(() => newAllocation);
         loading = undefined;
@@ -234,8 +212,8 @@
     updateTotalAvailableAllocations();
   }
 
-  const updateTotalAvailableAllocations = () => {
-    updateDisable();
+  const updateTotalAvailableAllocations = async() => {
+    await updateDisable();
     totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
     totalAvailableTemporary = totalAvailable;
   };
@@ -262,8 +240,7 @@
     disabled =
       !$userAddress ||
       $veOceanWithDelegations <= 0 ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID;
-
+      $connectedChainId != import.meta.env.VITE_VE_SUPPORTED_CHAINID;
     updateTooltip();
   }
 
@@ -289,7 +266,7 @@
     disabled =
       !$userAddress ||
       $veOceanWithDelegations <= 0 ||
-      $connectedChainId != process.env.VE_SUPPORTED_CHAINID;
+      $connectedChainId != import.meta.env.VITE_VE_SUPPORTED_CHAINID;
   }
 
   // init the page state

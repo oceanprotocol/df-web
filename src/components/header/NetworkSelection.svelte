@@ -14,6 +14,7 @@
   import * as networksDataArray from "../../networks-metadata.json";
 
   let networksData = networksDataArray.default;
+  const veSupportedChainIds = import.meta.env.VITE_SUPPORTED_CHAIN_IDS
 
   function onCheck(checked, value) {
     if (!checked) {
@@ -29,13 +30,15 @@
     if (!localStorage.getItem("SupportedChainIds")) {
       localStorage.setItem(
         "SupportedChainIds",
-        JSON.stringify(JSON.parse(process.env.SUPPORTED_CHAIN_IDS))
+        JSON.stringify(JSON.parse(veSupportedChainIds))
       );
     } else {
       let localStorageSupportedChainIds = JSON.parse(
         localStorage.getItem("SupportedChainIds")
       );
-      let envSupportedChainIds = JSON.parse(process.env.SUPPORTED_CHAIN_IDS);
+      let envSupportedChainIds = JSON.parse(
+        veSupportedChainIds
+      );
       if (
         envSupportedChainIds.length != localStorageSupportedChainIds.length ||
         envSupportedChainIds.every(function (element, index) {
@@ -54,6 +57,7 @@
   $: if ($selectedNetworks) {
     localStorage.setItem("selectedNetworks", JSON.stringify($selectedNetworks));
   }
+
 </script>
 
 {#if $selectedNetworks?.length < 2}
@@ -63,7 +67,7 @@
         text={`Switch Network to ${
           getNetworkDataById(networksData, parseInt($selectedNetworks[0]))?.name
         }`}
-        onclick={() => switchWalletNetwork(parseInt($selectedNetworks[0]))}
+        onclick={() => switchWalletNetwork(import.meta.env.VITE_VE_SUPPORTED_CHAINID)}
         className="switchNetworkHeaderButton"
         textOnly
         disabled={!$userAddress}
@@ -75,7 +79,7 @@
     <span class="text"> Selected networks </span>
     <Tooltip icon={ChevronDown} align="end">
       {#if $selectedNetworks}
-        {#each JSON.parse(process.env.SUPPORTED_CHAIN_IDS) as chainId}
+        {#each JSON.parse(veSupportedChainIds) as chainId}
           <NetworkItem
             {chainId}
             checked={$selectedNetworks.find((id) => id === chainId) !==
