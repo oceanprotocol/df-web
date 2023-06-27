@@ -5,6 +5,7 @@
   import DelegationPortal from "./components/delegation/DelegationPortal.svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
   import DataPortal from "./components/data/DataPortal.svelte";
+  import ChallengesPortal from "./components/challenges/ChallengesPortal.svelte";
   import {
     userAddress,
     selectedNetworks,

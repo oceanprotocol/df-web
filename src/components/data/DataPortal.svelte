@@ -100,7 +100,7 @@
       <h2 class="title">Curate Data to Earn OCEAN</h2>
       <div class="data">
         <Table 
-          dataAvailable={$datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
+          dataAvailable={$datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
           colData={columnsData[tabSelected]}
           notHidableColumns={["Allocate"]}
           rowData={$datasets}
