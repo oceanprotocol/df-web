@@ -67,7 +67,7 @@
         text={`Switch Network to ${
           getNetworkDataById(networksData, parseInt($selectedNetworks[0]))?.name
         }`}
-        onclick={() => switchWalletNetwork(parseInt($selectedNetworks[0]))}
+        onclick={() => switchWalletNetwork(import.meta.env.VITE_VE_SUPPORTED_CHAINID)}
         className="switchNetworkHeaderButton"
         textOnly
         disabled={!$userAddress}
