@@ -47,7 +47,7 @@
     },
     { key: "veocean", value: "veOCEAN Rewards" },
     { key: "volumedf", value: "VolumeDF Rewards" },
-    { key: "challengee", value: "Challenge Rewards" },
+    { key: "challenge", value: "Challenge Rewards" },
   ];
   let headers = [...allHeaders.slice(0, -3)]
   let initialHeaders = [...headers];
@@ -111,6 +111,9 @@
         ).toFixed(2)}%`,
         passive: `${row.streams.find((s) => s.name=='Passive').rewards.toLocaleString()} OCEAN`,
         active: `${row.streams.find((s) => s.name=='Active').rewards.toLocaleString()} OCEAN`,
+        veocean: `${row.streams.find((s) => s.name=='Passive')?.substreams.find((s) => s.name=='veOCEAN')?.rewards.toLocaleString() || 0} OCEAN`,
+        volumedf: `${row.streams.find((s) => s.name=='Active')?.substreams.find((s) => s.name=='Volume DF')?.rewards.toLocaleString() || 0} OCEAN`,
+        challenge: `${row.streams.find((s) => s.name=='Active')?.substreams.find((s) => s.name=='Challenge')?.rewards.toLocaleString() || 0} OCEAN`,
       });
     });
     rows = newRows;

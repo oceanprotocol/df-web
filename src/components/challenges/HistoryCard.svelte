@@ -1,7 +1,7 @@
 <script>
   import DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
   import DataTableSkeleton from "carbon-components-svelte/src/DataTable/DataTableSkeleton.svelte";
-  import { dataChallenges, loadDFChallengeResults } from "../../stores/data";
+  import { dataChallenges, loadDFChallengeResults } from "../../stores/challenge";
   import { get } from 'svelte/store';
   import { onDestroy } from 'svelte';
 

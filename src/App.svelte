@@ -49,6 +49,7 @@
   import { totalUserAllocation } from "./stores/dataAllocations";
   import { Buffer } from "buffer";
   import "@oceanprotocol/typographies/css/ocean-typo.css";
+  import { getUserSubmittedChallenges, userSubmittedChallenges } from "./stores/challenge";
   
   // @ts-ignore
   window.Buffer = Buffer;
@@ -127,6 +128,9 @@
     veOceanWithDelegations.update(() => newVeOceansWithDelegations);
     await updateUserBalanceVeOcean($userAddress);
     await updateUserBalanceOcean($userAddress);
+
+    let userChallenges = await getUserSubmittedChallenges($userAddress)
+    userSubmittedChallenges.update(() => userChallenges)
     isAppLoading.update(() => false);
   }
 
