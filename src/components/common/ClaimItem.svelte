@@ -27,7 +27,6 @@
       <Substream 
         title={substream.name}
         availableRewards={substream.rewards}
-        availableRewardsUSD={substream.rewardsUSD}
         description={substream.description}
         action={substream.action}
         metric={substream.metric}

@@ -6,7 +6,6 @@
     export let title;
     export let description;
     export let availableRewards = 0;
-    export let availableRewardsUSD = 0;
     export let rewards = 0;
     export let apy;
     export let metric = {};
@@ -16,7 +15,7 @@
 <div class="container">
     <div class="title">
         <div class="titleSection">
-            <h4>{`${title} - ${availableRewards} OCEAN ${availableRewardsUSD ? `- (${availableRewardsUSD} USD)` : ''}`}</h4>
+            <h4>{`${title} - ${availableRewards} OCEAN`}</h4>
             {#if apy}
                 <span class="apy">{apy.value}</span>
             {/if}

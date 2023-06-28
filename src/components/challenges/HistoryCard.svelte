@@ -3,6 +3,7 @@
   import DataTableSkeleton from "carbon-components-svelte/src/DataTable/DataTableSkeleton.svelte";
   import { dataChallenges, loadDFChallengeResults } from "../../stores/data";
   import { get } from 'svelte/store';
+  import { onDestroy } from 'svelte';
 
   const ExternalIcon = "/images/external.svg";
 
@@ -40,22 +41,36 @@
 
     return results;
   }
+  
+  let unsubscribe;  // For cleaning up the subscription
+  
+  $: {
+    if (!unsubscribe) { // Ensure we only subscribe once
+      unsubscribe = dataChallenges.subscribe(async (value) => {
+        if( !value || value.length === 0 ) {
+          await loadDFChallengeResults();
+          
+          const formattedResults = formatDFChallengeResults();
+          rows = formattedResults;
 
-  const init = async () => {
-    // Subscribe to get the value of dataChallenges
-    dataChallenges.subscribe(async (value) => {
-      if( !value || value.length === 0 ) {
-        await loadDFChallengeResults();
-        
-        const formattedResults = formatDFChallengeResults();
-        rows = formattedResults;
+          loading = false;
+        }  else {
+          const formattedResults = formatDFChallengeResults();
+          rows = formattedResults;
 
-        loading = false;
-      }
+          loading = false;
+        }
     });
+    }
   }
 
-  init();
+  onDestroy(() => {
+  // Unsubscribe when the component is unmounted
+  if (unsubscribe) {
+    unsubscribe();
+    unsubscribe = null;
+  }
+});
 </script>
 
 <div class="container">
@@ -80,16 +95,10 @@
                     {cell.value.toLowerCase().substr(0, 6) + '...' + cell.value.toLowerCase().substr(cell.value.length - 6)}
                     <img class="externalLink" src={ExternalIcon} alt="external link" />
                   </a>
+                {:else if cell.key === 'first_prize' || cell.key === 'second_prize' || cell.key === 'third_prize'}
+                  {`${cell.value} OCEAN`}
                 {:else if cell.key==='round'}
-                  <a
-                    href={`https://github.com/oceanprotocol/predict-eth/blob/main/challenges/main${cell.value}.md`}
-                    target="_blank"
-                    rel="noreferrer"
-                    class="link"
-                  >
-                    {`Predict-ETH Round ${cell.value}`}
-                    <img class="externalLink" src={ExternalIcon} alt="external link" />
-                  </a>
+                  {`DF ${cell.value}`}                  
                 {:else}
                   {cell.value}
                 {/if}

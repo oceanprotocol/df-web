@@ -31,26 +31,12 @@
   let streams = null;
 
   async function populateStreamsWithRewardsFromCurrentEpoch(){
-    // Calculate adjusted rewards for current epoch
-    const fxRate = await getRate('OCEAN', 'ocean-protocol');
-    const challengeDFReward = Math.round(
-      // TODO - Fix Magic Numbers
-      curEpoch.streams[1].substreams[1].rewards / fxRate, 2
-    );
-    const adjustedVolumeDFReward = curEpoch.streams[1].rewards - challengeDFReward;
-    
-    // Update curEpoch rewards
-    curEpoch.streams[1].substreams[0].rewards = adjustedVolumeDFReward;
-    curEpoch.streams[1].substreams[1].rewardsUSD = curEpoch.streams[1].substreams[1].rewards;
-    curEpoch.streams[1].substreams[1].rewards = challengeDFReward;
-
     // Update streams with rewards from curEpoch
     const modifiedStreams = streamsData.default.streams.map((stream, indexStream) => {
         if(!curEpoch?.streams) return stream; // return the original stream if there is no current epoch
         stream.rewards = curEpoch?.streams[indexStream]?.rewards;
         stream.substreams.forEach((substream, indexSubstream) => {
           substream.rewards = curEpoch.streams[indexStream].substreams[indexSubstream].rewards;
-          substream.rewardsUSD = substream.showUSD ? curEpoch.streams[indexStream].substreams[indexSubstream].rewardsUSD : 0;
         });
         return stream; // return the updated stream
     });

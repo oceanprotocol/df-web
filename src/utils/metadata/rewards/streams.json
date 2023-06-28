@@ -47,8 +47,7 @@
           "metric": {
             "name": "completed",
             "value": "0"
-          },
-          "showUSD": true
+          }
         }
       ]
     }
