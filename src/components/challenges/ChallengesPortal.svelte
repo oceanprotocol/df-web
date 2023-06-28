@@ -1,13 +1,6 @@
 <script>
   import ActiveCard from "./ActiveCard.svelte";
   import HistoryCard from "./HistoryCard.svelte";
-  import { getChallengeRewards } from "../../utils/rewards";
-  import { onMount } from "svelte";
-
-  onMount(() => {
-    //getChallengeRewards()
-  })
-  //getChallengeRewards()
 </script>
 
 <div class={`container`}>
