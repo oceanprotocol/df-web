@@ -1140,11 +1140,16 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards": 1
+            "rewards": 70000
           },
           {
             "name": "Challenge",
-            "rewards": 1250
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
           }
         ]
       }
@@ -1172,11 +1177,16 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards": 1
+            "rewards": 70000
           },
           {
             "name": "Challenge",
-            "rewards": 1250
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
           }
         ]
       }
@@ -1204,12 +1214,16 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards": 1
+            "rewards": 70000
           },
           {
             "name": "Challenge",
-            "rewards": 1250,
-            "currency": "USDT"
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
           }
         ]
       }
@@ -1237,11 +1251,16 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards": 1
+            "rewards": 70000
           },
           {
             "name": "Challenge",
-            "rewards": 1250
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
           }
         ]
       }
@@ -1269,11 +1288,16 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards": 1
+            "rewards": 70000
           },
           {
             "name": "Challenge",
-            "rewards": 1250
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
           }
         ]
       }

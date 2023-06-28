@@ -373,10 +373,10 @@ export async function loadDFChallengeResults() {
   } catch (error) {
     console.log("loadDataChallenges error:", error);
     dataChallenges.set([
-        [7, "$1250", "0x0abca", "$750", "0x0abcb", "$500", "0x0abc"],
-        [6, "$1250", "0x0abca", "$750", "0x0abcb", "$500", "0x0abc"],
-        [5, "$1250", "0x0abca", "$750", "0x0abcb", "$500", "0x0abc"],
-        [4, "$1250", "0x0abca", "$750", "0x0abcb", "$500", "0x0abc"]
+        [4, "2500", "0x0abca", "1500", "0x0abcb", "1000", "0x0abc"],
+        [3, "2500", "0x0abca", "1500", "0x0abcb", "1000", "0x0abc"],
+        [2, "2500", "0x0abca", "1500", "0x0abcb", "1000", "0x0abc"],
+        [1, "2500", "0x0abca", "1500", "0x0abcb", "1000", "0x0abc"]
     ]);
   }
 }
