@@ -15,7 +15,7 @@
 <div class="container">
     <div class="title">
         <div class="titleSection">
-            <h4>{`${title} - ${availableRewards} OCEAN`}</h4>
+            <h4>{`${title} - ${availableRewards.toLocaleString()} OCEAN`}</h4>
             {#if apy}
                 <span class="apy">{apy.value}</span>
             {/if}

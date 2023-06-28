@@ -17,7 +17,7 @@
 
 <div class={`container`}>
   <Card
-    title={`${title} Rewards - ${distributedAmount} OCEAN`}
+    title={`${title} Rewards - ${distributedAmount.toLocaleString()} OCEAN`}
     tag={apy?.value}
     tooltipMessage={apy?.tooltip}
     priority="secondary"

@@ -109,8 +109,8 @@
               )
             : 0
         ).toFixed(2)}%`,
-        passive: `${row.streams.find((s) => s.name=='Passive').rewards} OCEAN`,
-        active: `${row.streams.find((s) => s.name=='Active').rewards} OCEAN`,
+        passive: `${row.streams.find((s) => s.name=='Passive').rewards.toLocaleString()} OCEAN`,
+        active: `${row.streams.find((s) => s.name=='Active').rewards.toLocaleString()} OCEAN`,
       });
     });
     rows = newRows;
