@@ -18,7 +18,6 @@
   import moment from "moment";
   import { getEpoch } from "../../utils/epochs";
   import { oceanUnlockDate } from "../../stores/veOcean";
-  import { getRate } from "../../utils/market_rates";
   import * as streamsData from "../../utils/metadata/rewards/streams.json"
   import { onMount } from "svelte";
 

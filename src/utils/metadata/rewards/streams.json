@@ -45,7 +45,7 @@
             "location": "/challenges"
           },
           "metric": {
-            "name": "submissions",
+            "name": "previous submissions",
             "value": "0"
           }
         }

@@ -2,6 +2,7 @@ import { writable } from "svelte/store";
 import { getChallengeRewards } from "../utils/rewards";
 
 export let dataChallenges = writable([]);
+export let userSubmittedChallenges = writable([]);
 
 export async function loadDFChallengeResults() {
   try {
@@ -37,3 +38,36 @@ export async function loadDFChallengeResults() {
     ]);
   }
 }
+
+export const getUserSubmittedChallenges = async (userAddress) => {
+  let res;
+  try {
+    res = await fetch(`${import.meta.env.VITE_BACKEND_API}/challenge/data`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: userAddress
+          ? {
+              round: {
+                $gt: -1,
+              },
+              from_addr: userAddress.toLowerCase(),
+            }
+          : {
+              round: {
+                $gt: -1,
+              },
+            },
+        fields: ["from_addr", "nft_addr", "nmse"],
+      }),
+    });
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
+  let data = await res.json();
+  console.log(data);
+  return data;
+};

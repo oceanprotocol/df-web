@@ -18,7 +18,8 @@
   import { claim as claimVERewards } from "../../utils/feeDistributor";
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import { totalUserAllocation } from "../../stores/dataAllocations";
-
+  import { userSubmittedChallenges } from "../../stores/challenge";
+ 
   export let canClaimVE = true;
   export let canClaimDF = true;
   export let streams;
@@ -115,6 +116,10 @@
     streams[1].substreams[0].metric.value = $totalUserAllocation + '%'
   }
 
+  function addUserSubmittedChallenges(){
+    streams[1].substreams[1].metric.value = $userSubmittedChallenges.length
+  }
+
   function addVeOceanBalance(){
     streams[0].substreams[0].metric.value = `${$userBalances[
         getAddressByChainIdKey(process.env.VE_SUPPORTED_CHAINID, "veOCEAN")
@@ -145,6 +150,7 @@
   $:if($APYs) addAPYs()
   $:if($totalUserAllocation) addAllocated()
   $:if($userBalances) addVeOceanBalance()
+  $:if($userSubmittedChallenges) addUserSubmittedChallenges()
 </script>
 
 <div class="container">
