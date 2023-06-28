@@ -30,11 +30,11 @@
       return {
         id: String(index + 1),
         round: row[0],
-        first_prize: row[1],
+        first_prize: parseInt(row[1]).toLocaleString(),
         first_place: row[2],
-        second_prize: row[3],
+        second_prize: parseInt(row[3]).toLocaleString(),
         second_place: row[4],
-        third_prize: row[5],
+        third_prize: parseInt(row[5]).toLocaleString(),
         third_place: row[6]
       };
     });

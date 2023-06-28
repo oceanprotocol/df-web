@@ -109,11 +109,11 @@
               )
             : 0
         ).toFixed(2)}%`,
-        passive: `${row.streams.find((s) => s.name=='Passive').rewards} OCEAN`,
-        active: `${row.streams.find((s) => s.name=='Active').rewards} OCEAN`,
-        veocean: `${row.streams.find((s) => s.name=='Passive')?.substreams.find((s) => s.name=='veOCEAN')?.rewards || 0} OCEAN`,
-        volumedf: `${row.streams.find((s) => s.name=='Active')?.substreams.find((s) => s.name=='Volume DF')?.rewards || 0} OCEAN`,
-        challenge: `${row.streams.find((s) => s.name=='Active')?.substreams.find((s) => s.name=='Challenge')?.rewards || 0} OCEAN`,
+        passive: `${row.streams.find((s) => s.name=='Passive').rewards.toLocaleString()} OCEAN`,
+        active: `${row.streams.find((s) => s.name=='Active').rewards.toLocaleString()} OCEAN`,
+        veocean: `${row.streams.find((s) => s.name=='Passive')?.substreams.find((s) => s.name=='veOCEAN')?.rewards.toLocaleString() || 0} OCEAN`,
+        volumedf: `${row.streams.find((s) => s.name=='Active')?.substreams.find((s) => s.name=='Volume DF')?.rewards.toLocaleString() || 0} OCEAN`,
+        challenge: `${row.streams.find((s) => s.name=='Active')?.substreams.find((s) => s.name=='Challenge')?.rewards.toLocaleString() || 0} OCEAN`,
       });
     });
     rows = newRows;

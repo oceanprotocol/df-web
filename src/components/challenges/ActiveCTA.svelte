@@ -10,7 +10,7 @@
   </div>
   <div class="challenge-details">
     <strong class="challenge-description">{challengeDetails.challengeDescription}</strong>
-    <p class="reward">{challengeDetails.reward}</p>
+    <p class="reward">{parseInt(challengeDetails.reward).toLocaleString()}</p>
   </div>
   <div class="challenge-cta">
     <Button 
