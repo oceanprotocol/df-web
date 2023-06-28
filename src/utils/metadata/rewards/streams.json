@@ -45,7 +45,7 @@
             "location": "/challenges"
           },
           "metric": {
-            "name": "completed",
+            "name": "submissions",
             "value": "0"
           }
         }

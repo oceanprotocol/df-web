@@ -217,6 +217,38 @@ export const getDFallocations = async (userAddress) => {
   return data;
 };
 
+export const getChallengeRewards = async (userAddress) => {
+  let res;
+  try {
+    res = await fetch(`${import.meta.env.VITE_BACKEND_API}/challenge/rewards`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: userAddress
+          ? {
+              round: {
+                $gt: -1,
+              },
+              winner_addr: userAddress.toLowerCase(),
+            }
+          : {
+              round: {
+                $gt: -1,
+              },
+            },
+        fields: ["winner_addr", "round", "OCEAN_amt"],
+      }),
+    });
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
+  let data = await res.json();
+  return data;
+};
+
 export const calcTotalAPY = (activeAPY, passiveAPY) => {
   let wpr_active = convertAPYtoWPR(activeAPY);
   let wpr_passive = convertAPYtoWPR(passiveAPY);
