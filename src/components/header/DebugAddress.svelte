@@ -1,8 +1,6 @@
 <script>
   import Input from "../common/Input.svelte";
   import { userAddress } from "../../stores/web3";
-
-  $: $userAddress && console.log($userAddress)
 </script>
 
 <div class="container">

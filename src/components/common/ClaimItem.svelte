@@ -45,7 +45,7 @@
         />
         <div class="buttonMargin">
           <Button
-            text={loading ? "Loading..." : `Claim Rewards${disabled ? "" : amount}`}
+            text={loading ? "Loading..." : "Claim Rewards"}
             onclick={onClick}
             disabled={loading || disabled}
           />

@@ -8,17 +8,20 @@
     veClaimables,
     dfClaimables,
     getDFRewards,
+    lasActiveRewardsClaimRound,
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import { getVeOceanBalance } from "../../utils/ve";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import EpochHistory from "./EpochHistory.svelte";
   import Features from "./Features.svelte";
+  import { query } from "svelte-apollo";
   import RewardOverview from "./RewardOverview.svelte";
   import moment from "moment";
   import { getEpoch } from "../../utils/epochs";
   import { oceanUnlockDate } from "../../stores/veOcean";
-  import * as streamsData from "../../utils/metadata/rewards/streams.json"
+  import * as streamsData from "../../utils/metadata/rewards/streams.json";
+  import {GET_USER_LAST_ACTIVE_REWARDS_CLAIM} from "../../utils/subgraph";
   import { onMount } from "svelte";
 
   let loading = false;
@@ -28,6 +31,9 @@
   const now = moment.utc();
   let curEpoch = getEpoch(now);
   let streams = null;
+  let userLastActiveRewardsClaim = query(GET_USER_LAST_ACTIVE_REWARDS_CLAIM, {
+      variables: { userAddress: $userAddress.toLowerCase() },
+    })
 
   async function populateStreamsWithRewardsFromCurrentEpoch(){
     // Update streams with rewards from curEpoch
@@ -76,6 +82,18 @@
 
   $: if ($userAddress && $connectedChainId) {
     initClaimables();
+    userLastActiveRewardsClaim = query(GET_USER_LAST_ACTIVE_REWARDS_CLAIM, {
+      variables: { userAddress: $userAddress.toLowerCase() },
+    })
+  }
+
+  $: if ($userLastActiveRewardsClaim.data) {
+    if(!$userLastActiveRewardsClaim.data.dfrewards[0]?.history.length || $userLastActiveRewardsClaim.data.dfrewards[0]?.history.length == 0){
+      lasActiveRewardsClaimRound.set(0)
+    }
+    else{
+      lasActiveRewardsClaimRound.set(getEpoch(moment.unix(parseInt($userLastActiveRewardsClaim.data.dfrewards[0].history[0].timestamp)).utc()).id)
+    }
   }
 
   onMount(() => {

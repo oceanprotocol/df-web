@@ -9,6 +9,8 @@
     claimDFReward,
     getDFRewards,
     APYs,
+    lasActiveRewardsClaimRound,
+    oceanUserRewards,
   } from "../../stores/airdrops";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
@@ -147,11 +149,26 @@
     }
   }
 
+  function setUnclaimedActiveRewardsSubstreamValues(){
+    let volumeRewards = 0
+    let challengeRewards = 0
+    console.log($oceanUserRewards)
+    $oceanUserRewards.forEach((r) => {
+      if(r.round >= $lasActiveRewardsClaimRound) {
+        volumeRewards += r['sum(curating_amt)']
+        challengeRewards += r['sum(challenge_amt)']
+      }
+    })
+    streams[1].substreams[0].availableRewards = volumeRewards
+    streams[1].substreams[1].availableRewards = challengeRewards
+  }
+
   $:if($APYs) addAPYs()
   $:if($totalUserAllocation) addAllocated()
   $:if($userBalances) addVeOceanBalance()
   $:if($userSubmittedChallenges) addUserSubmittedChallenges()
   $:if($veClaimables) streams[0].substreams[0].availableRewards = $veClaimables
+  $:if($lasActiveRewardsClaimRound >= 0 && $oceanUserRewards) setUnclaimedActiveRewardsSubstreamValues()
 </script>
 
 <div class="container">
