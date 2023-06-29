@@ -152,7 +152,6 @@
   function setUnclaimedActiveRewardsSubstreamValues(){
     let volumeRewards = 0
     let challengeRewards = 0
-    console.log($oceanUserRewards)
     $oceanUserRewards.forEach((r) => {
       if(r.round >= $lasActiveRewardsClaimRound) {
         volumeRewards += r['sum(curating_amt)']
