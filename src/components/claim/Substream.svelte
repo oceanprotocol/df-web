@@ -20,7 +20,7 @@
                 <span class="apy">{apy.value}</span>
             {/if}
         </div>
-        <ItemWithLabel title="rewards" value={rewards} direction="row"/>
+        <ItemWithLabel title="rewards" value={`${parseFloat(rewards ? rewards : 0)?.toFixed(2)} OCEAN`} direction="row"/>
     </div>
     <p class="description">{description}</p>
     <div class="action">

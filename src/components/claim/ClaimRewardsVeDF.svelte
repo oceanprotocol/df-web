@@ -151,6 +151,7 @@
   $:if($totalUserAllocation) addAllocated()
   $:if($userBalances) addVeOceanBalance()
   $:if($userSubmittedChallenges) addUserSubmittedChallenges()
+  $:if($veClaimables) streams[0].substreams[0].availableRewards = $veClaimables
 </script>
 
 <div class="container">
