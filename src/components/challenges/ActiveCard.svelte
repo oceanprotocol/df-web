@@ -10,7 +10,7 @@
 
   let challengeDetails = {
     bannerTitle: `Challenge-DF ${curEpoch.id}`,
-    challengeDescription: `Crunch some code and participate in the active data challenge. </br>Predict the price of Ethereum for a share of <strong>${curEpoch.streams[1].substreams[1].rewards} OCEAN</strong> rewards.`,
+    challengeDescription: `Crunch some code and participate in the <strong>weekly</strong> data challenge. </br>Predict the price of Ethereum for a share of <strong>${curEpoch.streams[1].substreams[1].rewards} OCEAN</strong> rewards.`,
     reward: `${curEpoch.streams[1].substreams[1].rewards} OCEAN in Rewards`,
     buttonText: 'PARTICIPATE',
     deadlineText: 'Enter before ' + getUpcomingFirstWednesdayOfTheMonth().format('DD MMM YYYY'),
