@@ -49,7 +49,7 @@
     padding-top: calc(var(--spacer) / 2);
   }
   .deadline {
-    padding: calc(var(--spacer) / 4);
+    padding-top: calc(var(--spacer) / 4);
     color: var(--brand-grey-light) !important;
   }
 </style>
