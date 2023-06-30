@@ -140,7 +140,7 @@
           ? $APYs?.active > 10000
             ? "over 10000"
             : `${$APYs?.active.toFixed(2)}`
-          : 0
+          : parseFloat(0).toFixed(2)
       }% Avg APY ${
         $userAddress
           ? `| ${
@@ -148,7 +148,7 @@
                 ? $APYs?.activeUser > 10000
                   ? "over 10000"
                   : `${$APYs?.activeUser.toFixed(2)}`
-                : 0
+                : parseFloat(0).toFixed(2)
             }% Your APY`
           : ""
       }`}
