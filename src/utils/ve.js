@@ -1,6 +1,6 @@
 import * as VeOceanABI from "./abis/veOceanABI.js";
 import * as TokenABI from "./abis/tokenABI";
-import { ethers } from "ethers";
+import { ethers, Contract } from "ethers";
 import { getAddressByChainIdKey } from "../utils/address/address.js";
 import {
   readContract,
@@ -8,7 +8,7 @@ import {
   prepareWriteContract,
   waitForTransaction,
 } from "@wagmi/core";
-import { getGasFeeEstimate } from "./web3.js";
+import { getGasFeeEstimate, getRpcUrlByChainId } from "./web3.js";
 
 const veOceanABI = VeOceanABI.default;
 
@@ -243,20 +243,16 @@ export const getTotalVeSupply = async () => {
 };
 
 export const getTotalOceanSupply = async () => {
-  const data = await readContract({
-    address: getAddressByChainIdKey(
-      import.meta.env.VITE_VE_SUPPORTED_CHAINID,
-      "Ocean"
-    ),
-    args: [
-      getAddressByChainIdKey(
-        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
-        "veOCEAN"
-      ),
-    ],
-    abi: TokenABI.default,
-    functionName: "balanceOf",
-  });
+  let rpc = await getRpcUrlByChainId(import.meta.env.VITE_VE_SUPPORTED_CHAINID);
+  let provider = new ethers.providers.JsonRpcProvider(rpc);
+  let contract = new Contract(
+    getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "Ocean"),
+    TokenABI.default,
+    provider
+  );
+  let data = await contract.balanceOf(
+    getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")
+  );
   const totalSupplyEth = parseFloat(ethers.utils.formatEther(data));
   return totalSupplyEth;
 };
