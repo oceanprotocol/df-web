@@ -8,7 +8,7 @@
     veClaimables,
     dfClaimables,
     getDFRewards,
-    lasActiveRewardsClaimRound,
+    lastActiveRewardsClaimRound,
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import { getVeOceanBalance } from "../../utils/ve";
@@ -89,10 +89,10 @@
 
   $: if ($userLastActiveRewardsClaim.data) {
     if(!$userLastActiveRewardsClaim.data.dfrewards[0]?.history.length || $userLastActiveRewardsClaim.data.dfrewards[0]?.history.length == 0){
-      lasActiveRewardsClaimRound.set(0)
+      lastActiveRewardsClaimRound.set(0)
     }
     else{
-      lasActiveRewardsClaimRound.set(getEpoch(moment.unix(parseInt($userLastActiveRewardsClaim.data.dfrewards[0].history[0].timestamp)).utc()).id)
+      lastActiveRewardsClaimRound.set(getEpoch(moment.unix(parseInt($userLastActiveRewardsClaim.data.dfrewards[0].history[0].timestamp)).utc()).id)
     }
   }
 

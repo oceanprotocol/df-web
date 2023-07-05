@@ -9,7 +9,7 @@
     claimDFReward,
     getDFRewards,
     APYs,
-    lasActiveRewardsClaimRound,
+    lastActiveRewardsClaimRound,
     oceanUserRewards,
   } from "../../stores/airdrops";
   import ClaimItem from "../common/ClaimItem.svelte";
@@ -153,7 +153,7 @@
     let volumeRewards = 0
     let challengeRewards = 0
     $oceanUserRewards.forEach((r) => {
-      if(r.round >= $lasActiveRewardsClaimRound) {
+      if(r.round >= $lastActiveRewardsClaimRound) {
         volumeRewards += r['sum(curating_amt)']
         challengeRewards += r['sum(challenge_amt)']
       }
@@ -167,7 +167,7 @@
   $:if($userBalances) addVeOceanBalance()
   $:if($userSubmittedChallenges) addUserSubmittedChallenges()
   $:if($veClaimables) streams[0].substreams[0].availableRewards = $veClaimables
-  $:if($lasActiveRewardsClaimRound >= 0 && $oceanUserRewards) setUnclaimedActiveRewardsSubstreamValues()
+  $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards) setUnclaimedActiveRewardsSubstreamValues()
 </script>
 
 <div class="container">
