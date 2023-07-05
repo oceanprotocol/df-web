@@ -1,19 +1,16 @@
 <script>
   import Card from "../common/Card.svelte"
-  import ActiveCTA from './ActiveCTA.svelte';
   import { getUpcomingFirstWednesdayOfTheMonth } from '../../utils/epochs.js';
   import moment from "moment";
   import { getEpoch } from "../../utils/epochs";
+  import Button from "../common/Button.svelte";
 
-  let title = "Active Challenges";
-  let description = "Crunch some code and participate in the active data challenge. Data Farming challenges are a substream of Ocean Protocol Active Rewards, running over periods of 1 week. You can claim your prize in the Rewards page.";
-  
   const now = moment.utc();
   let curEpoch = getEpoch(now);
 
   let challengeDetails = {
-    bannerTitle: `Challenge DF`,
-    challengeDescription: 'Predict the price of Ethereum',
+    bannerTitle: `Challenge-DF ${curEpoch.id}`,
+    challengeDescription: `Crunch some code and participate in the <strong>weekly</strong> data challenge. </br>Predict the price of Ethereum for a share of <strong>${curEpoch.streams[1].substreams[1].rewards} OCEAN</strong> rewards.`,
     reward: `${curEpoch.streams[1].substreams[1].rewards} OCEAN in Rewards`,
     buttonText: 'PARTICIPATE',
     deadlineText: 'Enter before ' + getUpcomingFirstWednesdayOfTheMonth().format('DD MMM YYYY'),
@@ -22,11 +19,17 @@
 </script>
 
 <div class="container">
-  <Card title={title}>
+  <Card title={challengeDetails.bannerTitle}>
     <p class="message">
-      {description}
+      {@html challengeDetails.challengeDescription}
     </p>
-    <ActiveCTA {challengeDetails} />
+    <div class="challenge-cta">
+      <Button
+        text={challengeDetails.buttonText}
+        onclick={() => window.open(challengeDetails.url, '_blank')}
+      />
+      <p class="deadline">{challengeDetails.deadlineText}</p>
+    </div>
   </Card>
 </div>
 
@@ -38,5 +41,15 @@
     justify-content: flex-start;
     width: 100%;
     padding-top: calc(var(--spacer) * 2);
+  }
+  .challenge-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: calc(var(--spacer) / 2);
+  }
+  .deadline {
+    padding-top: calc(var(--spacer) / 4);
+    color: var(--brand-grey-light) !important;
   }
 </style>
