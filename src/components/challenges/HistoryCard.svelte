@@ -27,9 +27,9 @@
       return {
         id: String(index + 1),
         round: row[0],
-        first_prize: `${parseInt(row[1]).toLocaleString()} OCEAN - ${row[2].toLowerCase().substr(0, 6) + '...' + row[2].toLowerCase().substr(row[2].length - 6)}`,
-        second_prize: `${parseInt(row[3]).toLocaleString()} OCEAN - ${row[4].toLowerCase().substr(0, 6) + '...' + row[4].toLowerCase().substr(row[4].length - 6)}`,
-        third_prize: `${parseInt(row[5]).toLocaleString()} OCEAN - ${row[6].toLowerCase().substr(0, 6) + '...' + row[6].toLowerCase().substr(row[6].length - 6)}`,
+        first_prize: `${parseInt(row[1]).toLocaleString()} OCEAN - ${row[2]}`,
+        second_prize: `${parseInt(row[3]).toLocaleString()} OCEAN - ${row[4]}`,
+        third_prize: `${parseInt(row[5]).toLocaleString()} OCEAN - ${row[6]}`,
       };
     });
 
@@ -81,12 +81,12 @@
               <div class="cellContainer">
                 {#if cell.key === 'first_prize' || cell.key === 'second_prize' || cell.key === 'third_prize'}
                   <a
-                    href={'https://etherscan.io/address/' + cell.value}
+                    href={'https://etherscan.io/address/' + cell.value.split(' - ')[1]}
                     target="_blank"
                     rel="noreferrer"
                     class="link"
                   >
-                    {cell.value}
+                    {`${cell.value.split(' - ')[0]} - ${cell.value.split(' - ')[1].toLowerCase().substr(0, 6) + '...' + cell.value.split(' - ')[1].toLowerCase().substr(cell.value.split(' - ')[1].toLowerCase().length - 6)}`}
                     <img class="externalLink" src={ExternalIcon} alt="external link" />
                   </a>
                 {:else if cell.key === 'first_prize' || cell.key === 'second_prize' || cell.key === 'third_prize'}
