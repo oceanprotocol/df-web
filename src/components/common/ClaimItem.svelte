@@ -27,6 +27,7 @@
       <Substream 
         title={substream.name}
         availableRewards={substream.rewards}
+        rewards={substream.availableRewards}
         description={substream.description}
         action={substream.action}
         metric={substream.metric}
@@ -44,7 +45,7 @@
         />
         <div class="buttonMargin">
           <Button
-            text={loading ? "Loading..." : `Claim Rewards${disabled ? "" : amount}`}
+            text={loading ? "Loading..." : "Claim Rewards"}
             onclick={onClick}
             disabled={loading || disabled}
           />

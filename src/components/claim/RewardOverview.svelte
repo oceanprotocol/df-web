@@ -1,7 +1,6 @@
 <script>
   import { APYs } from "../../stores/airdrops";
   import { userBalances } from "../../stores/tokens";
-  import { lockedOceanAmount } from "../../stores/veOcean";
   import { userAddress } from "../../stores/web3";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { calcTotalAPY } from "../../utils/rewards";

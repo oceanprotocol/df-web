@@ -124,6 +124,11 @@ export const getRoundAPY = async (userAddress) => {
               pattern: "sum(passive_amt)",
             },
           },
+          {
+            expression: {
+              pattern: "sum(challenge_amt)",
+            },
+          },
           "round",
         ],
         group: "round",
