@@ -10,7 +10,7 @@
 
   let challengeDetails = {
     bannerTitle: `Challenge-DF ${curEpoch.id}`,
-    challengeDescription: `Crunch some code and participate in the <strong>weekly</strong> data challenge. </br>Predict the price of Ethereum for a share of <strong>${curEpoch.streams[1].substreams[1].rewards} OCEAN</strong> rewards.`,
+    challengeDescription: `Crunch some code and participate in the active data challenge for <strong>predicting the price of Ethereum</strong>. Data Farming challenges are a substream of Ocean Protocol Active Rewards, running over <strong>periods of 1 week</strong>. You can claim your prize from the <a href="https://df.oceandao.org/rewards">Rewards page</a>.`,
     reward: `${curEpoch.streams[1].substreams[1].rewards} OCEAN in Rewards`,
     buttonText: 'PARTICIPATE',
     deadlineText: 'Enter before ' + getUpcomingFirstWednesdayOfTheMonth().format('DD MMM YYYY'),
@@ -20,9 +20,17 @@
 
 <div class="container">
   <Card title={challengeDetails.bannerTitle}>
-    <p class="message">
+    <img src="/images/features/podium.png" alt="podium" class="podiumImage"/>
+    <p class="description">
       {@html challengeDetails.challengeDescription}
     </p>
+    <div class="prizes">
+      {#each curEpoch.streams[1].substreams[1].prizes as prize, i}
+        <div class="prize">
+          <span class="place">{`${i + 1}${i == 0 ? 'st' : i == 1 ? 'nd' : 'rd'}`}</span> - {`$${prize}`}
+        </div>
+      {/each}
+    </div>
     <div class="challenge-cta">
       <Button
         text={challengeDetails.buttonText}
@@ -42,6 +50,10 @@
     width: 100%;
     padding-top: calc(var(--spacer) * 2);
   }
+  .description{
+    margin-bottom: calc(var(--spacer) / 3);
+    margin-top: calc(var(--spacer) / 6);
+  }
   .challenge-cta {
     display: flex;
     flex-direction: column;
@@ -51,5 +63,20 @@
   .deadline {
     padding-top: calc(var(--spacer) / 4);
     color: var(--brand-grey-light) !important;
+  }
+  .prizes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+  }
+  .prize{
+    margin: 0 calc(var(--spacer));
+  }
+  .place{
+    color: var(--brand-pink);
+  }
+  .podiumImage{
+    height: 40px;
   }
 </style>
