@@ -124,12 +124,12 @@
 
   function addVeOceanBalance(){
     streams[0].substreams[0].metric.value = `${$userBalances[
-        getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")
+        getAddressByChainIdKey(supportedChainId, "veOCEAN")
       ]
       ? parseFloat(
           $userBalances[
             getAddressByChainIdKey(
-              import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+              supportedChainId,
               "veOCEAN"
             )
           ]
