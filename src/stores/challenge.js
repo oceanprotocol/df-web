@@ -68,6 +68,5 @@ export const getUserSubmittedChallenges = async (userAddress) => {
     return 0;
   }
   let data = await res.json();
-  console.log(data);
   return data;
 };
