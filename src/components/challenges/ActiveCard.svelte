@@ -27,7 +27,7 @@
     <div class="prizes">
       {#each curEpoch.streams[1].substreams[1].prizes as prize, i}
         <div class="prize">
-          <span class="place">{`${i + 1}${i == 0 ? 'st' : i == 1 ? 'nd' : 'rd'}`}</span> - {`$${prize}`}
+          <span class="place">{`${i + 1}${i == 0 ? 'st' : i == 1 ? 'nd' : 'rd'}`}</span> - {`${parseInt(prize).toLocaleString()} OCEAN`}
         </div>
       {/each}
     </div>
@@ -71,7 +71,8 @@
     font-weight: bold;
   }
   .prize{
-    margin: 0 calc(var(--spacer));
+    margin: 0;
+    font-size: var(--font-size-large);
   }
   .place{
     color: var(--brand-pink);
@@ -79,4 +80,10 @@
   .podiumImage{
     height: 40px;
   }
+
+  @media (min-width: 489px) {
+  .prize{
+    margin: 0 calc(var(--spacer));
+  }
+}
 </style>
