@@ -54,7 +54,7 @@ export const getPassiveAPY = async () => {
   const oceanSupply = await getTotalOceanSupply();
   let curEpoch = getEpoch();
   let passiveRewards =
-    import.meta.env.VITE_VE_SUPPORTED_CHAIN_ID !== "5" ? 20 : curEpoch.passive;
+    import.meta.env.VITE_VE_SUPPORTED_CHAINID != "1" ? 20 : curEpoch.passive;
   const wpr_passive = passiveRewards / oceanSupply;
   return convertWPRtoAPY(wpr_passive);
 };
@@ -63,7 +63,7 @@ export const getPassiveUserAPY = async (userVeOcean, lockedOcean) => {
   const veOceanSupply = await getTotalVeSupply();
   let curEpoch = getEpoch();
   let passiveRewards =
-    import.meta.env.VITE_VE_SUPPORTED_CHAIN_ID !== "5" ? 20 : curEpoch.passive;
+    import.meta.env.VITE_VE_SUPPORTED_CHAINID != "1" ? 20 : curEpoch.passive;
   const rewards = (passiveRewards / veOceanSupply) * userVeOcean;
   const wpr_passive = rewards / lockedOcean;
   return convertWPRtoAPY(wpr_passive);
