@@ -1,6 +1,5 @@
 <script>
   import Card from "../common/Card.svelte"
-  import { getUpcomingFirstWednesdayOfTheMonth } from '../../utils/epochs.js';
   import moment from "moment";
   import { getEpoch } from "../../utils/epochs";
   import Button from "../common/Button.svelte";
@@ -13,7 +12,7 @@
     challengeDescription: `Crunch some code and participate in the active data challenge for <strong>predicting the price of Ethereum</strong>. Data Farming challenges are a substream of Ocean Protocol Active Rewards, running over <strong>periods of 1 week</strong>. You can claim your prize from the <a href="https://df.oceandao.org/rewards">Rewards page</a>.`,
     reward: `${curEpoch.streams[1].substreams[1].rewards} OCEAN in Rewards`,
     buttonText: 'PARTICIPATE',
-    deadlineText: 'Enter before ' + getUpcomingFirstWednesdayOfTheMonth().format('DD MMM YYYY'),
+    deadlineText: 'Enter before ' + moment(curEpoch.date_end).format('DD MMM YYYY'),
     url: 'https://github.com/oceanprotocol/predict-eth/blob/main/challenges/challenge-df.md'
   };
 </script>

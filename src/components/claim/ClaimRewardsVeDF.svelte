@@ -119,6 +119,7 @@
   }
 
   function addUserSubmittedChallenges(){
+    console.log($userSubmittedChallenges)
     streams[1].substreams[1].metric.value = $userSubmittedChallenges.length
   }
 
