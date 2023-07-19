@@ -10,7 +10,7 @@
   let challengeDetails = {
     bannerTitle: `Challenge-DF ${curEpoch.id}`,
     challengeDescription: `Crunch some code and participate in the active data challenge for <strong>predicting the price of Ethereum</strong>. Data Farming challenges are a substream of Ocean Protocol Active Rewards, running over <strong>periods of 1 week</strong>. You can claim your prize from the <a href="https://df.oceandao.org/rewards">Rewards page</a>.`,
-    reward: `${curEpoch.streams[1].substreams[1].rewards} OCEAN in Rewards`,
+    reward: `${curEpoch?.streams && curEpoch?.streams[1]?.substreams ? curEpoch?.streams[1]?.substreams[1]?.rewards : 0} OCEAN in Rewards`,
     buttonText: 'PARTICIPATE',
     deadlineText: 'Enter before ' + moment(curEpoch.date_end).format('DD MMM YYYY'),
     url: 'https://github.com/oceanprotocol/predict-eth/blob/main/challenges/challenge-df.md'
@@ -23,13 +23,15 @@
     <p class="description">
       {@html challengeDetails.challengeDescription}
     </p>
+    {#if curEpoch?.streams && curEpoch?.streams[1]?.substreams && curEpoch?.streams[1]?.substreams[1]?.prizes}
     <div class="prizes">
-      {#each curEpoch.streams[1].substreams[1].prizes as prize, i}
+      {#each curEpoch?.streams[1]?.substreams[1]?.prizes as prize, i}
         <div class="prize">
           <span class="place">{`${i + 1}${i == 0 ? 'st' : i == 1 ? 'nd' : 'rd'}`}</span> - {`${parseInt(prize).toLocaleString()} OCEAN`}
         </div>
       {/each}
     </div>
+    {/if}
     <div class="challenge-cta">
       <Button
         text={challengeDetails.buttonText}
