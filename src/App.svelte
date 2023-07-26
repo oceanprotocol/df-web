@@ -221,7 +221,7 @@
     <Route path="/rewards" primary={false}>
       <ClaimPortal />
     </Route>
-    <Route path="/volumedf" primary={false}>
+    <Route path="/volume-df" primary={false}>
       <DataPortal />
     </Route>
     <Route path="/veocean" primary={false}>
@@ -230,7 +230,7 @@
     <Route path="/delegate" primary={false}>
       <DelegationPortal />
     </Route>
-    <Route path="/challenges" primary={false}>
+    <Route path="/challenge-df" primary={false}>
       <ChallengesPortal />
     </Route>
     <Route path="/*" primary={false}>
