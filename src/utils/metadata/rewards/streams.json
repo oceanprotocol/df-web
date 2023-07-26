@@ -39,7 +39,7 @@
         {
           "name": "Challenge DF",
           "rewards": 0,
-          "description": "Earn rewards by participating and submitting predictions to the weekly Predict-ETH challenge.",
+          "description": "Earn rewards by participating and submitting predictions to the weekly challenge.",
           "action": {
             "text": "Participate",
             "location": "/challenges"
