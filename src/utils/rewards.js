@@ -222,7 +222,7 @@ export const getDFallocations = async (userAddress) => {
   return data;
 };
 
-export const getChallengeRewards = async (userAddress) => {
+export const getChallengeRewards = async () => {
   let res;
   try {
     res = await fetch(`${import.meta.env.VITE_BACKEND_API}/challenge/rewards`, {
@@ -231,18 +231,6 @@ export const getChallengeRewards = async (userAddress) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        query: userAddress
-          ? {
-              round: {
-                $gt: -1,
-              },
-              winner_addr: userAddress.toLowerCase(),
-            }
-          : {
-              round: {
-                $gt: -1,
-              },
-            },
         fields: ["winner_addr", "round", "OCEAN_amt"],
       }),
     });
