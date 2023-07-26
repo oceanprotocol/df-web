@@ -50,6 +50,7 @@
   import { Buffer } from "buffer";
   import "@oceanprotocol/typographies/css/ocean-typo.css";
   import { getUserSubmittedChallenges, userSubmittedChallenges } from "./stores/challenge";
+  import Redirect from "./components/common/Redirect.svelte";
   
   // @ts-ignore
   window.Buffer = Buffer;
@@ -221,7 +222,7 @@
     <Route path="/rewards" primary={false}>
       <ClaimPortal />
     </Route>
-    <Route path="/volumedf" primary={false}>
+    <Route path="/volume-df" primary={false}>
       <DataPortal />
     </Route>
     <Route path="/veocean" primary={false}>
@@ -230,11 +231,11 @@
     <Route path="/delegate" primary={false}>
       <DelegationPortal />
     </Route>
-    <Route path="/challenges" primary={false}>
+    <Route path="/challenge-df" primary={false}>
       <ChallengesPortal />
     </Route>
     <Route path="/*" primary={false}>
-      <ClaimPortal />
+      <Redirect />
     </Route>
   </main>
 </Router>

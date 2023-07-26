@@ -27,8 +27,8 @@
       <li class:active={$location.pathname === "/veocean"}>
         <Link to="/veocean" class="link">veOCEAN</Link>
       </li>
-      <li class:active={$location.pathname === "/volumedf"}>
-        <Link to="/volumedf" class="link">VOLUMEDF</Link>
+      <li class:active={$location.pathname === "/volume-df"}>
+        <Link to="/volume-df" class="link">VOLUME-DF</Link>
       </li>
       <li class:active={$location.pathname === "/rewards"}>
         <Link to="/rewards" class="link">REWARDS</Link>
@@ -36,8 +36,8 @@
       <li class:active={$location.pathname === "/delegate"}>
         <Link to="/delegate" class="link">DELEGATE</Link>
       </li>
-      <li class:active={$location.pathname === "/challenges"}>
-        <Link to="/challenges" class="link">CHALLENGES</Link>
+      <li class:active={$location.pathname === "/challenge-df"}>
+        <Link to="/challenge-df" class="link">CHALLENGE-DF</Link>
       </li>
       <li class:active={false}>
         <a href={aboutURL} target="_blank" class="link" rel="noreferrer">ABOUT</a>
