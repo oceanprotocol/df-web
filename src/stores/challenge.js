@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 import { getChallengeRewards } from "../utils/rewards";
 
-export let dataChallenges = writable([]);
+export let dataChallenges = writable(undefined);
 export let userSubmittedChallenges = writable([]);
 
 export async function loadDFChallengeResults() {
