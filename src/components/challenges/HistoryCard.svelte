@@ -41,7 +41,7 @@
   $: {
     if (!unsubscribe) { // Ensure we only subscribe once
       unsubscribe = dataChallenges.subscribe(async (value) => {
-        if( !value || value.length === 0 ) {
+        if( !value ) {
           await loadDFChallengeResults();
           
           const formattedResults = formatDFChallengeResults();
@@ -70,7 +70,7 @@
 <div class="container">
     <h2 class="title">{title}</h2>
         <div class="epochHistoryTableContainer">
-          {#if $dataChallenges.length > 0 && !loading}
+          {#if !$dataChallenges?.length >= 0 && !loading}
           <DataTable {headers} {rows} class="customTable">
             <svelte:fragment slot="cell-header" let:header>
               <div class="headerContainer">
