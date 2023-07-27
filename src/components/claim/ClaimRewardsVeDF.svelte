@@ -9,6 +9,8 @@
     claimDFReward,
     getDFRewards,
     APYs,
+    lastActiveRewardsClaimRound,
+    oceanUserRewards,
   } from "../../stores/airdrops";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
@@ -16,13 +18,13 @@
   import { updateUserBalanceOcean, userBalances } from "../../stores/tokens";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { claim as claimVERewards } from "../../utils/feeDistributor";
-  import { totalUserAllocation } from "../../stores/dataAllocations";
-  import { oceanUnlockDate } from "../../stores/veOcean";
   import * as descriptions from "../../utils/metadata/descriptions.json";
-
+  import { totalUserAllocation } from "../../stores/dataAllocations";
+  import { userSubmittedChallenges } from "../../stores/challenge";
+ 
   export let canClaimVE = true;
   export let canClaimDF = true;
-  export let roundInfo;
+  export let streams;
   let claiming;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
@@ -70,21 +72,9 @@
     }
     claiming = undefined;
   }
-</script>
 
-<div class="container">
-  <h2 class="title">Reward Programs</h2>
-  <p class="description">
-    Data Farming consists of two reward programs. Each reward program is unique
-    and offers different ways for participants to get engaged. To access Reward
-    Programs, participants are required to hold veOCEAN.
-  </p>
-  <div class="rewardsContainer">
-    <ClaimItem
-      title="Passive"
-      description="<p>Earn Passive Rewards from Data Farming by <strong>locking OCEAN</strong> and <strong>holding veOCEAN</strong>.</p><p><strong>Earn more Rewards</strong> by locking more OCEAN or increasing your unlock time.</p>"
-      distributedAmount={roundInfo?.passive}
-      apy={`${
+  function addAPYs(){
+    streams[0].substreams[0].apy = {value: `${
         $APYs
           ? $APYs?.passive > 10000
             ? "over 10000"
@@ -100,42 +90,10 @@
                 : parseFloat(0).toFixed(2)
             }% Your APY`
           : ""
-      }`}
-      apyTooltip={descriptions.default.tooltip_rewards_apy_passive}
-      showRedirectLink={!$oceanUnlockDate && $veClaimables <= 0}
-      redirectLink={{ text: "Get veOCEAN", url: "veocean" }}
-      amount={`${parseFloat($veClaimables).toFixed(2)} OCEAN`}
-      metrics={[
-        {
-          name: "balance",
-          value: `${
-            $userBalances[
-              getAddressByChainIdKey(
-                supportedChainId,
-                "veOCEAN"
-              )
-            ]
-              ? parseFloat(
-                  $userBalances[
-                    getAddressByChainIdKey(
-                      supportedChainId,
-                      "veOCEAN"
-                    )
-                  ]
-                ).toFixed(3)
-              : 0
-          } veOCEAN`,
-        },
-      ]}
-      loading={claiming === "VE_REWARDS"}
-      onClick={onClaimVeRewards}
-      disabled={canClaimVE === false ||
-        claiming !== undefined ||
-        $veClaimables <= 0}
-    />
-    <ClaimItem
-      title="Active"
-      apy={`${
+      }`,
+      tooltip: descriptions.default.tooltip_rewards_apy_passive}
+
+    streams[1].substreams[0].apy ={value: `${
         $APYs
           ? $APYs?.active > 10000
             ? "over 10000"
@@ -151,48 +109,96 @@
                 : parseFloat(0).toFixed(2)
             }% Your APY`
           : ""
-      }`}
-      apyTooltip={descriptions.default.tooltip_rewards_apy_active}
-      description="<p>Earn Active Rewards from Data Farming by <strong>allocating veOCEAN</strong> and <strong>curating quality data</strong>.</p><p>Get <strong>2X Rewards by publishing</strong> your own datasets and allocating to them.</p>"
-      amount={`${parseFloat($dfClaimables).toFixed(3)} OCEAN`}
-      rewardTooltip={descriptions.default.tooltip_active_rewards}
-      metrics={[{ name: "allocated", value: `${$totalUserAllocation}%` }]}
-      showRedirectLink={(!$oceanUnlockDate || $totalUserAllocation <= 0) &&
-        $dfClaimables <= 0}
-      redirectLink={{ text: "Set allocations", url: "datafarming" }}
-      distributedAmount={roundInfo?.active}
-      loading={claiming === "DF_REWARDS"}
-      onClick={onClaimDfRewards}
-      disabled={canClaimDF === false ||
+      }`,
+    tooltip: descriptions.default.tooltip_active_rewards
+    }
+  }
+
+  function addAllocated(){
+    streams[1].substreams[0].metric.value = $totalUserAllocation + '%'
+  }
+
+  function addUserSubmittedChallenges(){
+    streams[1].substreams[1].metric.value = $userSubmittedChallenges.length
+  }
+
+  function addVeOceanBalance(){
+    streams[0].substreams[0].metric.value = `${$userBalances[
+        getAddressByChainIdKey(supportedChainId, "veOCEAN")
+      ]
+      ? parseFloat(
+          $userBalances[
+            getAddressByChainIdKey(
+              supportedChainId,
+              "veOCEAN"
+            )
+          ]
+        ).toFixed(2)
+      : parseFloat("0").toFixed(2)} veOCEAN`
+  }
+
+  function canClaim(type){
+    if(type.toLowerCase() == 'passive'){
+      return canClaimVE === false ||
         claiming !== undefined ||
-        $dfClaimables <= 0}
-      disableRedirect={!$oceanUnlockDate}
+        $veClaimables <= 0
+    }else{
+      return canClaimDF === false ||
+        claiming !== undefined ||
+        $dfClaimables <= 0
+    }
+  }
+
+  function setUnclaimedActiveRewardsSubstreamValues(){
+    let volumeRewards = 0
+    let challengeRewards = 0
+    $oceanUserRewards.forEach((r) => {
+      if(r.round >= $lastActiveRewardsClaimRound) {
+        volumeRewards += r['sum(curating_amt)']
+        challengeRewards += r['sum(challenge_amt)']
+      }
+    })
+    streams[1].substreams[0].availableRewards = volumeRewards
+    streams[1].substreams[1].availableRewards = challengeRewards
+  }
+
+  $:if($APYs) addAPYs()
+  $:if($totalUserAllocation) addAllocated()
+  $:if($userBalances) addVeOceanBalance()
+  $:if($userSubmittedChallenges) addUserSubmittedChallenges()
+  $:if($veClaimables) streams[0].substreams[0].availableRewards = $veClaimables
+  $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards) setUnclaimedActiveRewardsSubstreamValues()
+</script>
+
+<div class="container">
+  <h2 class="title">Reward Programs</h2>
+  <div class="rewardsContainer">
+  {#each streams as stream}
+    <ClaimItem
+      title={stream.name}
+      distributedAmount={stream?.rewards}
+      amount={`${parseFloat(stream.name.toLowerCase() == 'passive' ? $veClaimables : $dfClaimables).toFixed(2)} OCEAN`}
+      loading={stream.name.toLowerCase() == 'passive' ? claiming === "VE_REWARDS" : claiming === "DF_REWARDS"}
+      onClick={stream.name.toLowerCase() == 'passive' ? onClaimVeRewards : onClaimDfRewards}
+      substreams={stream.substreams}
+      disabled={canClaim(stream.name)}
     />
+    {/each}
   </div>
 </div>
 
 <style>
   .container {
     margin: calc(var(--spacer) * 2) 0;
+    width: 100%;
   }
   .rewardsContainer {
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    gap: calc(var(--spacer) / 2);
-    flex-direction: row;
+    flex-direction: column;
     margin-top: calc(var(--spacer) / 2);
   }
   .title {
     margin-bottom: calc(var(--spacer) / 2);
-  }
-  .description {
-    max-width: 600px;
-    margin: auto;
-  }
-  @media (min-width: 640px) {
-    .rewardsContainer {
-      gap: calc(var(--spacer) / 2);
-    }
   }
 </style>

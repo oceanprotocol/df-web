@@ -8,16 +8,21 @@
     veClaimables,
     dfClaimables,
     getDFRewards,
+    lastActiveRewardsClaimRound,
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import { getVeOceanBalance } from "../../utils/ve";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import EpochHistory from "./EpochHistory.svelte";
   import Features from "./Features.svelte";
+  import { query } from "svelte-apollo";
   import RewardOverview from "./RewardOverview.svelte";
   import moment from "moment";
   import { getEpoch } from "../../utils/epochs";
   import { oceanUnlockDate } from "../../stores/veOcean";
+  import * as streamsData from "../../utils/metadata/rewards/streams.json";
+  import {GET_USER_LAST_ACTIVE_REWARDS_CLAIM} from "../../utils/subgraph";
+  import { onMount } from "svelte";
 
   let loading = false;
   let veBalance = 0.0;
@@ -25,11 +30,26 @@
   let canClaimDF = true;
   const now = moment.utc();
   let curEpoch = getEpoch(now);
+  let streams = null;
+  let userLastActiveRewardsClaim = query(GET_USER_LAST_ACTIVE_REWARDS_CLAIM, {
+      variables: { userAddress: $userAddress.toLowerCase() },
+    })
+
+  async function populateStreamsWithRewardsFromCurrentEpoch(){
+    // Update streams with rewards from curEpoch
+    const modifiedStreams = streamsData.default.streams.map((stream, indexStream) => {
+        if(!curEpoch?.streams) return stream; // return the original stream if there is no current epoch
+        stream.rewards = curEpoch?.streams[indexStream]?.rewards;
+        stream.substreams.forEach((substream, indexSubstream) => {
+          substream.rewards = curEpoch.streams[indexStream].substreams[indexSubstream].rewards;
+        });
+        return stream; // return the updated stream
+    });
+
+    streams = modifiedStreams;
+  }
 
   async function initClaimables() {
-    // userAddress.set("0x0000000000........")
-    // console.log("userAddress", $userAddress)
-
     if (!userAddress || !oceanUnlockDate) {
       veClaimables.set(0);
       dfClaimables.set(0);
@@ -49,12 +69,6 @@
     );
     dfClaimables.set(dfRewards);
 
-    /*const veRewards = 20;
-    const dfRewards = 20;
-
-    veClaimables.set(veRewards);
-    dfClaimables.set(dfRewards);*/
-
     if (veRewards <= 0) {
       canClaimVE = false;
     }
@@ -63,23 +77,36 @@
       canClaimDF = false;
     }
 
-    // console.log("canClaimVE", canClaimVE)
-    // console.log("canClaimDF", canClaimDF)
-    // console.log("veClaimables", $veClaimables)
-    // console.log("dfClaimables", $dfClaimables)
-
     loading = false;
   }
 
   $: if ($userAddress && $connectedChainId) {
     initClaimables();
+    userLastActiveRewardsClaim = query(GET_USER_LAST_ACTIVE_REWARDS_CLAIM, {
+      variables: { userAddress: $userAddress.toLowerCase() },
+    })
   }
+
+  $: if ($userLastActiveRewardsClaim.data) {
+    if(!$userLastActiveRewardsClaim.data.dfrewards[0]?.history.length || $userLastActiveRewardsClaim.data.dfrewards[0]?.history.length == 0){
+      lastActiveRewardsClaimRound.set(0)
+    }
+    else{
+      lastActiveRewardsClaimRound.set(getEpoch(moment.unix(parseInt($userLastActiveRewardsClaim.data.dfrewards[0].history[0].timestamp)).utc()).id)
+    }
+  }
+
+  onMount(() => {
+    populateStreamsWithRewardsFromCurrentEpoch();
+  })
 </script>
 
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
   <Features />
-  <ClaimRewards {canClaimVE} {canClaimDF} roundInfo={curEpoch} {loading} />
+  {#if streams !== null}
+    <ClaimRewards {canClaimVE} {canClaimDF} streams={streams}/>
+  {/if}
   <EpochHistory />
 </div>
 

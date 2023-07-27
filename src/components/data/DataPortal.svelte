@@ -96,11 +96,11 @@
     "alignContentCenter"
   }`}
 >
-  {#if $datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(chainId, "veOCEAN")] !== undefined}
     <div class="wrapper">
       <h2 class="title">Curate Data to Earn OCEAN</h2>
       <div class="data">
         <Table 
+          dataAvailable={$datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
           colData={columnsData[tabSelected]}
           notHidableColumns={["Allocate"]}
           rowData={$datasets}
@@ -109,9 +109,6 @@
         />
       </div>
     </div>
-  {:else}
-    <h3 class="loading">Loading...</h3>
-  {/if}
 </div>
 
 <style>

@@ -2,6 +2,7 @@
   import CustomTooltip from "./CustomTooltip.svelte";
 
   export let title = undefined;
+  export let id = undefined;
   export let subtitle = undefined;
   export let className = undefined;
   export let tag = undefined;
@@ -14,7 +15,7 @@
   export let tooltipAlign = "center";
 </script>
 
-<div class={`container ${className ? className : ""}`}>
+<div class={`container ${className ? className : ""}`} id={id && id}>
   <div class="cardHeader">
     {#if title && priority == "primary"}
       <h2 class="title">{title}</h2>

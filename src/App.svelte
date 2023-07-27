@@ -5,6 +5,7 @@
   import DelegationPortal from "./components/delegation/DelegationPortal.svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
   import DataPortal from "./components/data/DataPortal.svelte";
+  import ChallengesPortal from "./components/challenges/ChallengesPortal.svelte";
   import {
     userAddress,
     selectedNetworks,
@@ -48,6 +49,8 @@
   import { totalUserAllocation } from "./stores/dataAllocations";
   import { Buffer } from "buffer";
   import "@oceanprotocol/typographies/css/ocean-typo.css";
+  import { getUserSubmittedChallenges, userSubmittedChallenges } from "./stores/challenge";
+  import Redirect from "./components/common/Redirect.svelte";
   
   // @ts-ignore
   window.Buffer = Buffer;
@@ -126,6 +129,9 @@
     veOceanWithDelegations.update(() => newVeOceansWithDelegations);
     await updateUserBalanceVeOcean($userAddress);
     await updateUserBalanceOcean($userAddress);
+
+    let userChallenges = await getUserSubmittedChallenges($userAddress)
+    userSubmittedChallenges.update(() => userChallenges)
     isAppLoading.update(() => false);
   }
 
@@ -213,10 +219,10 @@
   <WalletConnectModal />
   <main>
     <Header />
-    <Route path="/activerewards" primary={false}>
+    <Route path="/rewards" primary={false}>
       <ClaimPortal />
     </Route>
-    <Route path="/datafarming" primary={false}>
+    <Route path="/volume-df" primary={false}>
       <DataPortal />
     </Route>
     <Route path="/veocean" primary={false}>
@@ -225,8 +231,11 @@
     <Route path="/delegate" primary={false}>
       <DelegationPortal />
     </Route>
+    <Route path="/challenge-df" primary={false}>
+      <ChallengesPortal />
+    </Route>
     <Route path="/*" primary={false}>
-      <ClaimPortal />
+      <Redirect />
     </Route>
   </main>
 </Router>

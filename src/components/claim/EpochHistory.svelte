@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import { DataTable, Pagination } from "carbon-components-svelte";
   import { convertWPRtoAPY } from "../../utils/rewards.js";
   import * as epochs from "../../utils/metadata/epochs/epochs.json";
@@ -16,15 +17,17 @@
   import { oceanRewards, oceanUserRewards } from "../../stores/airdrops";
   import moment from "moment";
   import CustomTooltip from "../common/CustomTooltip.svelte";
-  import * as descriptions from "../../utils/metadata/descriptions.json";
+  import  * as descriptions from "../../utils/metadata/descriptions.json";
+  import ChecklistDropdown from "../common/ChecklistDropdown.svelte";
 
   let rows = [];
   let initialRows = [];
   let pagination = { pageSize: 100, page: 1 };
+  let dropdownOptions = {};
   let loading = true;
 
   // Tooltips dropped for now, they'll be back
-  let headers = [
+  let allHeaders = [
     {
       key: "id",
       value: "Round",
@@ -38,28 +41,47 @@
     },
     { key: "active", value: "Active Rewards" },
     {
-      key: "activeapy",
-      value: "Active APY",
-      tooltip: descriptions.default.tooltip_rewards_apy_active_history,
+      key: "volumeapy",
+      value: "VolumeDF APY",
+      tooltip: descriptions.default.tooltip_rewards_apy_volume_history,
     },
+    { key: "veocean", value: "veOCEAN Rewards" },
+    { key: "volumedf", value: "VolumeDF Rewards" },
+    { key: "challenge", value: "Challenge Rewards" },
   ];
-  let initialHeaders = headers;
+  let headers = [...allHeaders.slice(0, -3)]
+  let initialHeaders = [...headers];
+
+  const createDropdownOptions = () => {
+    allHeaders.forEach((header) => {
+      dropdownOptions[header.value] = headers.some(
+        (h) => h.key === header.key
+      );
+    });
+  }
+
+  const onDropdownCheck = (value, checked) => {
+    if(!checked){
+      headers = headers.filter((header) => header.value !== value)
+    }else{
+      headers.push(allHeaders.find((header) => header.value == value))
+      headers = headers
+    }
+    dropdownOptions[value] = checked
+  }
 
   const init = async () => {
-    rows = JSON.parse(
-      JSON.stringify(
-        epochs.default.filter((epoch) =>
+    rows = [...epochs.default.filter((epoch) =>
           moment(epoch.date_end).isBefore(moment())
         )
-      )
-    );
+    ]
     if (!$veBalances || !$veAllocations || !$oceanRewards) {
       let veBals = await getVeOceanBal();
       let dfAllocation = await getDFallocations();
       let apys = await getRoundAPY();
-      veBalances.update(() => veBals);
-      veAllocations.update(() => dfAllocation);
-      oceanRewards.update(() => apys);
+      veBalances.set(veBals);
+      veAllocations.set(dfAllocation);
+      oceanRewards.set(apys);
     } else {
       let allocations = $veBalances;
       let veBals = $veAllocations;
@@ -80,15 +102,18 @@
               )
             : 0
         ).toFixed(2)}%`,
-        activeapy: `${parseFloat(
+        volumeapy: `${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
                 rewards["sum(curating_amt)"] / allocation["sum(ocean_amt)"]
               )
             : 0
         ).toFixed(2)}%`,
-        passive: `${row.passive} OCEAN`,
-        active: `${row.active} OCEAN`,
+        passive: `${row.streams.find((s) => s.name=='Passive').rewards.toLocaleString()} OCEAN`,
+        active: `${row.streams.find((s) => s.name=='Active').rewards.toLocaleString()} OCEAN`,
+        veocean: `${row.streams.find((s) => s.name=='Passive')?.substreams.find((s) => s.name=='veOCEAN')?.rewards.toLocaleString() || 0} OCEAN`,
+        volumedf: `${row.streams.find((s) => s.name=='Active')?.substreams.find((s) => s.name=='Volume DF')?.rewards.toLocaleString() || 0} OCEAN`,
+        challenge: `${row.streams.find((s) => s.name=='Active')?.substreams.find((s) => s.name=='Challenge')?.rewards.toLocaleString() || 0} OCEAN`,
       });
     });
     rows = newRows;
@@ -112,17 +137,15 @@
       let allocation = $veUserAllocations.find((r) => r.round == row.id);
       let rewards = $oceanUserRewards.find((r) => r.round == row.id);
       row.passiveapy =
-        row.passiveapy?.toString() +
-        ` / ${parseFloat(
+        `${row.passiveapy?.toString()} / ${parseFloat(
           rewards && veBal
             ? convertWPRtoAPY(
                 rewards["sum(passive_amt)"] / veBal["sum(locked_amt)"]
               )
             : 0
         ).toFixed(2)}%`;
-      row.activeapy =
-        row.activeapy?.toString() +
-        ` / ${parseFloat(
+      row.volumeapy =
+        `${row.volumeapy?.toString()} / ${parseFloat(
           rewards && allocation
             ? convertWPRtoAPY(
                 rewards["sum(curating_amt)"] / allocation["sum(ocean_amt)"]
@@ -134,8 +157,9 @@
     headers = JSON.parse(JSON.stringify(initialHeaders));
   };
 
-  init();
+  onMount(init);
 
+  $: createDropdownOptions()
   $: if ($userAddress) {
     getUserRoundAPY();
   }
@@ -143,6 +167,10 @@
 
 <h2 class="historyTableTitle">Data Farming History</h2>
 <div class="epochHistoryTableContainer">
+  <div class="tableCustomHeader">
+    <ChecklistDropdown title="Select displayed columns" options={dropdownOptions} onCheck={onDropdownCheck}/>
+  </div>
+  <div class="tableBody">
   <DataTable sortable {headers} {rows} class="customTable">
     <svelte:fragment slot="cell-header" let:header>
       <div class="headerContainer">
@@ -165,6 +193,7 @@
     pageSizeInputDisabled
   />
 </div>
+</div>
 
 <style lang="scss" global>
   @import "carbon-components/scss/components/data-table/_data-table.scss";
@@ -178,8 +207,7 @@
     transform: translate3d(0, -0.05rem, 0);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    max-height: calc(50vh);
-    overflow-y: scroll;
+    margin-bottom: calc(var(--spacev)/4);
   }
   :global(.epochHistoryTableContainer thead) {
     position: sticky;
@@ -197,5 +225,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .epochHistoryTableContainer .tableCustomHeader{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: calc(var(--spacer) / 6) calc(var(--spacer) / 3);
+    margin: 0;
+  }
+  .tableBody{
+    max-height: calc(50vh);
+    overflow-y: scroll;
   }
 </style>

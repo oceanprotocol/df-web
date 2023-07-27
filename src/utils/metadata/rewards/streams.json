@@ -1,0 +1,56 @@
+{
+  "streams": [
+    {
+      "name": "Passive",
+      "rewards": 0,
+      "substreams": [
+        {
+          "name": "veOCEAN",
+          "rewards": 0,
+          "description": "Earn rewards by locking OCEAN and holding veOCEAN. The longer you hold, the more you earn.",
+          "action": {
+            "text": "Get veOCEAN",
+            "location": "/veocean"
+          },
+          "metric": {
+            "name": "balance",
+            "value": "0 veOCEAN"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Active",
+      "rewards": 0,
+      "substreams": [
+        {
+          "name": "Volume DF",
+          "rewards": 0,
+          "description": "Earn rewards by allocating veOCEAN to high-DCV assets; or delegating veOCEAN to market curators.",
+          "action": {
+            "text": "Set allocation",
+            "location": "/volume-df"
+          },
+          "metric": {
+            "name": "allocated",
+            "value": "0%"
+          }
+        },
+        {
+          "name": "Challenge DF",
+          "rewards": 0,
+          "description": "Earn rewards by participating and submitting predictions to the weekly challenge.",
+          "action": {
+            "text": "Participate",
+            "location": "/challenge-df"
+          },
+          "metric": {
+            "name": "previous submissions",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  ],
+  "total": 150000
+}

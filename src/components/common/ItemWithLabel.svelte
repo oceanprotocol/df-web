@@ -5,14 +5,15 @@
   export let value;
   export let float = false;
   export let loading = false;
+  export let direction = "column";
   export let tooltipMessage = undefined;
   export let tooltipState = undefined;
   export let tooltipDirection = "top";
   export let tooltipAlign = "center";
 </script>
 
-<div class="item">
-  <div class="titleContainer">
+<div class="item" style="flex-direction : {direction}">
+  <div class="titleContainer" style={direction=="row" && "margin-bottom:0; margin-right:calc(var(--spacer)/6)"}>
     <span class="title">{title}</span>
     {#if tooltipMessage}
       <CustomTooltip
@@ -34,6 +35,7 @@
   .item {
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
   :global(.item .bx--tooltip__label) {
     background-color: transparent !important;

@@ -96,9 +96,10 @@
     background-color: var(--background-body) !important;
   }
   .buttonSecondary {
-    background-color: var(--brand-grey-dimmed);
+    background: var(--brand-grey-dimmed) !important;
     border-radius: var(--border-radius);
-    border: 1px solid var(--brand-grey-lighter);
+    border: 1px solid var(--brand-grey-lighter) !important;
+    color: var(--brand-grey-light) !important;
   }
   .textOnly {
     background-color: transparent;

@@ -1,7 +1,6 @@
 <script>
   import { APYs } from "../../stores/airdrops";
   import { userBalances } from "../../stores/tokens";
-  import { lockedOceanAmount } from "../../stores/veOcean";
   import { userAddress } from "../../stores/web3";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { calcTotalAPY } from "../../utils/rewards";
@@ -17,11 +16,19 @@
     totalApy = calcTotalAPY($APYs.active, $APYs.passive);
     totalApyUser = calcTotalAPY($APYs.activeUser, $APYs.passiveUser);
   }
+
+  function getTotalRewards(){
+    let totalRewards = 0
+    roundInfo?.streams?.forEach((stream) => {
+      totalRewards+=parseInt(stream.rewards)
+    })
+    return `${totalRewards.toLocaleString()} OCEAN`
+  }
 </script>
 
 <Card
   title={`Data Farming Round ${roundInfo?.id}`}
-  subtitle={`${parseInt(roundInfo?.passive) + parseInt(roundInfo?.active)} OCEAN`}
+  subtitle={getTotalRewards()}
   tag={`${
     $APYs
       ? totalApy > 10000

@@ -124,6 +124,11 @@ export const getRoundAPY = async (userAddress) => {
               pattern: "sum(passive_amt)",
             },
           },
+          {
+            expression: {
+              pattern: "sum(challenge_amt)",
+            },
+          },
           "round",
         ],
         group: "round",
@@ -207,6 +212,26 @@ export const getDFallocations = async (userAddress) => {
           "round",
         ],
         group: "round",
+      }),
+    });
+  } catch (error) {
+    console.log(error);
+    return 0;
+  }
+  let data = await res.json();
+  return data;
+};
+
+export const getChallengeRewards = async () => {
+  let res;
+  try {
+    res = await fetch(`${import.meta.env.VITE_BACKEND_API}/challenge/rewards`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fields: ["winner_addr", "round", "OCEAN_amt"],
       }),
     });
   } catch (error) {
