@@ -231,6 +231,11 @@ export const getChallengeRewards = async () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        query: {
+              round: {
+                $gt: 47,
+              }
+            },
         fields: ["winner_addr", "round", "OCEAN_amt"],
       }),
     });

@@ -23,14 +23,15 @@
     const data = get(dataChallenges);
     
     // Map the data array to an array of row objects
-    const results = data.map((row, index) => {
-      return {
+    let results=[]
+    data.forEach((row, index) => {
+      results.push( {
         id: String(index + 1),
         round: row[0],
         first_prize: `${parseInt(row[1]).toLocaleString()} OCEAN - ${row[2]}`,
         second_prize: `${parseInt(row[3]).toLocaleString()} OCEAN - ${row[4]}`,
         third_prize: `${parseInt(row[5]).toLocaleString()} OCEAN - ${row[6]}`,
-      };
+      });
     });
 
     return results;
