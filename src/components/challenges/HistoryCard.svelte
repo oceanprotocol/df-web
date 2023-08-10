@@ -34,7 +34,7 @@
       });
     });
 
-    return results;
+    return results.sort((a, b) => (a.round < b.round)? 1 : -1)
   }
   
   let unsubscribe;  // For cleaning up the subscription
