@@ -8,8 +8,6 @@ export async function loadDFChallengeResults() {
   try {
     let results = [];
     let rewards = await getChallengeRewards();
-    let challengesData = await getUserSubmittedChallenges()
-    console.log(challengesData)
 
     rewards.forEach((r) => {
       if (!results[r.round]) results[r.round] = [];
@@ -22,13 +20,16 @@ export async function loadDFChallengeResults() {
         index,
         round[0].OCEAN_amt,
         round[0].winner_addr,
+        parseFloat(round[0].nmse).toFixed(10),
         round[1].OCEAN_amt,
         round[1].winner_addr,
+        parseFloat(round[1].nmse).toFixed(10),
         round[2].OCEAN_amt,
         round[2].winner_addr,
+        parseFloat(round[2].nmse).toFixed(10),
       ];
     });
-
+    console.log(results)
     dataChallenges.set(results);
   } catch (error) {
     console.log("loadDataChallenges error:", error);
