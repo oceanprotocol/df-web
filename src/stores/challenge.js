@@ -8,6 +8,8 @@ export async function loadDFChallengeResults() {
   try {
     let results = [];
     let rewards = await getChallengeRewards();
+    let challengesData = await getUserSubmittedChallenges()
+    console.log(challengesData)
 
     rewards.forEach((r) => {
       if (!results[r.round]) results[r.round] = [];
@@ -46,16 +48,16 @@ export const getUserSubmittedChallenges = async (userAddress) => {
         query: userAddress
           ? {
               round: {
-                $gt: -1,
+                $gt: 47,
               },
               from_addr: userAddress.toLowerCase(),
             }
           : {
               round: {
-                $gt: -1,
+                $gt: 47,
               },
             },
-        fields: ["from_addr", "nft_addr", "nmse"],
+        fields: ["from_addr", "nft_addr", "nmse", "round"],
       }),
     });
   } catch (error) {

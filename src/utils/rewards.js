@@ -236,9 +236,9 @@ export const getChallengeRewards = async () => {
                 $gt: 47,
               }
             },
-        fields: ["winner_addr", "round", "OCEAN_amt"],
       }),
     });
+    console.log(res)
   } catch (error) {
     console.log(error);
     return 0;
