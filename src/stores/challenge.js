@@ -29,7 +29,6 @@ export async function loadDFChallengeResults() {
         parseFloat(round[2].nmse).toFixed(10),
       ];
     });
-    console.log(results)
     dataChallenges.set(results);
   } catch (error) {
     console.log("loadDataChallenges error:", error);

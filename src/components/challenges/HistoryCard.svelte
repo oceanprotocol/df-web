@@ -21,7 +21,6 @@
   const formatDFChallengeResults = () => {
     // Retrieve the current value from the dataChallenges store
     const data = get(dataChallenges);
-    console.log(data)
     
     // Map the data array to an array of row objects
     let results=[]

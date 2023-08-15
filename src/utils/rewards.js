@@ -265,7 +265,6 @@ export const getChallengeRewards = async () => {
       }),
       
     });
-    console.log(res)
   } catch (error) {
     console.log(error);
     return 0;
