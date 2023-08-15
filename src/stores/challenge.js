@@ -20,13 +20,15 @@ export async function loadDFChallengeResults() {
         index,
         round[0].OCEAN_amt,
         round[0].winner_addr,
+        parseFloat(round[0].nmse).toFixed(10),
         round[1].OCEAN_amt,
         round[1].winner_addr,
+        parseFloat(round[1].nmse).toFixed(10),
         round[2].OCEAN_amt,
         round[2].winner_addr,
+        parseFloat(round[2].nmse).toFixed(10),
       ];
     });
-
     dataChallenges.set(results);
   } catch (error) {
     console.log("loadDataChallenges error:", error);
@@ -46,16 +48,16 @@ export const getUserSubmittedChallenges = async (userAddress) => {
         query: userAddress
           ? {
               round: {
-                $gt: -1,
+                $gt: 47,
               },
               from_addr: userAddress.toLowerCase(),
             }
           : {
               round: {
-                $gt: -1,
+                $gt: 47,
               },
             },
-        fields: ["from_addr", "nft_addr", "nmse"],
+        fields: ["from_addr", "nft_addr", "nmse", "round"],
       }),
     });
   } catch (error) {

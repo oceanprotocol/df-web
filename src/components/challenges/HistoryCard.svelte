@@ -28,9 +28,9 @@
       results.push( {
         id: String(index + 1),
         round: row[0],
-        first_prize: `${parseInt(row[1]).toLocaleString()} OCEAN - ${row[2]}`,
-        second_prize: `${parseInt(row[3]).toLocaleString()} OCEAN - ${row[4]}`,
-        third_prize: `${parseInt(row[5]).toLocaleString()} OCEAN - ${row[6]}`,
+        first_prize: `${parseInt(row[1]).toLocaleString()} OCEAN - ${row[2]} - NMSE ${row[3]}`,
+        second_prize: `${parseInt(row[4]).toLocaleString()} OCEAN - ${row[5]} - NMSE ${row[6]}`,
+        third_prize: `${parseInt(row[7]).toLocaleString()} OCEAN - ${row[8]} - NMSE ${row[9]}`,
       });
     });
 
@@ -87,8 +87,11 @@
                     rel="noreferrer"
                     class="link"
                   >
-                    {`${cell.value.split(' - ')[0]} - ${cell.value.split(' - ')[1].toLowerCase().substr(0, 6) + '...' + cell.value.split(' - ')[1].toLowerCase().substr(cell.value.split(' - ')[1].toLowerCase().length - 6)}`}
+                  <div class="challengeWinnerAndReward">
+                    <span>{`${cell.value.split(' - ')[0]} - ${cell.value.split(' - ')[1].toLowerCase().substr(0, 6) + '...' + cell.value.split(' - ')[1].toLowerCase().substr(cell.value.split(' - ')[1].toLowerCase().length - 6)}`}</span>
                     <img class="externalLink" src={ExternalIcon} alt="external link" />
+                  </div>
+                  <span class="nmse">{cell.value.split(' - ')[2]}</span>
                   </a>
                 {:else if cell.key === 'first_prize' || cell.key === 'second_prize' || cell.key === 'third_prize'}
                   {`${cell.value} OCEAN`}
@@ -120,7 +123,8 @@
   }
   .link{
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: center;
     text-decoration: none;
   }
@@ -128,5 +132,13 @@
     width: 10px;
     height: auto;
     margin-left: calc(var(--spacer) / 6);
+  }
+  .challengeWinnerAndReward{
+    display: flex;
+    font-weight: bold;
+    margin-bottom: calc(var(--spacer)/12);
+  }
+  .nmse{
+    font-size: var(--font-size-small);
   }
 </style>

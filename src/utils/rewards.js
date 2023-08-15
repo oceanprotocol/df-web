@@ -236,8 +236,34 @@ export const getChallengeRewards = async () => {
                 $gt: 47,
               }
             },
-        fields: ["winner_addr", "round", "OCEAN_amt"],
+            join: [
+              {
+                "alias": "t1",
+                "type": "left",
+                "on": {
+                  "challenge_rewards.winner_addr": "t1.from_addr",
+                  "challenge_rewards.round": "t1.rnd"
+                },
+                "select": {
+                  "table": "challenge_data",
+                  "fields": [
+                    {
+                      "expression": {
+                        "pattern": "nmse"
+                      }
+                    },
+                    "from_addr",
+                    "nft_addr",
+            {
+                      "field": "round",
+                      "alias": "rnd"
+                    }
+                  ]
+                }
+              }
+            ]
       }),
+      
     });
   } catch (error) {
     console.log(error);
