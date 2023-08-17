@@ -24,8 +24,8 @@
   </h1>
   <nav>
     <ul>
-      <li class:active={$location.pathname === "/passive"}>
-        <Link to="/passive" class="link">PASSIVE</Link>
+      <li class:active={$location.pathname === "/passive-df" || $location.pathname === "/veocean"}>
+        <Link to="/passive-df" class="link">PASSIVE-DF</Link>
       </li>
       <li class:active={$location.pathname === "/volume-df"}>
         <Link to="/volume-df" class="link">VOLUME-DF</Link>
