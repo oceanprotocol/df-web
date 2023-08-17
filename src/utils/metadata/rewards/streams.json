@@ -24,7 +24,7 @@
       "rewards": 0,
       "substreams": [
         {
-          "name": "Volume DF",
+          "name": "Volume-DF",
           "rewards": 0,
           "description": "Earn rewards by allocating veOCEAN to high-DCV assets; or delegating veOCEAN to market curators.",
           "action": {
@@ -37,7 +37,7 @@
           }
         },
         {
-          "name": "Challenge DF",
+          "name": "Challenge-DF",
           "rewards": 0,
           "description": "Earn rewards by participating and submitting predictions to the weekly challenge.",
           "action": {
