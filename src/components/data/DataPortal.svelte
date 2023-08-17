@@ -16,6 +16,7 @@
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { userBalances } from "../../stores/tokens";
   import { oceanUnlockDate } from "../../stores/veOcean";
+  import DelegationPortal from "../delegation/DelegationPortal.svelte";
 
   let allocations;
   let message = undefined;
@@ -98,6 +99,7 @@
 >
     <div class="wrapper">
       <h2 class="title">Curate Data to Earn OCEAN</h2>
+      <p class="message">Allow anoher wallet to manage your veOCEAN allocation by delegating. <a href="#delegation" rel="noreferrer" >Scrool down to delegation section.</a></p>
       <div class="data">
         <Table 
           dataAvailable={$datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
@@ -109,25 +111,23 @@
         />
       </div>
     </div>
+    <DelegationPortal />
 </div>
 
 <style>
   .wrapper {
     padding-top: calc(var(--spacer) * 2);
-    height: 100%;
     width: 100%;
   }
 
   .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
     width: 100%;
+    margin-bottom: var(--spacer);
   }
 
   .title {
     width: 100%;
+    margin-bottom: calc(var(--spacer) / 2);
   }
 
   .data {
@@ -145,7 +145,7 @@
 
   .alignContentCenter {
     justify-content: center;
-    height: calc(100vh - 115px);
+    min-height: calc(100vh - 115px);
   }
 
   @media (min-width: 640px) {

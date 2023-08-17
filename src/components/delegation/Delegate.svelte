@@ -190,7 +190,7 @@
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    padding-top: calc(var(--spacer) * 2);
+    padding-top: var(--spacer);
   }
   .form {
     display: flex;
