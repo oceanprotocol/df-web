@@ -225,7 +225,7 @@
     <Route path="/volume-df" primary={false}>
       <DataPortal />
     </Route>
-    <Route path="/veocean" primary={false}>
+    <Route path="/passive" primary={false}>
       <VeOceanPortal />
     </Route>
     <Route path="/delegate" primary={false}>

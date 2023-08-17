@@ -10,7 +10,7 @@
           "description": "Earn rewards by locking OCEAN and holding veOCEAN. The longer you hold, the more you earn.",
           "action": {
             "text": "Get veOCEAN",
-            "location": "/veocean"
+            "location": "/passive"
           },
           "metric": {
             "name": "balance",
