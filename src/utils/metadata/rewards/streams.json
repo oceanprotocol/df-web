@@ -5,7 +5,7 @@
       "rewards": 0,
       "substreams": [
         {
-          "name": "veOCEAN",
+          "name": "Passive-DF",
           "rewards": 0,
           "description": "Earn rewards by locking OCEAN and holding veOCEAN. The longer you hold, the more you earn.",
           "action": {
