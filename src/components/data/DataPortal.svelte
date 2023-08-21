@@ -99,7 +99,8 @@
 >
     <div class="wrapper">
       <h2 class="title">Curate Data to Earn OCEAN</h2>
-      <p class="message">Allow anoher wallet to manage your veOCEAN allocation by delegating. <a href="#delegation" rel="noreferrer" >Scrool down to delegation section.</a></p>
+      <p class="message">Allocate veOCEAN to Data assets that generate sales, to earn Active Rewards.</p>
+      <p class="message">You can allow another wallet to manage your veOCEAN allocation by delegating. <a href="#delegation" rel="noreferrer" >Scrol down to delegate.</a></p>
       <div class="data">
         <Table 
           dataAvailable={$datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
