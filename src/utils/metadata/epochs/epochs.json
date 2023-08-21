@@ -1510,7 +1510,11 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards": 70000
+            "rewards": 35000
+          },
+          {
+            "name": "Volume DF",
+            "rewards": 35000
           },
           {
             "name": "Challenge",

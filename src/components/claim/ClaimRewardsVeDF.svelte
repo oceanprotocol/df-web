@@ -21,6 +21,7 @@
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import { userSubmittedChallenges } from "../../stores/challenge";
+  import { getPredictoorAccuracy } from "../../utils/predictoor";
  
   export let canClaimVE = true;
   export let canClaimDF = true;
@@ -122,6 +123,12 @@
     streams[1].substreams[1].metric.value = $userSubmittedChallenges.length
   }
 
+  async function addUserPredictoorAccuracy(){
+    let accuracy = await getPredictoorAccuracy($userAddress)
+    streams[1].substreams[2].metric.value = accuracy
+    console.log(accuracy)
+  }
+
   function addVeOceanBalance(){
     streams[0].substreams[0].metric.value = `${$userBalances[
         getAddressByChainIdKey(supportedChainId, "veOCEAN")
@@ -168,6 +175,7 @@
   $:if($userSubmittedChallenges) addUserSubmittedChallenges()
   $:if($veClaimables) streams[0].substreams[0].availableRewards = $veClaimables
   $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards) setUnclaimedActiveRewardsSubstreamValues()
+  $:if($userAddress) addUserPredictoorAccuracy()
 </script>
 
 <div class="container">

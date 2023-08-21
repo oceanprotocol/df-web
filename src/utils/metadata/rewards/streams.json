@@ -52,13 +52,13 @@
         {
           "name": "Predictoor DF",
           "rewards": 0,
-          "description": "Earn by submiting accurate predictions of the price direction to the available contracts inside predictoor webpage.",
+          "description": "Earn by submiting accurate predictions of the price direction to the available predictoor contracts.",
           "action": {
             "text": "Predict",
             "location": "/challenge-df"
           },
           "metric": {
-            "name": "accurate predictions",
+            "name": "prediction accuracy",
             "value": "0"
           }
         }
