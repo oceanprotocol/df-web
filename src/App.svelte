@@ -227,7 +227,10 @@
     <Route path="/passive-df" primary={false}>
       <VeOceanPortal />
     </Route>
-     <Route path="/veocean" primary={false}>
+    <Route path="/delegate" primary={false}>
+      <VeOceanPortal />
+    </Route>
+    <Route path="/veocean" primary={false}>
       <VeOceanPortal />
     </Route>
     <Route path="/challenge-df" primary={false}>
