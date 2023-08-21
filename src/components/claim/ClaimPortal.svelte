@@ -41,7 +41,7 @@
         if(!curEpoch?.streams) return stream; // return the original stream if there is no current epoch
         stream.rewards = curEpoch?.streams[indexStream]?.rewards;
         stream.substreams.forEach((substream, indexSubstream) => {
-          substream.rewards = curEpoch.streams[indexStream].substreams[indexSubstream].rewards;
+          substream.rewards = curEpoch.streams[indexStream].substreams[indexSubstream]?.rewards;
         });
         return stream; // return the updated stream
     });

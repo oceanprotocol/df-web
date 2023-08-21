@@ -48,6 +48,19 @@
             "name": "previous submissions",
             "value": "0"
           }
+        },
+        {
+          "name": "Predictoor DF",
+          "rewards": 0,
+          "description": "Earn by submiting accurate predictions of the price direction to the available contracts inside predictoor webpage.",
+          "action": {
+            "text": "Predict",
+            "location": "/challenge-df"
+          },
+          "metric": {
+            "name": "accurate predictions",
+            "value": "0"
+          }
         }
       ]
     }
