@@ -5,12 +5,12 @@
       "rewards": 0,
       "substreams": [
         {
-          "name": "veOCEAN",
+          "name": "Passive-DF",
           "rewards": 0,
           "description": "Earn rewards by locking OCEAN and holding veOCEAN. The longer you hold, the more you earn.",
           "action": {
             "text": "Get veOCEAN",
-            "location": "/veocean"
+            "location": "/passive-df"
           },
           "metric": {
             "name": "balance",
@@ -24,7 +24,7 @@
       "rewards": 0,
       "substreams": [
         {
-          "name": "Volume DF",
+          "name": "Volume-DF",
           "rewards": 0,
           "description": "Earn rewards by allocating veOCEAN to high-DCV assets; or delegating veOCEAN to market curators.",
           "action": {
@@ -37,7 +37,7 @@
           }
         },
         {
-          "name": "Challenge DF",
+          "name": "Challenge-DF",
           "rewards": 0,
           "description": "Earn rewards by participating and submitting predictions to the weekly challenge.",
           "action": {

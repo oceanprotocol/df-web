@@ -121,8 +121,8 @@
       ends. You can cancel at any time.
     </p>
     <p class="message">
-      The wallet address you delegate to is going to receive 100% of your Active
-      Rewards.<br />
+      <strong>The wallet address you delegate to is going to receive 100% of your Active
+      Rewards.</strong><br />
       If you update your lock and obtain more veOCEAN, you must update your delegation
       to remain 100% delegated.
     </p>
@@ -190,7 +190,7 @@
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    padding-top: calc(var(--spacer) * 2);
+    padding-top: var(--spacer);
   }
   .form {
     display: flex;

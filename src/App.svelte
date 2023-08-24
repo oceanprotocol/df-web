@@ -2,7 +2,6 @@
   import Header from "../src/components/header/Header.svelte";
   import BannerMessage from "./components/common/BannerMessage.svelte";
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
-  import DelegationPortal from "./components/delegation/DelegationPortal.svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
   import DataPortal from "./components/data/DataPortal.svelte";
   import ChallengesPortal from "./components/challenges/ChallengesPortal.svelte";
@@ -221,11 +220,14 @@
     <Route path="/volume-df" primary={false}>
       <DataPortal />
     </Route>
-    <Route path="/veocean" primary={false}>
+    <Route path="/passive-df" primary={false}>
       <VeOceanPortal />
     </Route>
     <Route path="/delegate" primary={false}>
-      <DelegationPortal />
+      <DataPortal />
+    </Route>
+    <Route path="/veocean" primary={false}>
+      <VeOceanPortal />
     </Route>
     <Route path="/challenge-df" primary={false}>
       <ChallengesPortal />

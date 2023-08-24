@@ -47,9 +47,9 @@
   }
 </script>
 
-<div class={`container`}>
+<div class={`container`} id="delegation">
   <h2 class="title">
-    Allow another wallet to manage your veOCEAN allocation by delegating.
+    Delegate your allocation.
   </h2>
   <p class="message">
     Maximize your Active APY and skip transaction fees by delegating to a wallet
