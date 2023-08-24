@@ -208,12 +208,8 @@
 
 <Router>
   <BannerMessage
-    title={`Data Farming Main has started!</a>`}
-    message={`Read <a href='https://blog.oceanprotocol.com/ocean-data-farming-main-is-here-49c99602419e' target='_blank'><strong>the blogpost</strong></a> for more information.`}
-  />
-  <BannerMessage
-    type="default"
-    message={`Publish your datasets through our <strong><a href='https://market.oceanprotocol.com/publish/1' target='_blank'>marketplace</a></strong> to get <strong><a href='https://blog.oceanprotocol.com/data-farming-publisher-rewards-f2639525e508' target='_blank'>2X Stake</a></strong> for publishers.`}
+    title={`Challenge-DF it's now live, participate in weekly challenges to get rewards!</a>`}
+    message={` Read <a href='https://blog.oceanprotocol.com/introducing-challenge-data-farming-378bba28fc97' target='_blank'><strong>the blogpost</strong></a> for more information.`}
   />
   <WalletConnectModal />
   <main>
