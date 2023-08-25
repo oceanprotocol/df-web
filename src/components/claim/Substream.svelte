@@ -20,7 +20,11 @@
                 <span class="apy">{apy.value}</span>
             {/if}
         </div>
+        {#if title.toLowerCase().includes("predictoor")}
+        <a href={"https://github.com/oceanprotocol/pdr-backend/blob/main/READMEs/predictoor.md"} target="_blank" rel="noreferrer">claim rewards here</a>
+        {:else}
         <ItemWithLabel title="rewards" value={`${parseFloat(rewards ? rewards : 0)?.toFixed(2)} OCEAN`} direction="row"/>
+        {/if}
     </div>
     <p class="description">{description}</p>
     <div class="action">
