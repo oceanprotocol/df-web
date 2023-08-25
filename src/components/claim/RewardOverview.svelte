@@ -24,34 +24,34 @@
     })
     return `${totalRewards.toLocaleString()} OCEAN`
   }
+
+  function calculateApyString(
+    apyValue,
+    userApyValue,
+    userBalances,
+    supportedChainId
+  ) {
+    const veOceanAddress = getAddressByChainIdKey(supportedChainId,"veOCEAN")
+    const userBalance = veOceanAddress && userBalances[veOceanAddress] ? userBalances[veOceanAddress] : 0;
+    const formattedApyValue = apyValue > 10000 ? "over 10000" : `${parseFloat(apyValue).toFixed(2)}`;
+    
+    if (userApyValue && userBalance > 0) {
+      const formattedUserApyValue = userApyValue > 10000 ? "over 10000" : `${parseFloat(userApyValue).toFixed(2)}`;
+      return `${formattedUserApyValue}% Your APY | ${formattedApyValue}% Avg APY`;
+    }
+    
+    return apyValue > 0 ? `${formattedApyValue}% Avg APY` : "";
+  }
 </script>
 
 <Card
   title={`Data Farming Round ${roundInfo?.id}`}
   subtitle={getTotalRewards()}
-  tag={`${
-    $APYs
-      ? totalApy > 10000
-        ? "over 10000"
-        : `${parseFloat(totalApy).toFixed(2)}`
-      : parseFloat(0).toFixed(2)
-  }% Avg APY ${
-    $userAddress
-      ? `| ${
-          $APYs &&
-          $userBalances[
-            getAddressByChainIdKey(
-              supportedChainId,
-              "veOCEAN"
-            )
-          ] > 0
-            ? totalApyUser > 10000
-              ? "over 10000"
-              : `${parseFloat(totalApyUser).toFixed(2)}`
-            : parseFloat(0).toFixed(2)
-        }% Your APY`
-      : ""
-  }`}
+  tag={calculateApyString(
+    totalApy,
+    totalApyUser,
+    supportedChainId
+  )}
   tooltipMessage={descriptions.default.tooltip_rewards_overview}
 >
   <Countdown />
