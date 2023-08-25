@@ -73,45 +73,44 @@
     claiming = undefined;
   }
 
-  function addAPYs(){
-    streams[0].substreams[0].apy = {value: `${
+  function addAPYs() {
+    streams[0].substreams[0].apy = {
+      value: `${
+        $userAddress
+          ? $APYs
+            ? $APYs?.passiveUser > 10000
+              ? "over 10000"
+              : `${$APYs?.passiveUser.toFixed(2)}`
+            : parseFloat(0).toFixed(2)
+          : ""
+      }% Your APY ${
         $APYs
           ? $APYs?.passive > 10000
             ? "over 10000"
             : `${$APYs?.passive.toFixed(2)}`
           : parseFloat(0).toFixed(2)
-      }% Avg APY ${
-        $userAddress
-          ? `| ${
-              $APYs
-                ? $APYs?.passiveUser > 10000
-                  ? "over 10000"
-                  : `${$APYs?.passiveUser.toFixed(2)}`
-                : parseFloat(0).toFixed(2)
-            }% Your APY`
-          : ""
-      }`,
-      tooltip: descriptions.default.tooltip_rewards_apy_passive}
+      }% Avg APY`,
+      tooltip: descriptions.default.tooltip_rewards_apy_passive,
+    };
 
-    streams[1].substreams[0].apy ={value: `${
+    streams[1].substreams[0].apy = {
+      value: `${
+        $userAddress
+          ? $APYs
+            ? $APYs?.activeUser > 10000
+              ? "over 10000"
+              : `${$APYs?.activeUser.toFixed(2)}`
+            : parseFloat(0).toFixed(2)
+          : ""
+      }% Your APY ${
         $APYs
           ? $APYs?.active > 10000
             ? "over 10000"
             : `${$APYs?.active.toFixed(2)}`
           : parseFloat(0).toFixed(2)
-      }% Avg APY ${
-        $userAddress
-          ? `| ${
-              $APYs
-                ? $APYs?.activeUser > 10000
-                  ? "over 10000"
-                  : `${$APYs?.activeUser.toFixed(2)}`
-                : parseFloat(0).toFixed(2)
-            }% Your APY`
-          : ""
-      }`,
-    tooltip: descriptions.default.tooltip_active_rewards
-    }
+      }% Avg APY`,
+      tooltip: descriptions.default.tooltip_active_rewards,
+    };
   }
 
   function addAllocated(){
