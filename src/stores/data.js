@@ -327,7 +327,7 @@ function getRow(dataInfo, key) {
     ),
     myveocean: dataInfo.allocation,
     lastroundvolume: parseFloat(dataInfo.lastRoundVolume).toFixed(3),
-    action: `https://market.oceanprotocol.com/asset/${dataInfo.did}`,
+    action: dataInfo.chainID != 23294 ? `https://market.oceanprotocol.com/asset/${dataInfo.did}` : 'https://predictoor.ai',
     publishersreward:
       dataInfo.ownerallocation > 0 || (isowner && dataInfo.allocation > 0),
   };

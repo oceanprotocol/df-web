@@ -58,6 +58,7 @@ web3Modal.setTheme({
 // TODO - Replace networkData w/ networksDataArray
 export function getNetworkDataById(data, networkId) {
   if (!networkId) return;
+  console.log
   const networkData = data.filter((chain) => chain.chainId === networkId);
   return networkData[0];
 }
