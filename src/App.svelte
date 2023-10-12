@@ -208,7 +208,7 @@
 
 <Router>
   <BannerMessage
-    title={`Challenge-DF it's now live, participate in weekly challenges to get rewards!</a>`}
+    title={`Predictoor-DF it's now live, become a predictoor by sending predictions to get rewards!</a>`}
     message={` Read <a href='https://blog.oceanprotocol.com/introducing-challenge-data-farming-378bba28fc97' target='_blank'><strong>the blogpost</strong></a> for more information.`}
   />
   <WalletConnectModal />

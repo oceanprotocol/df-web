@@ -55,7 +55,7 @@
           "description": "Earn by submiting accurate predictions of the price direction to the available predictoor contracts.",
           "action": {
             "text": "Predict",
-            "location": "/challenge-df"
+            "location": "https://predictoor.ai"
           },
           "metric": {
             "name": "prediction accuracy",
