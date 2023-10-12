@@ -24,20 +24,17 @@
   </h1>
   <nav>
     <ul>
-      <li class:active={$location.pathname === "/veocean"}>
-        <Link to="/veocean" class="link">veOCEAN</Link>
+      <li class:active={$location.pathname === "/passive-df" || $location.pathname === "/veocean"}>
+        <Link to="/passive-df" class="link">PASSIVE-DF</Link>
       </li>
       <li class:active={$location.pathname === "/volume-df"}>
         <Link to="/volume-df" class="link">VOLUME-DF</Link>
       </li>
-      <li class:active={$location.pathname === "/rewards"}>
-        <Link to="/rewards" class="link">REWARDS</Link>
-      </li>
-      <li class:active={$location.pathname === "/delegate"}>
-        <Link to="/delegate" class="link">DELEGATE</Link>
-      </li>
       <li class:active={$location.pathname === "/challenge-df"}>
         <Link to="/challenge-df" class="link">CHALLENGE-DF</Link>
+      </li>
+      <li class:active={$location.pathname === "/rewards"}>
+        <Link to="/rewards" class="link">REWARDS</Link>
       </li>
       <li class:active={false}>
         <a href={aboutURL} target="_blank" class="link" rel="noreferrer">ABOUT</a>

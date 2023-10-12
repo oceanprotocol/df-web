@@ -80,6 +80,14 @@
 </script>
 
 {#if !loading }
+<div>
+  <h2 class="title">
+    Get Passive rewards by locking you OCEAN tokens.
+  </h2>
+  <p class="message">
+    You can get veOCEAN tokens in exchage for OCEAN. The longer the lock period the more the veOCEAN received.
+    </p>
+  </div>
   <div class={`container`}>
   {#if showDismissAllowance}
     <ToastNotification
@@ -129,13 +137,22 @@
     justify-content: center;
   }
 
+  .title {
+    width: 100%;
+    margin-top: calc(var(--spacer) * 2);
+    margin-bottom: calc(var(--spacer) / 2);
+  }
+  .message {
+    width: 100%;
+  }
+
   :global(.dismissAllowanceButton){
     margin-bottom: calc(var(--spacer)/3) !important;
   }
 
   @media (min-width: 640px) {
     .container {
-      padding-top: calc(var(--spacer) * 2);
+      padding-top: var(--spacer);
       gap: var(--spacer);
     }
   }

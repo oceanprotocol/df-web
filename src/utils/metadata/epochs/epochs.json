@@ -1682,24 +1682,259 @@
     "id": 56,
     "date_start": "2023-09-21",
     "date_end": "2023-09-28",
-    "passive": 75000,
-    "active": 75000,
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 75000
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 70000
+          },
+          {
+            "name": "Challenge",
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
+          }
+        ]
+      }
+    ],
     "total": 150000
   },
   {
     "id": 57,
     "date_start": "2023-09-28",
     "date_end": "2023-10-05",
-    "passive": 75000,
-    "active": 75000,
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 75000
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 70000
+          },
+          {
+            "name": "Challenge",
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
+          }
+        ]
+      }
+    ],
+    "total": 150000
+  },
+  {
+    "id": 59,
+    "date_start": "2023-10-12",
+    "date_end": "2023-10-19",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 75000
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 70000
+          },
+          {
+            "name": "Challenge",
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
+          }
+        ]
+      }
+    ],
+    "total": 150000
+  },
+  {
+    "id": 60,
+    "date_start": "2023-10-19",
+    "date_end": "2023-10-26",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 75000
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 70000
+          },
+          {
+            "name": "Challenge",
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
+          }
+        ]
+      }
+    ],
+    "total": 150000
+  },
+  {
+    "id": 61,
+    "date_start": "2023-10-26",
+    "date_end": "2023-11-02",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 75000
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 70000
+          },
+          {
+            "name": "Challenge",
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
+          }
+        ]
+      }
+    ],
+    "total": 150000
+  },
+  {
+    "id": 63,
+    "date_start": "2023-11-02",
+    "date_end": "2023-11-09",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 75000
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 70000
+          },
+          {
+            "name": "Challenge",
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
+          }
+        ]
+      }
+    ],
     "total": 150000
   },
   {
     "id": 58,
     "date_start": "2023-10-05",
     "date_end": "2023-10-12",
-    "passive": 75000,
-    "active": 75000,
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 75000
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 70000
+          },
+          {
+            "name": "Challenge",
+            "rewards": 5000,
+            "prizes": [
+              2500,
+              1500,
+              1000
+            ]
+          }
+        ]
+      }
+    ],
     "total": 150000
   }
 ]
