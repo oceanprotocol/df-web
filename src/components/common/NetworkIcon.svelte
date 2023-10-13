@@ -4,6 +4,7 @@
   const MoonbeamIcon = "/images/moonbeam.svg";
   const BscIcon = "/images/bsc.svg";
   const EnergywebIcon = "/images/energyweb.svg";
+  const OasisIcon = "/images/oasis.svg";
 
   export let name;
   export let minimal = false;
@@ -23,6 +24,8 @@
       ? BscIcon
       : name.includes(minimal ? "Energy Web" : "Energy Web")
       ? EnergywebIcon
+      : name.includes(minimal ? "Sapphire" : "Sapphire")
+      ? OasisIcon
       : EthIcon; // ETH icon as fallback
   }
 </script>
