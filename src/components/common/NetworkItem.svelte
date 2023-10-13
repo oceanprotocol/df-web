@@ -14,7 +14,6 @@
   let name = undefined;
 
   $: if (chainId) {
-    console.log(getNetworkDataById(networksData, parseInt(chainId))?.name)
     name = minimal
       ? getNetworkDataById(networksData, parseInt(chainId))?.chain
       : getNetworkDataById(networksData, parseInt(chainId))?.name;
