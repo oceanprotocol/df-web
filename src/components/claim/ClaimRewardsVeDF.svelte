@@ -179,7 +179,7 @@
       amount={`${parseFloat(stream.name.toLowerCase() == 'passive' ? `${parseFloat(passiveRewards).toFixed(2)}` : $dfClaimables).toFixed(2)} OCEAN`}
       loading={stream.name.toLowerCase() == 'passive' ? claiming === "VE_REWARDS" : claiming === "DF_REWARDS"}
       onClick={stream.name.toLowerCase() == 'passive' ? onClaimVeRewards : onClaimDfRewards}
-      buttonText={stream.name.toLowerCase() == 'passive' && $veClaimables!=passiveRewards ? `First Claim ${parseFloat($veClaimables).toFixed(2)}` : 'Claim Rewards'}
+      buttonText={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? `First Claim ${parseFloat($veClaimables).toFixed(2)}` : 'Claim Rewards'}
       substreams={stream.substreams}
       disabled={canClaim(stream.name)}
     />
