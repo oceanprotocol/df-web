@@ -9,6 +9,7 @@
     dfClaimables,
     getDFRewards,
     lastActiveRewardsClaimRound,
+    lastPassiveRewardsClaimRound,
   } from "../../stores/airdrops";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
   import { getVeOceanBalance } from "../../utils/ve";
@@ -21,7 +22,7 @@
   import { getEpoch } from "../../utils/epochs";
   import { oceanUnlockDate } from "../../stores/veOcean";
   import * as streamsData from "../../utils/metadata/rewards/streams.json";
-  import {GET_USER_LAST_ACTIVE_REWARDS_CLAIM} from "../../utils/subgraph";
+  import {GET_USER_LAST_ACTIVE_REWARDS_CLAIM, GET_USER_LAST_PASSIVE_REWARDS_CLAIM} from "../../utils/subgraph";
   import { onMount } from "svelte";
 
   let loading = false;
@@ -31,6 +32,7 @@
   const now = moment.utc();
   let curEpoch = getEpoch(now);
   let streams = null;
+  let userLastPassiveRewardsClaim = null;
   let userLastActiveRewardsClaim = query(GET_USER_LAST_ACTIVE_REWARDS_CLAIM, {
       variables: { userAddress: $userAddress.toLowerCase() },
     })
@@ -85,6 +87,9 @@
     userLastActiveRewardsClaim = query(GET_USER_LAST_ACTIVE_REWARDS_CLAIM, {
       variables: { userAddress: $userAddress.toLowerCase() },
     })
+    userLastPassiveRewardsClaim = query(GET_USER_LAST_PASSIVE_REWARDS_CLAIM, {
+      variables: { userAddress: $userAddress.toLowerCase() },
+    })
   }
 
   $: if ($userLastActiveRewardsClaim.data) {
@@ -93,6 +98,14 @@
     }
     else{
       lastActiveRewardsClaimRound.set(getEpoch(moment.unix(parseInt($userLastActiveRewardsClaim.data.dfrewards[0].history[0].timestamp)).utc()).id)
+    }
+  }
+
+  $: if ($userLastPassiveRewardsClaim?.data) {
+    if($userLastPassiveRewardsClaim.data?.veOCEAN?.claims.length>0){
+      lastPassiveRewardsClaimRound.set(getEpoch(moment($userLastPassiveRewardsClaim.data.veOCEAN.claims[0].timestamp * 1000)))
+    }else{
+      lastPassiveRewardsClaimRound.set(0)
     }
   }
 

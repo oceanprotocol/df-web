@@ -13,6 +13,7 @@
   export let rewardTooltip = undefined;
   export let apy = undefined;
   export let substreams;
+  export let buttonText = "Claim Rewards"
 </script>
 
 <div class={`container`}>
@@ -46,7 +47,7 @@
         />
         <div class="buttonMargin">
           <Button
-            text={loading ? "Loading..." : "Claim Rewards"}
+            text={loading ? "Loading..." : buttonText}
             onclick={onClick}
             disabled={loading || disabled}
           />
