@@ -50,6 +50,7 @@
   import "@oceanprotocol/typographies/css/ocean-typo.css";
   import { getUserSubmittedChallenges, userSubmittedChallenges } from "./stores/challenge";
   import Redirect from "./components/common/Redirect.svelte";
+  import Footer from "./components/footer/Footer.svelte";
   
   // @ts-ignore
   window.Buffer = Buffer;
@@ -235,6 +236,7 @@
     <Route path="/*" primary={false}>
       <Redirect />
     </Route>
+    <Footer/>
   </main>
 </Router>
 
