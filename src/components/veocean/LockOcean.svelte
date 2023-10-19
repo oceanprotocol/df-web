@@ -322,7 +322,7 @@
         </div>
       </div>
       <AgreementCheckbox
-        text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, waive all rights, and assume all risks."
+        text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, <a href='/terms'><strong>terms of use</strong></a>, waive all rights, and assume all risks."
         bind:value={$form.ageement}
       />
       <div class="item buttonContainer">
