@@ -176,10 +176,11 @@
     <ClaimItem
       title={stream.name}
       distributedAmount={stream?.rewards}
-      amount={`${parseFloat(stream.name.toLowerCase() == 'passive' ? `${parseFloat(passiveRewards).toFixed(2)}` : $dfClaimables).toFixed(2)} OCEAN`}
+      amount={`${parseFloat(stream.name.toLowerCase() == 'passive' ? `${parseFloat(passiveRewards > $veClaimables ? passiveRewards : $veClaimables).toFixed(2)}` : $dfClaimables).toFixed(2)} OCEAN`}
       loading={stream.name.toLowerCase() == 'passive' ? claiming === "VE_REWARDS" : claiming === "DF_REWARDS"}
+      claimMessage={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? 'You need multiple claims to claim all the rewards' : undefined}
       onClick={stream.name.toLowerCase() == 'passive' ? onClaimVeRewards : onClaimDfRewards}
-      buttonText={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? `First Claim ${parseFloat($veClaimables).toFixed(2)}` : 'Claim Rewards'}
+      buttonText={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? `Claim ${parseFloat($veClaimables).toFixed(2)}` : 'Claim All'}
       substreams={stream.substreams}
       disabled={canClaim(stream.name)}
     />

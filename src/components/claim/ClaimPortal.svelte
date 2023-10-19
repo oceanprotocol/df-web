@@ -101,7 +101,7 @@
     }
   }
 
-  $: if ($userLastPassiveRewardsClaim?.data) {
+  $: if ($userLastPassiveRewardsClaim?.data || $veClaimables) {
     if($userLastPassiveRewardsClaim.data?.veOCEAN?.claims.length>0){
       lastPassiveRewardsClaimRound.set(getEpoch(moment($userLastPassiveRewardsClaim.data.veOCEAN.claims[0].timestamp * 1000)).id)
     }else{
