@@ -165,7 +165,6 @@
   $:if($totalUserAllocation) addAllocated()
   $:if($userBalances) addVeOceanBalance()
   $:if($userSubmittedChallenges) addUserSubmittedChallenges()
-  //$:if($veClaimables) streams[0].substreams[0].availableRewards = $veClaimables
   $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards) setUnclaimedActiveRewardsSubstreamValues()
 </script>
 
