@@ -1,8 +1,3 @@
----
-title: Terms and Conditions
-description: Thanks for using our product and services.
----
-
 Data Farming Portal Terms and Conditions (this “**Agreement**”) is made and entered into by and between Ocean Protocol Foundation Ltd., with office at The Commerze @ Irving, 1 Irving Place, #08-11, Singapore, 369546 Singapore (“**Ocean**”) and the legal entity set forth in the Account Information (“**Customer**”). It governs Customer’s access to and use of the Data Farming Portal (as defined below) and takes effect on the date of its acceptance by Customer (the “**Effective Date**”). Customer represents being lawfully able to enter into contracts and having legal authority to bind Customer’s entity.
 
 **DEFINITIONS**
