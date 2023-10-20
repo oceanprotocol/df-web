@@ -13,6 +13,8 @@
   export let rewardTooltip = undefined;
   export let apy = undefined;
   export let substreams;
+  export let claimMessage;
+  export let buttonText = "Claim Rewards";
 </script>
 
 <div class={`container`}>
@@ -38,15 +40,20 @@
   {/if}
     <div class="rewardsContainer">
       <div class="claimRewards">
-        <ItemWithLabel
-          title="total rewards"
-          value={amount || "..."}
-          tooltipMessage={rewardTooltip || undefined}
-          direction="row"
-        />
+        <div class="rewardsAmt">
+          <ItemWithLabel
+            title="total rewards"
+            value={amount || "..."}
+            tooltipMessage={rewardTooltip || undefined}
+            direction="row"
+          />
+          {#if claimMessage} 
+            <span>{claimMessage}</span>
+          {/if}
+        </div>
         <div class="buttonMargin">
           <Button
-            text={loading ? "Loading..." : "Claim Rewards"}
+            text={loading ? "Loading..." : buttonText}
             onclick={onClick}
             disabled={loading || disabled}
           />
@@ -74,5 +81,16 @@
   }
   .buttonMargin {
     margin-top: calc(var(--spacer) / 4);
+  }
+  .rewardsAmt{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .rewardsAmt span{
+    font-size: var(--font-size-mini);
+    color: var(--brand-alert-yellow);
+    margin-top: calc(var(--spacer)/16);
   }
 </style>
