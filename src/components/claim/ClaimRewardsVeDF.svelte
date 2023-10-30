@@ -11,6 +11,7 @@
     APYs,
     lastActiveRewardsClaimRound,
     oceanUserRewards,
+    lastPassiveRewardsClaimRound,
   } from "../../stores/airdrops";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
@@ -27,6 +28,7 @@
   export let canClaimDF = true;
   export let streams;
   let claiming;
+  let passiveRewards = 0;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   async function onClaimDfRewards() {
@@ -153,11 +155,23 @@
     streams[1].substreams[1].availableRewards = challengeRewards
   }
 
+  const calculateUnclaimedPassiveReward = () => {
+    let sum = 0
+      $oceanUserRewards.forEach((r) => {
+        if(r.round >= $lastPassiveRewardsClaimRound) {
+          sum += r['sum(passive_amt)']
+        }
+      })
+      passiveRewards = sum
+      streams[0].substreams[0].availableRewards = sum
+  }
+
+  $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards) calculateUnclaimedPassiveReward()
+
   $:if($APYs) addAPYs()
   $:if($totalUserAllocation) addAllocated()
   $:if($userBalances) addVeOceanBalance()
   $:if($userSubmittedChallenges) addUserSubmittedChallenges()
-  $:if($veClaimables) streams[0].substreams[0].availableRewards = $veClaimables
   $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards) setUnclaimedActiveRewardsSubstreamValues()
   $:if($userAddress) addUserPredictoorAccuracy()
 </script>
@@ -169,9 +183,11 @@
     <ClaimItem
       title={stream.name}
       distributedAmount={stream?.rewards}
-      amount={`${parseFloat(stream.name.toLowerCase() == 'passive' ? $veClaimables : $dfClaimables).toFixed(2)} OCEAN`}
+      amount={`${parseFloat(stream.name.toLowerCase() == 'passive' ? `${parseFloat(passiveRewards > $veClaimables ? passiveRewards : $veClaimables).toFixed(2)}` : $dfClaimables).toFixed(2)} OCEAN`}
       loading={stream.name.toLowerCase() == 'passive' ? claiming === "VE_REWARDS" : claiming === "DF_REWARDS"}
+      claimMessage={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? 'You need multiple claims to claim all the rewards' : undefined}
       onClick={stream.name.toLowerCase() == 'passive' ? onClaimVeRewards : onClaimDfRewards}
+      buttonText={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? `Claim ${parseFloat($veClaimables).toFixed(2)}` : 'Claim All'}
       substreams={stream.substreams}
       disabled={canClaim(stream.name)}
     />

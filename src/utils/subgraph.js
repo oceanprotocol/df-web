@@ -10,7 +10,7 @@ export const TOTAL_LOCKED = gql`
 `;
 
 export const GET_USER_LAST_ACTIVE_REWARDS_CLAIM = gql`
-  query userDelegation($userAddress: String!) {
+  query userLastActiveClaim($userAddress: String!) {
     dfrewards(where: { id: $userAddress }) {
       id
       receiver {
@@ -25,6 +25,19 @@ export const GET_USER_LAST_ACTIVE_REWARDS_CLAIM = gql`
         id
         timestamp
       }
+    }
+  }
+`;
+
+export const GET_USER_LAST_PASSIVE_REWARDS_CLAIM = gql`
+  query userLastPassivClaim($userAddress: String!) {
+    veOCEAN(id: $userAddress) {
+      claims(first: 1
+        orderBy: timestamp
+        orderDirection: desc) {
+          id
+          timestamp
+        }
     }
   }
 `;

@@ -18,6 +18,8 @@
       ? getNetworkDataById(networksData, parseInt(chainId))?.chain
       : getNetworkDataById(networksData, parseInt(chainId))?.name;
   }
+
+
 </script>
 
 <div class={`container ${checked === undefined && "margin0"}`}>
