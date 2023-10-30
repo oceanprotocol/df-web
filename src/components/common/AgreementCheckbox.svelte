@@ -1,12 +1,13 @@
 <script>
-  import Input from "../common/Input.svelte";
+  import SvelteMarkdown from "svelte-markdown";
+import Input from "../common/Input.svelte";
   export let text;
   export let value;
 </script>
 
 <div class="container">
   <Input type="checkbox" bind:value className="lockAgreementCheckbox" />
-  <span class="text">{text}</span>
+  <span class="text">{@html text}</span>
 </div>
 
 <style>
