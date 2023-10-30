@@ -5950,7 +5950,7 @@
     ]
   }, {
     "name": "Sapphire Paratime Mainnet",
-    "chain": "oasis",
+    "chain": "Sapphire",
     "icon": "oasis",
     "rpc": ["https://sapphire.oasis.io", "wss://sapphire.oasis.io/ws"],
     "faucets": [],
@@ -5960,13 +5960,35 @@
       "decimals": 18
     },
     "infoURL": "https://docs.oasis.dev/general/developer-resources/overview",
-    "shortName": "oasis",
+    "shortName": "sapphire",
     "chainId": 23294,
     "networkId": 23294,
     "explorers": [
       {
         "name": "Sapphire Paratime Mainnet Explorer",
         "url": "https://explorer.sapphire.oasis.io",
+        "standard": "EIP3091"
+      }
+    ]
+  }, {
+    "name": "Sapphire Paratime Testnet",
+    "chain": "Sapphire testnet",
+    "icon": "sapphire",
+    "rpc": ["https://testnet.sapphire.oasis.dev", "wss://testnet.sapphire.oasis.dev/ws"],
+    "faucets": [],
+    "nativeCurrency": {
+      "name": "Sapphire Rose",
+      "symbol": "ROSE",
+      "decimals": 18
+    },
+    "infoURL": "https://docs.oasis.dev/general/developer-resources/overview",
+    "shortName": "sapphire testnet",
+    "chainId": 23295,
+    "networkId": 23295,
+    "explorers": [
+      {
+        "name": "Sapphire Paratime Testnet Explorer",
+        "url": "https://testnet.explorer.sapphire.oasis.dev",
         "standard": "EIP3091"
       }
     ]

@@ -24,7 +24,7 @@
       ? BscIcon
       : name.includes(minimal ? "Energy Web" : "Energy Web")
       ? EnergywebIcon
-      : name.includes(minimal ? "Sapphire" : "Sapphire")
+      : name.includes(minimal ? "Sapphire" : "Sapphire") || name.includes('oasis')
       ? OasisIcon
       : EthIcon; // ETH icon as fallback
   }
