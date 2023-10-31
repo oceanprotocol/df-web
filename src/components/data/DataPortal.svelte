@@ -100,7 +100,7 @@
     <div class="wrapper">
       <h2 class="title">Curate Data to Earn OCEAN</h2>
       <p class="message">Find assets that generate sales and allocate your veOCEAN to curate them.</p>
-      <p class="message">Easily manage your curation and rewards by delegating to a single wallet. <a href="#delegation" rel="noreferrer" >Scrol down to learn more.</a></p>
+      <p class="message">Easily manage your curation and rewards by delegating to a single wallet. <a href="#delegation" rel="noreferrer" >Scroll down to learn more.</a></p>
       <div class="data">
         <Table 
           dataAvailable={$datasets && !$isAppLoading && $userBalances[getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")] !== undefined}
