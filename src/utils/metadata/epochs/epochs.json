@@ -1897,7 +1897,10 @@
               1500,
               1000
             ]
-          }
+          },{
+            "name": "Predictoor DF",
+            "rewards": 37500
+        }
         ]
       }
     ],
@@ -1937,7 +1940,7 @@
           }
           ,{
             "name": "Predictoor DF",
-            "rewards": 35000
+            "rewards": 37500
           }
         ]
       }
@@ -1979,7 +1982,7 @@
           }
           ,{
             "name": "Predictoor DF",
-            "rewards": 35000
+            "rewards": 37500
           }
         ]
       }
@@ -2020,7 +2023,7 @@
           }
           ,{
             "name": "Predictoor DF",
-            "rewards": 35000
+            "rewards": 37500
           }
         ]
       }

@@ -22,11 +22,12 @@
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import { userSubmittedChallenges } from "../../stores/challenge";
-  import { getPredictoorAccuracy } from "../../utils/predictoor";
+  import { getPredictoorRoundSummary } from "../../utils/predictoor";
  
   export let canClaimVE = true;
   export let canClaimDF = true;
   export let streams;
+  export let roundInfo;
   let claiming;
   let passiveRewards = 0;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
@@ -110,9 +111,9 @@
   }
 
   async function addUserPredictoorAccuracy(){
-    let accuracy = await getPredictoorAccuracy($userAddress)
-    streams[1].substreams[2].metric.value = accuracy
-    console.log(accuracy)
+    let response = await getPredictoorRoundSummary($userAddress, roundInfo.id - 1)
+    streams[1].substreams[2].metric.value = response ? `${response.correct_prediction_count}/${response.prediction_count} ${parseFloat(response.accuracy).toFixed(3) * 100}%` : 0
+    
   }
 
   function addVeOceanBalance(){

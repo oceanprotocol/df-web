@@ -118,7 +118,7 @@
   <RewardOverview roundInfo={curEpoch} />
   <Features />
   {#if streams !== null}
-    <ClaimRewards {canClaimVE} {canClaimDF} streams={streams}/>
+    <ClaimRewards {canClaimVE} {canClaimDF} streams={streams} roundInfo={curEpoch}/>
   {/if}
   <EpochHistory />
 </div>
