@@ -342,7 +342,6 @@
             disabled={!$userAddress}
           />
         {:else}
-          <!-- Todo #398 - disable update lock button, if unlock date == same date inside Date Input -->
           <TokenApproval
             tokenAddress={getAddressByChainIdKey($connectedChainId, "Ocean")}
             tokenName={"OCEAN"}
@@ -366,7 +365,9 @@
                 disabled={loading ||
                   !$form.ageement ||
                   $form.amount > getOceanBalance($connectedChainId) ||
-                  $oceanUnlockDate.isBefore(moment())}
+                  $oceanUnlockDate.isBefore(moment()) ||
+                  (moment.utc($form.unlockDate).isSame($oceanUnlockDate) && $form.amount==0)
+                  }
                 type="submit"
               />
             {:else}<Button
