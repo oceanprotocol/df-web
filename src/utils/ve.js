@@ -243,16 +243,13 @@ export const getTotalVeSupply = async () => {
 };
 
 export const getTotalOceanSupply = async () => {
-  let rpc = await getRpcUrlByChainId(import.meta.env.VITE_VE_SUPPORTED_CHAINID);
-  let provider = new ethers.providers.JsonRpcProvider(rpc);
-  let contract = new Contract(
-    getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "Ocean"),
-    TokenABI.default,
-    provider
-  );
-  let data = await contract.balanceOf(
-    getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")
-  );
+  const data = await readContract({
+    address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "Ocean"),
+    args: [getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")],
+    abi: TokenABI.default,
+    functionName: "balanceOf",
+  });
+  
   const totalSupplyEth = parseFloat(ethers.utils.formatEther(data));
   return totalSupplyEth;
 };
