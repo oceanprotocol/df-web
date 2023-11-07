@@ -169,7 +169,6 @@
 </script>
 
 <div class="container">
-  <h2 class="title">Reward Programs</h2>
   <div class="rewardsContainer">
   {#each streams as stream}
     <ClaimItem
