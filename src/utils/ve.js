@@ -1,12 +1,13 @@
 import * as VeOceanABI from "./abis/veOceanABI.js";
-import tokenABI, * as TokenABI from "./abis/tokenABI";
-import { ethers, Contract } from "ethers";
+import { ethers } from "ethers";
+import * as TokenABI from "./abis/tokenABI";
 import { getAddressByChainIdKey } from "../utils/address/address.js";
 import {
   readContract,
   writeContract,
   prepareWriteContract,
   waitForTransaction,
+  getPublicClient
 } from "@wagmi/core";
 import { getGasFeeEstimate, getRpcUrlByChainId } from "./web3.js";
 

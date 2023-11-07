@@ -18,7 +18,7 @@ export let isWalletConnectModalOpen = writable(false);
 
 export const GASLIMIT_DEFAULT = 1000000;
 
-const chains = [mainnet, goerli];
+const chains = [import.meta.env.VITE_VE_SUPPORTED_CHAINID==="1" ? mainnet : goerli];
 
 // Wagmi Core Client
 const { publicClient } = configureChains(chains, [
