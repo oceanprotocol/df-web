@@ -304,7 +304,6 @@
             className="updateAllocationsBtton"
             onclick={() => updateAllocations(true)}
             disabled={disabled || loading || $totalUserAllocation < 1}
-            secondary
             loading={loading === "RESET"}
           />
         {:else}
