@@ -117,7 +117,6 @@
 
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
-  <Features />
   {#if streams !== null}
     <ClaimRewards {canClaimVE} {canClaimDF} streams={streams}/>
   {/if}

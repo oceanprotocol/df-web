@@ -13,6 +13,7 @@
   } from "../../utils/tokens";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import moment from "moment";
+  import { ethers } from "ethers";
 
   let loading = false;
   let showDismissAllowance = false;
@@ -69,7 +70,9 @@
      )
     ).then((allowedAmt) => {
       if(allowedAmt>0){
-        allowedTokenAmt = allowedAmt
+        allowedTokenAmt = ethers.utils.formatEther(
+          BigInt(allowedAmt).toString(10)
+        )
         showDismissAllowance = true
       }else{
         allowedTokenAmt = 0
