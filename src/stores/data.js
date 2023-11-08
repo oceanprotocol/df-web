@@ -19,14 +19,14 @@ export const columnsData = {
     },
     { key: "symbol", value: "Symbol" },
     {
-      key: "last5roundavgalloc",
-      value: "Rnd5 Avg Alloc",
+      key: "prev5roundavgalloc",
+      value: "Prev5 Avg Alloc",
       display: (allocated) => allocated + " veOCEAN",
       tooltip: descriptions.default.tooltip_datafarming_5_round_allocation,
     },
     {
-      key: "last3roundavgalloc",
-      value: "Rnd3 Avg Alloc",
+      key: "prev3roundavgalloc",
+      value: "Prev3 Avg Alloc",
       display: (allocated) => allocated + " veOCEAN",
       tooltip: descriptions.default.tooltip_datafarming_3_round_allocation,
     },
@@ -57,28 +57,28 @@ export const columnsData = {
     },
     { key: "symbol", value: "Symbol" },
     {
-      key: "last5roundavgdcv",
-      value: "Rnd5 Avg DCV",
+      key: "prev5roundavgdcv",
+      value: "Prev5 Avg DCV",
       display: (volume) => "$" + volume,
       tooltip: descriptions.default.tooltip_datafarming_5_round_consume,
     },
     {
-      key: "last3roundavgdcv",
-      value: "Rnd3 Avg DCV",
+      key: "prev3roundavgdcv",
+      value: "Prev3 Avg DCV",
       display: (volume) => "$" + volume,
       tooltip: descriptions.default.tooltip_datafarming_3_round_consume,
     },
     {
-      key: "roundvolume",
-      value: "Rnd Volume",
+      key: "prevroundvolume",
+      value: "Prev DCV",
       display: (volume) => "$" + volume,
-      tooltip: descriptions.default.tooltip_datafarming_round_consume,
+      tooltip: descriptions.default.tooltip_datafarming_previous_round_consume,
     },
     {
-      key: "lastroundvolume",
-      value: "Last Rnd Volume",
+      key: "roundvolume",
+      value: "Curr DCV",
       display: (volume) => "$" + volume,
-      tooltip: descriptions.default.tooltip_datafarming_last_round_consume,
+      tooltip: descriptions.default.tooltip_datafarming_round_consume,
     },
     {
       key: "myallocation",
@@ -95,39 +95,39 @@ export const columnsData = {
     },
     { key: "symbol", value: "Symbol" },
     {
-      key: "last5roundavgapy",
-      value: "Rnd5 Avg APY",
+      key: "prev5roundavgapy",
+      value: "Prev5 Avg APY",
       display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + "%",
       tooltip: descriptions.default.tooltip_datafarming_5_round_asset_APY,
     },
     {
-      key: "last3roundavgapy",
-      value: "Rnd3 Avg APY",
+      key: "prev3roundavgapy",
+      value: "Prev3 Avg APY",
       display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + "%",
       tooltip: descriptions.default.tooltip_datafarming_3_round_asset_APY,
     },
     {
+      key: "prevroundapy",
+      value: "Prev APY",
+      display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + "%",
+      tooltip: descriptions.default.tooltip_datafarming_previous_round_asset_APY,
+    },
+    {
       key: "roundapr",
-      value: "Rnd APR",
+      value: "Curr APR",
       display: (roundAPR) =>
         parseFloat(roundAPR ? roundAPR * 100 : 0).toFixed(2) + "%",
       tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APR,
     },
     {
       key: "roundapy",
-      value: "Rnd APY",
+      value: "Curr APY",
       display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + "%",
       tooltip: descriptions.default.tooltip_datafarming_current_round_asset_APY,
     },
     {
-      key: "lastroundapy",
-      value: "Last Rnd APY",
-      display: (apy) => parseFloat(apy ? apy * 100 : 0).toFixed(2) + "%",
-      tooltip: descriptions.default.tooltip_datafarming_last_round_asset_APY,
-    },
-    {
       key: "roundyield",
-      value: "Rnd Yield",
+      value: "Curr Yield",
       display: (roundYield) =>
         parseFloat(roundYield ? roundYield * 100 : 0).toFixed(2) + "%",
       tooltip:
@@ -144,28 +144,28 @@ export const columnsData = {
 export const defaultColumns = {
   alloc: [
     "Title",
-    "Rnd5 Avg Alloc",
-    "Rnd3 Avg Alloc",
+    "Prev5 Avg Alloc",
+    "Prev3 Avg Alloc",
     "Rnd Alloc",
     "Curr Alloc",
     "My Allocation",
   ],
   dcv: [
     "Title",
-    "Rnd10 Avg DCV",
-    "Rnd5 Avg DCV",
-    "Rnd3 Avg DCV",
-    "Last Rnd Volume",
-    "Rnd Volume",
+    "Prev10 Avg DCV",
+    "Prev5 Avg DCV",
+    "Prev3 Avg DCV",
+    "Prev DCV",
+    "Curr DCV",
     "My Allocation",
   ],
   apy: [
     "Title",
-    "Rnd5 Avg APY",
-    "Rnd3 Avg APY",
-    "Last Rnd APY",
-    "Rnd APY",
-    "Rnd Yield",
+    "Prev5 Avg APY",
+    "Prev3 Avg APY",
+    "Prev Rnd APY",
+    "Curr APY",
+    "Curr Yield",
     "My Allocation",
   ],
 };
@@ -301,18 +301,18 @@ function getRow(dataInfo, key) {
     network: getNetworkDataById(networksData, parseInt(dataInfo.chainID))?.name,
     symbol: dataInfo.symbol,
     owner: dataInfo.owner_addr,
-    lastroundapy: dataInfo.lastRoundAPY,
-    lastroundapr: dataInfo.lastRoundAPR,
-    lastroundyield: dataInfo.lastRoundYield,
+    prevroundapy: dataInfo.prevRoundAPY,
+    prevroundapr: dataInfo.prevRoundAPR,
+    prevroundyield: dataInfo.prevRoundYield,
     roundapy: dataInfo.apy,
     roundapr: dataInfo.apr,
     roundyield: dataInfo.roundYield,
-    last3roundavgapy: dataInfo.last3roundavgapy,
-    last5roundavgapy: dataInfo.last5roundavgapy,
-    last3roundavgdcv: parseFloat(dataInfo.last3roundavgdcv).toFixed(3),
-    last5roundavgdcv: parseFloat(dataInfo.last5roundavgdcv).toFixed(3),
-    last3roundavgalloc: parseFloat(dataInfo.last3roundavgalloc).toFixed(3),
-    last5roundavgalloc: parseFloat(dataInfo.last5roundavgalloc).toFixed(3),
+    prev3roundavgapy: dataInfo.prev3roundavgapy,
+    prev5roundavgapy: dataInfo.prev5roundavgapy,
+    prev3roundavgdcv: parseFloat(dataInfo.prev3roundavgdcv).toFixed(3),
+    prev5roundavgdcv: parseFloat(dataInfo.prev5roundavgdcv).toFixed(3),
+    prev3roundavgalloc: parseFloat(dataInfo.prev3roundavgalloc).toFixed(3),
+    prev5roundavgalloc: parseFloat(dataInfo.prev5roundavgalloc).toFixed(3),
     nftaddress: dataInfo.nft_addr,
     ispurgatory: dataInfo.is_purgatory,
     did: dataInfo.did,
@@ -326,7 +326,7 @@ function getRow(dataInfo, key) {
       3
     ),
     myveocean: dataInfo.allocation,
-    lastroundvolume: parseFloat(dataInfo.lastRoundVolume).toFixed(3),
+    prevroundvolume: parseFloat(dataInfo.prevRoundVolume).toFixed(3),
     action: dataInfo.chainID != 23294 ? `https://market.oceanprotocol.com/asset/${dataInfo.did}` : 'https://predictoor.ai',
     publishersreward:
       dataInfo.ownerallocation > 0 || (isowner && dataInfo.allocation > 0),
@@ -347,7 +347,7 @@ function filterPurgatoryDatasetsWithoutAllocations(datasets, allocations) {
 export async function loadDatasets(nftsApi, allocations) {
   let curRound = getEpoch().id;
   //current round number is 0
-  let [currentRoundDatasets, lastRoundDatasets, avgs3Rounds, avgs5Rounds] =
+  let [currentRoundDatasets, prevRoundDatasets, avgs3Rounds, avgs5Rounds] =
     await Promise.all([
       getDatasets(nftsApi, 0),
       getDatasets(nftsApi, curRound - 1),
@@ -377,16 +377,16 @@ export async function loadDatasets(nftsApi, allocations) {
         (allocation) => allocation.nftAddress === datasetInfo.nft_addr
       )?.allocated / 100 || 0;
 
-    const lastRoundDataset = lastRoundDatasets.find(
+    const prevRoundDataset = prevRoundDatasets.find(
       (ld) => ld.nft_addr === datasetInfo.nft_addr
     );
-    datasetInfo.lastRoundAPY = lastRoundDataset?.apy;
-    datasetInfo.lastRoundAPR = lastRoundDataset?.apr;
-    datasetInfo.lastRoundYield = lastRoundDataset?.roundYield;
-    datasetInfo.lastRoundVolume = lastRoundDataset?.volume;
+    datasetInfo.prevRoundAPY = prevRoundDataset?.apy;
+    datasetInfo.prevRoundAPR = prevRoundDataset?.apr;
+    datasetInfo.prevRoundYield = prevRoundDataset?.roundYield;
+    datasetInfo.prevRoundVolume = prevRoundDataset?.volume;
 
-    datasetInfo.lastRoundVolume =
-      datasetInfo.lastRoundVolume > 0 ? datasetInfo.lastRoundVolume : 0.0;
+    datasetInfo.prevRoundVolume =
+      datasetInfo.prevRoundVolume > 0 ? datasetInfo.prevRoundVolume : 0.0;
 
     const avg3Round = avgs3Rounds.find(
       (ld) => ld.nft_addr === datasetInfo.nft_addr
@@ -395,13 +395,13 @@ export async function loadDatasets(nftsApi, allocations) {
       (ld) => ld.nft_addr === datasetInfo.nft_addr
     );
 
-    datasetInfo.last3roundavgalloc = avg3Round?.["3_round_avg_alloc"] || 0;
-    datasetInfo.last3roundavgdcv = avg3Round?.["3_round_avg_dcv"] || 0;
-    datasetInfo.last3roundavgapy = avg3Round?.["3_round_avg_apy"] || 0;
+    datasetInfo.prev3roundavgalloc = avg3Round?.["3_round_avg_alloc"] || 0;
+    datasetInfo.prev3roundavgdcv = avg3Round?.["3_round_avg_dcv"] || 0;
+    datasetInfo.prev3roundavgapy = avg3Round?.["3_round_avg_apy"] || 0;
 
-    datasetInfo.last5roundavgalloc = avg5Round?.["5_round_avg_alloc"] || 0;
-    datasetInfo.last5roundavgdcv = avg5Round?.["5_round_avg_dcv"] || 0;
-    datasetInfo.last5roundavgapy = avg5Round?.["5_round_avg_apy"] || 0;
+    datasetInfo.prev5roundavgalloc = avg5Round?.["5_round_avg_alloc"] || 0;
+    datasetInfo.prev5roundavgdcv = avg5Round?.["5_round_avg_dcv"] || 0;
+    datasetInfo.prev5roundavgapy = avg5Round?.["5_round_avg_apy"] || 0;
 
     newDatasets.push(getRow(datasetInfo, key));
   });
