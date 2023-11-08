@@ -1847,19 +1847,16 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards": 37000
+            "rewards": 70000
           },
           {
             "name": "Challenge",
-            "rewards": 1000,
+            "rewards": 5000,
             "prizes": [
-              500,
-              300,
-              200
+              2500,
+              1500,
+              1000
             ]
-          },{
-              "name": "Predictoor DF",
-              "rewards": 37000
           }
         ]
       }
@@ -1887,20 +1884,17 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards": 37000
+            "rewards": 70000
           },
           {
             "name": "Challenge",
-            "rewards": 1000,
+            "rewards": 5000,
             "prizes": [
-              500,
-              300,
-              200
+              2500,
+              1500,
+              1000
             ]
-          },{
-            "name": "Predictoor DF",
-            "rewards": 37000
-        }
+          }
         ]
       }
     ],
@@ -1946,8 +1940,7 @@
       }
     ],
     "total": 150000
-  }
-  ,
+  },
   {
     "id": 64,
     "date_start": "2023-11-16",
