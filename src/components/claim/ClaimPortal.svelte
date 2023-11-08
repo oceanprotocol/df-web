@@ -103,7 +103,8 @@
 
   $: if ($userLastPassiveRewardsClaim?.data || $veClaimables) {
     if($userLastPassiveRewardsClaim.data?.veOCEAN?.claims.length>0){
-      lastPassiveRewardsClaimRound.set(getEpoch(moment($userLastPassiveRewardsClaim.data.veOCEAN.claims[0].timestamp * 1000)).id)
+      let date = moment(parseInt($userLastPassiveRewardsClaim.data.veOCEAN.claims[0].timestamp) * 1000)
+      lastPassiveRewardsClaimRound.set(getEpoch(date)?.id)
     }else{
       lastPassiveRewardsClaimRound.set(0)
     }
@@ -116,7 +117,6 @@
 
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
-  <Features />
   {#if streams !== null}
     <ClaimRewards {canClaimVE} {canClaimDF} streams={streams} roundInfo={curEpoch}/>
   {/if}
