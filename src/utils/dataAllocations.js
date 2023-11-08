@@ -63,7 +63,7 @@ export const allocateVeOceanToMultipleNFTs = async (
   chainIds
 ) => {
   if (!amounts?.length > 0) {
-    throw { message: "There are no allocations set" };
+    throw { message: "There are no allocations set or changed. Make sure there are changes inside the 'My Allocation' column." };
   }
   //convert amounts from 100 to 10000 units
   const formatedAmounts = amounts.map((amount) => amount * 100);
