@@ -112,7 +112,7 @@
 
   async function addUserPredictoorAccuracy(){
     let response = await getPredictoorRoundSummary($userAddress, roundInfo.id - 1)
-    streams[1].substreams[2].metric.value = response ? `${response.correct_prediction_count}/${response.prediction_count} ${parseFloat(response.accuracy).toFixed(3) * 100}%` : 0
+    streams[1].substreams[2].metric.value = `${response && response.accuracy ? parseFloat(response.accuracy).toFixed(3) * 100 : 0}%`
     
   }
 

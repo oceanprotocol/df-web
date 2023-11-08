@@ -58,8 +58,8 @@
             "location": "https://predictoor.ai"
           },
           "metric": {
-            "name": "last round correct predictions",
-            "value": "0"
+            "name": "last round accuracy",
+            "value": "0%"
           }
         }
       ]
