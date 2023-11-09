@@ -1510,7 +1510,11 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards": 70000
+            "rewards": 35000
+          },
+          {
+            "name": "Volume DF",
+            "rewards": 35000
           },
           {
             "name": "Challenge",
@@ -1917,16 +1921,102 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards": 70000
+            "rewards":37000
           },
           {
             "name": "Challenge",
-            "rewards": 5000,
+            "rewards": 1000,
             "prizes": [
-              2500,
-              1500,
-              1000
+              500,
+              300,
+              200
             ]
+          }
+          ,{
+            "name": "Predictoor DF",
+            "rewards": 37000
+          }
+        ]
+      }
+    ],
+    "total": 150000
+  },
+  {
+    "id": 64,
+    "date_start": "2023-11-16",
+    "date_end": "2023-11-23",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 75000
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards":37000
+          },
+          {
+            "name": "Challenge",
+            "rewards": 1000,
+            "prizes": [
+              500,
+              300,
+              200
+            ]
+          }
+          ,{
+            "name": "Predictoor DF",
+            "rewards": 37000
+          }
+        ]
+      }
+    ],
+    "total": 150000
+  },
+  {
+    "id": 65,
+    "date_start": "2023-11-23",
+    "date_end": "2023-11-30",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 75000
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 75000,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards":37000
+          },
+          {
+            "name": "Challenge",
+            "rewards": 1000,
+            "prizes": [
+              500,
+              300,
+              200
+            ]
+          }
+          ,{
+            "name": "Predictoor DF",
+            "rewards": 37000
           }
         ]
       }

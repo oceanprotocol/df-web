@@ -15,12 +15,16 @@
 <div class="container">
     <div class="title">
         <div class="titleSection">
-            <h4>{`${title} - ${availableRewards.toLocaleString()} OCEAN`}</h4>
+            <h4>{`${title} - ${availableRewards?.toLocaleString()} OCEAN`}</h4>
             {#if apy}
                 <span class="apy">{apy.value}</span>
             {/if}
         </div>
+        {#if title.toLowerCase().includes("predictoor")}
+        <a href={"https://github.com/oceanprotocol/pdr-backend/blob/main/READMEs/payout.md"} target="_blank" rel="noreferrer">claim rewards here</a>
+        {:else}
         <ItemWithLabel title="rewards" value={`${parseFloat(rewards ? rewards : 0)?.toFixed(2)} OCEAN`} direction="row"/>
+        {/if}
     </div>
     <p class="description">{description}</p>
     <div class="action">

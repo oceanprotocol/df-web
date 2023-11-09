@@ -48,6 +48,19 @@
             "name": "previous submissions",
             "value": "0"
           }
+        },
+        {
+          "name": "Predictoor-DF",
+          "rewards": 0,
+          "description": "Earn by submiting accurate predictions of the price direction to the available predictoor contracts.",
+          "action": {
+            "text": "Predict",
+            "location": "https://predictoor.ai"
+          },
+          "metric": {
+            "name": "last round accuracy",
+            "value": "0%"
+          }
         }
       ]
     }
