@@ -5,7 +5,8 @@ import * as descriptions from "../utils/metadata/descriptions.json";
 import { getEpoch } from "../utils/epochs";
 import { getRoundsDatafarm } from "../utils/functions";
 
-let networksData = networksDataArray.default;
+const networksData = networksDataArray.default;
+const sapphireChainIdsList=[23294, 23295]
 
 export let datasets = writable("");
 
@@ -327,7 +328,7 @@ function getRow(dataInfo, key) {
     ),
     myveocean: dataInfo.allocation,
     prevroundvolume: parseFloat(dataInfo.prevRoundVolume).toFixed(3),
-    action: dataInfo.chainID != 23294 ? `https://market.oceanprotocol.com/asset/${dataInfo.did}` : 'https://predictoor.ai',
+    action: !sapphireChainIdsList.includes(dataInfo.chainID)  ? `https://market.oceanprotocol.com/asset/${dataInfo.did}` : `${getNetworkDataById(networksData, dataInfo.chainID).explorers[0].url}/address/${dataInfo.nft_addr}`,
     publishersreward:
       dataInfo.ownerallocation > 0 || (isowner && dataInfo.allocation > 0),
   };
