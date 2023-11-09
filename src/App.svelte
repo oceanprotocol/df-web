@@ -210,8 +210,8 @@
 
 <Router>
   <BannerMessage
-    title={`Predictoor-DF it's now live, submit accurate predictions to get rewards!</a>`}
-    message={` Read <a href='https://blog.oceanprotocol.com/introducing-challenge-data-farming-378bba28fc97' target='_blank'><strong>the blogpost</strong></a> for more information.`}
+    title={`Predictoor-DF is now live, submit accurate predictions to get rewards!</a>`}
+    message={` Read <a href='https://docs.oceanprotocol.com/data-farming/predictoordf' target='_blank'><strong>the docs</strong></a> for more information.`}
   />
   <WalletConnectModal />
   <main>
