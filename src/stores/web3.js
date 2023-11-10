@@ -4,6 +4,7 @@ import { configureChains, createConfig } from "@wagmi/core";
 import { mainnet, goerli } from "@wagmi/core/chains";
 import { infuraProvider } from "@wagmi/core/providers/infura";
 import { EthereumClient, w3mConnectors } from "@web3modal/ethereum";
+import { CoinbaseWalletConnector } from '@wagmi/connectors/coinbaseWallet';
 
 export let userAddress = writable("");
 export let poolContracts = writable("");
@@ -27,11 +28,11 @@ const { publicClient } = configureChains(chains, [
 
 const wagmiClient = createConfig({
   autoConnect: true,
-  connectors: w3mConnectors({
+  connectors: [...w3mConnectors({
     chains,
     projectId: import.meta.env.VITE_WALLET_CONNECT_KEY,
     version: 2,
-  }),
+  }), new CoinbaseWalletConnector({ chains})],
   publicClient,
 });
 
