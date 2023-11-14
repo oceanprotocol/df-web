@@ -12,6 +12,7 @@
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
   import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
+  import DisplayAPY from "./DisplayAPY.svelte"
   import {
     allowance
   } from "../../utils/tokens";
@@ -322,11 +323,11 @@
       </div>
       <div class="item">
         <div class="output-container">
-          <ItemWithLabel
-            title={`Curr PASSIVE APY`}
+          <DisplayAPY
             value={`${parseFloat(APY).toFixed(2)}%`}
             tooltipMessage={descriptions.default
               .tooltip_veocean_lock_multiplier}
+            onClick={() => {$form.unlockDate = getMaxDate().format("YYYY-MM-DD")}}
           />
           <ItemWithLabel
             title={`Receive`}
