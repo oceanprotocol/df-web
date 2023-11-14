@@ -15,7 +15,7 @@
     />
     <div class="valuContainer">
     <span class="apy">
-      {`${parseFloat(value).toFixed(2)}%`}
+      {value}
     </span>
     <Button
       className="apyMaxButton"
@@ -40,6 +40,7 @@
     .apy{
       color: var(--brand-pink);
       margin-right: calc(var(--spacer)/10);
+      font-weight: bold;
     }
     .apyDisplay :global(.apyMaxButton){
       color: var(--brand-grey-light);

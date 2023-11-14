@@ -63,7 +63,7 @@ export const getPassiveUserRewardsData = async (userVeOcean, lockedOcean, veOcea
   const passiveRewards = import.meta.env.VITE_VE_SUPPORTED_CHAINID != "1" ? 20 : curEpoch?.streams[0]?.substreams[0]?.rewards;
   const rewards = passiveRewards / veOceanSupply * userVeOcean;
   const wpr_passive = rewards / lockedOcean
-  return {apy: convertWPRtoAPY(wpr_passive), weeklyRewards: rewards * 52}
+  return {apy: convertWPRtoAPY(wpr_passive), rewards: rewards * 52}
 };
 
 export const getActiveAPY = async (userAddress) => {

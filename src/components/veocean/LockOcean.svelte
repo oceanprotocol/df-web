@@ -54,7 +54,7 @@
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
   let tokenApproved = false;
-  let APY = 0;
+  let APY = `${parseFloat(0).toFixed(2)}%(${parseFloat(0).toFixed(2)} OCEAN)`;
 
   const MAXDAYS = 4 * 365;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
@@ -253,11 +253,11 @@
 
   const calculateAPY = async() => {
     if(calculatedVotingPower<=0 || $form.amount<=0){
-      APY = 0
+      APY = `${parseFloat(0).toFixed(2)}% (${parseFloat(0).toFixed(2)} OCEAN)`
       return
     }
     const data = await getPassiveUserRewardsData(parseFloat(calculatedVotingPower), $form.amount, $totalVeOceanSupply + parseFloat(calculatedVotingPower))
-    APY = data.apy
+    APY = `${parseFloat(data.apy).toFixed(2)}%(${parseFloat(data.rewards).toFixed(2)} OCEAN)`
   }
 
   $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
@@ -323,16 +323,16 @@
       </div>
       <div class="item">
         <div class="output-container">
-          <DisplayAPY
-            value={`${parseFloat(APY).toFixed(2)}%`}
-            tooltipMessage={descriptions.default
-              .tooltip_veocean_lock_multiplier}
-            onClick={() => {$form.unlockDate = getMaxDate().format("YYYY-MM-DD")}}
-          />
           <ItemWithLabel
             title={`Receive`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
             tooltipMessage={descriptions.default.tooltip_veocean_receive}
+          />
+          <DisplayAPY
+            value={APY}
+            tooltipMessage={descriptions.default
+              .tooltip_veocean_lock_passiveAPY}
+            onClick={() => {$form.unlockDate = getMaxDate().format("YYYY-MM-DD")}}
           />
         </div>
       </div>

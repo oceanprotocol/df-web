@@ -4,6 +4,7 @@
   "tooltip_veocean_my_locked_ocean": "Total amount of OCEAN tokens you have locked up, in exchange for veOCEAN.",
   "tooltip_veocean_my_lock_ends": "The date when the lock completes, OCEAN tokens are released, and the user is able to withdraw their tokens.",
   "tooltip_veocean_lock_multiplier": "The veOCEAN multiplier received based on your lock end time.<br/><br/>Per 1 OCEAN:\n1 Year = 0.25 veOCEAN\n2 Years = 0.5 veOCEAN\n3 Years = 0.75 veOCEAN\n4 Years = 1.0 veOCEAN",
+  "tooltip_veocean_lock_passiveAPY": "Increase the Lock End Date for higher APY<br/><br/>APY assumes a 4-year lock up period with a weekly schedule of compounding rewards into an updated 4-year lock. This estimate is calculated assuming the current numbers remain constant: number of users, reward emissions, other parameters, while excluding all tx fees<br/><br/>Be aware that your APY also deppends on veOCEAN amount which decreases until the lock end date, when it's getting to 0",
   "tooltip_veocean_receive": "The amount of veOCEAN you'll receive based on the lock end date, and OCEAN deposited.",
   "tooltip_veocean_owner_allocation": "veOCEAN amount currently allocated to a Dataset by the owner.",
   "tooltip_datafarming_title": "If you're interested in identifying high-performing publishers, you can easily see those who are earning 2x stake by the Gold background.",
