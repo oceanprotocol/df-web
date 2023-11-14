@@ -32,6 +32,7 @@
   import {
     lockedOceanAmount,
     oceanUnlockDate,
+    totalVeOceanSupply,
     veOceanWithDelegations,
   } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
@@ -41,6 +42,7 @@
   import moment from "moment";
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import StepsComponent from "../common/StepsComponent.svelte";
+  import {getPassiveUserRewardsData } from "../../utils/rewards";
 
   export let setShowApprovalNotification;
 
@@ -51,6 +53,7 @@
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
   let tokenApproved = false;
+  let APY = 0;
 
   const MAXDAYS = 4 * 365;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
@@ -247,7 +250,18 @@
     }
   };
 
+  const calculateAPY = async() => {
+    if(calculatedVotingPower<=0 || $form.amount<=0){
+      APY = 0
+      return
+    }
+    const data = await getPassiveUserRewardsData(parseFloat(calculatedVotingPower), $form.amount, $totalVeOceanSupply)
+    APY = data.apy
+  }
+
   $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
+  //$: calculatedVotingPower && calculateAPR(parseFloat(calculatedVotingPower))
+  $: $totalVeOceanSupply && calculatedVotingPower && calculateAPY()
 
   const updateFormAmount = () => {
     let _amount = $form.amount;
@@ -309,8 +323,8 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Lock Multiplier`}
-            value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
+            title={`Curr PASSIVE APY`}
+            value={`${parseFloat(APY).toFixed(2)}%`}
             tooltipMessage={descriptions.default
               .tooltip_veocean_lock_multiplier}
           />

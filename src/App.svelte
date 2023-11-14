@@ -24,7 +24,7 @@
     getActiveAPY,
     getPassiveAPY,
     getRewards,
-    getPassiveUserAPY,
+    getPassiveUserRewardsData,
   } from "./utils/rewards";
   import {
     updateUserBalanceOcean,
@@ -34,6 +34,7 @@
   import {
     lockedOceanAmount,
     oceanUnlockDate,
+    totalVeOceanSupply,
     veOceanWithDelegations,
   } from "./stores/veOcean";
   import { getUserVotingPowerWithDelegations } from "./utils/delegations";
@@ -42,7 +43,7 @@
   import { setClient } from "svelte-apollo";
   import { onMount } from "svelte";
   import { getAddressByChainIdKey } from "./utils/address/address";
-  import { getLockedEndTime, getLockedOceanAmount } from "./utils/ve";
+  import { getLockedEndTime, getLockedOceanAmount, getTotalVeSupply } from "./utils/ve";
   import moment from "moment";
   import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
   import { totalUserAllocation } from "./stores/dataAllocations";
@@ -57,8 +58,10 @@
   window.Buffer = Buffer;
 
   async function loadGeneralAPYs() {
-    let activeAPY = $APYs?.active ? $APYs?.active : await getActiveAPY();
-    let passiveAPY = $APYs?.passive ? $APYs.passive : await getPassiveAPY();
+    const veOceanSupply = await getTotalVeSupply()
+    totalVeOceanSupply.update(() => veOceanSupply)
+    const activeAPY = $APYs?.active ? $APYs?.active : await getActiveAPY();
+    const passiveAPY = $APYs?.passive ? $APYs.passive : await getPassiveAPY();
     APYs.update(() => {
       return {
         passive: passiveAPY,
@@ -80,15 +83,16 @@
           "veOCEAN"
         )
       ] > 0
-        ? await getPassiveUserAPY(
+        ? await getPassiveUserRewardsData(
             $userBalances[
               getAddressByChainIdKey(
                 import.meta.env.VITE_VE_SUPPORTED_CHAINID,
                 "veOCEAN"
               )
             ],
-            $lockedOceanAmount
-          )
+            $lockedOceanAmount,
+            $totalVeOceanSupply
+          ).apy
         : 0;
     APYs.update((oldObj) => {
       return {
