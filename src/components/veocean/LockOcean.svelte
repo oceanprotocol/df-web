@@ -252,11 +252,12 @@
   };
 
   const calculateAPY = async() => {
-    if(calculatedVotingPower<=0 || $form.amount<=0){
+    if(calculatedVotingPower<=0 || (!$lockedOceanAmount && $form.amount<=0)){
       APY = `${parseFloat(0).toFixed(2)}% (${parseFloat(0).toFixed(2)} OCEAN)`
       return
     }
-    const data = await getPassiveUserRewardsData(parseFloat(calculatedVotingPower), $form.amount, $totalVeOceanSupply + parseFloat(calculatedVotingPower))
+    const votingPowerForAPY = parseFloat(calculatedVotingPower)
+    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY)
     APY = `${parseFloat(data.apy).toFixed(2)}%(${parseFloat(data.rewards).toFixed(2)} OCEAN)`
   }
 
@@ -332,7 +333,11 @@
             value={APY}
             tooltipMessage={descriptions.default
               .tooltip_veocean_lock_passiveAPY}
-            onClick={() => {$form.unlockDate = getMaxDate().format("YYYY-MM-DD")}}
+            onClick={() => {
+              $form.unlockDate = getMaxDate().format("YYYY-MM-DD")
+              $form.amount = parseInt(oceanBalance)
+              }
+            }
           />
         </div>
       </div>
