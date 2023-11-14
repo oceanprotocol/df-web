@@ -255,7 +255,7 @@
       APY = 0
       return
     }
-    const data = await getPassiveUserRewardsData(parseFloat(calculatedVotingPower), $form.amount, $totalVeOceanSupply)
+    const data = await getPassiveUserRewardsData(parseFloat(calculatedVotingPower), $form.amount, $totalVeOceanSupply + parseFloat(calculatedVotingPower))
     APY = data.apy
   }
 

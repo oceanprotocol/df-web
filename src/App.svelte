@@ -92,12 +92,12 @@
             ],
             $lockedOceanAmount,
             $totalVeOceanSupply
-          ).apy
+          )
         : 0;
     APYs.update((oldObj) => {
       return {
         passive: oldObj?.passive ? oldObj.passive : 0,
-        passiveUser: passiveUserAPY,
+        passiveUser: passiveUserAPY.apy,
         active: oldObj?.active ? oldObj.active : 0,
         activeUser: activeUserAPY,
       };
