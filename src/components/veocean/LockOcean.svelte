@@ -52,7 +52,6 @@
   let networksData = networksDataArray.default;
   let oceanBalance = 0;
   let calculatedVotingPower = 0;
-  let calculatedMultiplier = 0;
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
   let tokenApproved = false;
@@ -234,16 +233,12 @@
     }
   }
 
-  const updateMultiplier = () => {
+  const updateVotingPower = () => {
     if ($form.unlockDate && moment($form.unlockDate) > moment()) {
       // 4 years = 100% voting power
       var today = moment.utc();
       var unlockDate = moment.utc($form.unlockDate);
       const msDelta = unlockDate.diff(today);
-      calculatedMultiplier = (
-        (msDelta / getMaxDate().diff(today)) *
-        100
-      ).toFixed(3);
       calculatedVotingPower = (
         (msDelta / getMaxDate().diff(today)) *
         ($form.amount + parseFloat($lockedOceanAmount))
@@ -263,7 +258,7 @@
     displayedAPY = formatApyForDisplay(data.apy, data.rewards)
   }
 
-  $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
+  $: $form && updateVotingPower();
   $: $totalVeOceanSupply && calculatedVotingPower && calculateAPY()
 
   const updateFormAmount = () => {
