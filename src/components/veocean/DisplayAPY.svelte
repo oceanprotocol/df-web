@@ -13,16 +13,16 @@
         title={`Curr PASSIVE APY`}
         tooltipMessage={tooltipMessage}
     />
-    <div class="valuContainer">
-    <span class="apy">
-      {value}
-    </span>
-    <Button
-      className="apyMaxButton"
-      text="max"
-      textOnly
-      onclick={() => onClick()}
-    />
+    <div class="valueContainer">
+      <span class="apy">
+        {value}
+      </span>
+      <Button
+        className="apyMaxButton"
+        text="max"
+        textOnly
+        onclick={() => onClick()}
+      />
   </div>
   </div>
   
@@ -32,7 +32,7 @@
       justify-self: center;
       align-items: center;
     }
-    .valuContainer{
+    .valueContainer{
       display: flex;
       justify-content: center;
       align-items: center;

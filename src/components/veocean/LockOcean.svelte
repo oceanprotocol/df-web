@@ -47,6 +47,8 @@
 
   export let setShowApprovalNotification;
 
+  const formatApyForDisplay = (apy, rewards) => `${parseFloat(apy).toFixed(2)}%(${parseFloat(rewards).toFixed(2)} OCEAN)`
+
   let networksData = networksDataArray.default;
   let oceanBalance = 0;
   let calculatedVotingPower = 0;
@@ -54,7 +56,7 @@
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
   let tokenApproved = false;
-  let APY = `${parseFloat(0).toFixed(2)}%(${parseFloat(0).toFixed(2)} OCEAN)`;
+  let displayedAPY = formatApyForDisplay(0,0);
 
   const MAXDAYS = 4 * 365;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
@@ -253,16 +255,15 @@
 
   const calculateAPY = async() => {
     if(calculatedVotingPower<=0 || (!$lockedOceanAmount && $form.amount<=0)){
-      APY = `${parseFloat(0).toFixed(2)}% (${parseFloat(0).toFixed(2)} OCEAN)`
+      displayedAPY = formatApyForDisplay(0,0)
       return
     }
     const votingPowerForAPY = parseFloat(calculatedVotingPower)
     const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY)
-    APY = `${parseFloat(data.apy).toFixed(2)}%(${parseFloat(data.rewards).toFixed(2)} OCEAN)`
+    displayedAPY = formatApyForDisplay(data.apy, data.rewards)
   }
 
   $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
-  //$: calculatedVotingPower && calculateAPR(parseFloat(calculatedVotingPower))
   $: $totalVeOceanSupply && calculatedVotingPower && calculateAPY()
 
   const updateFormAmount = () => {
@@ -330,7 +331,7 @@
             tooltipMessage={descriptions.default.tooltip_veocean_receive}
           />
           <DisplayAPY
-            value={APY}
+            value={displayedAPY}
             tooltipMessage={descriptions.default
               .tooltip_veocean_lock_passiveAPY}
             onClick={() => {
