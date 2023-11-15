@@ -118,7 +118,7 @@
 
   async function init() {
     await updateUserBalanceOcean($userAddress);
-    oceanBalance = getOceanBalance($connectedChainId);
+    oceanBalance = $connectedChainId!=import.meta.env.VITE_VE_SUPPORTED_CHAINID ? 0 : getOceanBalance($connectedChainId);
     initForm();
   }
 
