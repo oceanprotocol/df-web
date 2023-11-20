@@ -112,8 +112,7 @@
 
   async function addUserPredictoorAccuracy(){
     let response = await getPredictoorRoundSummary($userAddress, roundInfo.id - 1)
-    streams[1].substreams[2].metric.value = `${response && response.accuracy ? parseFloat(response.accuracy).toFixed(3) * 100 : 0}%`
-    
+    streams[1].substreams[2].metric.value = `${response && response.accuracy ? parseFloat(response.accuracy * 100).toFixed(2) : 0}%`
   }
 
   function addVeOceanBalance(){
