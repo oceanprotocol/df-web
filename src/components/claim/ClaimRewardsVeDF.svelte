@@ -111,7 +111,9 @@
   }
 
   async function addUserPredictoorAccuracy(){
-    let response = await getPredictoorRoundSummary($userAddress, roundInfo.id - 1)
+    const currentDayIndexInWeek = new Date().getDay()
+    //Predictoor data is updated every Monday morning. Between new round start and Monday show accuracy for round - 2.
+    const response = await getPredictoorRoundSummary($userAddress, roundInfo.id - ((currentDayIndexInWeek>=1 && currentDayIndexInWeek<4) ? 1 : 2))
     streams[1].substreams[2].metric.value = `${response && response.accuracy ? parseFloat(response.accuracy * 100).toFixed(2) : 0}%`
   }
 
