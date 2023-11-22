@@ -12,6 +12,7 @@
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
   import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
+  import DisplayAPY from "./DisplayAPY.svelte"
   import {
     allowance
   } from "../../utils/tokens";
@@ -32,6 +33,7 @@
   import {
     lockedOceanAmount,
     oceanUnlockDate,
+    totalVeOceanSupply,
     veOceanWithDelegations,
   } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
@@ -41,16 +43,19 @@
   import moment from "moment";
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import StepsComponent from "../common/StepsComponent.svelte";
+  import {getPassiveUserRewardsData } from "../../utils/rewards";
 
   export let setShowApprovalNotification;
+
+  const formatApyForDisplay = (apy, rewards) => `${parseFloat(apy).toFixed(2)}% (${parseFloat(rewards).toFixed(2)} OCEAN)`
 
   let networksData = networksDataArray.default;
   let oceanBalance = 0;
   let calculatedVotingPower = 0;
-  let calculatedMultiplier = 0;
   let loading = false;
   let updateLockButtonText = "UPDATE LOCK";
   let tokenApproved = false;
+  let displayedAPY = formatApyForDisplay(0,0);
 
   const MAXDAYS = 4 * 365;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
@@ -114,7 +119,7 @@
 
   async function init() {
     await updateUserBalanceOcean($userAddress);
-    oceanBalance = getOceanBalance($connectedChainId);
+    oceanBalance = $connectedChainId!=import.meta.env.VITE_VE_SUPPORTED_CHAINID ? 0 : getOceanBalance($connectedChainId);
     initForm();
   }
 
@@ -228,16 +233,12 @@
     }
   }
 
-  const updateMultiplier = () => {
+  const updateVotingPower = () => {
     if ($form.unlockDate && moment($form.unlockDate) > moment()) {
       // 4 years = 100% voting power
       var today = moment.utc();
       var unlockDate = moment.utc($form.unlockDate);
       const msDelta = unlockDate.diff(today);
-      calculatedMultiplier = (
-        (msDelta / getMaxDate().diff(today)) *
-        100
-      ).toFixed(3);
       calculatedVotingPower = (
         (msDelta / getMaxDate().diff(today)) *
         ($form.amount + parseFloat($lockedOceanAmount))
@@ -247,14 +248,24 @@
     }
   };
 
-  $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
+  const calculateAPY = async() => {
+    if(calculatedVotingPower<=0 || (!$lockedOceanAmount && $form.amount<=0)){
+      displayedAPY = formatApyForDisplay(0,0)
+      return
+    }
+    const votingPowerForAPY = parseFloat(calculatedVotingPower)
+    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY)
+    displayedAPY = formatApyForDisplay(data.apy, data.rewards)
+  }
+
+  $: $form && updateVotingPower();
+  $: $totalVeOceanSupply && calculatedVotingPower && calculateAPY()
 
   const updateFormAmount = () => {
     let _amount = $form.amount;
     _amount = _amount == null ? 0 : parseInt(_amount);
     _amount = _amount < 0 ? 0 : parseInt(_amount);
-    _amount = _amount > oceanBalance ? oceanBalance : parseInt(_amount);
-
+    _amount = parseInt(_amount);
     $form.amount = _amount;
   };
 </script>
@@ -309,15 +320,19 @@
       <div class="item">
         <div class="output-container">
           <ItemWithLabel
-            title={`Lock Multiplier`}
-            value={`${parseFloat(calculatedMultiplier).toFixed(2)}%`}
-            tooltipMessage={descriptions.default
-              .tooltip_veocean_lock_multiplier}
-          />
-          <ItemWithLabel
             title={`Receive`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
             tooltipMessage={descriptions.default.tooltip_veocean_receive}
+          />
+          <DisplayAPY
+            value={displayedAPY}
+            tooltipMessage={descriptions.default
+              .tooltip_veocean_lock_passiveAPY}
+            onClick={() => {
+              $form.unlockDate = getMaxDate().format("YYYY-MM-DD")
+              $form.amount = parseInt(oceanBalance)
+              }
+            }
           />
         </div>
       </div>
