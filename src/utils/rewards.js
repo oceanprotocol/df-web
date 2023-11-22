@@ -1,5 +1,12 @@
 import { getTotalOceanSupply, getTotalVeSupply } from "./ve.js";
 import { getEpoch } from "./epochs.js";
+import { fetchFeeData } from "@wagmi/core";
+
+const GasFeeAmounts = {
+  'lock': 2291056n,
+  'claimPassive': 0,
+  'withdraw': 0
+}
 
 export const convertAPYtoWPR = (apy) => {
   const weeks = 52;
@@ -279,3 +286,18 @@ export const calcTotalAPY = (activeAPY, passiveAPY) => {
   let wpr_total = wpr_active + wpr_passive;
   return convertWPRtoAPY(wpr_total);
 };
+
+export const getEstimatedFeesCosts = async () => {
+  const feeData = await fetchFeeData({
+    chainId: 1,
+  })
+  console.log('gas price in wei',feeData.gasPrice)
+   const lockCost = GasFeeAmounts.lock * feeData.gasPrice
+   const claimCost = GasFeeAmounts.claimPassive * feeData.gasPrice
+   const withdrawCost = GasFeeAmounts.withdraw * feeData.gasPrice
+   return {
+    lock: lockCost,
+    claim: claimCost,
+    withdraw: withdrawCost
+   }
+}

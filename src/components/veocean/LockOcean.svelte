@@ -41,6 +41,7 @@
   import moment from "moment";
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import StepsComponent from "../common/StepsComponent.svelte";
+  import { getEstimatedFeesCosts } from "../../utils/rewards";
 
   export let setShowApprovalNotification;
 
@@ -228,7 +229,7 @@
     }
   }
 
-  const updateMultiplier = () => {
+  const updateMultiplier = async () => {
     if ($form.unlockDate && moment($form.unlockDate) > moment()) {
       // 4 years = 100% voting power
       var today = moment.utc();
@@ -242,6 +243,8 @@
         (msDelta / getMaxDate().diff(today)) *
         ($form.amount + parseFloat($lockedOceanAmount))
       ).toFixed(3);
+      const fees = await getEstimatedFeesCosts($userAddress,$form.amount, moment.utc($form.unlockDate).unix())
+      console.log(fees)
     } else {
       calculatedVotingPower = 0;
     }
