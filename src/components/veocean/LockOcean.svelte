@@ -47,7 +47,7 @@
 
   export let setShowApprovalNotification;
 
-  const formatApyForDisplay = (apy, rewards) => `${parseFloat(apy).toFixed(2)}%(${parseFloat(rewards).toFixed(2)} OCEAN)`
+  const formatApyForDisplay = (apy, rewards) => `${parseFloat(apy).toFixed(2)}% (${parseFloat(rewards).toFixed(2)} OCEAN)`
 
   let networksData = networksDataArray.default;
   let oceanBalance = 0;
@@ -265,8 +265,7 @@
     let _amount = $form.amount;
     _amount = _amount == null ? 0 : parseInt(_amount);
     _amount = _amount < 0 ? 0 : parseInt(_amount);
-    _amount = _amount > oceanBalance ? oceanBalance : parseInt(_amount);
-
+    _amount = parseInt(_amount);
     $form.amount = _amount;
   };
 </script>
