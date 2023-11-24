@@ -1,4 +1,4 @@
-import { getTotalOceanSupply, getTotalVeSupply } from "./ve.js";
+import { getTotalOceanSupply } from "./ve.js";
 import { getEpoch } from "./epochs.js";
 import { getTokenPriceFromCoingecko } from "./tokens.js";
 import { fetchFeeData } from '@wagmi/core'
@@ -25,9 +25,8 @@ export const convertAPYtoWPR = (apy) => {
 
 export const convertWPRtoAPY = (wpr) => {
   const weeks = 52;
-  const apr_passiv = wpr * weeks;
-  const apy_passiv = ((1 + apr_passiv / weeks) ** weeks - 1) * 100;
-  return apy_passiv;
+  const apy = Math.pow(1 + wpr, weeks) - 1;
+  return apy * 100;
 };
 
 export const getRewards = async (userAddress) => {
@@ -67,13 +66,12 @@ export const getRewardsForDataAllocation = (
 
 export const getPassiveAPY = async () => {
   const oceanSupply = await getTotalOceanSupply();
-  let curEpoch = getEpoch();
-  let passiveRewards =
+  const curEpoch = getEpoch();
+  const passiveRewards =
     import.meta.env.VITE_VE_SUPPORTED_CHAINID != "1" ? 20 : curEpoch?.streams[0]?.substreams[0]?.rewards;
   const wpr_passive = passiveRewards / oceanSupply;
   return convertWPRtoAPY(wpr_passive);
 };
-
 
 export const getPassiveUserAPY = async (userVeOcean, lockedOcean) => {
   const veOceanSupply = await getTotalVeSupply();

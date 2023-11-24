@@ -24,10 +24,12 @@
       />
     {/if}
   </div>
-  {#if !loading}
-    <span class="value">{float ? parseFloat(value).toFixed(3) : value}</span>
-  {:else}
-    <span class="value">loading...</span>
+  {#if value}
+    {#if !loading}
+      <span class="value">{float ? parseFloat(value).toFixed(3) : value}</span>
+    {:else}
+      <span class="value">loading...</span>
+    {/if}
   {/if}
 </div>
 
