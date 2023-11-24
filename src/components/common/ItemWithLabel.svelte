@@ -38,6 +38,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: black;
   }
   :global(.item .bx--tooltip__label) {
     background-color: transparent !important;

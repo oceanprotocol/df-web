@@ -45,6 +45,7 @@
   import StepsComponent from "../common/StepsComponent.svelte";
   import {calculateFees, getPassiveUserRewardsData } from "../../utils/rewards";
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
+  import AdvanceCalculatorModal from "./AdvanceCalculatorModal.svelte";
 
   export let setShowApprovalNotification;
 
@@ -57,6 +58,7 @@
   let updateLockButtonText = "UPDATE LOCK";
   let tokenApproved = false;
   let displayedAPY = formatApyForDisplay(0,0);
+  let showModal = false;
 
   const MAXDAYS = 4 * 365;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
@@ -275,6 +277,7 @@
 </script>
 
 <div class={`container`}>
+  <AdvanceCalculatorModal bind:showModal/>
   <Card
     title={$oceanUnlockDate ? `Update veOCEAN Lock` : `Lock OCEAN, get veOCEAN`}
   >
@@ -338,6 +341,7 @@
               $form.amount = parseInt(oceanBalance)
               }
             }
+            openCalculator={() => showModal=true}
           />
         </div>
       </div>
@@ -431,7 +435,7 @@
   .output-container {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
   }
 

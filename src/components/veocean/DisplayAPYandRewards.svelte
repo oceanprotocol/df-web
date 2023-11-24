@@ -7,7 +7,8 @@
     export let profitValue;
     export let tooltipMessage;
     export let onClick;
-    let showModal = false;
+    export let openCalculator;
+    
 
     /*
          <Button
@@ -17,11 +18,9 @@
           onclick={() => onClick()}
         />
     */
-    $:showModal && console.log(showModal())
   </script>
   
   <div class="container">
-    <AdvanceCalculatorModal showModal={showModal}/>
     <div class="apyDisplay">
       <ItemWithLabel
           title={`PASSIVE APY`}
@@ -40,7 +39,7 @@
       />
       <span>{profitValue}</span>
     </div>
-    <button type="button" onClick={() => (showModal=true)}>
+    <button type="button" on:click={openCalculator}>
       <img src="/images/calculator.png" alt="podium" class="podiumImage"/>
     </button>
   </div>
@@ -48,6 +47,9 @@
   <style>
     .container{
       display: flex;
+      background-color: var(--brand-grey-lighter);
+      padding: 10px;
+      border-radius: 10px;
     }
     .apyDisplay{
       display: column;

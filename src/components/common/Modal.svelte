@@ -1,5 +1,7 @@
 <script>
-	export let showModal = true; // boolean
+  import Button from "./Button.svelte";
+
+	export let showModal; // boolean
 
 	let dialog; // HTMLDialogElement
 
@@ -14,12 +16,11 @@
 >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div on:click|stopPropagation>
+		<div class="buttonContainer">
+			<Button onclick={() => dialog.close()} type="button" textOnly text="X"/>
+		</div>
 		<slot name="header" />
-		<hr />
 		<slot />
-		<hr />
-		<!-- svelte-ignore a11y-autofocus -->
-		<button autofocus on:click={() => dialog.close()}>close modal</button>
 	</div>
 </dialog>
 
@@ -28,7 +29,8 @@
 		max-width: 32em;
 		border-radius: 0.2em;
 		border: none;
-		padding: 0;
+		padding: calc(var(--spacer) / 2);
+		background-color: white;
 	}
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);
@@ -58,7 +60,13 @@
 			opacity: 1;
 		}
 	}
-	button {
-		display: block;
+	.buttonContainer{
+		width: 100%;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+	:global(.buttonContainer > button){
+		color: black !important;
 	}
 </style>
