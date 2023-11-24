@@ -41,9 +41,12 @@
   import moment from "moment";
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import StepsComponent from "../common/StepsComponent.svelte";
-  import { getEstimatedFeesCosts } from "../../utils/rewards";
+  import {calculateFees, getPassiveUserRewardsData } from "../../utils/rewards";
+  import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
 
   export let setShowApprovalNotification;
+
+  const formatApyForDisplay = (apy, rewards) =>{ return {apy:`${parseFloat(apy).toFixed(2)}%`, profit:`${parseFloat(rewards).toFixed(2)} OCEAN` }}
 
   let networksData = networksDataArray.default;
   let oceanBalance = 0;
@@ -230,6 +233,8 @@
   }
 
   const updateMultiplier = async () => {
+    calculateFees($form.amount, moment($form.unlockDate))
+  }
     if ($form.unlockDate && moment($form.unlockDate) > moment()) {
       // 4 years = 100% voting power
       var today = moment.utc();
@@ -321,6 +326,17 @@
             title={`Receive`}
             value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
             tooltipMessage={descriptions.default.tooltip_veocean_receive}
+          />
+          <DisplayApYandRewards
+            apyValue={displayedAPY.apy}
+            profitValue={displayedAPY.profit}
+            tooltipMessage={descriptions.default
+              .tooltip_veocean_lock_passiveAPY}
+            onClick={() => {
+              $form.unlockDate = getMaxDate().format("YYYY-MM-DD")
+              $form.amount = parseInt(oceanBalance)
+              }
+            }
           />
         </div>
       </div>

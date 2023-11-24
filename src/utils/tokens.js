@@ -110,3 +110,19 @@ export const approve = async (
     throw e;
   }
 };
+
+export const getTokenPriceFromCoingecko = async(token, currency) => {
+  try {
+    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=${currency}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    const data = await res.json()
+    return data[token][currency]
+  }catch(e){
+    console.error(e)
+    return null
+  }
+}
