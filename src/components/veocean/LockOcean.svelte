@@ -234,7 +234,6 @@
 
   const updateMultiplier = async () => {
     calculateFees($form.amount, moment($form.unlockDate))
-  }
     if ($form.unlockDate && moment($form.unlockDate) > moment()) {
       // 4 years = 100% voting power
       var today = moment.utc();
@@ -253,7 +252,7 @@
     } else {
       calculatedVotingPower = 0;
     }
-  };
+  }
 
   $: calculatedMultiplier, $form.unlockDate, updateMultiplier();
 
