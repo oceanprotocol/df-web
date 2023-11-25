@@ -26,7 +26,6 @@
 
 <style>
 	dialog {
-		max-width: 32em;
 		border-radius: 0.2em;
 		border: none;
 		padding: calc(var(--spacer) / 2);
@@ -67,6 +66,6 @@
 		align-items: center;
 	}
 	:global(.buttonContainer > button){
-		color: black !important;
+		color: var(--brand-grey-light) !important;
 	}
 </style>

@@ -46,6 +46,7 @@
   import {calculateFees, getPassiveUserRewardsData } from "../../utils/rewards";
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
   import AdvanceCalculatorModal from "./AdvanceCalculatorModal.svelte";
+  import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
 
   export let setShowApprovalNotification;
 
@@ -277,7 +278,11 @@
 </script>
 
 <div class={`container`}>
-  <AdvanceCalculatorModal bind:showModal/>
+  <AdvanceCalculatorModal
+    bind:showModal 
+    apyValue={displayedAPY.apy}
+    rewards={displayedAPY.profit}
+  />
   <Card
     title={$oceanUnlockDate ? `Update veOCEAN Lock` : `Lock OCEAN, get veOCEAN`}
   >
@@ -326,23 +331,27 @@
       </div>
       <div class="item">
         <div class="output-container">
-          <ItemWithLabel
-            title={`Receive`}
-            value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
-            tooltipMessage={descriptions.default.tooltip_veocean_receive}
-          />
-          <DisplayApYandRewards
-            apyValue={displayedAPY.apy}
-            profitValue={displayedAPY.profit}
-            tooltipMessage={descriptions.default
-              .tooltip_veocean_lock_passiveAPY}
-            onClick={() => {
-              $form.unlockDate = getMaxDate().format("YYYY-MM-DD")
-              $form.amount = parseInt(oceanBalance)
+          <GroupedItemsDisplay>
+            <ItemWithLabel
+              title={`Receive`}
+              value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
+              tooltipMessage={descriptions.default.tooltip_veocean_receive}
+            />
+          </GroupedItemsDisplay>
+          <GroupedItemsDisplay>
+            <DisplayApYandRewards
+              apyValue={displayedAPY.apy}
+              profitValue={displayedAPY.profit}
+              tooltipMessage={descriptions.default
+                .tooltip_veocean_lock_passiveAPY}
+              onClick={() => {
+                $form.unlockDate = getMaxDate().format("YYYY-MM-DD")
+                $form.amount = parseInt(oceanBalance)
+                }
               }
-            }
-            openCalculator={() => showModal=true}
-          />
+              openCalculator={() => showModal=true}
+            />
+          </GroupedItemsDisplay>
         </div>
       </div>
       <AgreementCheckbox
@@ -435,8 +444,9 @@
   .output-container {
     width: 100%;
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .item {

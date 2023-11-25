@@ -1,10 +1,16 @@
 <script>
+  import { calculateFees } from "../../utils/rewards";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
 import Modal from "../common/Modal.svelte";
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
+  import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
   
   export let showModal;
+  export let apyValue;
+  export let rewards;
+
+  let fees = calculateFees()
 
   </script>
   
@@ -12,12 +18,15 @@ import Modal from "../common/Modal.svelte";
       <h3 slot="header">Passive yield calculation</h3>
         <div class="container">
           <div class="metricsContainer">
-            <DisplayApYandRewards
-              apyValue={0}
-              profitValue={0}
-              tooltipMessage={''}
-              onClick={() => {}}
-            />
+            <GroupedItemsDisplay>
+              <DisplayApYandRewards
+                apyValue={apyValue}
+                profitValue={rewards}
+                tooltipMessage={''}
+                showCalculatorButton={false}
+                onClick={() => {}}
+              />
+            </GroupedItemsDisplay>
             <div class="buttonContainer">
               <Button
                 textOnly
@@ -28,14 +37,14 @@ import Modal from "../common/Modal.svelte";
           <div class="profitDetails">
             <ItemWithLabel title='Yield' value={'1400 OCEAN'} direction="row"/>
             <ItemWithLabel title='Fees' value={'1400 OCEAN'} direction="row"/>
-            <ItemWithLabel title='Profit' value={'1400 OCEAN'} direction="row"/>
+            <ItemWithLabel title='Profit' value={rewards} direction="row"/>
           </div>
           <div class="feeDetails">
-            <ItemWithLabel title='Lock' value={'1400 OCEAN'}/>
-            <ItemWithLabel title='Lock amount update' value={'1400 OCEAN'}/>
-            <ItemWithLabel title='Lock end date update' value={'1400 OCEAN'}/>
-            <ItemWithLabel title='Claim' value={'1400 OCEAN'}/>
-            <ItemWithLabel title='Withdraw' value={'1400 OCEAN'}/>
+            <ItemWithLabel title='Lock' value={'$14'}/>
+            <ItemWithLabel title='Lock amount update' value={'$14'}/>
+            <ItemWithLabel title='Lock end date update' value={'$14'}/>
+            <ItemWithLabel title='Claim' value={'$14'}/>
+            <ItemWithLabel title='Withdraw' value={'$14'}/>
           </div>
         </div>
   </Modal>
@@ -49,7 +58,7 @@ import Modal from "../common/Modal.svelte";
     }
     .metricsContainer{
       margin-top: calc(var(--spacer));
-      width: fit-content;
+      width: 100%;
     }
     .profitDetails,.feeDetails{
       display: flex;
@@ -58,8 +67,10 @@ import Modal from "../common/Modal.svelte";
     }
     .profitDetails{ 
       margin: calc(var(--spacer)) 0;
+      gap: calc(var(--spacer) * 2);
     }
     .feeDetails{
+      width: 100%;
       border: 2px solid var(--brand-grey-lighter);
       border-radius: var(--border-radius);
       padding: calc(var(--spacer)/3);
