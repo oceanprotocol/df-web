@@ -27,7 +27,7 @@
       />
       <div class="valueContainer">
         <span class="apy">
-          {apyValue}
+          {`${parseFloat(apyValue).toFixed(2)}%`}
         </span>
       </div>
     </div>
@@ -36,7 +36,7 @@
         title={`Profit with Fees`}
         tooltipMessage={tooltipMessage}
       />
-      <span class="profit">{profitValue}</span>
+      <span class="profit">{`${parseFloat(profitValue).toFixed(2)} OCEAN`}</span>
     </div>
     {#if showCalculatorButton}
       <button type="button" on:click={openCalculator}>

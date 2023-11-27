@@ -1,5 +1,4 @@
 <script>
-  import { calculateFees } from "../../utils/rewards";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
 import Modal from "../common/Modal.svelte";
@@ -9,8 +8,12 @@ import Modal from "../common/Modal.svelte";
   export let showModal;
   export let apyValue;
   export let rewards;
+  export let simpleFlowCostOcean;
+  export let fees
 
-  let fees = calculateFees()
+  const formatValue = (value) => {
+    return parseFloat(value).toFixed(0)
+  }
 
   </script>
   
@@ -35,16 +38,16 @@ import Modal from "../common/Modal.svelte";
             </div>
           </div>
           <div class="profitDetails">
-            <ItemWithLabel title='Yield' value={'1400 OCEAN'} direction="row"/>
-            <ItemWithLabel title='Fees' value={'1400 OCEAN'} direction="row"/>
-            <ItemWithLabel title='Profit' value={rewards} direction="row"/>
+            <ItemWithLabel title='Yield' value={`${formatValue(rewards)} OCEAN`} direction="row"/>
+            <ItemWithLabel title='Fees' value={`${formatValue(simpleFlowCostOcean)} OCEAN`} direction="row"/>
+            <ItemWithLabel title='Profit' value={`${formatValue(rewards - simpleFlowCostOcean)} OCEAN`} direction="row"/>
           </div>
           <div class="feeDetails">
-            <ItemWithLabel title='Lock' value={'$14'}/>
-            <ItemWithLabel title='Lock amount update' value={'$14'}/>
-            <ItemWithLabel title='Lock end date update' value={'$14'}/>
-            <ItemWithLabel title='Claim' value={'$14'}/>
-            <ItemWithLabel title='Withdraw' value={'$14'}/>
+            <ItemWithLabel title='Lock' value={`$${formatValue(fees?.lock)}`}/>
+            <ItemWithLabel title='Lock amount update' value={`$${formatValue(fees?.updateLockedAmount)}`}/>
+            <ItemWithLabel title='Lock end date update' value={`$${formatValue(fees?.updateUnlockDate)}`}/>
+            <ItemWithLabel title='Claim' value={`$${formatValue(fees?.claim)}`}/>
+            <ItemWithLabel title='Withdraw' value={`$${formatValue(fees?.withdraw)}`}/>
           </div>
         </div>
   </Modal>

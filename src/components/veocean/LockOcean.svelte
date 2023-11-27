@@ -53,7 +53,7 @@
 
   export let setShowApprovalNotification;
 
-  const formatApyForDisplay = (apy, rewards) =>{ return {apy:`${parseFloat(apy).toFixed(2)}%`, profit:`${parseFloat(rewards).toFixed(2)} OCEAN` }}
+  const formatApyForDisplay = (apy, rewards) =>{ return {apy:apy, profit:rewards}}
 
   let networksData = networksDataArray.default;
   let oceanBalance = 0;
@@ -63,6 +63,7 @@
   let tokenApproved = false;
   let displayedAPY = formatApyForDisplay(0,0);
   let showModal = false;
+  let simpleFlowCostOcean = 0;
   let fees
 
   const MAXDAYS = 4 * 365;
@@ -264,8 +265,8 @@
       return
     }
     const votingPowerForAPY = parseFloat(calculatedVotingPower)
-    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY, fees / $oceanPrice)
-    displayedAPY = formatApyForDisplay(data.apy, data.rewards)
+    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY)
+    displayedAPY = formatApyForDisplay(data.apy, data.rewards,data.rewardsWithoutFees)
   }
 
   const fetchTokenPrices = async () => {
@@ -276,8 +277,9 @@
   }
 
   const getFeesCosts =async () => {
-    fees = await calculateFees($form.unlockDate ? moment($form.unlockDate) : moment(), $ethPrice)
-    console.log(fees)
+    const resp = await calculateFees($form.unlockDate ? moment($form.unlockDate) : moment(), $ethPrice)
+    fees = resp.fees
+    simpleFlowCostOcean = resp.simpleFlowFeesCost / $oceanPrice
   }
 
   $: $form && updateVotingPower();
@@ -297,8 +299,10 @@
 <div class={`container`}>
   <AdvanceCalculatorModal
     bind:showModal 
+    bind:simpleFlowCostOcean
     apyValue={displayedAPY.apy}
     rewards={displayedAPY.profit}
+    fees={fees}
   />
   <Card
     title={$oceanUnlockDate ? `Update veOCEAN Lock` : `Lock OCEAN, get veOCEAN`}
@@ -358,7 +362,7 @@
           <GroupedItemsDisplay>
             <DisplayApYandRewards
               apyValue={displayedAPY.apy}
-              profitValue={displayedAPY.profit}
+              profitValue={displayedAPY.profit - simpleFlowCostOcean}
               tooltipMessage={descriptions.default
                 .tooltip_veocean_lock_passiveAPY}
               onClick={() => {
