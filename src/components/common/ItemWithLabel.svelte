@@ -10,6 +10,7 @@
   export let tooltipState = undefined;
   export let tooltipDirection = "top";
   export let tooltipAlign = "center";
+  export let input = undefined;
 </script>
 
 <div class="item" style="flex-direction : {direction}">
@@ -24,6 +25,10 @@
       />
     {/if}
   </div>
+  <div class="valueContainer">
+  {#if input!==null && input!==undefined}
+    <input type="number" bind:value={input}/>
+  {/if}
   {#if value}
     {#if !loading}
       <span class="value">{float ? parseFloat(value).toFixed(3) : value}</span>
@@ -31,6 +36,7 @@
       <span class="value">loading...</span>
     {/if}
   {/if}
+  </div>
 </div>
 
 <style>
@@ -56,5 +62,13 @@
   .value {
     font-size: var(--font-size-base);
     font-weight: bold;
+  }
+  input{
+    background-color: transparent;
+    color: black;
+    border: 1px solid var(--brand-grey-lighter);
+    width: 40px;
+    margin-right: 5px;
+    font-size: var(--font-size-small);
   }
 </style>

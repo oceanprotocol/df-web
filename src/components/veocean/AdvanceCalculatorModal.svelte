@@ -1,4 +1,5 @@
 <script>
+  import { oceanPrice } from "../../stores/tokens";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
 import Modal from "../common/Modal.svelte";
@@ -9,11 +10,21 @@ import Modal from "../common/Modal.svelte";
   export let apyValue;
   export let rewards;
   export let simpleFlowCostOcean;
-  export let fees
+  export let fees;
+  export let lockAmountUpdates = 0;
+  export let lockEndDateUpdates = 0;
+  export let claims = 1;
 
   const formatValue = (value) => {
     return parseFloat(value).toFixed(0)
   }
+
+  const calculateFees = () => {
+    if(!fees) return
+    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw) / $oceanPrice
+  }
+
+  $: lockEndDateUpdates && lockEndDateUpdates && claims && fees && $oceanPrice && calculateFees() 
 
   </script>
   
@@ -44,9 +55,9 @@ import Modal from "../common/Modal.svelte";
           </div>
           <div class="feeDetails">
             <ItemWithLabel title='Lock' value={`$${formatValue(fees?.lock)}`}/>
-            <ItemWithLabel title='Lock amount update' value={`$${formatValue(fees?.updateLockedAmount)}`}/>
-            <ItemWithLabel title='Lock end date update' value={`$${formatValue(fees?.updateUnlockDate)}`}/>
-            <ItemWithLabel title='Claim' value={`$${formatValue(fees?.claim)}`}/>
+            <ItemWithLabel title='Lock amount update' value={`$${formatValue(fees?.updateLockedAmount * lockAmountUpdates)}`} bind:input={lockAmountUpdates}/>
+            <ItemWithLabel title='Lock end date update' value={`$${formatValue(fees?.updateUnlockDate * lockEndDateUpdates)}`} bind:input={lockEndDateUpdates}/>
+            <ItemWithLabel title='Claim' value={`$${formatValue(fees?.claim * claims)}`} bind:input={claims}/>
             <ItemWithLabel title='Withdraw' value={`$${formatValue(fees?.withdraw)}`}/>
           </div>
         </div>
@@ -69,7 +80,7 @@ import Modal from "../common/Modal.svelte";
       align-items: center;
     }
     .profitDetails{ 
-      margin: calc(var(--spacer)) 0;
+      margin: calc(var(--spacer)) 0 calc(var(--spacer) / 2) 0;
       gap: calc(var(--spacer) * 2);
     }
     .feeDetails{
@@ -77,9 +88,22 @@ import Modal from "../common/Modal.svelte";
       border: 2px solid var(--brand-grey-lighter);
       border-radius: var(--border-radius);
       padding: calc(var(--spacer)/3);
+      position: relative;
     }
     .buttonContainer{
       margin-top: calc(var(--spacer) / 4);
+    }
+    .feeDetails::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent; /* Adjust the size of the triangle as needed */
+      border-right: 8px solid transparent;
+      border-bottom: 10px solid var(--brand-grey-lighter); /* Match the background color of your div */
     }
   </style>
   

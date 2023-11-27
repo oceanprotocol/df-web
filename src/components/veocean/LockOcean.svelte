@@ -259,8 +259,7 @@
   }
 
   const calculateAPY = async() => {
-    if(!fees) return
-    if(calculatedVotingPower<=0 || (!$lockedOceanAmount && $form.amount<=0)){
+    if(calculatedVotingPower<=0 || (!$lockedOceanAmount && $form.amount<=0 || !fees)){
       displayedAPY = formatApyForDisplay(0,0)
       return
     }
@@ -283,9 +282,9 @@
   }
 
   $: $form && updateVotingPower();
-  $: $totalVeOceanSupply && calculatedVotingPower && calculateAPY()
+  $: $totalVeOceanSupply && calculatedVotingPower && fees && calculateAPY()
   $: fetchTokenPrices()
-  $: $ethPrice && getFeesCosts()
+  $: $ethPrice && $oceanPrice && getFeesCosts()
 
   const updateFormAmount = () => {
     let _amount = $form.amount;

@@ -321,7 +321,9 @@ export const calculateFees = async (unlockDate, ethTokenPrice) => {
   //user needs to claim at least once per every 52 weeks
   const numberOfClaims = Math.ceil(numberOfWeeks / 52)
 
-  const simpleFlow = txFees.lock + txFees.withdraw + (txFees.claim * numberOfClaims)
+  console.log(numberOfClaims)
+
+  const simpleFlow = txFees.lock + txFees.withdraw + (txFees.claim * (numberOfClaims>0 ? numberOfClaims : 1))
 
   console.log(simpleFlow)
 
