@@ -14,10 +14,13 @@
   import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
   import DisplayAPY from "./DisplayAPY.svelte"
   import {
-    allowance
+    allowance, getTokenPriceFromCoingecko
+
   } from "../../utils/tokens";
   import {
+  ethPrice,
     getOceanBalance,
+    oceanPrice,
     updateUserBalanceOcean,
     updateUserBalanceVeOcean,
   } from "../../stores/tokens";
@@ -60,6 +63,7 @@
   let tokenApproved = false;
   let displayedAPY = formatApyForDisplay(0,0);
   let showModal = false;
+  let fees
 
   const MAXDAYS = 4 * 365;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
@@ -238,7 +242,7 @@
   }
     
   const updateVotingPower = async () => {
-    calculateFees($form.amount, moment($form.unlockDate))
+    $ethPrice && calculateFees(moment($form.unlockDate), $ethPrice)
     if ($form.unlockDate && moment($form.unlockDate) > moment()) {
       // 4 years = 100% voting power
       var today = moment.utc();
@@ -248,25 +252,38 @@
         (msDelta / getMaxDate().diff(today)) *
         ($form.amount + parseFloat($lockedOceanAmount))
       ).toFixed(3);
-      const fees = await getEstimatedFeesCosts($userAddress,$form.amount, moment.utc($form.unlockDate).unix())
-      console.log(fees)
     } else {
       calculatedVotingPower = 0;
     }
   }
 
   const calculateAPY = async() => {
+    if(!fees) return
     if(calculatedVotingPower<=0 || (!$lockedOceanAmount && $form.amount<=0)){
       displayedAPY = formatApyForDisplay(0,0)
       return
     }
     const votingPowerForAPY = parseFloat(calculatedVotingPower)
-    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY)
+    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY, fees / $oceanPrice)
     displayedAPY = formatApyForDisplay(data.apy, data.rewards)
+  }
+
+  const fetchTokenPrices = async () => {
+    const ethTokenPrice = await getTokenPriceFromCoingecko('ethereum', 'usd')
+    ethPrice.update((p) => ethTokenPrice)
+    const oceanTokenPrice = await getTokenPriceFromCoingecko('ocean-protocol', 'usd')
+    oceanPrice.update((p) => oceanTokenPrice)
+  }
+
+  const getFeesCosts =async () => {
+    fees = await calculateFees($form.unlockDate ? moment($form.unlockDate) : moment(), $ethPrice)
+    console.log(fees)
   }
 
   $: $form && updateVotingPower();
   $: $totalVeOceanSupply && calculatedVotingPower && calculateAPY()
+  $: fetchTokenPrices()
+  $: $ethPrice && getFeesCosts()
 
   const updateFormAmount = () => {
     let _amount = $form.amount;

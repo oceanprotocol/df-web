@@ -1,20 +1,17 @@
 import { getTotalOceanSupply } from "./ve.js";
 import { getEpoch } from "./epochs.js";
-import { getTokenPriceFromCoingecko } from "./tokens.js";
 import { fetchFeeData } from '@wagmi/core'
 import moment from "moment";
 
 const Fees = {
-  lock: 20, //0.010 - 0.013 ETH     Gas usage 335
-  withdraw: 20, //0.013 ETH
-  claim: 20, //0.013 ETH
-  updateLockedAmount: 20, //0.013 ETH
-  updateUnlockDate: 20 //0.013 ETH
+  lock: 400, //Gas usage ~335
+  withdraw: 250, //Gas usage ~224
+  claim: 200, //Gas usage 130 - 220
+  updateLockedAmount: 300, //Gas usage ~277
+  updateUnlockDate: 280 //Gas usage ~254
 }
 
-// 542,559  Gas limit
-
-const eth = 1000000000
+const eth = 1000000
 
 export const convertAPYtoWPR = (apy) => {
   const weeks = 52;
@@ -91,7 +88,7 @@ export const getPassiveUserRewardsData = async (userVeOcean, lockedOcean, veOcea
   const passiveRewards = import.meta.env.VITE_VE_SUPPORTED_CHAINID != "1" ? 20 : curEpoch?.streams[0]?.substreams[0]?.rewards;
   const rewards = passiveRewards / veOceanSupply * userVeOcean;
   const wpr_passive = rewards / lockedOcean
-  return {apy: convertWPRtoAPY(wpr_passive), rewards: (rewards * 52)}
+  return {apy: convertWPRtoAPY(wpr_passive), rewards: (rewards * 52) - feesCost}
 };
 
 export const getActiveAPY = async (userAddress) => {
@@ -305,50 +302,35 @@ export const calcTotalAPY = (activeAPY, passiveAPY) => {
   return convertWPRtoAPY(wpr_total);
 };
 
-export const getEstimatedFeesCosts = async () => {
-  const feeData = await fetchFeeData({
-    chainId: 1,
-  })
-  console.log('gas price in wei',feeData.gasPrice)
-   const lockCost = GasFeeAmounts.lock * feeData.gasPrice
-   const claimCost = GasFeeAmounts.claimPassive * feeData.gasPrice
-   const withdrawCost = GasFeeAmounts.withdraw * feeData.gasPrice
-   return {
-    lock: lockCost,
-    claim: claimCost,
-    withdraw: withdrawCost
-   }
-}
-
-export const calculateFees = async (oceanLocked, unlockDate) => {
+export const calculateFees = async (unlockDate, ethTokenPrice) => {
   const feeData = await fetchFeeData({
     chainId: 1,
     formatUnits: 'gwei',
   })
-  //console.log(feeData)
-
-  const ethTokenPrice = await getTokenPriceFromCoingecko('ethereum', 'usd')
-  const oceanTokenPrice = await getTokenPriceFromCoingecko('ocean-protocol', 'usd')
+  const gasPriceInGwei = feeData.formatted.gasPrice
+  const txFees = JSON.parse(JSON.stringify(Fees))
+  for (const key of Object.keys(txFees)){
+    txFees[key] = txFees[key] * gasPriceInGwei / eth
+  }
 
   //update Fees to proper values in usd
-  getFeesInUSD(feeData.formatted.gasPrice, ethTokenPrice)
+  await getFeesInUSD(ethTokenPrice, txFees)
 
-  const currentDate = moment()
-  const numberOfWeeks = unlockDate.diff(currentDate, 'weeks')
+  const numberOfWeeks = unlockDate.diff(moment(), 'weeks')
 
   //user needs to claim at least once per every 52 weeks
   const numberOfClaims = Math.ceil(numberOfWeeks / 52)
-  console.log(numberOfWeeks, numberOfClaims)
 
-  const simpleFlow = Fees.lock + Fees.withdraw + (Fees.claim * numberOfClaims)
+  const simpleFlow = txFees.lock + txFees.withdraw + (txFees.claim * numberOfClaims)
 
   console.log(simpleFlow)
 
   return simpleFlow
 }
 
-const getFeesInUSD = (gasPrice, ethUsdPrice) => {
-  console.log(gasPrice, ethUsdPrice)
-  Object.keys(Fees).forEach((txType) => Fees[txType] = (Fees[txType] * gasPrice) * ethUsdPrice)
-  return Fees
+const getFeesInUSD = (ethUsdPrice, fees) => {
+  for (const key of Object.keys(fees)){
+    fees[key] = fees[key] * ethUsdPrice
+  }
+  return fees
 }
