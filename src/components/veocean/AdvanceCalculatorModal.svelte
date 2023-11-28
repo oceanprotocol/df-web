@@ -1,5 +1,6 @@
 <script>
   import { oceanPrice } from "../../stores/tokens";
+  import { calculateNumberOFClaims } from "../../utils/rewards";
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
 import Modal from "../common/Modal.svelte";
@@ -13,7 +14,8 @@ import Modal from "../common/Modal.svelte";
   export let fees;
   export let lockAmountUpdates = 0;
   export let lockEndDateUpdates = 0;
-  export let claims = 1;
+  export let unlockDate;
+  export let claims = calculateNumberOFClaims(unlockDate);
 
   const formatValue = (value) => {
     return parseFloat(value).toFixed(0)
@@ -24,18 +26,18 @@ import Modal from "../common/Modal.svelte";
     simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw) / $oceanPrice
   }
 
-  $: lockEndDateUpdates && lockEndDateUpdates && claims && fees && $oceanPrice && calculateFees() 
+  $: lockEndDateUpdates>=0 && lockEndDateUpdates>=0 && claims>=0 && fees && $oceanPrice && calculateFees() 
 
   </script>
   
-  <Modal bind:showModal>
+  <Modal bind:showModal onClose={() => {claims = calculateNumberOFClaims(unlockDate)}}>
       <h3 slot="header">Passive yield calculation</h3>
         <div class="container">
           <div class="metricsContainer">
             <GroupedItemsDisplay>
               <DisplayApYandRewards
                 apyValue={apyValue}
-                profitValue={rewards}
+                profitValue={rewards - simpleFlowCostOcean}
                 tooltipMessage={''}
                 showCalculatorButton={false}
                 onClick={() => {}}

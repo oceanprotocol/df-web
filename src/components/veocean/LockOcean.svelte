@@ -46,7 +46,7 @@
   import moment from "moment";
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import StepsComponent from "../common/StepsComponent.svelte";
-  import {calculateFees, getPassiveUserRewardsData } from "../../utils/rewards";
+  import {calculateFees, calculateNumberOFClaims, getPassiveUserRewardsData } from "../../utils/rewards";
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
   import AdvanceCalculatorModal from "./AdvanceCalculatorModal.svelte";
   import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
@@ -281,10 +281,15 @@
     simpleFlowCostOcean = resp.simpleFlowFeesCost / $oceanPrice
   }
 
+  const calculateSimpleFlowCost = () => {
+    simpleFlowCostOcean = (fees.lock + calculateNumberOFClaims(moment($form.unlockDate)) * fees.claim + fees.withdraw) / $oceanPrice
+  }
+
   $: $form && updateVotingPower();
   $: $totalVeOceanSupply && calculatedVotingPower && fees && calculateAPY()
   $: fetchTokenPrices()
   $: $ethPrice && $oceanPrice && getFeesCosts()
+  $: $form.unlockDate && calculateSimpleFlowCost()
 
   const updateFormAmount = () => {
     let _amount = $form.amount;
@@ -296,13 +301,16 @@
 </script>
 
 <div class={`container`}>
-  <AdvanceCalculatorModal
-    bind:showModal 
-    bind:simpleFlowCostOcean
-    apyValue={displayedAPY.apy}
-    rewards={displayedAPY.profit}
-    fees={fees}
-  />
+  {#if showModal}
+    <AdvanceCalculatorModal
+      bind:showModal 
+      bind:simpleFlowCostOcean
+      unlockDate={moment($form.unlockDate)}
+      apyValue={displayedAPY.apy}
+      rewards={displayedAPY.profit}
+      fees={fees}
+    />
+  {/if}
   <Card
     title={$oceanUnlockDate ? `Update veOCEAN Lock` : `Lock OCEAN, get veOCEAN`}
   >

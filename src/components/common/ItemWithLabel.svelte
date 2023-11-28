@@ -27,7 +27,7 @@
   </div>
   <div class="valueContainer">
   {#if input!==null && input!==undefined}
-    <input type="number" bind:value={input}/>
+    <input type="number" value={input} min="0" on:change={(event) => {input = event.target.valueAsNumber >= 0 ? event.target.valueAsNumber : 0}}/>
   {/if}
   {#if value}
     {#if !loading}

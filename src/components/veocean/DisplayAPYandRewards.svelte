@@ -36,7 +36,7 @@
         title={`Profit with Fees`}
         tooltipMessage={tooltipMessage}
       />
-      <span class="profit">{`${parseFloat(profitValue).toFixed(2)} OCEAN`}</span>
+      <span class={`profit ${profitValue > 0 ? 'green' : 'red'}`}>{`${parseFloat(profitValue).toFixed(2)} OCEAN`}</span>
     </div>
     {#if showCalculatorButton}
       <button type="button" on:click={openCalculator}>
@@ -87,6 +87,12 @@
     button > img{
       height: 100%;
       width: 100%;
+    }
+    .green{
+      color: var(--brand-alert-green);
+    }
+    .red{
+      color: var(--brand-alert-red);
     }
   </style>
   

@@ -295,12 +295,28 @@ export const getChallengeRewards = async () => {
   return data;
 };
 
+
 export const calcTotalAPY = (activeAPY, passiveAPY) => {
   let wpr_active = convertAPYtoWPR(activeAPY);
   let wpr_passive = convertAPYtoWPR(passiveAPY);
   let wpr_total = wpr_active + wpr_passive;
   return convertWPRtoAPY(wpr_total);
 };
+
+const getFeesInUSD = (ethUsdPrice, fees) => {
+  for (const key of Object.keys(fees)){
+    fees[key] = fees[key] * ethUsdPrice
+  }
+  return fees
+}
+
+export const calculateNumberOFClaims = (unlockDate) => {
+  const numberOfWeeks = unlockDate.diff(moment(), 'weeks')
+
+  //user needs to claim at least once per every 52 weeks
+  const numberOfClaims = Math.ceil(numberOfWeeks / 52)
+  return numberOfClaims>0 ? numberOfClaims : 1
+}
 
 export const calculateFees = async (unlockDate, ethTokenPrice) => {
   const feeData = await fetchFeeData({
@@ -316,23 +332,8 @@ export const calculateFees = async (unlockDate, ethTokenPrice) => {
   //update Fees to proper values in usd
   await getFeesInUSD(ethTokenPrice, txFees)
 
-  const numberOfWeeks = unlockDate.diff(moment(), 'weeks')
-
-  //user needs to claim at least once per every 52 weeks
-  const numberOfClaims = Math.ceil(numberOfWeeks / 52)
-
-  console.log(numberOfClaims)
-
-  const simpleFlow = txFees.lock + txFees.withdraw + (txFees.claim * (numberOfClaims>0 ? numberOfClaims : 1))
-
-  console.log(simpleFlow)
+  const numberOfClaims = calculateNumberOFClaims(unlockDate)
+  const simpleFlow = txFees.lock + txFees.withdraw + (txFees.claim * numberOfClaims)
 
   return {fees: txFees, simpleFlowFeesCost: simpleFlow}
-}
-
-const getFeesInUSD = (ethUsdPrice, fees) => {
-  for (const key of Object.keys(fees)){
-    fees[key] = fees[key] * ethUsdPrice
-  }
-  return fees
 }

@@ -2,6 +2,7 @@
   import Button from "./Button.svelte";
 
 	export let showModal; // boolean
+	export let onClose;
 
 	let dialog; // HTMLDialogElement
 
@@ -11,7 +12,11 @@
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
 	bind:this={dialog}
-	on:close={() => (showModal = false)}
+	on:close={() => {
+		showModal = false
+		onClose()
+		}
+	}
 	on:click|self={() => dialog.close()}
 >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -65,7 +70,7 @@
 		justify-content: flex-end;
 		align-items: center;
 	}
-	:global(.buttonContainer > button){
+	:global(dialog  button){
 		color: var(--brand-grey-light) !important;
 	}
 </style>
