@@ -15,18 +15,26 @@ import Modal from "../common/Modal.svelte";
   export let lockAmountUpdates = 0;
   export let lockEndDateUpdates = 0;
   export let unlockDate;
+  export let compounds;
   export let claims = calculateNumberOFClaims(unlockDate);
 
   const formatValue = (value) => {
     return parseFloat(value).toFixed(0)
   }
 
+  const onCompoundsChange = () => {
+    lockAmountUpdates = compounds
+    lockEndDateUpdates = compounds
+    claims = compounds + calculateNumberOFClaims(unlockDate)
+  }
+
   const calculateFees = () => {
     if(!fees) return
-    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw) / $oceanPrice
+    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * (fees.claim + fees.updateLockedAmount + fees.updateUnlockDate)) / $oceanPrice
   }
 
   $: lockEndDateUpdates>=0 && lockEndDateUpdates>=0 && claims>=0 && fees && $oceanPrice && calculateFees() 
+  $: compounds && onCompoundsChange()
 
   </script>
   
@@ -56,11 +64,16 @@ import Modal from "../common/Modal.svelte";
             <ItemWithLabel title='Profit' value={`${formatValue(rewards - simpleFlowCostOcean)} OCEAN`} direction="row"/>
           </div>
           <div class="feeDetails">
-            <ItemWithLabel title='Lock' value={`$${formatValue(fees?.lock)}`}/>
-            <ItemWithLabel title='Lock amount update' value={`$${formatValue(fees?.updateLockedAmount * lockAmountUpdates)}`} bind:input={lockAmountUpdates}/>
-            <ItemWithLabel title='Lock end date update' value={`$${formatValue(fees?.updateUnlockDate * lockEndDateUpdates)}`} bind:input={lockEndDateUpdates}/>
-            <ItemWithLabel title='Claim' value={`$${formatValue(fees?.claim * claims)}`} bind:input={claims}/>
-            <ItemWithLabel title='Withdraw' value={`$${formatValue(fees?.withdraw)}`}/>
+            <div class="feeDatailsRow">
+              <ItemWithLabel title='Lock' value={`$${formatValue(fees?.lock)}`}/>
+              <ItemWithLabel title='Lock amount update' value={`$${formatValue(fees?.updateLockedAmount * lockAmountUpdates)}`} bind:input={lockAmountUpdates}/>
+              <ItemWithLabel title='Lock end date update' value={`$${formatValue(fees?.updateUnlockDate * lockEndDateUpdates)}`} bind:input={lockEndDateUpdates}/>
+              <ItemWithLabel title='Claim' value={`$${formatValue(fees?.claim * claims)}`} bind:input={claims}/>
+              <ItemWithLabel title='Withdraw' value={`$${formatValue(fees?.withdraw)}`}/>
+            </div>
+            <div class="feeDatailsRow">
+              <ItemWithLabel title='Compounds' bind:input={compounds} value={`Lock amount update $${formatValue(fees.updateLockedAmount)}  +  Lock end date update $${formatValue(fees.updateUnlockDate)}  +  Claim $${formatValue(fees.claim)}`}/>
+            </div>
           </div>
         </div>
   </Modal>
@@ -86,6 +99,8 @@ import Modal from "../common/Modal.svelte";
       gap: calc(var(--spacer) * 2);
     }
     .feeDetails{
+      display: flex;
+      flex-direction: column;
       width: 100%;
       border: 2px solid var(--brand-grey-lighter);
       border-radius: var(--border-radius);
@@ -106,6 +121,12 @@ import Modal from "../common/Modal.svelte";
       border-left: 8px solid transparent; /* Adjust the size of the triangle as needed */
       border-right: 8px solid transparent;
       border-bottom: 10px solid var(--brand-grey-lighter); /* Match the background color of your div */
+    }
+    .feeDatailsRow{
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin: calc(var(--spacer) / 4) 0;
     }
   </style>
   

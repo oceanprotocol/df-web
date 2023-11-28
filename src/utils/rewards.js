@@ -20,9 +20,10 @@ export const convertAPYtoWPR = (apy) => {
   return wpr;
 };
 
-export const convertWPRtoAPY = (wpr) => {
+export const convertWPRtoAPY = (wpr, nrOfCompounds) => {
   const weeks = 52;
-  const apy = Math.pow(1 + wpr, weeks) - 1;
+  console.log(nrOfCompounds)
+  const apy = Math.pow(1 + wpr, nrOfCompounds ? nrOfCompounds : weeks) - 1;
   return apy * 100;
 };
 
@@ -80,15 +81,13 @@ export const getPassiveUserAPY = async (userVeOcean, lockedOcean) => {
   return convertWPRtoAPY(wpr_passive);
 }
 
-export const getPassiveUserRewardsDataWithFees = async(feesCost) => {
-}
 
-export const getPassiveUserRewardsData = async (userVeOcean, lockedOcean, veOceanSupply, feesCost) => {
+export const getPassiveUserRewardsData = async (userVeOcean, lockedOcean, veOceanSupply, nrOfCompounds) => {
   const curEpoch = getEpoch();
   const passiveRewards = import.meta.env.VITE_VE_SUPPORTED_CHAINID != "1" ? 20 : curEpoch?.streams[0]?.substreams[0]?.rewards;
   const rewards = passiveRewards / veOceanSupply * userVeOcean;
   const wpr_passive = rewards / lockedOcean
-  return {apy: convertWPRtoAPY(wpr_passive), rewards: (rewards * 52)}
+  return {apy: convertWPRtoAPY(wpr_passive, nrOfCompounds), rewards: (rewards * 52)}
 };
 
 export const getActiveAPY = async (userAddress) => {
@@ -318,7 +317,7 @@ export const calculateNumberOFClaims = (unlockDate) => {
   return numberOfClaims>0 ? numberOfClaims : 1
 }
 
-export const calculateFees = async (unlockDate, ethTokenPrice) => {
+export const calculateFees = async (unlockDate, ethTokenPrice, compounds) => {
   const feeData = await fetchFeeData({
     chainId: 1,
     formatUnits: 'gwei',
@@ -333,7 +332,7 @@ export const calculateFees = async (unlockDate, ethTokenPrice) => {
   await getFeesInUSD(ethTokenPrice, txFees)
 
   const numberOfClaims = calculateNumberOFClaims(unlockDate)
-  const simpleFlow = txFees.lock + txFees.withdraw + (txFees.claim * numberOfClaims)
+  const simpleFlow = txFees.lock + txFees.withdraw + (txFees.claim * numberOfClaims) + compounds * ( txFees.updateLockedAmount + txFees.updateUnlockDate + txFees.claim )
 
   return {fees: txFees, simpleFlowFeesCost: simpleFlow}
 }

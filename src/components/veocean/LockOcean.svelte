@@ -12,7 +12,6 @@
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
   import TokenApproval from "../common/TokenApproval.svelte";
   import AgreementCheckbox from "../common/AgreementCheckbox.svelte";
-  import DisplayAPY from "./DisplayAPY.svelte"
   import {
     allowance, getTokenPriceFromCoingecko
 
@@ -64,6 +63,7 @@
   let displayedAPY = formatApyForDisplay(0,0);
   let showModal = false;
   let simpleFlowCostOcean = 0;
+  let compounds = 0;
   let fees
 
   const MAXDAYS = 4 * 365;
@@ -264,7 +264,7 @@
       return
     }
     const votingPowerForAPY = parseFloat(calculatedVotingPower)
-    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY)
+    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY, compounds)
     displayedAPY = formatApyForDisplay(data.apy, data.rewards,data.rewardsWithoutFees)
   }
 
@@ -276,7 +276,7 @@
   }
 
   const getFeesCosts =async () => {
-    const resp = await calculateFees($form.unlockDate ? moment($form.unlockDate) : moment(), $ethPrice)
+    const resp = await calculateFees($form.unlockDate ? moment($form.unlockDate) : moment(), $ethPrice, compounds)
     fees = resp.fees
     simpleFlowCostOcean = resp.simpleFlowFeesCost / $oceanPrice
   }
@@ -305,6 +305,7 @@
     <AdvanceCalculatorModal
       bind:showModal 
       bind:simpleFlowCostOcean
+      bind:compounds
       unlockDate={moment($form.unlockDate)}
       apyValue={displayedAPY.apy}
       rewards={displayedAPY.profit}
