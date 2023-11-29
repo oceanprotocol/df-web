@@ -50,7 +50,6 @@
       display: flex;
       align-items: center;
       justify-content: space-around;
-      width: 100%;
     }
     .apyDisplay{
       display: column;
@@ -79,7 +78,7 @@
       background-color: transparent;
       height: 100%;
       padding: 0 calc(var(--spacer) / 8);
-      width: 30px;
+      height: 25px;
       display: flex;
       justify-content: center;
       align-items: center;

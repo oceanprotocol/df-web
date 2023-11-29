@@ -49,6 +49,7 @@
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
   import AdvanceCalculatorModal from "./AdvanceCalculatorModal.svelte";
   import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
+  import Switch from "../common/Switch.svelte";
 
   export let setShowApprovalNotification;
 
@@ -64,6 +65,7 @@
   let showModal = false;
   let simpleFlowCostOcean = 0;
   let compounds = 0;
+  let switchValue = true;
   let fees
 
   const MAXDAYS = 4 * 365;
@@ -359,6 +361,22 @@
         />
       </div>
       <div class="item">
+        <GroupedItemsDisplay>
+          <DisplayApYandRewards
+            apyValue={displayedAPY.apy}
+            profitValue={displayedAPY.profit - simpleFlowCostOcean}
+            tooltipMessage={descriptions.default
+              .tooltip_veocean_lock_passiveAPY}
+            onClick={() => {
+              $form.unlockDate = getMaxDate().format("YYYY-MM-DD")
+              $form.amount = parseInt(oceanBalance)
+              }
+            }
+            openCalculator={() => showModal=true}
+          />
+        </GroupedItemsDisplay>
+      </div>
+      <div class="item">
         <div class="output-container">
           <GroupedItemsDisplay>
             <ItemWithLabel
@@ -367,19 +385,17 @@
               tooltipMessage={descriptions.default.tooltip_veocean_receive}
             />
           </GroupedItemsDisplay>
+        </div>
+        <div class="compound">
           <GroupedItemsDisplay>
-            <DisplayApYandRewards
-              apyValue={displayedAPY.apy}
-              profitValue={displayedAPY.profit - simpleFlowCostOcean}
-              tooltipMessage={descriptions.default
-                .tooltip_veocean_lock_passiveAPY}
-              onClick={() => {
-                $form.unlockDate = getMaxDate().format("YYYY-MM-DD")
-                $form.amount = parseInt(oceanBalance)
-                }
-              }
-              openCalculator={() => showModal=true}
+            <ItemWithLabel
+                title={`Optimize compounding`}
+                tooltipMessage={descriptions.default.tooltip_veocean_receive}
             />
+            <div class="switch">
+              <Switch bind:value={switchValue} design="slider" fontSize={12} displayDirection="column"/>
+              <span>{`${compounds} compounds`}</span>
+            </div>
           </GroupedItemsDisplay>
         </div>
       </div>
@@ -483,6 +499,7 @@
     margin-bottom: calc(var(--spacer) / 3);
     display: flex;
     justify-content: center;
+    gap: calc(var(--spacer)/4)
   }
 
   .item:last-child {
@@ -496,6 +513,24 @@
   .stepsContainer {
     width: 360px !important;
     margin-top: calc(var(--spacer) / 5);
+  }
+
+  .compound{
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+  }
+
+  .switch{
+    display: flex;
+    width: max-content;
+  }
+
+  .switch span{
+    margin-left: 40px;
+    font-size: var(--font-size-small);
+    display: flex;
+    align-items: center;
   }
 
   @media (min-width: 640px) {
