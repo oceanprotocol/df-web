@@ -22,7 +22,7 @@
   <div class="container">
     <div class="apyDisplay">
       <ItemWithLabel
-          title={`PASSIVE APY`}
+          title={`Passive APY`}
           tooltipMessage={tooltipMessage}
       />
       <div class="valueContainer">
@@ -61,6 +61,9 @@
       justify-content: center;
       align-items: center;
     }
+    .apy,.profit{
+      font-size: var(--font-size-small);
+    }
     .apy{
       color: var(--brand-pink);
       margin-right: calc(var(--spacer)/10);
@@ -76,10 +79,9 @@
     }
     button{
       background-color: transparent;
-      height: 100%;
-      padding: 0 calc(var(--spacer) / 8);
       height: 25px;
       display: flex;
+      padding: 0;
       justify-content: center;
       align-items: center;
     }

@@ -383,6 +383,7 @@
               title={`Receive`}
               value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
               tooltipMessage={descriptions.default.tooltip_veocean_receive}
+              small={true}
             />
           </GroupedItemsDisplay>
         </div>
@@ -527,7 +528,7 @@
   }
 
   .switch span{
-    margin-left: 40px;
+    margin-left: 35px;
     font-size: var(--font-size-small);
     display: flex;
     align-items: center;
