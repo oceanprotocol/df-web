@@ -50,6 +50,7 @@
   import AdvanceCalculatorModal from "./AdvanceCalculatorModal.svelte";
   import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
   import Switch from "../common/Switch.svelte";
+  import CompoundToggle from "./CompoundToggle.svelte";
 
   export let setShowApprovalNotification;
 
@@ -387,18 +388,7 @@
             />
           </GroupedItemsDisplay>
         </div>
-        <div class="compound">
-          <GroupedItemsDisplay>
-            <ItemWithLabel
-                title={`Optimize compounding`}
-                tooltipMessage={descriptions.default.tooltip_veocean_receive}
-            />
-            <div class="switch">
-              <Switch bind:value={switchValue} design="slider" fontSize={12} displayDirection="column"/>
-              <span>{`${compounds} compounds`}</span>
-            </div>
-          </GroupedItemsDisplay>
-        </div>
+        <CompoundToggle switchValue compounds={compounds}/>
       </div>
       <AgreementCheckbox
         text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, <a href='/terms'><strong>terms of use</strong></a>, waive all rights, and assume all risks."
@@ -514,24 +504,6 @@
   .stepsContainer {
     width: 360px !important;
     margin-top: calc(var(--spacer) / 5);
-  }
-
-  .compound{
-    display: flex;
-    flex-direction: row;
-    width: max-content;
-  }
-
-  .switch{
-    display: flex;
-    width: max-content;
-  }
-
-  .switch span{
-    margin-left: 35px;
-    font-size: var(--font-size-small);
-    display: flex;
-    align-items: center;
   }
 
   @media (min-width: 640px) {
