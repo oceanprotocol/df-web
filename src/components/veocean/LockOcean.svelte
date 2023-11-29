@@ -264,7 +264,8 @@
       return
     }
     const votingPowerForAPY = parseFloat(calculatedVotingPower)
-    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY, compounds)
+    const compoundCost = (fees.updateFormAmount + fees.updateUnlockDate + fees.claim) / $oceanPrice
+    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY, compounds, compoundCost, simpleFlowCostOcean)
     displayedAPY = formatApyForDisplay(data.apy, data.rewards,data.rewardsWithoutFees)
   }
 

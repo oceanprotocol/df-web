@@ -82,7 +82,8 @@ export const getPassiveUserAPY = async (userVeOcean, lockedOcean) => {
 }
 
 
-export const getPassiveUserRewardsData = async (userVeOcean, lockedOcean, veOceanSupply, nrOfCompounds) => {
+export const getPassiveUserRewardsData = async (userVeOcean, lockedOcean, veOceanSupply, nrOfCompounds, compoundFees, basicFlowFees) => {
+  console.log(compoundFees, basicFlowFees)
   const curEpoch = getEpoch();
   const passiveRewards = import.meta.env.VITE_VE_SUPPORTED_CHAINID != "1" ? 20 : curEpoch?.streams[0]?.substreams[0]?.rewards;
   const rewards = passiveRewards / veOceanSupply * userVeOcean;
