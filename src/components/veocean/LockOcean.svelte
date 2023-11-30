@@ -45,7 +45,7 @@
   import moment from "moment";
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import StepsComponent from "../common/StepsComponent.svelte";
-  import {calculateFees, calculateNumberOFClaims, getPassiveUserRewardsData } from "../../utils/rewards";
+  import {calculateFees, calculateNumberOFClaims, getMaxDate, getPassiveUserRewardsData } from "../../utils/rewards";
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
   import AdvanceCalculatorModal from "./AdvanceCalculatorModal.svelte";
   import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
@@ -66,7 +66,6 @@
   let compounds = 0;
   let fees
 
-  const MAXDAYS = 4 * 365;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
 
   let steps = [
@@ -75,11 +74,6 @@
     { text: "Receive veOCEAN" },
   ];
   let currentStep = 0;
-
-  const getMaxDate = () => {
-    let max = moment.utc().add(MAXDAYS, "days");
-    return moment.utc(getThursdayOffset(moment().utc(), MAXDAYS, max));
-  };
 
   let schema, fields, form, errors;
   var handleSubmit;
@@ -264,8 +258,9 @@
       return
     }
     const votingPowerForAPY = parseFloat(calculatedVotingPower)
+    console.log(fees)
     const compoundCost = (fees.updateFormAmount + fees.updateUnlockDate + fees.claim) / $oceanPrice
-    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY, compounds, compoundCost, simpleFlowCostOcean)
+    const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY, moment($form.unlockDate), compounds, compoundCost, simpleFlowCostOcean)
     displayedAPY = formatApyForDisplay(data.apy, data.rewards,data.rewardsWithoutFees)
   }
 
