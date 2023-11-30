@@ -375,7 +375,6 @@
   $: $form.unlockDate && calculateSimpleFlowCost();
   $: $form &&
     (async () => {
-      console.log("anan");
       if ($form.amount && $form.unlockDate) {
         await calculateOptimalCompounds();
       }
