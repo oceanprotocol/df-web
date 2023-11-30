@@ -32,14 +32,13 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         currentPrincipal
       );
 
-      let rewardsData = await getPassiveUserRewardsData(
+      const rewardsData = await getPassiveUserRewardsData(
         votingPower,
         currentPrincipal,
         tempTotalSupply,
         1
       );
 
-      console.log("rewardsData", rewardsData);
       let periodReward = rewardsData.rewards;
       const {
         totalFeeForPeriod,
