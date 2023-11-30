@@ -107,7 +107,13 @@
     color: var(--color-primary);
   }
   input::-webkit-calendar-picker-indicator {
-    filter: invert(1);
     cursor: pointer;
-}
+  }
+
+  /* if it is dark mode, invert the color of the calendar icon */
+  @media (prefers-color-scheme: dark) {
+    input::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+    }
+  }
 </style>
