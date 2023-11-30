@@ -305,37 +305,6 @@
 
     console.log('optimumComp',optimumComp)
 
-    for (let i = 1; i <= MAX_COMPOUNDS; i++) {
-      compounds = i; // Set the current number of compounds
-      const msDelta = getMsDelta($form.unlockDate);
-
-      const resultDisplayedAPY = await calculateOptimalCompoundInterestWithFees({
-        msDelta: msDelta,
-        getMaxDate: getMaxDate,
-        lockedOceanAmount: $lockedOceanAmount,
-        formAmount: $form.amount,
-        formUnlockDate: $form.unlockDate,
-        fees: fees,
-        displayedAPY: displayedAPY,
-        totalVeOceanSupply: $totalVeOceanSupply,
-        compounds: i,
-      }); // This updates `displayedAPY` and other relevant states
-
-      // Assuming `displayedAPY.profit` holds the net return after fees
-      if (resultDisplayedAPY.profit > highestNetReturn) {
-        highestNetReturn = resultDisplayedAPY.profit;
-        optimalCompounds = i;
-      }
-
-      console.log("displayedAPY.profit", resultDisplayedAPY.profit.toString());
-      console.log("lastNetReturn", lastNetReturn.toString());
-      // Early exit condition: if net return starts decreasing, break the loop
-
-      lastNetReturn = resultDisplayedAPY.profit; // Update the lastNetReturn for the next iteration
-    }
-
-    console.log("optimalCompounds", optimalCompounds);
-
     //compounds = optimalCompounds; // Set to the optimal number of compounds
     //await calculateCompoundInterestWithFees(); // Recalculate with the optimal number
   };

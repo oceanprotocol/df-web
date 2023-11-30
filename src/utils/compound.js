@@ -17,22 +17,21 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   // Calculate the optimal number of compounds
   // the 4000 is just a random number, we will never reach it
   let reachedHighestNetReturn = false;
+  let lastCompoundDetails = null;
   while (!reachedHighestNetReturn) {
     let totalRewards = 0;
     let currentPrincipal = principal;
     let tempTotalSupply = totalVeOceanSupply;
     const compoundDetails = [];
-    for (let i = 0; i < optimalCompounds; i++) {
+    for (let i = 0; i < currentCompoundCount; i++) {
       const periodMS = msDelta / currentCompoundCount;
-
-      console.log('periodMS',periodMS)
+      
       const votingPower = getVotingPower(
         periodMS,
         getMaxDate,
         currentPrincipal
       );
 
-      console.log('votingPower',votingPower)
       let rewardsData = await getPassiveUserRewardsData(
         votingPower,
         currentPrincipal,
@@ -40,7 +39,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         1
       );
 
-      console.log('rewardsData',rewardsData)
+      console.log("rewardsData", rewardsData);
       let periodReward = rewardsData.rewards;
       const {
         totalFeeForPeriod,
@@ -57,7 +56,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
       }
 
       if (i === currentCompoundCount - 1) {
-        periodReward -= fees.claim;
+        periodReward -= totalPeriodClaims;
         periodReward -= fees.withdraw;
       }
 
@@ -66,31 +65,36 @@ export const calculateOptimalCompoundInterestWithFees = async ({
       }
 
       tempTotalSupply += periodReward;
+      
+      const stepPrincipal = currentPrincipal;
       currentPrincipal += periodReward;
       totalRewards += periodReward;
 
       compoundDetails.push({
         order: i,
-        lock: i === 0 ? fees.lock : 0,
-        withdraw: i === currentCompoundCount - 1 ? fees.withdraw : 0,
+        lockFee: i === 0 ? fees.lock : 0,
+        withdrawFee: i === currentCompoundCount - 1 ? fees.withdraw : 0,
+        claimsFee: feeForClaims,
         votingPower,
-        apy: rewardsData.apy,
         rawPeriodReward,
         periodReward,
         totalFeeForPeriod,
-        feeForClaims,
         feeUpdateAmount: i === 0 ? feeUpdateAmount : 0,
         tempTotalSupply,
-        currentPrincipal,
+        stepPrincipal,
+        nextPrincipal: currentPrincipal,
         totalRewards,
         mandatoryClaimCount,
         totalPeriodClaims,
       });
     }
 
+    console.log('totalRewards',totalRewards)
+    console.log('compoundDetails',compoundDetails)
+    console.log('------***------')
     if (totalRewards > highestNetReturn) {
       highestNetReturn = totalRewards;
-      optimalCompounds = compounds;
+      optimalCompounds = currentCompoundCount;
       optimalCompoundDetails = compoundDetails;
       currentCompoundCount += 1;
     } else {
