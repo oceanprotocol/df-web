@@ -43,10 +43,8 @@
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import StepsComponent from "../common/StepsComponent.svelte";
   import {
-    calculateCompoundInterestWithFees,
     calculateFees,
     calculateNumberOFClaims,
-    calculateOptimalCompoundInterestWithFees,
     getMsDelta,
     getPassiveUserRewardsData,
     getVotingPower,
@@ -54,6 +52,7 @@
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
   import AdvanceCalculatorModal from "./AdvanceCalculatorModal.svelte";
   import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
+  import { calculateOptimalCompoundInterestWithFees } from "../../utils/compound";
 
   export let setShowApprovalNotification;
 
@@ -310,7 +309,7 @@
       compounds = i; // Set the current number of compounds
       const msDelta = getMsDelta($form.unlockDate);
 
-      const resultDisplayedAPY = await calculateCompoundInterestWithFees({
+      const resultDisplayedAPY = await calculateOptimalCompoundInterestWithFees({
         msDelta: msDelta,
         getMaxDate: getMaxDate,
         lockedOceanAmount: $lockedOceanAmount,

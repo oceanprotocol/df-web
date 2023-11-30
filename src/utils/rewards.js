@@ -89,143 +89,10 @@ export const getMsDelta = (unlockDate) => {
   var today = moment.utc();
   var unlockDate = moment.utc(unlockDate);
   return unlockDate.diff(today);
-}
+};
 
 export const getVotingPower = (msDelta, getMaxDate, totalAmount) => {
   return ((msDelta / getMaxDate().diff(moment.utc())) * totalAmount).toFixed(3);
-};
-
-const calculateFeeForPeriod = (fees, unlockDate) => {
-  // Assuming 'fees' contains fee values for different actions (lock, claim, etc.)
-  // and 'unlockDate' is the moment object of the unlock date
-
-  const numberOfClaims = calculateNumberOFClaims(unlockDate); // Function from your 'rewards.js'
-  const feePerClaim = fees.claim * numberOfClaims;
-  const feeForLock = fees.lock;
-  const totalFeeForPeriod = feePerClaim + feeForLock; // Summing up fees for lock and claims
-
-  return totalFeeForPeriod;
-};
-
-const calculateAPYBasedOnTotalRewards = (principal, totalRewards) => {
-  if (principal === 0) return 0; // Avoid division by zero
-
-  // Calculate the APY based on the total rewards and the principal
-  const apy = (totalRewards / principal) * 100; // Convert the ratio to a percentage
-
-  return apy;
-};
-
-export const calculateCompoundInterestWithFees = async ({
-  msDelta,
-  getMaxDate,
-  lockedOceanAmount,
-  formAmount,
-  formUnlockDate,
-  fees,
-  displayedAPY,
-  totalVeOceanSupply,
-  compounds,
-}) => {
-  const formatApyForDisplay = (apy, rewards) => {
-    return { apy: apy, profit: rewards };
-  };
-
-  const startPrincipal =
-    formAmount > 0
-      ? formAmount + parseFloat(lockedOceanAmount)
-      : parseFloat(lockedOceanAmount);
-
-  let calculatedVotingPower = getVotingPower(msDelta, getMaxDate, startPrincipal);
-
-  if (
-    calculatedVotingPower <= 0 ||
-    (!lockedOceanAmount && formAmount <= 0) ||
-    !fees
-  ) {
-    displayedAPY = formatApyForDisplay(0, 0);
-    return;
-  }
-
-  let principal = startPrincipal;
-
-  let totalRewards = 0;
-
-  let totalVotingPower = 0;
-  for (let i = 0; i < compounds; i++) {
-    let tempVotingPower = getVotingPower(
-      msDelta / compounds,
-      getMaxDate,
-      principal
-    );
-
-    totalVotingPower += parseFloat(tempVotingPower);
-
-    const totalVeOceanSupplyWithVP =
-      totalVeOceanSupply + parseFloat(totalVotingPower);
-
-    // Get rewards data for the current compound period
-    const data = await getPassiveUserRewardsData(
-      calculatedVotingPower,
-      principal,
-      totalVeOceanSupplyWithVP,
-      1
-    );
-
-    let periodReward = data.rewards / compounds; // Annual reward divided by number of compounds
-    let feeForPeriod = calculateFeeForPeriod(fees, moment(formUnlockDate)); // Calculate fees for the period
-
-    // Deduct fee from the reward
-    periodReward -= feeForPeriod;
-
-    // Add the remaining reward to the principal for the next period
-    principal += periodReward;
-    totalRewards += periodReward;
-  }
-
-  console.log("Total rewards: ", totalRewards);
-
-  let finalAPY = calculateAPYBasedOnTotalRewards(startPrincipal, totalRewards); // Function to calculate APY based on total rewards and final principal
-  displayedAPY = formatApyForDisplay(finalAPY, totalRewards);
-  return displayedAPY;
-};
-
-export const calculateOptimalCompoundInterestWithFees = async ({
-  msDelta, getMaxDate, lockedOceanAmount, formAmount, formUnlockDate, fees, totalVeOceanSupply
-}) => {
-  let optimalCompounds = 1;
-  let highestNetReturn = 0;
-  let principal = formAmount + lockedOceanAmount;
-
-  // Calculate the optimal number of compounds
-  // the 4000 is just a random number, we will never reach it 
-  for (let compounds = 1; compounds <= 4000; compounds++) {
-      let totalRewards = 0;
-      let currentPrincipal = principal;
-      let tempTotalSupply = totalVeOceanSupply;
-
-      for (let i = 0; i < compounds; i++) {
-          let votingPower = getVotingPower(msDelta / compounds, getMaxDate, currentPrincipal);
-          let rewardsData = await getPassiveUserRewardsData(votingPower, currentPrincipal, tempTotalSupply, 1);
-          let periodReward = rewardsData.rewards;
-          let feeForPeriod = calculateFeeForPeriod(fees, moment(formUnlockDate));
-
-          periodReward -= feeForPeriod;
-          tempTotalSupply += periodReward;
-          currentPrincipal += periodReward;
-          totalRewards += periodReward;
-      }
-
-      let netReturn = totalRewards - calculateFeeForPeriod(fees, moment(formUnlockDate));
-      if (netReturn > highestNetReturn) {
-          highestNetReturn = netReturn;
-          optimalCompounds = compounds;
-      } else {
-          break;
-      }
-  }
-
-  return optimalCompounds;
 };
 
 export const getPassiveUserRewardsData = async (
@@ -235,6 +102,7 @@ export const getPassiveUserRewardsData = async (
   nrOfCompounds
 ) => {
   const curEpoch = getEpoch();
+
   const passiveRewards =
     import.meta.env.VITE_VE_SUPPORTED_CHAINID != "1"
       ? 20
@@ -464,8 +332,11 @@ const getFeesInUSD = (ethUsdPrice, fees) => {
   return fees;
 };
 
-export const calculateNumberOFClaims = (unlockDate) => {
-  const numberOfWeeks = unlockDate.diff(moment(), "weeks");
+export const calculateNumberOFClaims = (unlockDate, startDate) => {
+  const numberOfWeeks = unlockDate.diff(
+    startDate ? moment(startDate) : moment(),
+    "weeks"
+  );
 
   //user needs to claim at least once per every 52 weeks
   const numberOfClaims = Math.ceil(numberOfWeeks / 52);
