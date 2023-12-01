@@ -2,7 +2,7 @@ import { getTotalOceanSupply } from "./ve.js";
 import { getEpoch } from "./epochs.js";
 import { fetchFeeData } from '@wagmi/core'
 import moment from "moment";
-import { getThursdayOffset } from "./functions.js";
+import { getThursdayDate, getThursdayOffset } from "./functions.js";
 
 const MAXDAYS = 4 * 365;
 const Fees = {
@@ -26,7 +26,7 @@ export const convertWPRtoAPY = (wpr, nrOfCompounds) => {
   const weeks = 52;
   console.log(nrOfCompounds)
   const apy = Math.pow(1 + wpr, nrOfCompounds ? nrOfCompounds : weeks) - 1;
-  return apy * 100;
+  return parseFloat(apy * 100);
 };
 
 export const getRewards = async (userAddress) => {
@@ -90,12 +90,10 @@ export const getPassiveUserAPY = async (userVeOcean, lockedOcean) => {
 
 
 export const getPassiveUserRewardsData = async (userVeOcean, lockedOcean, veOceanSupply, unlockDate, nrOfCompounds, compoundFees, basicFlowFees) => {
-  console.log(compoundFees, basicFlowFees)
-  let currentDate = moment()
-  const getNumberOFWeeks = currentDate.diff(currentDate)
+  let currentDate = moment(getThursdayDate(moment()))
   let totalRewards = 0
   let rewards = 0
-
+  let weeks = 0
 
   const curEpoch = getEpoch();
   const passiveRewards = import.meta.env.VITE_VE_SUPPORTED_CHAINID != "1" ? 20 : curEpoch?.streams[0]?.substreams[0]?.rewards;
@@ -106,44 +104,17 @@ export const getPassiveUserRewardsData = async (userVeOcean, lockedOcean, veOcea
       (msDelta / getMaxDate().diff(currentDate)) *
        parseFloat(lockedOcean)
     ).toFixed(3)
-    console.log(passiveRewards, veOceanSupply, votingPower)
     rewards = passiveRewards / veOceanSupply * votingPower;
     totalRewards += rewards
+    weeks += 1
     currentDate = currentDate.add(1, 'weeks')
-    console.log('voting power:', votingPower, '-rewards:', rewards)
+    //console.log('voting power:', votingPower, '-rewards:', rewards)
   }
 
-  
-
-  /*currentDate = currentDate.add(1, 'weeks')
-  msDelta = unlockDate.diff(currentDate);
-  const secondWeekVotingPower = (
-    (msDelta / getMaxDate().diff(currentDate)) *
-    parseFloat(lockedOcean)
-  ).toFixed(3)
-
-  currentDate = currentDate.add(1, 'weeks')
-  msDelta = unlockDate.diff(currentDate);
-  const thirdWeekVotingPower = (
-    (msDelta / getMaxDate().diff(currentDate)) *
-    parseFloat(lockedOcean)
-  ).toFixed(3)
-
-  currentDate = currentDate.add(1, 'weeks')
-  msDelta = unlockDate.diff(currentDate);
-  const fourWeekVotingPower = (
-    (msDelta / getMaxDate().diff(currentDate)) *
-    parseFloat(lockedOcean)
-  ).toFixed(3)
-
-  console.log(firstWeekVotingPower, secondWeekVotingPower, thirdWeekVotingPower, secondWeekVotingPower - firstWeekVotingPower, thirdWeekVotingPower - secondWeekVotingPower, fourWeekVotingPower - thirdWeekVotingPower)
-  */
-  //const rewards = passiveRewards / veOceanSupply * userVeOcean;
-  //const rewards2 = passiveRewards / veOceanSupply * secondWeekVotingPower;
-  //const rewards3 = passiveRewards / veOceanSupply * thirdWeekVotingPower;
-  //console.log(rewards, rewards2, rewards3, rewards - rewards2, rewards2-rewards3)
-  const wpr_passive = rewards / lockedOcean
-  return {apy: convertWPRtoAPY(wpr_passive, nrOfCompounds), rewards: (rewards * 52)}
+  const yyield = ((lockedOcean + totalRewards - basicFlowFees)) / lockedOcean - 1
+  const wpr = yyield / weeks
+  console.log(totalRewards, wpr)
+  return {apy: wpr * 52 * 100, yield: yyield * 100,rewards: totalRewards}
 };
 
 export const getActiveAPY = async (userAddress) => {
