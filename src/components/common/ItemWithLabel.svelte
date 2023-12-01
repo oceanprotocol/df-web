@@ -3,6 +3,7 @@
 
   export let title;
   export let value;
+  export let small = false;
   export let float = false;
   export let loading = false;
   export let direction = "column";
@@ -31,9 +32,9 @@
   {/if}
   {#if value}
     {#if !loading}
-      <span class="value">{float ? parseFloat(value).toFixed(3) : value}</span>
+      <span class={`value ${small ? 'small' : ''}`}>{float ? parseFloat(value).toFixed(3) : value}</span>
     {:else}
-      <span class="value">loading...</span>
+      <span class={`value ${small ? 'small' : ''}`}>loading...</span>
     {/if}
   {/if}
   </div>
@@ -69,6 +70,9 @@
     border: 1px solid var(--brand-grey-lighter);
     width: 40px;
     margin-right: 5px;
+    font-size: var(--font-size-small);
+  }
+  .small{
     font-size: var(--font-size-small);
   }
 </style>

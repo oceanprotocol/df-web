@@ -53,6 +53,8 @@
   import AdvanceCalculatorModal from "./AdvanceCalculatorModal.svelte";
   import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
   import { calculateOptimalCompoundInterestWithFees } from "../../utils/compound";
+  import Switch from "../common/Switch.svelte";
+  import CompoundToggle from "./CompoundToggle.svelte";
 
   export let setShowApprovalNotification;
 
@@ -70,7 +72,8 @@
   let showModal = false;
   let simpleFlowCostOcean = 0;
   let compounds = 0;
-  let fees;
+  let switchValue = true;
+  let fees
 
   const MAXDAYS = 4 * 365;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
@@ -416,6 +419,22 @@
         />
       </div>
       <div class="item">
+        <GroupedItemsDisplay>
+          <DisplayApYandRewards
+            apyValue={displayedAPY.apy}
+            profitValue={displayedAPY.profit - simpleFlowCostOcean}
+            tooltipMessage={descriptions.default
+              .tooltip_veocean_lock_passiveAPY}
+            onClick={() => {
+              $form.unlockDate = getMaxDate().format("YYYY-MM-DD")
+              $form.amount = parseInt(oceanBalance)
+              }
+            }
+            openCalculator={() => showModal=true}
+          />
+        </GroupedItemsDisplay>
+      </div>
+      <div class="item">
         <div class="output-container">
           <GroupedItemsDisplay>
             <ItemWithLabel
@@ -424,20 +443,8 @@
               tooltipMessage={descriptions.default.tooltip_veocean_receive}
             />
           </GroupedItemsDisplay>
-          <GroupedItemsDisplay>
-            <DisplayApYandRewards
-              apyValue={displayedAPY.apy}
-              profitValue={displayedAPY.profit - simpleFlowCostOcean}
-              tooltipMessage={descriptions.default
-                .tooltip_veocean_lock_passiveAPY}
-              onClick={() => {
-                $form.unlockDate = getMaxDate().format("YYYY-MM-DD");
-                $form.amount = parseInt(oceanBalance);
-              }}
-              openCalculator={() => (showModal = true)}
-            />
-          </GroupedItemsDisplay>
         </div>
+        <CompoundToggle switchValue compounds={compounds}/>
       </div>
       <AgreementCheckbox
         text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, <a href='/terms'><strong>terms of use</strong></a>, waive all rights, and assume all risks."
@@ -533,6 +540,7 @@
     margin-bottom: calc(var(--spacer) / 3);
     display: flex;
     justify-content: center;
+    gap: calc(var(--spacer)/4)
   }
 
   .item:last-child {
