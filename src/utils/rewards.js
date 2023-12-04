@@ -108,13 +108,12 @@ export const getPassiveUserRewardsData = async (userVeOcean, lockedOcean, veOcea
     totalRewards += rewards
     weeks += 1
     currentDate = currentDate.add(1, 'weeks')
-    //console.log('voting power:', votingPower, '-rewards:', rewards)
   }
 
   const yyield = ((lockedOcean + totalRewards - basicFlowFees)) / lockedOcean - 1
   const wpr = yyield / weeks
-  console.log(totalRewards, wpr)
-  return {apy: wpr * 52 * 100, yield: yyield * 100,rewards: totalRewards}
+  console.log(totalRewards, wpr, weeks, yyield * 100, basicFlowFees)
+  return {apy: wpr * 52 * 100, yield: yyield * 100, rewards: totalRewards - basicFlowFees}
 };
 
 export const getActiveAPY = async (userAddress) => {

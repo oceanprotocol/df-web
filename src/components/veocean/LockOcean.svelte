@@ -261,7 +261,6 @@
       return
     }
     const votingPowerForAPY = parseFloat(calculatedVotingPower)
-    console.log(fees)
     const compoundCost = (fees.updateFormAmount + fees.updateUnlockDate + fees.claim) / $oceanPrice
     const data = await getPassiveUserRewardsData( votingPowerForAPY, $form.amount>0 ? $form.amount + parseFloat($lockedOceanAmount) : parseFloat($lockedOceanAmount), $totalVeOceanSupply + votingPowerForAPY, moment($form.unlockDate), compounds, compoundCost, simpleFlowCostOcean)
     displayedAPY = formatApyForDisplay(data.apy, data.rewards,data.rewardsWithoutFees)
@@ -361,7 +360,7 @@
         <GroupedItemsDisplay>
           <DisplayApYandRewards
             apyValue={displayedAPY.apy}
-            profitValue={displayedAPY.profit - simpleFlowCostOcean}
+            profitValue={displayedAPY.profit}
             tooltipMessage={descriptions.default
               .tooltip_veocean_lock_passiveAPY}
             onClick={() => {
