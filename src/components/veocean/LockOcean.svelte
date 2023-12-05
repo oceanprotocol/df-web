@@ -57,9 +57,7 @@
 
   export let setShowApprovalNotification;
 
-  const formatApyForDisplay = (apy, rewards) => {
-    return { apy: apy, profit: rewards };
-  };
+  const formatApyForDisplay = (apy, rewards) =>{ return {apy:apy, rewards:rewards}}
 
   let networksData = networksDataArray.default;
   let oceanBalance = 0;
@@ -362,8 +360,8 @@
       bind:compounds
       unlockDate={moment($form.unlockDate)}
       apyValue={displayedAPY.apy}
-      rewards={displayedAPY.profit}
-      {fees}
+      rewards={$form.amount && $form.unlockDate ? displayedAPY.rewards : 0}
+      fees={fees}
     />
   {/if}
   <Card
@@ -416,7 +414,7 @@
         <GroupedItemsDisplay>
           <DisplayApYandRewards
             apyValue={displayedAPY.apy}
-            profitValue={displayedAPY.profit}
+            profitValue={$form.amount && $form.unlockDate ? displayedAPY.rewards - simpleFlowCostOcean : 0}
             tooltipMessage={descriptions.default
               .tooltip_veocean_lock_passiveAPY}
             onClick={() => {

@@ -124,16 +124,10 @@ export const getPassiveUserRewardsData = async (
     currentDate = currentDate.add(1, "weeks");
   }
 
-  const yyield = (lockedOcean + totalRewards - basicFlowFees) / lockedOcean - 1;
-  const wpr = yyield / weeks;
-  console.log(totalRewards, wpr, weeks, yyield * 100, basicFlowFees);
-  return {
-    apy: wpr * 52 * 100,
-    weeks,
-    yield: yyield * 100,
-    grossRewards: totalRewards,
-    rewards: totalRewards - basicFlowFees,
-  };
+  const yyield = ((lockedOcean + totalRewards - basicFlowFees)) / lockedOcean - 1
+  const wpr = yyield / weeks
+  console.log(totalRewards, wpr, weeks, yyield * 100, basicFlowFees)
+  return {apy: wpr * 52 * 100, yield: yyield * 100, rewards: totalRewards}
 };
 
 export const getActiveAPY = async (userAddress) => {
