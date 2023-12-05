@@ -11,12 +11,12 @@
 <div class="compound">
     <GroupedItemsDisplay>
       <ItemWithLabel
-          title={`Optimize compounding`}
-          tooltipMessage={''}
+          title={`${compounds} compounds`}
+          tooltipMessage={'Hello'}
       />
       <div class="switch">
         <Switch bind:value={switchValue} design="slider" fontSize={12} displayDirection="column"/>
-        <span>{`${compounds} compounds`}</span>
+        <span>optimize</span>
       </div>
     </GroupedItemsDisplay>
 </div>
@@ -24,8 +24,12 @@
 <style>
   .compound{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: max-content;
+  }
+
+  :global(.compound .title){
+    font-weight: bold;
   }
 
   .switch{
@@ -34,7 +38,7 @@
   }
 
   .switch span{
-    margin-left: 25px;
+    margin-left: 28px;
     font-size: var(--font-size-small);
     display: flex;
     align-items: center;

@@ -327,24 +327,6 @@
     >
       <div class="item">
         <Input
-          type="number"
-          name="amount"
-          min={$lockedOceanAmount ? 0 : 1}
-          max={parseInt(oceanBalance)}
-          error={$errors.amount}
-          disabled={getOceanBalance($connectedChainId) <= 0 ||
-            moment().utc().isAfter($oceanUnlockDate)}
-          label="OCEAN Amount"
-          direction="column"
-          bind:value={$form.amount}
-          maxValueLabel="Balance: "
-          showMaxValue={true}
-          showMaxButton={true}
-          onChange={() => updateFormAmount()}
-        />
-      </div>
-      <div class="item">
-        <Input
           type="date"
           label="Lock End Date"
           name="unlockDate"
@@ -361,6 +343,39 @@
           bind:value={$form.unlockDate}
         />
       </div>
+      <div class="item amountCompound">
+        <div class="amountCompoundInputs">
+          <Input
+            type="number"
+            name="amount"
+            label="OCEAN amount"
+            min={$lockedOceanAmount ? 0 : 1}
+            max={parseInt(oceanBalance)}
+            error={$errors.amount}
+            disabled={getOceanBalance($connectedChainId) <= 0 ||
+              moment().utc().isAfter($oceanUnlockDate)}
+            direction="column"
+            bind:value={$form.amount}
+            maxValueLabel="Balance: "
+            showMaxValue={true}
+            showMaxButton={true}
+            onChange={() => updateFormAmount()}
+          />
+          <CompoundToggle switchValue compounds={compounds}/>
+        </div>
+      </div>
+      <div class="item">
+        <div class="output-container">
+          <GroupedItemsDisplay>
+            <ItemWithLabel
+              title={`Receive`}
+              value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
+              tooltipMessage={descriptions.default.tooltip_veocean_receive}
+              small={true}
+            />
+          </GroupedItemsDisplay>
+        </div>
+      </div>
       <div class="item">
         <GroupedItemsDisplay>
           <DisplayApYandRewards
@@ -376,19 +391,6 @@
             openCalculator={() => showModal=true}
           />
         </GroupedItemsDisplay>
-      </div>
-      <div class="item">
-        <div class="output-container">
-          <GroupedItemsDisplay>
-            <ItemWithLabel
-              title={`Receive`}
-              value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
-              tooltipMessage={descriptions.default.tooltip_veocean_receive}
-              small={true}
-            />
-          </GroupedItemsDisplay>
-        </div>
-        <CompoundToggle switchValue compounds={compounds}/>
       </div>
       <AgreementCheckbox
         text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, <a href='/terms'><strong>terms of use</strong></a>, waive all rights, and assume all risks."
@@ -490,7 +492,7 @@
     margin-bottom: calc(var(--spacer) / 3);
     display: flex;
     justify-content: center;
-    gap: calc(var(--spacer)/4)
+    gap: calc(var(--spacer)/4);
   }
 
   .item:last-child {
@@ -504,6 +506,16 @@
   .stepsContainer {
     width: 360px !important;
     margin-top: calc(var(--spacer) / 5);
+  }
+
+  .amountCompound{
+    flex-direction: column;
+  }
+
+  .amountCompoundInputs{
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacer)/2)
   }
 
   @media (min-width: 640px) {
