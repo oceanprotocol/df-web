@@ -1,69 +1,71 @@
-import { getPassiveUserRewardsData, getVotingPower, getMsDelta } from "./rewards";
-
-const msInWeek = 604800000
+import { getEpoch } from "./epochs";
+import { getMaxDate } from "./rewards";
+import { getThursdayDate } from "./functions";
+import { getTokenPriceFromCoingecko } from "./tokens";
+import moment from "moment";
 
 export const calculateOptimalCompoundInterestWithFees = async ({
-  msDelta,
-  getMaxDate,
   lockedOceanAmount,
   formAmount,
   formUnlockDate,
   fees,
   totalVeOceanSupply,
 }) => {
+  const msDelta = moment(formUnlockDate).diff(moment());
   let optimalCompounds = 1;
   let currentCompoundCount = 1;
   let highestNetReturn = 0;
   const principal = formAmount + lockedOceanAmount;
   let optimalCompoundDetails = [];
-  // Calculate the optimal number of compounds
-  // the 4000 is just a random number, we will never reach it
+
+  const oceanTokenPrice = await getTokenPriceFromCoingecko(
+    "ocean-protocol",
+    "usd"
+  );
+
   let reachedHighestNetReturn = false;
   let lastCompoundDetails = null;
-  let currentDate = moment()
+  let currentDate = moment();
+  let totalCostInOcean = 0;
+  let totalCost = 0;
+  let claimCount = 0;
+
   while (!reachedHighestNetReturn) {
-    let totalRewards = 0;
+    let grossRewards = 0;
     let currentPrincipal = principal;
     let tempTotalSupply = totalVeOceanSupply;
     const compoundDetails = [];
+    const compoundDates = calculateCompoundDates(
+      formUnlockDate,
+      currentCompoundCount
+    );
+    claimCount = 0;
+
     for (let i = 0; i < currentCompoundCount; i++) {
       const periodMS = msDelta / currentCompoundCount;
-      console.log('weeksInPeriod', Math.floor(periodMS/msInWeek))
-      const weekInPeriod = Math.floor(periodMS/msInWeek)
 
-      const rewardsData =
-      //calculate rewards for period by calculating rewards for each week
-      for(let i = 0; i < currentCompoundCount; i++) {
-        const currentMsDelta = getMsDelta(formUnlockDate, currentDate)
+      const periodStartDate = i === 0 ? currentDate : compoundDates[i - 1];
 
-      }
-      
-      const votingPower = getVotingPower(
-        periodMS,
-        getMaxDate,
-        currentPrincipal
-      );
+      const rewardsData = await getPeriodRewardData({
+        lockedOcean: currentPrincipal,
+        veOceanSupply: tempTotalSupply,
+        unlockDate: moment(formUnlockDate),
+        currentDate: periodStartDate,
+        periodEndDate: compoundDates[i],
+      });
 
-      const rewardsData = await getPassiveUserRewardsData(
-        votingPower,
-        currentPrincipal,
-        tempTotalSupply,
-        1
-      );
+      const periodReward = rewardsData.rewards;
+      const { totalPeriodClaims } = calculateFeeForPeriod(fees, periodMS);
 
-      let periodReward = rewardsData.rewards;
-      const {
-        totalFeeForPeriod,
-        feeForClaims,
-        feeUpdateAmount,
-        mandatoryClaimCount,
-        totalPeriodClaims,
-      } = calculateFeeForPeriod(fees, periodMS);
-
+      claimCount += totalPeriodClaims;
       const rawPeriodReward = periodReward;
 
+      /*
       if (i === 0) {
         periodReward -= fees.lock;
+        if (currentCompoundCount > 1) {
+          periodReward -= totalPeriodClaims;
+        }
       }
 
       if (i === currentCompoundCount - 1) {
@@ -73,38 +75,43 @@ export const calculateOptimalCompoundInterestWithFees = async ({
 
       if (i > 0 && i < currentCompoundCount - 1) {
         periodReward -= totalFeeForPeriod;
-      }
+      }*/
 
       tempTotalSupply += periodReward;
-      
+
       const stepPrincipal = currentPrincipal;
       currentPrincipal += periodReward;
-      totalRewards += periodReward;
+      grossRewards += periodReward;
 
       compoundDetails.push({
         order: i,
-        lockFee: i === 0 ? fees.lock : 0,
-        withdrawFee: i === currentCompoundCount - 1 ? fees.withdraw : 0,
-        claimsFee: feeForClaims,
-        votingPower,
+        //        lockFee: i === 0 ? fees.lock : 0,
+        //        withdrawFee: i === currentCompoundCount - 1 ? fees.withdraw : 0,
+        //        claimsFee: feeForClaims,
         rawPeriodReward,
         periodReward,
-        totalFeeForPeriod,
-        feeUpdateAmount: i === 0 ? feeUpdateAmount : 0,
+        //        totalFeeForPeriod,
+        //        feeUpdateAmount: i === 0 ? feeUpdateAmount : 0,
         tempTotalSupply,
         stepPrincipal,
         nextPrincipal: currentPrincipal,
-        totalRewards,
-        mandatoryClaimCount,
+        grossRewards,
+        //        mandatoryClaimCount,
         totalPeriodClaims,
       });
     }
 
-    console.log('totalRewards',totalRewards)
-    console.log('compoundDetails',compoundDetails)
-    console.log('------***------')
-    if (totalRewards > highestNetReturn) {
-      highestNetReturn = totalRewards;
+    totalCost =
+      claimCount * fees.claim +
+      (currentCompoundCount - 1) * fees.updateLockedAmount +
+      fees.lock +
+      fees.withdraw;
+
+    totalCostInOcean = totalCost / oceanTokenPrice;
+
+    const netRewards = grossRewards - totalCostInOcean;
+    if (netRewards > highestNetReturn) {
+      highestNetReturn = netRewards;
       optimalCompounds = currentCompoundCount;
       optimalCompoundDetails = compoundDetails;
       currentCompoundCount += 1;
@@ -123,6 +130,10 @@ export const calculateOptimalCompoundInterestWithFees = async ({
     optimalAPY,
     optimalCompoundDetails,
     highestNetReturn,
+    totalCostInOcean,
+    totalCost,
+    claimCount,
+    fees,
   };
 };
 
@@ -158,4 +169,60 @@ const calculateAPYBasedOnTotalRewards = (principal, totalRewards) => {
   const apy = (totalRewards / principal) * 100; // Convert the ratio to a percentage
 
   return apy;
+};
+
+const calculateCompoundDates = (unlockDate, compoundCount) => {
+  const compoundDates = [];
+  const msDelta = moment(unlockDate).diff(moment());
+  const periodMsDelta = msDelta / compoundCount;
+  let currentDate = moment();
+  for (let i = 0; i < compoundCount; i++) {
+    currentDate = moment(getThursdayDate(currentDate.add(periodMsDelta, "ms")));
+    compoundDates.push(currentDate.format("YYYY-MM-DD"));
+  }
+  return compoundDates;
+};
+
+export const getPeriodRewardData = async ({
+  lockedOcean,
+  veOceanSupply,
+  unlockDate,
+  currentDate,
+  periodEndDate,
+}) => {
+  let tempCurrentDate = moment(
+    getThursdayDate(moment(currentDate)),
+    "YYYY-MM-DD"
+  );
+  let totalRewards = 0;
+  let rewards = 0;
+  let weeks = 0;
+
+  const momentPeriodEndDate = moment(periodEndDate, "YYYY-MM-DD");
+  const curEpoch = getEpoch();
+  const passiveRewards =
+    import.meta.env.VITE_VE_SUPPORTED_CHAINID != "1"
+      ? 20
+      : curEpoch?.streams[0]?.substreams[0]?.rewards;
+
+  while (tempCurrentDate.isBefore(momentPeriodEndDate)) {
+    const msDelta = unlockDate.diff(tempCurrentDate);
+    const votingPower = parseFloat(
+      (msDelta / getMaxDate().diff(currentDate)) * parseFloat(lockedOcean)
+    ).toFixed(3);
+    rewards = (passiveRewards / veOceanSupply) * votingPower;
+    totalRewards += rewards;
+    weeks += 1;
+    tempCurrentDate = tempCurrentDate.add(1, "weeks");
+  }
+
+  const yyield = (lockedOcean + totalRewards) / lockedOcean - 1;
+  const wpr = yyield / weeks;
+
+  return {
+    apy: wpr * 52 * 100,
+    yield: yyield * 100,
+    weeks,
+    rewards: totalRewards,
+  };
 };
