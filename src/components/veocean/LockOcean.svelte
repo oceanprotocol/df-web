@@ -280,6 +280,9 @@
       compoundCost,
       simpleFlowCostOcean
     );
+
+    console.log('Norbert-data', data)
+
     displayedAPY = formatApyForDisplay(
       data.apy,
       data.rewards,
@@ -323,7 +326,7 @@
       formAmount: $form.amount,
       formUnlockDate: $form.unlockDate,
       fees,
-      totalVeOceanSupply: $totalVeOceanSupply,
+      totalVeOceanSupply: $totalVeOceanSupply + votingPowerForAPY,
     });
     console.log('optimumComp',optimumComp)
     //compounds = optimalCompounds; // Set to the optimal number of compounds

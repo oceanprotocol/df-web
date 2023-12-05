@@ -31,6 +31,13 @@ export const getThursdayOffset = (day, days, max) => {
   return target.format("YYYY-MM-DD");
 }
 
+export const isThursday = (date) => {
+  // returns: true if date is a thursday
+  // params: moment(date)
+
+  return date.day() == 4;
+}
+
 export const getRoundsDatafarm = (currentRound, limit) => {
     currentRound
     // return an array of numbers from currentRound to (currentRound-10)
