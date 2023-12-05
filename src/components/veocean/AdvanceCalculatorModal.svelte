@@ -32,11 +32,11 @@
 
   const calculateFees = () => {
     if(!fees) return
-    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * (fees.claim + fees.updateLockedAmount + fees.updateUnlockDate)) / $oceanPrice
+    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * (fees.claim + fees.updateLockedAmount + fees.updateUnlockDate))
   }
 
   $: lockEndDateUpdates>=0 && lockEndDateUpdates>=0 && claims>=0 && fees && $oceanPrice && calculateFees() 
-  $: compounds && onCompoundsChange()
+  $: compounds && onCompoundsChange() 
 
   </script>
   
@@ -61,23 +61,26 @@
                   <span>compounds</span>
                 </div>
                 <div class="compoundInputContainer">
-                  <Switch bind:value={switchValue} design="slider" fontSize={14} displayDirection="column"/>
+                  <Switch bind:value={switchValue} design="slider" fontSize={14}/>
                   <span>optimize</span>
                 </div>
               </div>
             </div>
           <div class="profitDetails">
-            <ItemWithLabel title='Yield' value={`${formatValue(rewards)} OCEAN`} direction="row"/>
+            <ItemWithLabel title='Rewards' value={`${formatValue(rewards)} OCEAN`} direction="row"/>
             <ItemWithLabel title='Fees' value={`${formatValue(simpleFlowCostOcean)} OCEAN`} direction="row"/>
             <ItemWithLabel title='Profit' value={`${formatValue(rewards - simpleFlowCostOcean)} OCEAN`} direction="row"/>
           </div>
           <div class="feeDetails">
+            <div class="gasPriceContainer">
+              <span>Gas Price</span> <span class={fees?.gasPrice > 50 ? 'red' : 'green'} style="font-weight: bold">{`${parseFloat(fees?.gasPrice).toFixed(0)} gwei`}</span> <span class={fees?.gasPrice > 50 ? 'red' : 'green'}>{`| ${fees?.gasPrice > 50 ? 'high' : 'low'}`}</span>
+            </div>
             <div class="feeDatailsRow">
-              <ItemWithLabel title='Lock' value={`$${formatValue(fees?.lock)}`}/>
-              <ItemWithLabel title='Lock amount update' value={`$${formatValue(fees?.updateLockedAmount * lockAmountUpdates)}`} bind:input={lockAmountUpdates}/>
-              <ItemWithLabel title='Lock end date update' value={`$${formatValue(fees?.updateUnlockDate * lockEndDateUpdates)}`} bind:input={lockEndDateUpdates}/>
-              <ItemWithLabel title='Claim' value={`$${formatValue(fees?.claim * claims)}`} bind:input={claims}/>
-              <ItemWithLabel title='Withdraw' value={`$${formatValue(fees?.withdraw)}`}/>
+              <ItemWithLabel title='Lock' value={`1 x ${formatValue(fees?.lock)}`}/>
+              <ItemWithLabel title='Lock amount update' value={`x ${formatValue(fees?.updateLockedAmount)}`} bind:input={lockAmountUpdates}/>
+              <ItemWithLabel title='Lock end date update' value={`x ${formatValue(fees?.updateUnlockDate)}`} bind:input={lockEndDateUpdates}/>
+              <ItemWithLabel title='Claim' value={`x ${formatValue(fees?.claim * claims)}`} bind:input={claims}/>
+              <ItemWithLabel title='Withdraw' value={`1 x ${formatValue(fees?.withdraw)}`}/>
             </div>
           </div>
         </div>
@@ -89,6 +92,7 @@
      flex-direction: column;
      justify-content: center;
      align-items: center;
+     color: black;
     }
     h3{
       margin-bottom: calc(var(--spacer));
@@ -108,11 +112,10 @@
       width: 100%;
       border: 2px solid var(--brand-grey-lighter);
       border-radius: var(--border-radius);
-      padding: calc(var(--spacer)/3);
+      padding: calc(var(--spacer)/2);
       position: relative;
     }
     .compounding{
-      color: black;
       display: flex;
       flex-direction: column;
       margin-top: calc(var(--spacer));
@@ -138,6 +141,9 @@
       width: 50px !important;
       height: fit-content !important;
     }
+    .gasPriceContainer{
+      margin-bottom: calc(var(--spacer) / 8);
+    }
     .feeDetails::before {
       content: '';
       position: absolute;
@@ -150,11 +156,17 @@
       border-right: 8px solid transparent;
       border-bottom: 10px solid var(--brand-grey-lighter); /* Match the background color of your div */
     }
+    .red{
+      color: var(--brand-alert-red);
+    }
+    .green{
+      color: var(--brand-alert-green);
+    }
     .feeDatailsRow{
       display: flex;
       justify-content: space-between;
       width: 100%;
-      margin: calc(var(--spacer) / 4) 0;
+      margin-top: calc(var(--spacer) / 6);
     }
   </style>
   

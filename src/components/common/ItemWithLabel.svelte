@@ -2,7 +2,7 @@
   import CustomTooltip from "./CustomTooltip.svelte";
 
   export let title;
-  export let value;
+  export let value = undefined;
   export let small = false;
   export let float = false;
   export let loading = false;
@@ -67,10 +67,12 @@
   input{
     background-color: transparent;
     color: black;
-    border: 1px solid var(--brand-grey-lighter);
-    width: 40px;
+    border: 1.5px solid var(--brand-grey-lighter);
+    width: 50px;
     margin-right: 5px;
     font-size: var(--font-size-small);
+    padding: 0 5px;
+    border-radius: 2px;
   }
   .small{
     font-size: var(--font-size-small);

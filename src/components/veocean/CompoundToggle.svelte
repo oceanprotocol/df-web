@@ -15,7 +15,7 @@
           tooltipMessage={'Hello'}
       />
       <div class="switch">
-        <Switch bind:value={switchValue} design="slider" fontSize={12} displayDirection="column"/>
+        <Switch bind:value={switchValue} design="slider" fontSize={12}/>
         <span>optimize</span>
       </div>
     </GroupedItemsDisplay>

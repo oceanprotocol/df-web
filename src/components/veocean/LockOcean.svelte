@@ -66,7 +66,7 @@
   let showModal = false;
   let simpleFlowCostOcean = 0;
   let compounds = 0;
-  let switchValue = true;
+  let switchValue = 'on';
   let fees
 
   const MAXDAYS = 4 * 365;
@@ -279,9 +279,9 @@
   }
 
   const getFeesCosts =async () => {
-    const resp = await calculateFees($form.unlockDate ? moment($form.unlockDate) : moment(), $ethPrice, compounds)
+    const resp = await calculateFees($form.unlockDate ? moment($form.unlockDate) : moment(), $ethPrice, $oceanPrice, compounds)
     fees = resp.fees
-    simpleFlowCostOcean = resp.simpleFlowFeesCost / $oceanPrice
+    simpleFlowCostOcean = resp.simpleFlowFeesCost
   }
 
   const calculateSimpleFlowCost = () => {
@@ -306,6 +306,7 @@
 <div class={`container`}>
   {#if showModal}
     <AdvanceCalculatorModal
+      bind:switchValue
       bind:showModal 
       bind:simpleFlowCostOcean
       bind:compounds
@@ -361,7 +362,7 @@
             showMaxButton={true}
             onChange={() => updateFormAmount()}
           />
-          <CompoundToggle switchValue compounds={compounds}/>
+          <CompoundToggle bind:switchValue compounds={compounds}/>
         </div>
       </div>
       <div class="item">
@@ -383,11 +384,6 @@
             profitValue={displayedAPY.profit - simpleFlowCostOcean}
             tooltipMessage={descriptions.default
               .tooltip_veocean_lock_passiveAPY}
-            onClick={() => {
-              $form.unlockDate = getMaxDate().format("YYYY-MM-DD")
-              $form.amount = parseInt(oceanBalance)
-              }
-            }
             openCalculator={() => showModal=true}
           />
         </GroupedItemsDisplay>

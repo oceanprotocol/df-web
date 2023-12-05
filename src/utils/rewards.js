@@ -2,13 +2,15 @@ import { getTotalOceanSupply } from "./ve.js";
 import { getEpoch } from "./epochs.js";
 import { fetchFeeData } from '@wagmi/core'
 import moment from "moment";
+import { oceanPrice } from "../stores/tokens.js";
 
 const Fees = {
   lock: 400, //Gas usage ~335
   withdraw: 250, //Gas usage ~224
   claim: 200, //Gas usage 130 - 220
   updateLockedAmount: 300, //Gas usage ~277
-  updateUnlockDate: 280 //Gas usage ~254
+  updateUnlockDate: 280, //Gas usage ~254
+  gasPrice: 0
 }
 
 const eth = 1000000
@@ -317,15 +319,17 @@ export const calculateNumberOFClaims = (unlockDate) => {
   return numberOfClaims>0 ? numberOfClaims : 1
 }
 
-export const calculateFees = async (unlockDate, ethTokenPrice, compounds) => {
+export const calculateFees = async (unlockDate, ethTokenPrice, oceanTokenPrice, compounds) => {
   const feeData = await fetchFeeData({
     chainId: 1,
     formatUnits: 'gwei',
   })
   const gasPriceInGwei = feeData.formatted.gasPrice
+  
   const txFees = JSON.parse(JSON.stringify(Fees))
+  txFees.gasPrice = gasPriceInGwei
   for (const key of Object.keys(txFees)){
-    txFees[key] = txFees[key] * gasPriceInGwei / eth
+    txFees[key] = txFees[key] * gasPriceInGwei / eth / oceanTokenPrice
   }
 
   //update Fees to proper values in usd

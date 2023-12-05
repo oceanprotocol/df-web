@@ -5,12 +5,19 @@
     export let profitValue;
     export let tooltipMessage;
     export let showCalculatorButton=true;
-    export let openCalculator;
+    export let openCalculator=undefined;
     
   </script>
   
   <div class="container">
     <div class="valuesContainer">
+      <div class="apyDisplay">
+        <ItemWithLabel
+          title={`Profit`}
+          tooltipMessage={tooltipMessage}
+        />
+        <span class={`profit ${profitValue > 0 ? 'green' : 'red'}`}>{`${parseFloat(profitValue).toFixed(2)} OCEAN`}</span>
+      </div>
       <div class="apyDisplay">
         <ItemWithLabel
             title={`Passive APY`}
@@ -21,13 +28,6 @@
             {`${parseFloat(apyValue).toFixed(2)}%`}
           </span>
         </div>
-      </div>
-      <div class="apyDisplay">
-        <ItemWithLabel
-          title={`Profit`}
-          tooltipMessage={tooltipMessage}
-        />
-        <span class={`profit ${profitValue > 0 ? 'green' : 'red'}`}>{`${parseFloat(profitValue).toFixed(2)} OCEAN`}</span>
       </div>
     </div>
     {#if showCalculatorButton}
