@@ -1,13 +1,15 @@
 <script>
   import { oceanPrice } from "../../stores/tokens";
   import { calculateNumberOFClaims } from "../../utils/rewards";
-  import Button from "../common/Button.svelte";
+  import Input from "../common/Input.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
-import Modal from "../common/Modal.svelte";
+  import Modal from "../common/Modal.svelte";
+  import Switch from "../common/Switch.svelte";
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
   import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
   
   export let showModal;
+  export let switchValue;
   export let apyValue;
   export let rewards;
   export let simpleFlowCostOcean;
@@ -41,7 +43,6 @@ import Modal from "../common/Modal.svelte";
   <Modal bind:showModal onClose={() => {claims = calculateNumberOFClaims(unlockDate)}}>
       <h3 slot="header">Passive yield calculation</h3>
         <div class="container">
-          <div class="metricsContainer">
             <GroupedItemsDisplay>
               <DisplayApYandRewards
                 apyValue={apyValue}
@@ -51,13 +52,20 @@ import Modal from "../common/Modal.svelte";
                 onClick={() => {}}
               />
             </GroupedItemsDisplay>
-            <div class="buttonContainer">
-              <Button
-                textOnly
-                text='MAX OUT YIELD'
-              />
+            <div class="compounding">
+              <span>Compounding</span>
+              <span class="compoundingDetails">( Claim amount + Locked amount update )</span>
+              <div class="compoundingActionable">
+                <div class="compoundInputContainer">
+                  <Input type="number" bind:value={compounds}/>
+                  <span>compounds</span>
+                </div>
+                <div class="compoundInputContainer">
+                  <Switch bind:value={switchValue} design="slider" fontSize={14} displayDirection="column"/>
+                  <span>optimize</span>
+                </div>
+              </div>
             </div>
-          </div>
           <div class="profitDetails">
             <ItemWithLabel title='Yield' value={`${formatValue(rewards)} OCEAN`} direction="row"/>
             <ItemWithLabel title='Fees' value={`${formatValue(simpleFlowCostOcean)} OCEAN`} direction="row"/>
@@ -71,9 +79,6 @@ import Modal from "../common/Modal.svelte";
               <ItemWithLabel title='Claim' value={`$${formatValue(fees?.claim * claims)}`} bind:input={claims}/>
               <ItemWithLabel title='Withdraw' value={`$${formatValue(fees?.withdraw)}`}/>
             </div>
-            <div class="feeDatailsRow">
-              <ItemWithLabel title='Compounds' bind:input={compounds} value={`Lock amount update $${formatValue(fees.updateLockedAmount)}  +  Lock end date update $${formatValue(fees.updateUnlockDate)}  +  Claim $${formatValue(fees.claim)}`}/>
-            </div>
           </div>
         </div>
   </Modal>
@@ -85,9 +90,8 @@ import Modal from "../common/Modal.svelte";
      justify-content: center;
      align-items: center;
     }
-    .metricsContainer{
-      margin-top: calc(var(--spacer));
-      width: 100%;
+    h3{
+      margin-bottom: calc(var(--spacer));
     }
     .profitDetails,.feeDetails{
       display: flex;
@@ -107,8 +111,32 @@ import Modal from "../common/Modal.svelte";
       padding: calc(var(--spacer)/3);
       position: relative;
     }
-    .buttonContainer{
-      margin-top: calc(var(--spacer) / 4);
+    .compounding{
+      color: black;
+      display: flex;
+      flex-direction: column;
+      margin-top: calc(var(--spacer));
+    }
+    .compoundingDetails{
+      color: var(--brand-grey-light);
+      font-size: var(--font-size-small);
+      margin-top: calc(var(--spacer)/8);
+    }
+    .compoundingActionable{
+      margin-top: calc(var(--spacer)/4);
+      display: flex;
+      gap: calc(var(--spacer));
+    }
+    .compoundInputContainer{
+      display: flex;
+      align-items: center;
+    }
+    .compoundInputContainer span{
+      margin-left: calc(var(--spacer)/6);
+    }
+    :global(.compoundInputContainer input){
+      width: 50px !important;
+      height: fit-content !important;
     }
     .feeDetails::before {
       content: '';

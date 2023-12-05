@@ -29,6 +29,7 @@
     on:change={onChange}
   />
 </div>
+{#if showMaxValue == true && showMaxButton == true}
 <div class="actionsContainer">
   {#if showMaxValue === true}
     <p class="maxItem maxValueLabel">
@@ -44,6 +45,7 @@
     />
   {/if}
 </div>
+{/if}
 
 <style>
   .container {

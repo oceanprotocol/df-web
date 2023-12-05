@@ -24,7 +24,7 @@
       </div>
       <div class="apyDisplay">
         <ItemWithLabel
-          title={`Profit with Fees`}
+          title={`Profit`}
           tooltipMessage={tooltipMessage}
         />
         <span class={`profit ${profitValue > 0 ? 'green' : 'red'}`}>{`${parseFloat(profitValue).toFixed(2)} OCEAN`}</span>
