@@ -327,7 +327,6 @@ export const calculateFees = async (unlockDate, ethTokenPrice, oceanTokenPrice, 
   const gasPriceInGwei = feeData.formatted.gasPrice
   
   const txFees = JSON.parse(JSON.stringify(Fees))
-  txFees.gasPrice = gasPriceInGwei
   for (const key of Object.keys(txFees)){
     txFees[key] = txFees[key] * gasPriceInGwei / eth / oceanTokenPrice
   }
@@ -336,6 +335,7 @@ export const calculateFees = async (unlockDate, ethTokenPrice, oceanTokenPrice, 
   await getFeesInUSD(ethTokenPrice, txFees)
 
   const numberOfClaims = calculateNumberOFClaims(unlockDate)
+  txFees.gasPrice = gasPriceInGwei
   const simpleFlow = txFees.lock + txFees.withdraw + (txFees.claim * numberOfClaims) + compounds * ( txFees.updateLockedAmount + txFees.updateUnlockDate + txFees.claim )
 
   return {fees: txFees, simpleFlowFeesCost: simpleFlow}
