@@ -1,6 +1,6 @@
 <script>
     import ItemWithLabel from "../common/ItemWithLabel.svelte";
-  import Switch from "../common/Switch.svelte";
+    import Switch from "../common/Switch.svelte";
     import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
   
   

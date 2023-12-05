@@ -15,6 +15,12 @@
         value = checked === true ? 'on' : 'off'
     }
 
+    const handleValueChange = () =>{
+        checked = value == 'on'
+    }
+
+    $: value && handleValueChange()
+
 </script>
 
 {#if design == 'inner'}
