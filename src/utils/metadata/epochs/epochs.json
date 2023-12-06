@@ -2044,11 +2044,20 @@
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards":37500
+            "rewards":37000
+          },
+          {
+            "name": "Challenge",
+            "rewards": 1000,
+            "prizes": [
+              500,
+              300,
+              200
+            ]
           }
           ,{
             "name": "Predictoor DF",
-            "rewards": 37500
+            "rewards": 37000
           }
         ]
       }
