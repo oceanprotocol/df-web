@@ -4,39 +4,31 @@
     export let apyValue;
     export let profitValue;
     export let tooltipMessage;
-    export let onClick;
     export let showCalculatorButton=true;
-    export let openCalculator;
+    export let openCalculator=undefined;
     
-
-    /*
-         <Button
-          className="apyMaxButton"
-          text="max"
-          textOnly
-          onclick={() => onClick()}
-        />
-    */
   </script>
   
   <div class="container">
-    <div class="apyDisplay">
-      <ItemWithLabel
-          title={`Passive APY`}
+    <div class="valuesContainer">
+      <div class="apyDisplay">
+        <ItemWithLabel
+          title={`Profit`}
           tooltipMessage={tooltipMessage}
-      />
-      <div class="valueContainer">
-        <span class="apy">
-          {`${parseFloat(apyValue).toFixed(2)}%`}
-        </span>
+        />
+        <span class={`profit ${profitValue == 0 ? '' : profitValue > 0 ? 'green' : 'red'}`}>{`${parseFloat(profitValue).toFixed(2)} OCEAN`}</span>
       </div>
-    </div>
-    <div class="apyDisplay">
-      <ItemWithLabel
-        title={`Profit with Fees`}
-        tooltipMessage={tooltipMessage}
-      />
-      <span class={`profit ${profitValue > 0 ? 'green' : 'red'}`}>{`${parseFloat(profitValue).toFixed(2)} OCEAN`}</span>
+      <div class="apyDisplay">
+        <ItemWithLabel
+            title={`Passive APY`}
+            tooltipMessage={tooltipMessage}
+        />
+        <div class="valueContainer">
+          <span class="apy">
+            {`${parseFloat(apyValue).toFixed(2)}%`}
+          </span>
+        </div>
+      </div>
     </div>
     {#if showCalculatorButton}
       <button type="button" on:click={openCalculator}>
@@ -49,12 +41,17 @@
     .container{
       display: flex;
       align-items: center;
-      justify-content: space-around;
+      justify-content: space-between;
     }
     .apyDisplay{
       display: column;
       justify-self: center;
       align-items: center;
+    }
+    .valuesContainer{
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
     }
     .valueContainer{
       display: flex;

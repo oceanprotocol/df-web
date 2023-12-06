@@ -16,13 +16,6 @@
   const handleOnMaxClick = () => (value = max);
 </script>
 
-<div class="actionsContainer">
-  {#if showMaxValue === true}
-    <p class="maxItem maxValueLabel">
-      {maxValueLabel && maxValueLabel !== "" && maxValueLabel}{max}
-    </p>
-  {/if}
-</div>
 <div class={`container`}>
   <input
     class={`input ${noArrows ? "disableArrows" : ""}`}
@@ -36,16 +29,23 @@
     on:change={onChange}
   />
 </div>
+{#if showMaxValue == true && showMaxButton == true}
 <div class="actionsContainer">
+  {#if showMaxValue === true}
+    <p class="maxItem maxValueLabel">
+      {maxValueLabel && maxValueLabel !== "" && maxValueLabel}{max}
+    </p>
+  {/if}
   {#if showMaxButton === true}
     <Button
       onclick={handleOnMaxClick}
-      className="maxItem"
+      className="maxItem maxItemButton"
       text={"max"}
       textOnly
     />
   {/if}
 </div>
+{/if}
 
 <style>
   .container {
@@ -59,7 +59,7 @@
     background-color: var(--background-content);
     color: var(--brand-black);
     font-weight: bold;
-    border: 1px solid var(--brand-grey-lighter);
+    border: 1.5px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
     width: 100%;
@@ -72,11 +72,13 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    align-items: center;
     width: 100%;
+    margin-top: calc(var(--spacer) / 10);
   }
   .actionsContainer :global(.maxItem) {
-    margin-top: calc(var(--spacer) / 10);
     font-size: var(--font-size-small);
+    align-items: center;
     color: var(--brand-grey-light);
   }
   .actionsContainer :global(.maxValueLabel) {
@@ -86,6 +88,14 @@
   .disableArrows::-webkit-outer-spin-button {
     -webkit-appearance: none !important;
     margin: 0 !important;
+  }
+  .maxValueLabel{
+    margin: 0;
+    margin-right: calc(var(--spacer) / 4);
+  }
+  .actionsContainer :global(.maxItemButton){
+    margin: 0;
+    height: fit-content;
   }
   .allocationInput[type="number"] {
     -moz-appearance: textfield; /* Firefox */

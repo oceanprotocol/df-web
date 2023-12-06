@@ -8,7 +8,8 @@ const Fees = {
   withdraw: 250, //Gas usage ~224
   claim: 200, //Gas usage 130 - 220
   updateLockedAmount: 300, //Gas usage ~277
-  updateUnlockDate: 280 //Gas usage ~254
+  updateUnlockDate: 280, //Gas usage ~254
+  gasPrice: 0
 }
 
 const eth = 1000000
@@ -22,7 +23,6 @@ export const convertAPYtoWPR = (apy) => {
 
 export const convertWPRtoAPY = (wpr, nrOfCompounds) => {
   const weeks = 52;
-  console.log(nrOfCompounds)
   const apy = Math.pow(1 + wpr, nrOfCompounds ? nrOfCompounds : weeks) - 1;
   return apy * 100;
 };
@@ -317,21 +317,23 @@ export const calculateNumberOFClaims = (unlockDate) => {
   return numberOfClaims>0 ? numberOfClaims : 1
 }
 
-export const calculateFees = async (unlockDate, ethTokenPrice, compounds) => {
+export const calculateFees = async (unlockDate, ethTokenPrice, oceanTokenPrice, compounds) => {
   const feeData = await fetchFeeData({
     chainId: 1,
     formatUnits: 'gwei',
   })
   const gasPriceInGwei = feeData.formatted.gasPrice
+  
   const txFees = JSON.parse(JSON.stringify(Fees))
   for (const key of Object.keys(txFees)){
-    txFees[key] = txFees[key] * gasPriceInGwei / eth
+    txFees[key] = txFees[key] * gasPriceInGwei / eth / oceanTokenPrice
   }
 
   //update Fees to proper values in usd
   await getFeesInUSD(ethTokenPrice, txFees)
 
   const numberOfClaims = calculateNumberOFClaims(unlockDate)
+  txFees.gasPrice = gasPriceInGwei
   const simpleFlow = txFees.lock + txFees.withdraw + (txFees.claim * numberOfClaims) + compounds * ( txFees.updateLockedAmount + txFees.updateUnlockDate + txFees.claim )
 
   return {fees: txFees, simpleFlowFeesCost: simpleFlow}

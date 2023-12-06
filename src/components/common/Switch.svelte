@@ -1,5 +1,5 @@
 <script>
-    export let label;
+    export let label = undefined;
     export let design = 'inner label'
     export let options = [];
 	export let fontSize = 16;
@@ -14,6 +14,12 @@
         checked = state === 'true' ? false : true
         value = checked === true ? 'on' : 'off'
     }
+
+    const handleValueChange = () =>{
+        checked = value == 'on'
+    }
+
+    $: value && handleValueChange()
 
 </script>
 
