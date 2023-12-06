@@ -57,7 +57,7 @@
 
   export let setShowApprovalNotification;
 
-  const formatApyForDisplay = (apy, rewards) =>{ return {apy:apy, rewards:rewards}}
+  const formatApyForDisplay = (apy, rewards) =>{ return {apy:apy, profit:rewards}}
 
   let networksData = networksDataArray.default;
   let oceanBalance = 0;
