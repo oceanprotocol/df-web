@@ -55,7 +55,7 @@
 </script>
 
 <div>
-    <span class="title">Compounds Details</span>
+    <span class="title">Suggested Compounds</span>
     <DataTable
         headers={headers}
         rows={rows}
