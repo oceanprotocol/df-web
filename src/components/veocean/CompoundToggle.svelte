@@ -16,13 +16,14 @@
       />
       <div class="switch">
         <Switch bind:value={switchValue} design="slider" fontSize={12}/>
-        <span>optimize</span>
+        <span>optimal</span>
       </div>
     </GroupedItemsDisplay>
 </div>
     
 <style>
   .compound{
+    min-width: 150px;
     display: flex;
     flex-direction: column;
     width: max-content;
@@ -34,11 +35,12 @@
 
   .switch{
     display: flex;
-    width: max-content;
+    justify-content: center; 
+    width: 100%;
   }
 
   .switch span{
-    margin-left: 28px;
+    margin-left: 5px;
     font-size: var(--font-size-small);
     display: flex;
     align-items: center;

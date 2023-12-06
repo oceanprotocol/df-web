@@ -25,9 +25,9 @@
   }
 
   const onCompoundsChange = () => {
-    lockAmountUpdates = compounds
-    lockEndDateUpdates = compounds
+    lockEndDateUpdates = lockAmountUpdates = compounds>=0 ? compounds : 0
     claims = compounds + calculateNumberOFClaims(unlockDate)
+    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * (fees.claim + fees.updateLockedAmount + fees.updateUnlockDate))
   }
 
   const calculateFees = () => {
@@ -35,8 +35,8 @@
     simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * (fees.claim + fees.updateLockedAmount + fees.updateUnlockDate))
   }
 
-  $: lockEndDateUpdates>=0 && lockEndDateUpdates>=0 && claims>=0 && fees && $oceanPrice && calculateFees() 
-  $: compounds && onCompoundsChange() 
+  $: lockEndDateUpdates>=0 && lockAmountUpdates>=0 && claims>=0 && fees && $oceanPrice && calculateFees() 
+  $: compounds>=0 && onCompoundsChange(compounds) 
 
   </script>
   
@@ -54,15 +54,15 @@
             </GroupedItemsDisplay>
             <div class="compounding">
               <span>Compounding</span>
-              <span class="compoundingDetails">( Claim amount + Locked amount update )</span>
+              <span class="compoundingDetails">( Claim amount + Update locked amount )</span>
               <div class="compoundingActionable">
                 <div class="compoundInputContainer">
-                  <Input type="number" bind:value={compounds}/>
+                  <Input type="number" value={compounds} disabled={switchValue=='on'} min=0 onChange={(e) => {compounds=e.target.value=e.target.valueAsNumber >= 0 ? e.target.valueAsNumber : 0}}/>
                   <span>compounds</span>
                 </div>
                 <div class="compoundInputContainer">
                   <Switch bind:value={switchValue} design="slider" fontSize={14}/>
-                  <span>optimize</span>
+                  <span>optimal</span>
                 </div>
               </div>
             </div>
@@ -77,9 +77,9 @@
             </div>
             <div class="feeDatailsRow">
               <ItemWithLabel title='Lock' value={`1 x ${formatValue(fees?.lock)}`}/>
-              <ItemWithLabel title='Lock amount update' value={`x ${formatValue(fees?.updateLockedAmount)}`} bind:input={lockAmountUpdates}/>
-              <ItemWithLabel title='Lock end date update' value={`x ${formatValue(fees?.updateUnlockDate)}`} bind:input={lockEndDateUpdates}/>
-              <ItemWithLabel title='Claim' value={`x ${formatValue(fees?.claim * claims)}`} bind:input={claims}/>
+              <ItemWithLabel title='Update locked amount' value={`x ${formatValue(fees?.updateLockedAmount)}`} bind:inputValue={lockAmountUpdates}/>
+              <ItemWithLabel title='Update lock end date' value={`x ${formatValue(fees?.updateUnlockDate)}`} bind:inputValue={lockEndDateUpdates}/>
+              <ItemWithLabel title='Claim' value={`x ${formatValue(fees?.claim * claims)}`} bind:inputValue={claims}/>
               <ItemWithLabel title='Withdraw' value={`1 x ${formatValue(fees?.withdraw)}`}/>
             </div>
           </div>

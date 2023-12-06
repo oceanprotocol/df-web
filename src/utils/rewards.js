@@ -2,7 +2,6 @@ import { getTotalOceanSupply } from "./ve.js";
 import { getEpoch } from "./epochs.js";
 import { fetchFeeData } from '@wagmi/core'
 import moment from "moment";
-import { oceanPrice } from "../stores/tokens.js";
 
 const Fees = {
   lock: 400, //Gas usage ~335
@@ -24,7 +23,6 @@ export const convertAPYtoWPR = (apy) => {
 
 export const convertWPRtoAPY = (wpr, nrOfCompounds) => {
   const weeks = 52;
-  console.log(nrOfCompounds)
   const apy = Math.pow(1 + wpr, nrOfCompounds ? nrOfCompounds : weeks) - 1;
   return apy * 100;
 };

@@ -1,4 +1,5 @@
 <script>
+  import { ValueVariable } from "carbon-icons-svelte";
   import CustomTooltip from "./CustomTooltip.svelte";
 
   export let title;
@@ -11,7 +12,7 @@
   export let tooltipState = undefined;
   export let tooltipDirection = "top";
   export let tooltipAlign = "center";
-  export let input = undefined;
+  export let inputValue = undefined;
 </script>
 
 <div class="item" style="flex-direction : {direction}">
@@ -27,8 +28,8 @@
     {/if}
   </div>
   <div class="valueContainer">
-  {#if input!==null && input!==undefined}
-    <input type="number" value={input} min="0" on:change={(event) => {input = event.target.valueAsNumber >= 0 ? event.target.valueAsNumber : 0}}/>
+  {#if inputValue!==null && inputValue!==undefined}
+    <input type="number" value={inputValue} min="0" on:change={(event) => {event.target.value = inputValue = event.target.valueAsNumber >= 0 ? event.target.valueAsNumber : 0}}/>
   {/if}
   {#if value}
     {#if !loading}
