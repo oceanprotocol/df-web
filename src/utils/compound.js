@@ -52,7 +52,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
 
     const { netRewardsInOcean, compoundDetails } = currentCompoundDetails;
 
-    console.log("currentCompoundDetails", currentCompoundDetails);
+    //console.log("currentCompoundDetails", currentCompoundDetails);
 
     if (netRewardsInOcean > highestNetReturn) {
       highestNetReturn = netRewardsInOcean;
@@ -72,7 +72,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
     highestNetReturn,
     ...currentCompoundDetails,
   };
-  console.log("result", result);
+  //console.log("result", result);
   return result;
 };
 

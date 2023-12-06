@@ -279,8 +279,6 @@
       simpleFlowCostOcean
     );
 
-    console.log('Norbert-data', data)
-
     displayedAPY = formatApyForDisplay(
       data.apy,
       data.rewards,
@@ -313,8 +311,6 @@
   };
 
   const calculateOptimalCompounds = async () => {
-    console.log('fees', fees)
-
     const optimumComp = await calculateOptimalCompoundInterestWithFees({
       lockedOceanAmount: $lockedOceanAmount,
       formAmount: $form.amount,
