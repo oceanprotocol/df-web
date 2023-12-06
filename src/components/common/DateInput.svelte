@@ -78,7 +78,7 @@
     background-color: var(--background-content);
     color: var(--brand-black);
     font-weight: bold;
-    border: 1px solid var(--brand-grey-lighter);
+    border: 1.5px solid var(--brand-grey-lighter);
     padding: calc(var(--spacer) / 14) calc(var(--spacer) / 6);
     border-radius: 3px;
     width: 100%;

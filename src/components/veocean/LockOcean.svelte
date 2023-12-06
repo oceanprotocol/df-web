@@ -69,8 +69,8 @@
   let showModal = false;
   let simpleFlowCostOcean = 0;
   let compounds = 0;
-  let switchValue = true;
-  let fees;
+  let switchValue = 'on';
+  let fees
 
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
 
@@ -298,15 +298,11 @@
     oceanPrice.update((p) => oceanTokenPrice);
   };
 
-  const getFeesCosts = async () => {
-    const resp = await calculateFees(
-      $form.unlockDate ? moment($form.unlockDate) : moment(),
-      $ethPrice,
-      compounds
-    );
-    fees = resp.fees;
-    simpleFlowCostOcean = resp.simpleFlowFeesCost / $oceanPrice;
-  };
+  const getFeesCosts =async () => {
+    const resp = await calculateFees($form.unlockDate ? moment($form.unlockDate) : moment(), $ethPrice, $oceanPrice, compounds)
+    fees = resp.fees
+    simpleFlowCostOcean = resp.simpleFlowFeesCost
+  }
 
   const calculateSimpleFlowCost = () => {
     simpleFlowCostOcean =
@@ -355,7 +351,8 @@
 <div class={`container`}>
   {#if showModal}
     <AdvanceCalculatorModal
-      bind:showModal
+      bind:switchValue
+      bind:showModal 
       bind:simpleFlowCostOcean
       bind:compounds
       unlockDate={moment($form.unlockDate)}
@@ -376,24 +373,6 @@
     >
       <div class="item">
         <Input
-          type="number"
-          name="amount"
-          min={$lockedOceanAmount ? 0 : 1}
-          max={parseInt(oceanBalance)}
-          error={$errors.amount}
-          disabled={getOceanBalance($connectedChainId) <= 0 ||
-            moment().utc().isAfter($oceanUnlockDate)}
-          label="OCEAN Amount"
-          direction="column"
-          bind:value={$form.amount}
-          maxValueLabel="Balance: "
-          showMaxValue={true}
-          showMaxButton={true}
-          onChange={() => updateFormAmount()}
-        />
-      </div>
-      <div class="item">
-        <Input
           type="date"
           label="Lock End Date"
           name="unlockDate"
@@ -410,20 +389,26 @@
           bind:value={$form.unlockDate}
         />
       </div>
-      <div class="item">
-        <GroupedItemsDisplay>
-          <DisplayApYandRewards
-            apyValue={displayedAPY.apy}
-            profitValue={$form.amount && $form.unlockDate ? displayedAPY.rewards - simpleFlowCostOcean : 0}
-            tooltipMessage={descriptions.default
-              .tooltip_veocean_lock_passiveAPY}
-            onClick={() => {
-              $form.unlockDate = getMaxDate().format("YYYY-MM-DD");
-              $form.amount = parseInt(oceanBalance);
-            }}
-            openCalculator={() => (showModal = true)}
+      <div class="item amountCompound">
+        <div class="amountCompoundInputs">
+          <Input
+            type="number"
+            name="amount"
+            label="OCEAN amount"
+            min={$lockedOceanAmount ? 0 : 1}
+            max={parseInt(oceanBalance)}
+            error={$errors.amount}
+            disabled={getOceanBalance($connectedChainId) <= 0 ||
+              moment().utc().isAfter($oceanUnlockDate)}
+            direction="column"
+            bind:value={$form.amount}
+            maxValueLabel="Balance: "
+            showMaxValue={true}
+            showMaxButton={true}
+            onChange={() => updateFormAmount()}
           />
-        </GroupedItemsDisplay>
+          <CompoundToggle bind:switchValue compounds={compounds}/>
+        </div>
       </div>
       <div class="item">
         <div class="output-container">
@@ -436,7 +421,17 @@
             />
           </GroupedItemsDisplay>
         </div>
-        <CompoundToggle switchValue {compounds} />
+      </div>
+      <div class="item">
+        <GroupedItemsDisplay>
+          <DisplayApYandRewards
+            apyValue={displayedAPY.apy}
+            profitValue={displayedAPY.profit - simpleFlowCostOcean}
+            tooltipMessage={descriptions.default
+              .tooltip_veocean_lock_passiveAPY}
+            openCalculator={() => showModal=true}
+          />
+        </GroupedItemsDisplay>
       </div>
       <AgreementCheckbox
         text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, <a href='/terms'><strong>terms of use</strong></a>, waive all rights, and assume all risks."
@@ -546,6 +541,16 @@
   .stepsContainer {
     width: 360px !important;
     margin-top: calc(var(--spacer) / 5);
+  }
+
+  .amountCompound{
+    flex-direction: column;
+  }
+
+  .amountCompoundInputs{
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacer)/2)
   }
 
   @media (min-width: 640px) {
