@@ -1,6 +1,6 @@
 <script>
     import DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
-    import DataTableSkeleton from "carbon-components-svelte/src/DataTable/DataTableSkeleton.svelte";
+  import moment from "moment";
     
     export let compounds = []
 
@@ -14,14 +14,14 @@
     let rows = []
 
     const createRows = () => {
-        console.log(compounds)
+        rows=[]
         compounds.forEach((d, i) => {
             rows.push({
                 id: i,
                 index: i + 1,
-                date: d?.date,
-                rewards: d?.rewards,
-                fees: d?.fees
+                date: moment(d?.date).format("DD-MM-YYYY"),
+                rewards: parseFloat(d?.rewards).toFixed(),
+                fees: parseFloat(d?.fees).toFixed()
             })
         })
     }
@@ -31,13 +31,16 @@
 
 <div>
     <span class="title">Suggested Compounds</span>
-    <DataTable
+    {#if rows}
+        <DataTable
         headers={headers}
         rows={rows}
         class="compoundsTable"
         stickyHeader
-    >
-    </DataTable>
+        >
+        </DataTable>
+    {/if}
+   
 </div>
 
 

@@ -24,15 +24,10 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   formUnlockDate,
   fees,
   totalVeOceanSupply,
+  compounds
 }) => {
-  const msDelta = moment(formUnlockDate).diff(moment());
-
-  var duration = moment.duration(moment(formUnlockDate).diff(moment()));
-  var years = duration.asYears();
-  console.log("years", years);
-  console.log(Math.ceil(years));
-
-  let optimalCompoundCount = 1;
+  const msDelta = getTotalMSDelta();
+  let optimalCompoundCount = compounds ? compounds : 1;
   let highestNetReturn = 0;
   let optimalCompoundDetails = [];
 
@@ -45,7 +40,8 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   const principalAmount = formAmount + lockedOceanAmount;
 
   let currentCompoundDetails;
-  while (!hasReachedMaxReturn) {
+
+  if(compounds){
     currentCompoundDetails = await calculateCompoundDetails({
       principal: principalAmount,
       totalSupply: totalVeOceanSupply,
@@ -55,15 +51,31 @@ export const calculateOptimalCompoundInterestWithFees = async ({
       tokenPrice: oceanTokenPrice,
       formUnlockDate,
     });
-
     const { netRewardsInOcean } = currentCompoundDetails;
+    optimalCompoundCount = compounds + 1
+    highestNetReturn = netRewardsInOcean;
+    optimalCompoundDetails = currentCompoundDetails;
+  }else{
+    while (!hasReachedMaxReturn) {
+      currentCompoundDetails = await calculateCompoundDetails({
+        principal: principalAmount,
+        totalSupply: totalVeOceanSupply,
+        fees: fees,
+        msDelta,
+        compoundCount: optimalCompoundCount,
+        tokenPrice: oceanTokenPrice,
+        formUnlockDate,
+      });
 
-    if (netRewardsInOcean > highestNetReturn) {
-      highestNetReturn = netRewardsInOcean;
-      optimalCompoundCount = optimalCompoundCount + 1;
-      optimalCompoundDetails = currentCompoundDetails;
-    } else {
-      hasReachedMaxReturn = true;
+      const { netRewardsInOcean } = currentCompoundDetails;
+
+      if (netRewardsInOcean > highestNetReturn) {
+        highestNetReturn = netRewardsInOcean;
+        optimalCompoundCount = optimalCompoundCount + 1;
+        optimalCompoundDetails = currentCompoundDetails;
+      } else {
+        hasReachedMaxReturn = true;
+      }
     }
   }
 
@@ -73,19 +85,23 @@ export const calculateOptimalCompoundInterestWithFees = async ({
     optimalCompounds: optimalCompoundCount - 1,
     optimalAPY,
     ...optimalCompoundDetails,
-    highestNetReturn,
   };
 
-  const resultOfYearlyCompounds = await calculateWithOnlyMandatoryClaims({
-    lockedOceanAmount,
-    formAmount,
-    formUnlockDate,
-    fees,
-    totalVeOceanSupply,
-  });
+  const mandatoryClaimCount = totalMandatoryClaimCount(formUnlockDate);
 
-  if (resultOfYearlyCompounds.highestNetReturn > result.highestNetReturn) {
-    return resultOfYearlyCompounds;
+  if(!compounds || compounds === mandatoryClaimCount) {
+    const resultOfYearlyCompounds = await calculateWithOnlyMandatoryClaims({
+      lockedOceanAmount,
+      formAmount,
+      formUnlockDate,
+      fees,
+      totalVeOceanSupply,
+      mandatoryClaimCount: mandatoryClaimCount
+    });
+
+    if (resultOfYearlyCompounds.highestNetReturn > result.highestNetReturn) {
+      return resultOfYearlyCompounds;
+    }
   }
 
   //console.log("result", result);
@@ -101,6 +117,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
  * @param {string} formUnlockDate - The unlock date of the tokens
  * @param {object} fees - The fees object
  * @param {number} totalVeOceanSupply - The total supply of veOCEAN tokens
+ * @param {number} mandatoryClaimCount - The number of mandatory claims
  * @returns {Object} - The optimal compound count and APY
  */
 export const calculateWithOnlyMandatoryClaims = async ({
@@ -109,11 +126,9 @@ export const calculateWithOnlyMandatoryClaims = async ({
   formUnlockDate,
   fees,
   totalVeOceanSupply,
+  mandatoryClaimCount
 }) => {
-  const msDelta = moment(formUnlockDate).diff(moment());
-
-  const duration = moment.duration(moment(formUnlockDate).diff(moment()));
-  const optimalCompoundCount = Math.round(duration.asYears());
+  const msDelta = getTotalMSDelta()
 
   const principalAmount = formAmount + lockedOceanAmount;
 
@@ -141,6 +156,14 @@ export const calculateWithOnlyMandatoryClaims = async ({
   return result;
 };
 
+export const getTotalMSDelta = (formUnlockDate) => 
+  moment(formUnlockDate).diff(getThursdayDate(moment()));
+
+export const totalMandatoryClaimCount = (formUnlockDate) => {
+  const duration = moment.duration(moment(formUnlockDate).diff(moment()));
+  const claimCount = Math.round(duration.asYears());
+  return claimCount
+}
 /**
  * Computes detailed compounding information for a specified principal amount of Ocean tokens
  * over a set number of compounding periods. Takes into account the total veOCEAN supply,
@@ -198,12 +221,13 @@ const calculateCompoundDetails = async ({
     const periodMS = msDelta / compoundCount;
 
     let totalPeriodClaims = 1;
+    let totalFeeForPeriod = fees.claim + fees.updateLockedAmount;
     if (!skipPeriodClaimCalculation)
-      totalPeriodClaims = calculateFeeForPeriod(
-        fees /* duration in ms for the period */,
-        periodMS
-      ).totalPeriodClaims;
-
+        const {totalPeriodClaims, totalFeeForPeriod} = calculateFeeForPeriod(
+          fees /* duration in ms for the period */,
+          periodMS
+        );
+  
     claimCount += totalPeriodClaims;
     tempTotalSupply += periodReward;
     currentPrincipal += periodReward;
@@ -211,14 +235,10 @@ const calculateCompoundDetails = async ({
 
     compoundDetails.push({
       order: i,
-      periodReward,
-      tempTotalSupply,
-      stepPrincipal: currentPrincipal - periodReward,
-      nextPrincipal: currentPrincipal,
-      grossRewards,
+      rewards: periodReward,
+      fees: totalFeeForPeriod,
       totalPeriodClaims,
-      periodStartDate: compoundDates[i],
-      periodEndDate: compoundDates[i + 1],
+      date: compoundDates[i + 1],
     });
   }
 
@@ -316,7 +336,9 @@ async function calculateRewardForPeriod({
 
   const periodReward = rewardsData.rewards; // Example assignment, adjust based on actual logic
 
-  return periodReward
+  return {
+    periodReward,
+  };
 }
 
 /**
@@ -378,7 +400,6 @@ const calculateFeeForPeriod = (fees, periodMsDelta) => {
  * @returns {Array<string>} - The compound dates, all elements are Thursday and in the format YYYY-MM-DD
  */
 const calculateCompoundAndStartDates = (unlockDate, compoundCount) => {
-  console.log("unlockDate", unlockDate);
   const compoundDates = [];
   const msDelta = Math.abs(moment().diff(unlockDate));
   const periodMsDelta = msDelta / compoundCount;
