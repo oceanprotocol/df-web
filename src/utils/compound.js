@@ -120,7 +120,6 @@ const calculateCompoundDetails = async ({
   compoundCount,
   formUnlockDate,
 }) => {
-  console.log('compoundCount',compoundCount)
   let currentPrincipal = principal;
   let tempTotalSupply = totalSupply;
   let grossRewards = 0;
@@ -133,7 +132,7 @@ const calculateCompoundDetails = async ({
   );
 
   for (let i = 0; i < compoundCount; i++) {
-    const { periodReward, totalPeriodClaims } = await calculateRewardForPeriod({
+    const { periodReward, totalPeriodClaims, totalFeeForPeriod } = await calculateRewardForPeriod({
       periodStartDate: compoundDates[i],
       periodEndDate: compoundDates[i + 1],
       formUnlockDate: formUnlockDate,
@@ -151,7 +150,7 @@ const calculateCompoundDetails = async ({
     compoundDetails.push({
       order: i,
       rewards: periodReward,
-      fees: periodReward - grossRewards,
+      fees: totalFeeForPeriod,
       totalPeriodClaims,
       date: compoundDates[i + 1],
     });
@@ -253,14 +252,15 @@ async function calculateRewardForPeriod({
   const rewardsData = await getPeriodRewardData(args);
 
   const periodReward = rewardsData.rewards; // Example assignment, adjust based on actual logic
-  const totalPeriodClaims = calculateFeeForPeriod(
+  const {totalPeriodClaims, totalFeeForPeriod} = calculateFeeForPeriod(
     fees /* duration in ms for the period */,
     periodMS
-  ).totalPeriodClaims;
+  );
 
   return {
     periodReward,
     totalPeriodClaims,
+    totalFeeForPeriod
   };
 }
 
@@ -323,7 +323,6 @@ const calculateFeeForPeriod = (fees, periodMsDelta) => {
  * @returns {Array<string>} - The compound dates, all elements are Thursday and in the format YYYY-MM-DD
  */
 const calculateCompoundAndStartDates = (unlockDate, compoundCount) => {
-  console.log('unlockDate',unlockDate)
   const compoundDates = [];
   const msDelta = Math.abs(moment().diff(unlockDate));
   const periodMsDelta = msDelta / compoundCount;
