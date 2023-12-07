@@ -51,7 +51,6 @@
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
   import AdvanceCalculatorModal from "./AdvanceCalculatorModal.svelte";
   import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
-  import Switch from "../common/Switch.svelte";
   import CompoundToggle from "./CompoundToggle.svelte";
   import { calculateOptimalCompoundInterestWithFees } from "../../utils/compound";
 
@@ -316,7 +315,7 @@
       formAmount: $form.amount,
       formUnlockDate: $form.unlockDate,
       fees,
-      totalVeOceanSupply: $totalVeOceanSupply + votingPowerForAPY,
+      totalVeOceanSupply: $totalVeOceanSupply + parseFloat(calculatedVotingPower),
     });
     console.log('optimumComp',optimumComp)
     //compounds = optimalCompounds; // Set to the optimal number of compounds
@@ -353,7 +352,7 @@
       bind:compounds
       unlockDate={moment($form.unlockDate)}
       apyValue={displayedAPY.apy}
-      rewards={$form.amount && $form.unlockDate ? displayedAPY.rewards : 0}
+      rewards={$form.amount && $form.unlockDate ? displayedAPY.profit : 0}
       fees={fees}
     />
   {/if}
@@ -422,7 +421,7 @@
         <GroupedItemsDisplay>
           <DisplayApYandRewards
             apyValue={displayedAPY.apy}
-            profitValue={displayedAPY.profit - simpleFlowCostOcean}
+            profitValue={$form.amount && $form.unlockDate ? displayedAPY.profit - simpleFlowCostOcean : 0}
             tooltipMessage={descriptions.default
               .tooltip_veocean_lock_passiveAPY}
             openCalculator={() => showModal=true}

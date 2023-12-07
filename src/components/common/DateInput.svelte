@@ -17,12 +17,12 @@
       days: 14,
     },
     {
-      label: "≈1 month",
-      days: 30,
+      label: "≈6 month",
+      days: 180,
     },
     {
-      label: "≈6 months",
-      days: 180,
+      label: "≈1 year",
+      days: 365,
     },
     {
       label: "≈2 years",

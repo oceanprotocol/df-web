@@ -49,7 +49,6 @@
                 profitValue={rewards - simpleFlowCostOcean}
                 tooltipMessage={''}
                 showCalculatorButton={false}
-                onClick={() => {}}
               />
             </GroupedItemsDisplay>
             <div class="compounding">
