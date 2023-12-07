@@ -37,19 +37,6 @@
           }
         },
         {
-          "name": "Challenge-DF",
-          "rewards": 0,
-          "description": "Earn rewards by participating and submitting predictions to the weekly challenge.",
-          "action": {
-            "text": "Participate",
-            "location": "/challenge-df"
-          },
-          "metric": {
-            "name": "previous submissions",
-            "value": "0"
-          }
-        },
-        {
           "name": "Predictoor-DF",
           "rewards": 0,
           "description": "Earn by submiting accurate predictions of the price direction to the available predictoor contracts.",

@@ -8,11 +8,11 @@
   let curEpoch = getEpoch(now);
 
   let challengeDetails = {
-    bannerTitle: `Challenge-DF ${curEpoch.id}`,
-    challengeDescription: `Crunch some code and participate in the active data challenge for <strong>predicting the price of Ethereum</strong>. Data Farming challenges are a substream of Ocean Protocol Active Rewards, running over <strong>periods of 1 week</strong>. You can claim your prize from the <a href="https://df.oceandao.org/rewards">Rewards page</a>.`,
+    bannerTitle: `Challenge-DF 66 - Last round`,
+    challengeDescription: `Crunch some code and participate in the active data challenge for <strong>predicting the price of Ethereum</strong>. Data Farming challenges are a substream of Ocean Protocol Active Rewards, running over <strong>periods of 1 week</strong>. You can claim your prize from the <a href="https://df.oceandao.org/rewards">Rewards page</a>. </br></br> Round 66 marked the conclusion of Challenge-DF. Keep submitting your predictions within Predictoor to qualify for Predictoor-DF rewards.`,
     reward: `${curEpoch?.streams && curEpoch?.streams[1]?.substreams ? curEpoch?.streams[1]?.substreams[1]?.rewards : 0} OCEAN in Rewards`,
     buttonText: 'PARTICIPATE',
-    deadlineText: 'Enter before ' + moment(curEpoch.date_end).format('DD MMM YYYY'),
+    deadlineText: 'Closed',
     url: 'https://github.com/oceanprotocol/predict-eth/blob/main/challenges/challenge-df.md'
   };
 </script>
@@ -36,6 +36,7 @@
       <Button
         text={challengeDetails.buttonText}
         onclick={() => window.open(challengeDetails.url, '_blank')}
+        disabled
       />
       <p class="deadline">{challengeDetails.deadlineText}</p>
     </div>
