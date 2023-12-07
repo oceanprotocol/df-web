@@ -50,9 +50,9 @@ export const calculateOptimalCompoundInterestWithFees = async ({
       formUnlockDate,
     });
 
-    const { netRewardsInOcean, compoundDetails } = currentCompoundDetails;
+    const { netRewardsInOcean } = currentCompoundDetails;
 
-    console.log("currentCompoundDetails", currentCompoundDetails);
+    //console.log("currentCompoundDetails", currentCompoundDetails);
 
     if (netRewardsInOcean > highestNetReturn) {
       highestNetReturn = netRewardsInOcean;
@@ -69,7 +69,6 @@ export const calculateOptimalCompoundInterestWithFees = async ({
     optimalCompounds: optimalCompoundCount - 1,
     optimalAPY,
     ...optimalCompoundDetails,
-    highestNetReturn,
   };
   //console.log("result", result);
   return result;
@@ -110,7 +109,6 @@ const calculateCompoundDetails = async ({
   let currentPrincipal = principal;
   let tempTotalSupply = totalSupply;
   let grossRewards = 0;
-  let totalCostInOcean = 0;
   let claimCount = 0;
   const compoundDetails = [];
 
@@ -137,14 +135,10 @@ const calculateCompoundDetails = async ({
 
     compoundDetails.push({
       order: i,
-      periodReward,
-      tempTotalSupply,
-      stepPrincipal: currentPrincipal - periodReward,
-      nextPrincipal: currentPrincipal,
-      grossRewards,
+      rewards: periodReward,
+      fees: periodReward - grossRewards,
       totalPeriodClaims,
-      periodStartDate: compoundDates[i],
-      periodEndDate: compoundDates[i + 1],
+      date: compoundDates[i + 1],
     });
   }
 
