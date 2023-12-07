@@ -34,7 +34,6 @@
   } from "../../stores/web3";
   import Link from "./Link.svelte";
   import { oceanUnlockDate, veOceanWithDelegations } from "../../stores/veOcean";
-  import { getAddressByChainIdKey } from "../../utils/address/address";
   import CustomTooltip from "./CustomTooltip.svelte";
   import { navigate } from "svelte-navigator";
   import * as descriptions from "../../utils/metadata/descriptions.json";
@@ -46,7 +45,6 @@
   export let rowData = undefined;
   export let notHidableColumns = [];
   export let dataAvailable = false
-  let showDataWithAllocations = false;
   let filteredDatasets = undefined;
   let disabled = undefined;
   let totalAvailable = disabled ? 0 : 100 - $totalUserAllocation;
@@ -563,7 +561,7 @@
     background-color: transparent !important;
   }
 
-  .bx--data-table td, .bx--data-table tbody th{
+  .customTable .bx--data-table td, .customTable .bx--data-table tbody th{
     padding: 0 !important;
   }
 

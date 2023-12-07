@@ -7,6 +7,7 @@
   import Switch from "../common/Switch.svelte";
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
   import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
+  import CompoundsDetails from "./CompoundsDetails.svelte";
   
   export let showModal;
   export let switchValue;
@@ -53,7 +54,7 @@
               />
             </GroupedItemsDisplay>
             <div class="compounding">
-              <span>Compounding</span>
+              <span class="title">Compounding</span>
               <span class="compoundingDetails">( Claim amount + Update locked amount )</span>
               <div class="compoundingActionable">
                 <div class="compoundInputContainer">
@@ -82,6 +83,9 @@
               <ItemWithLabel title='Claim' value={`x ${formatValue(fees?.claim * claims)}`} bind:inputValue={claims}/>
               <ItemWithLabel title='Withdraw' value={`1 x ${formatValue(fees?.withdraw)}`}/>
             </div>
+          </div>
+          <div class="compoundDetailsContainer">
+            <CompoundsDetails/>
           </div>
         </div>
   </Modal>
@@ -119,6 +123,9 @@
       display: flex;
       flex-direction: column;
       margin-top: calc(var(--spacer));
+    }
+    .compounding .title{
+      font-weight: bold;
     }
     .compoundingDetails{
       color: var(--brand-grey-light);
@@ -167,6 +174,10 @@
       justify-content: space-between;
       width: 100%;
       margin-top: calc(var(--spacer) / 6);
+    }
+    .compoundDetailsContainer{
+      margin-top: var(--spacer);
+      width: 100%;
     }
   </style>
   
