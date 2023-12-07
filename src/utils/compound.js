@@ -52,12 +52,12 @@ export const calculateOptimalCompoundInterestWithFees = async ({
 
     const { netRewardsInOcean, compoundDetails } = currentCompoundDetails;
 
-    //console.log("currentCompoundDetails", currentCompoundDetails);
+    console.log("currentCompoundDetails", currentCompoundDetails);
 
     if (netRewardsInOcean > highestNetReturn) {
       highestNetReturn = netRewardsInOcean;
       optimalCompoundCount = optimalCompoundCount + 1;
-      optimalCompoundDetails = compoundDetails;
+      optimalCompoundDetails = currentCompoundDetails;
     } else {
       hasReachedMaxReturn = true;
     }
@@ -66,11 +66,10 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   const optimalAPY = calculateAPY(principalAmount, highestNetReturn);
 
   const result = {
-    optimalCompounds: optimalCompoundCount,
+    optimalCompounds: optimalCompoundCount - 1,
     optimalAPY,
-    optimalCompoundDetails,
+    ...optimalCompoundDetails,
     highestNetReturn,
-    ...currentCompoundDetails,
   };
   //console.log("result", result);
   return result;
@@ -93,10 +92,10 @@ export const calculateOptimalCompoundInterestWithFees = async ({
  * @property {number} grossRewards - The gross rewards
  * @property {number} netRewardsInOcean - The net rewards in Ocean tokens
  * @property {object} compoundDetails - The compound details
- * @property {number} totalCostInOcean - The total cost in Ocean tokens
  * @property {object} costs - The costs object
  * @property {number} claimCount - The number of claims
- *
+ * @property {string} periodStartDate - The start date of the period
+ * @property {string} periodEndDate - The end date of the period
  */
 const calculateCompoundDetails = async ({
   principal,
@@ -107,6 +106,7 @@ const calculateCompoundDetails = async ({
   tokenPrice,
   formUnlockDate,
 }) => {
+  console.log('compoundCount',compoundCount)
   let currentPrincipal = principal;
   let tempTotalSupply = totalSupply;
   let grossRewards = 0;
@@ -143,18 +143,18 @@ const calculateCompoundDetails = async ({
       nextPrincipal: currentPrincipal,
       grossRewards,
       totalPeriodClaims,
+      periodStartDate: compoundDates[i],
+      periodEndDate: compoundDates[i + 1],
     });
   }
 
   const costs = calculateTotalCost(claimCount, compoundCount, fees);
-  totalCostInOcean = costs.totalCost / tokenPrice;
 
-  const netRewards = grossRewards - totalCostInOcean;
+  const netRewards = grossRewards - costs.totalCost;
   return {
     grossRewards,
     netRewardsInOcean: netRewards,
     compoundDetails,
-    totalCostInOcean,
     costs: costs,
     claimCount,
   };
@@ -314,17 +314,20 @@ const calculateFeeForPeriod = (fees, periodMsDelta) => {
  * @returns {Array<string>} - The compound dates, all elements are Thursday and in the format YYYY-MM-DD
  */
 const calculateCompoundAndStartDates = (unlockDate, compoundCount) => {
+  console.log('unlockDate',unlockDate)
   const compoundDates = [];
-  const msDelta = Math.abs(moment(unlockDate).diff(moment()));
+  const msDelta = Math.abs(moment().diff(unlockDate));
   const periodMsDelta = msDelta / compoundCount;
   let currentDate = moment();
   for (let i = 0; i < compoundCount; i++) {
     let tempEndDate = currentDate.add(periodMsDelta, "ms");
-    if (!isThursday(tempEndDate)) {
-      tempEndDate = moment(getThursdayDate(tempEndDate));
+    let tempCompoundDate = moment(tempEndDate.format("YYYY-MM-DD"), "YYYY-MM-DD");
+
+    if (!isThursday(tempCompoundDate)) {
+      tempCompoundDate = moment(getThursdayDate(tempCompoundDate));
     }
     currentDate = tempEndDate;
-    compoundDates.push(currentDate.format("YYYY-MM-DD"));
+    compoundDates.push(tempCompoundDate.format("YYYY-MM-DD"));
   }
 
   compoundDates.unshift(moment(getThursdayDate(moment())).format("YYYY-MM-DD"));
