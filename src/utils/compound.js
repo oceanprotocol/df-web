@@ -26,6 +26,12 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   totalVeOceanSupply,
 }) => {
   const msDelta = moment(formUnlockDate).diff(moment());
+
+  var duration = moment.duration(moment(formUnlockDate).diff(moment()));
+  var years = duration.asYears();
+  console.log("years", years);
+  console.log(Math.ceil(years));
+
   let optimalCompoundCount = 1;
   let highestNetReturn = 0;
   let optimalCompoundDetails = [];
@@ -50,9 +56,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
       formUnlockDate,
     });
 
-    const { netRewardsInOcean, compoundDetails } = currentCompoundDetails;
-
-    console.log("currentCompoundDetails", currentCompoundDetails);
+    const { netRewardsInOcean } = currentCompoundDetails;
 
     if (netRewardsInOcean > highestNetReturn) {
       highestNetReturn = netRewardsInOcean;
@@ -71,7 +75,69 @@ export const calculateOptimalCompoundInterestWithFees = async ({
     ...optimalCompoundDetails,
     highestNetReturn,
   };
+
+  const resultOfYearlyCompounds = await calculateWithOnlyMandatoryClaims({
+    lockedOceanAmount,
+    formAmount,
+    formUnlockDate,
+    fees,
+    totalVeOceanSupply,
+  });
+
+  if (resultOfYearlyCompounds.highestNetReturn > result.highestNetReturn) {
+    return resultOfYearlyCompounds;
+  }
+
   //console.log("result", result);
+  return result;
+};
+
+/**
+ * Calculates the optimal number of compounding events and the corresponding
+ * Annual Percentage Yield (APY) for a specific amount of Ocean tokens,
+ *
+ * @param {number} lockedOceanAmount - The amount of Ocean tokens locked in the contract
+ * @param {number} formAmount - The amount of Ocean tokens to be locked
+ * @param {string} formUnlockDate - The unlock date of the tokens
+ * @param {object} fees - The fees object
+ * @param {number} totalVeOceanSupply - The total supply of veOCEAN tokens
+ * @returns {Object} - The optimal compound count and APY
+ */
+export const calculateWithOnlyMandatoryClaims = async ({
+  lockedOceanAmount,
+  formAmount,
+  formUnlockDate,
+  fees,
+  totalVeOceanSupply,
+}) => {
+  const msDelta = moment(formUnlockDate).diff(moment());
+
+  const duration = moment.duration(moment(formUnlockDate).diff(moment()));
+  const optimalCompoundCount = Math.round(duration.asYears());
+
+  const principalAmount = formAmount + lockedOceanAmount;
+
+  const currentCompoundDetails = await calculateCompoundDetails({
+    principal: principalAmount,
+    totalSupply: totalVeOceanSupply,
+    fees: fees,
+    msDelta,
+    compoundCount: optimalCompoundCount,
+    formUnlockDate,
+    skipPeriodClaimCalculation: true,
+  });
+
+  const { netRewardsInOcean } = currentCompoundDetails;
+
+  const optimalAPY = calculateAPY(principalAmount, netRewardsInOcean);
+
+  const result = {
+    optimalCompounds: optimalCompoundCount,
+    optimalAPY,
+    ...currentCompoundDetails,
+    highestNetReturn: netRewardsInOcean,
+  };
+
   return result;
 };
 
@@ -81,13 +147,16 @@ export const calculateOptimalCompoundInterestWithFees = async ({
  * fees, time delta, token price, and unlock date. Returns comprehensive compound details
  * including gross rewards, net rewards in Ocean tokens, and the total cost in Ocean tokens.
  *
- * @param {number} principal - The amount of Ocean tokens locked in the contract
- * @param {number} totalSupply - The total supply of veOCEAN tokens
- * @param {object} fees - The fees object
- * @param {number} msDelta - The time delta in milliseconds
- * @param {number} compoundCount - The number of compounds
- * @param {number} tokenPrice - The price of the Ocean token
- * @param {string} formUnlockDate - The unlock date of the tokens
+ * @param {Object} args - The arguments object
+ * @property {number} principal - The amount of Ocean tokens locked in the contract
+ * @property {number} totalSupply - The total supply of veOCEAN tokens
+ * @property {object} fees - The fees object
+ * @property {number} msDelta - The time delta in milliseconds
+ * @property {number} compoundCount - The number of compounds
+ * @property {number} tokenPrice - The price of the Ocean token
+ * @property {string} formUnlockDate - The unlock date of the tokens
+ * @property {boolean} skipPeriodClaimCalculation - Whether to skip the period claim calculation
+ *
  * @returns {Object} - The compound details
  * @property {number} grossRewards - The gross rewards
  * @property {number} netRewardsInOcean - The net rewards in Ocean tokens
@@ -103,14 +172,12 @@ const calculateCompoundDetails = async ({
   fees,
   msDelta,
   compoundCount,
-  tokenPrice,
   formUnlockDate,
+  skipPeriodClaimCalculation = false,
 }) => {
-  console.log('compoundCount',compoundCount)
   let currentPrincipal = principal;
   let tempTotalSupply = totalSupply;
   let grossRewards = 0;
-  let totalCostInOcean = 0;
   let claimCount = 0;
   const compoundDetails = [];
 
@@ -120,15 +187,22 @@ const calculateCompoundDetails = async ({
   );
 
   for (let i = 0; i < compoundCount; i++) {
-    const { periodReward, totalPeriodClaims } = await calculateRewardForPeriod({
+    const periodReward = await calculateRewardForPeriod({
       periodStartDate: compoundDates[i],
       periodEndDate: compoundDates[i + 1],
       formUnlockDate: formUnlockDate,
-      periodMS: msDelta / compoundCount,
       currentPrincipal,
       tempTotalSupply,
-      fees,
     });
+
+    const periodMS = msDelta / compoundCount;
+
+    let totalPeriodClaims = 1;
+    if (!skipPeriodClaimCalculation)
+      totalPeriodClaims = calculateFeeForPeriod(
+        fees /* duration in ms for the period */,
+        periodMS
+      ).totalPeriodClaims;
 
     claimCount += totalPeriodClaims;
     tempTotalSupply += periodReward;
@@ -220,18 +294,15 @@ const calculateAPY = (principal, totalRewards) => {
  * @param {number} currentPrincipal - The current principal
  * @param {number} tempTotalSupply - The total supply of veOCEAN tokens
  * @param {object} fees - The fees object
- * @returns {Object} - The rewards for the period
- * @property {number} periodReward - The reward for the period
- * @property {number} totalPeriodClaims - The total claims for the period
+ * 
+ * @returns {number} periodReward - The reward for the period
  */
 async function calculateRewardForPeriod({
   periodStartDate,
   periodEndDate,
   formUnlockDate,
-  periodMS,
   currentPrincipal,
   tempTotalSupply,
-  fees,
 }) {
   const args = {
     lockedOcean: currentPrincipal,
@@ -244,15 +315,8 @@ async function calculateRewardForPeriod({
   const rewardsData = await getPeriodRewardData(args);
 
   const periodReward = rewardsData.rewards; // Example assignment, adjust based on actual logic
-  const totalPeriodClaims = calculateFeeForPeriod(
-    fees /* duration in ms for the period */,
-    periodMS
-  ).totalPeriodClaims;
 
-  return {
-    periodReward,
-    totalPeriodClaims,
-  };
+  return periodReward
 }
 
 /**
@@ -290,7 +354,7 @@ const calculateFeeForPeriod = (fees, periodMsDelta) => {
   // Assuming 'fees' contains fee values for different actions (lock, claim, etc.)
   // and 'unlockDate' is the moment object of the unlock date
   const mandatoryClaimCount = calculatePeriodClaimsWithMS(periodMsDelta); // Function from your 'rewards.js'
-  const totalPeriodClaims = mandatoryClaimCount + 1; // Adding 1 to include the claim at the end of the period
+  const totalPeriodClaims = mandatoryClaimCount < 2 ? 0 : +1; // Adding 1 to include the claim at the end of the period
   const feeForClaims = fees.claim * totalPeriodClaims;
   const feeUpdateAmount = fees.updateLockedAmount;
   const totalFeeForPeriod = feeForClaims + feeUpdateAmount; // Summing up fees for lock and claims
@@ -314,14 +378,17 @@ const calculateFeeForPeriod = (fees, periodMsDelta) => {
  * @returns {Array<string>} - The compound dates, all elements are Thursday and in the format YYYY-MM-DD
  */
 const calculateCompoundAndStartDates = (unlockDate, compoundCount) => {
-  console.log('unlockDate',unlockDate)
+  console.log("unlockDate", unlockDate);
   const compoundDates = [];
   const msDelta = Math.abs(moment().diff(unlockDate));
   const periodMsDelta = msDelta / compoundCount;
   let currentDate = moment();
   for (let i = 0; i < compoundCount; i++) {
     let tempEndDate = currentDate.add(periodMsDelta, "ms");
-    let tempCompoundDate = moment(tempEndDate.format("YYYY-MM-DD"), "YYYY-MM-DD");
+    let tempCompoundDate = moment(
+      tempEndDate.format("YYYY-MM-DD"),
+      "YYYY-MM-DD"
+    );
 
     if (!isThursday(tempCompoundDate)) {
       tempCompoundDate = moment(getThursdayDate(tempCompoundDate));
