@@ -222,11 +222,12 @@ const calculateCompoundDetails = async ({
 
     let totalPeriodClaims = 1;
     let totalFeeForPeriod = fees.claim + fees.updateLockedAmount;
-    if (!skipPeriodClaimCalculation)
+    if (!skipPeriodClaimCalculation){
         const {totalPeriodClaims, totalFeeForPeriod} = calculateFeeForPeriod(
           fees /* duration in ms for the period */,
           periodMS
         );
+    }
   
     claimCount += totalPeriodClaims;
     tempTotalSupply += periodReward;
