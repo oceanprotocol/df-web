@@ -69,6 +69,7 @@
   let simpleFlowCostOcean = 0;
   let compounds = 0;
   let switchValue = 'on';
+  let compoundsData;
   let fees
 
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
@@ -318,7 +319,8 @@
       totalVeOceanSupply: $totalVeOceanSupply + parseFloat(calculatedVotingPower),
     });
     console.log('optimumComp',optimumComp)
-    //compounds = optimalCompounds; // Set to the optimal number of compounds
+    compoundsData = optimumComp
+    compounds = optimumComp.optimalCompounds; // Set to the optimal number of compounds
     //await calculateCompoundInterestWithFees(); // Recalculate with the optimal number
   };
 
@@ -351,6 +353,7 @@
       bind:simpleFlowCostOcean
       bind:compounds
       unlockDate={moment($form.unlockDate)}
+      compoundsData={compoundsData}
       apyValue={displayedAPY.apy}
       rewards={$form.amount && $form.unlockDate ? displayedAPY.profit : 0}
       fees={fees}

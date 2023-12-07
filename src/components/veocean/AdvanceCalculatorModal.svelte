@@ -19,6 +19,7 @@
   export let lockEndDateUpdates = 0;
   export let unlockDate;
   export let compounds;
+  export let compoundsData;
   export let claims = calculateNumberOFClaims(unlockDate);
 
   const formatValue = (value) => {
@@ -84,7 +85,7 @@
             </div>
           </div>
           <div class="compoundDetailsContainer">
-            <CompoundsDetails/>
+            <CompoundsDetails compounds={compoundsData?.compoundDetails}/>
           </div>
         </div>
   </Modal>

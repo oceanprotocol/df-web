@@ -2,33 +2,7 @@
     import DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
     import DataTableSkeleton from "carbon-components-svelte/src/DataTable/DataTableSkeleton.svelte";
     
-    export let compoundsData = [
-        {
-            date: '15.12.2023',
-            rewards: 2000,
-            fees: 300
-        },
-         {
-            date: '15.01.2024',
-            rewards: 2000,
-            fees: 300
-        },
-         {
-            date: '15.02.2024',
-            rewards: 2000,
-            fees: 300
-        },
-         {
-            date: '15.01.2024',
-            rewards: 2000,
-            fees: 300
-        },
-         {
-            date: '15.02.2024',
-            rewards: 2000,
-            fees: 300
-        }
-    ]
+    export let compounds = []
 
     const headers = [
         { key: 'index', value: 'Order'},
@@ -40,18 +14,19 @@
     let rows = []
 
     const createRows = () => {
-        compoundsData.forEach((d, i) => {
+        console.log(compounds)
+        compounds.forEach((d, i) => {
             rows.push({
                 id: i,
                 index: i + 1,
-                date: d.date,
-                rewards: d.rewards,
-                fees: d.fees
+                date: d?.date,
+                rewards: d?.rewards,
+                fees: d?.fees
             })
         })
     }
 
-    $: compoundsData && createRows()
+    $: compounds && createRows()
 </script>
 
 <div>
