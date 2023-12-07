@@ -317,6 +317,7 @@
       formUnlockDate: $form.unlockDate,
       fees,
       totalVeOceanSupply: $totalVeOceanSupply + parseFloat(calculatedVotingPower),
+      compounds: switchValue == 'on' ? undefined : compounds
     });
     console.log('optimumComp',optimumComp)
     compoundsData = optimumComp
@@ -329,7 +330,7 @@
   $: fetchTokenPrices();
   $: $ethPrice && $oceanPrice && getFeesCosts();
   $: $form.unlockDate && calculateSimpleFlowCost();
-  $: $form &&
+  $: $form && switchValue && compounds>=0 &&
     (async () => {
       if ($form.amount && $form.unlockDate) {
         await calculateOptimalCompounds();

@@ -14,6 +14,7 @@
     let rows = []
 
     const createRows = () => {
+        rows=[]
         compounds.forEach((d, i) => {
             rows.push({
                 id: i,
@@ -30,13 +31,16 @@
 
 <div>
     <span class="title">Suggested Compounds</span>
-    <DataTable
+    {#if rows}
+        <DataTable
         headers={headers}
         rows={rows}
         class="compoundsTable"
         stickyHeader
-    >
-    </DataTable>
+        >
+        </DataTable>
+    {/if}
+   
 </div>
 
 

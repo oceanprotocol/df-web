@@ -24,9 +24,10 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   formUnlockDate,
   fees,
   totalVeOceanSupply,
+  compounds
 }) => {
   const msDelta = moment(formUnlockDate).diff(moment());
-  let optimalCompoundCount = 1;
+  let optimalCompoundCount = compounds ? compounds : 1;
   let highestNetReturn = 0;
   let optimalCompoundDetails = [];
 
@@ -39,7 +40,8 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   const principalAmount = formAmount + lockedOceanAmount;
 
   let currentCompoundDetails;
-  while (!hasReachedMaxReturn) {
+
+  if(compounds){
     currentCompoundDetails = await calculateCompoundDetails({
       principal: principalAmount,
       totalSupply: totalVeOceanSupply,
@@ -49,17 +51,31 @@ export const calculateOptimalCompoundInterestWithFees = async ({
       tokenPrice: oceanTokenPrice,
       formUnlockDate,
     });
-
     const { netRewardsInOcean } = currentCompoundDetails;
+    optimalCompoundCount = compounds + 1
+    highestNetReturn = netRewardsInOcean;
+    optimalCompoundDetails = currentCompoundDetails;
+  }else{
+    while (!hasReachedMaxReturn) {
+      currentCompoundDetails = await calculateCompoundDetails({
+        principal: principalAmount,
+        totalSupply: totalVeOceanSupply,
+        fees: fees,
+        msDelta,
+        compoundCount: optimalCompoundCount,
+        tokenPrice: oceanTokenPrice,
+        formUnlockDate,
+      });
 
-    //console.log("currentCompoundDetails", currentCompoundDetails);
+      const { netRewardsInOcean } = currentCompoundDetails;
 
-    if (netRewardsInOcean > highestNetReturn) {
-      highestNetReturn = netRewardsInOcean;
-      optimalCompoundCount = optimalCompoundCount + 1;
-      optimalCompoundDetails = currentCompoundDetails;
-    } else {
-      hasReachedMaxReturn = true;
+      if (netRewardsInOcean > highestNetReturn) {
+        highestNetReturn = netRewardsInOcean;
+        optimalCompoundCount = optimalCompoundCount + 1;
+        optimalCompoundDetails = currentCompoundDetails;
+      } else {
+        hasReachedMaxReturn = true;
+      }
     }
   }
 
@@ -102,7 +118,6 @@ const calculateCompoundDetails = async ({
   fees,
   msDelta,
   compoundCount,
-  tokenPrice,
   formUnlockDate,
 }) => {
   console.log('compoundCount',compoundCount)
