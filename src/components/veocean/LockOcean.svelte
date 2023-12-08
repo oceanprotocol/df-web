@@ -254,7 +254,7 @@
     }
   };
 
-  const calculateAPY = async () => {
+  /*const calculateAPY = async () => {
     if (
       calculatedVotingPower <= 0 ||
       (!$lockedOceanAmount && $form.amount <= 0) ||
@@ -268,7 +268,6 @@
       (fees.updateFormAmount + fees.updateUnlockDate + fees.claim) /
       $oceanPrice;
     const data = await getPassiveUserRewardsData(
-      votingPowerForAPY,
       $form.amount > 0
         ? $form.amount + parseFloat($lockedOceanAmount)
         : parseFloat($lockedOceanAmount),
@@ -284,7 +283,7 @@
       data.rewards,
       data.rewardsWithoutFees
     );
-  };
+  };*/
 
   const fetchTokenPrices = async () => {
     const ethTokenPrice = await getTokenPriceFromCoingecko("ethereum", "usd");
@@ -323,10 +322,14 @@
     compoundsData = optimumComp
     compounds = optimumComp.optimalCompounds; // Set to the optimal number of compounds
     //await calculateCompoundInterestWithFees(); // Recalculate with the optimal number
+    displayedAPY = formatApyForDisplay(
+      optimumComp.apy,
+      optimumComp.rewards,
+      optimumComp?.rewardsWithoutFees
+    );
   };
 
   $: $form && updateVotingPower();
-  $: $totalVeOceanSupply && calculatedVotingPower && fees && calculateAPY();
   $: fetchTokenPrices();
   $: $ethPrice && $oceanPrice && getFeesCosts();
   $: $form.unlockDate && calculateSimpleFlowCost();

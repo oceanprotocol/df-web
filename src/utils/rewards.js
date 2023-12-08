@@ -26,7 +26,7 @@ export const convertAPYtoWPR = (apy) => {
 
 export const convertWPRtoAPY = (wpr, nrOfCompounds) => {
   const weeks = 52;
-  const apy = Math.pow(1 + wpr, nrOfCompounds ? nrOfCompounds : weeks) - 1;
+  const apy = nrOfCompounds>0 ? Math.pow(1 + wpr, nrOfCompounds>0 ? nrOfCompounds : weeks) - 1 : wpr * weeks;
   return parseFloat(apy * 100);
 };
 
@@ -94,7 +94,6 @@ export const getPassiveUserAPY = async (userVeOcean, lockedOcean) => {
 };
 
 export const getPassiveUserRewardsData = async (
-  userVeOcean,
   lockedOcean,
   veOceanSupply,
   unlockDate,
@@ -123,11 +122,11 @@ export const getPassiveUserRewardsData = async (
     weeks += 1;
     currentDate = currentDate.add(1, "weeks");
   }
-
+  console.log(nrOfCompounds)
   const yyield = ((lockedOcean + totalRewards - basicFlowFees)) / lockedOcean - 1
-  const wpr = yyield / weeks
+  const wpr = yyield / weeks * (nrOfCompounds>0 ? (52 / nrOfCompounds) : 1)
   console.log(totalRewards, wpr, weeks, yyield * 100, basicFlowFees)
-  return {apy: wpr * 52 * 100, yield: yyield * 100, rewards: totalRewards}
+  return {apy: convertWPRtoAPY(wpr, nrOfCompounds), yield: yyield * 100, rewards: totalRewards}
 };
 
 export const getActiveAPY = async (userAddress) => {
