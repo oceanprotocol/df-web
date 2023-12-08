@@ -82,14 +82,14 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   const optimalAPY = calculateAPY(principalAmount, highestNetReturn);
 
   const result = {
-    optimalCompounds: optimalCompoundCount - 1,
+    optimalCompounds: optimalCompoundCount > 1 ? optimalCompoundCount - 2 : optimalCompoundCount - 1,
     optimalAPY,
     ...optimalCompoundDetails,
   };
-
+ /*
   const mandatoryClaimCount = totalMandatoryClaimCount(formUnlockDate);
 
-  if(!compounds || compounds === mandatoryClaimCount) {
+ if(!compounds || compounds === mandatoryClaimCount) {
     const resultOfYearlyCompounds = await calculateWithOnlyMandatoryClaims({
       lockedOceanAmount,
       formAmount,
@@ -102,7 +102,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
     if (resultOfYearlyCompounds.highestNetReturn > result.highestNetReturn) {
       return resultOfYearlyCompounds;
     }
-  }
+  }*/
 
   //console.log("result", result);
   return result;
@@ -208,6 +208,7 @@ const calculateCompoundDetails = async ({
     formUnlockDate,
     compoundCount
   );
+  console.log('Lock with compound number:', compoundCount )
 
   for (let i = 0; i < compoundCount; i++) {
     const periodReward = await calculateRewardForPeriod({
@@ -234,7 +235,7 @@ const calculateCompoundDetails = async ({
     currentPrincipal += periodReward;
     grossRewards += periodReward;
 
-    compoundDetails.push({
+    compoundCount > 1 && i < compoundCount - 1 && compoundDetails.push({
       order: i,
       rewards: periodReward,
       fees: totalFeeForPeriod,
@@ -246,6 +247,7 @@ const calculateCompoundDetails = async ({
   const costs = calculateTotalCost(claimCount, compoundCount, fees);
 
   const netRewards = grossRewards - costs.totalCost;
+  console.log('Period rewards',netRewards)
   return {
     grossRewards,
     netRewardsInOcean: netRewards,
@@ -337,9 +339,7 @@ async function calculateRewardForPeriod({
 
   const periodReward = rewardsData.rewards; // Example assignment, adjust based on actual logic
 
-  return {
-    periodReward,
-  };
+  return periodReward;
 }
 
 /**
@@ -480,6 +480,7 @@ export const getPeriodRewardData = async ({
     tempCurrentDate = tempCurrentDate.add(1, "weeks");
   }
 
+  console.log(currentDate.format("DD-MM-YYYY -"), totalRewards)
   const yyield = (lockedOcean + totalRewards) / lockedOcean - 1;
   const wpr = yyield / weeks;
 
