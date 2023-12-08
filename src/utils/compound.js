@@ -47,12 +47,12 @@ export const calculateOptimalCompoundInterestWithFees = async ({
       totalSupply: totalVeOceanSupply,
       fees: fees,
       msDelta,
-      compoundCount: optimalCompoundCount,
+      compoundCount: optimalCompoundCount + 1,
       tokenPrice: oceanTokenPrice,
       formUnlockDate,
     });
     const { netRewardsInOcean } = currentCompoundDetails;
-    optimalCompoundCount = compounds + 1
+    optimalCompoundCount = compounds
     highestNetReturn = netRewardsInOcean;
     optimalCompoundDetails = currentCompoundDetails;
   }else{
@@ -82,7 +82,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   const optimalAPY = calculateAPY(principalAmount, highestNetReturn);
 
   const result = {
-    optimalCompounds: optimalCompoundCount > 1 ? optimalCompoundCount - 2 : optimalCompoundCount - 1,
+    optimalCompounds: compounds ? compounds : optimalCompoundCount > 1 ? optimalCompoundCount - 2 : optimalCompoundCount - 1,
     optimalAPY,
     ...optimalCompoundDetails,
   };

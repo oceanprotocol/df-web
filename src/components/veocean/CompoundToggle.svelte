@@ -23,7 +23,7 @@
     
 <style>
   .compound{
-    min-width: 150px;
+    min-width: 50%;
     display: flex;
     flex-direction: column;
     width: max-content;
