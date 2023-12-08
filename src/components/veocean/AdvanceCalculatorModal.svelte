@@ -27,14 +27,16 @@
   }
 
   const onCompoundsChange = () => {
-    lockEndDateUpdates = lockAmountUpdates = compounds>=0 ? compounds : 0
-    claims = compounds + calculateNumberOFClaims(unlockDate)
-    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * (fees.claim + fees.updateLockedAmount + fees.updateUnlockDate))
+    lockAmountUpdates = compounds>=0 ? compounds : 0
+    const numberOfMandatoryClaims = calculateNumberOFClaims(unlockDate)
+    claims = numberOfMandatoryClaims + (compounds > numberOfMandatoryClaims ? compounds - numberOfMandatoryClaims : 0)
+    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * fees.updateLockedAmount)
   }
 
   const calculateFees = () => {
     if(!fees) return
-    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * (fees.claim + fees.updateLockedAmount + fees.updateUnlockDate))
+    console.log('herre')
+    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * fees.updateLockedAmount)
   }
 
   $: lockEndDateUpdates>=0 && lockAmountUpdates>=0 && claims>=0 && fees && $oceanPrice && calculateFees() 
@@ -80,7 +82,7 @@
               <ItemWithLabel title='Lock' value={`1 x ${formatValue(fees?.lock)}`}/>
               <ItemWithLabel title='Update locked amount' value={`x ${formatValue(fees?.updateLockedAmount)}`} bind:inputValue={lockAmountUpdates}/>
               <ItemWithLabel title='Update lock end date' value={`x ${formatValue(fees?.updateUnlockDate)}`} bind:inputValue={lockEndDateUpdates}/>
-              <ItemWithLabel title='Claim' value={`x ${formatValue(fees?.claim * claims)}`} bind:inputValue={claims}/>
+              <ItemWithLabel title='Claim' value={`x ${formatValue(fees?.claim)}`} bind:inputValue={claims}/>
               <ItemWithLabel title='Withdraw' value={`1 x ${formatValue(fees?.withdraw)}`}/>
             </div>
           </div>
