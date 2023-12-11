@@ -44,7 +44,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   let totalWeeksInLock = Math.ceil(msDelta / 604800000)
   let rewardsWithFees = 0
 
-  if(compounds){
+  if(compounds!==undefined){
     currentCompoundDetails = await calculateCompoundDetails({
       principal: principalAmount,
       totalSupply: totalVeOceanSupply,
