@@ -26,7 +26,6 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   totalVeOceanSupply,
   compounds
 }) => {
-  console.log(compounds)
   const msDelta = getTotalMSDelta(formUnlockDate);
   let optimalCompoundCount = compounds ? compounds : 0;
   let highestNetReturn = 0 - (fees.lock + calculatePeriodClaimsWithMS(msDelta) * fees.claim + fees.withdraw);
@@ -189,7 +188,7 @@ const calculateCompoundDetails = async ({
     });
   }
 
-  console.log(compoundDetails)
+  //console.log(compoundDetails)
 
   //console.log(grossRewards)
 
@@ -223,7 +222,7 @@ const calculateCompoundDetails = async ({
  */
 const calculateTotalCost = (claimCount, compoundCount, fees) => {
   const claimFees = claimCount * fees.claim;
-  const updateFees = (compoundCount - 1) * fees.updateLockedAmount;
+  const updateFees = compoundCount * fees.updateLockedAmount;
   const lockFee = fees.lock;
   const withdrawFee = fees.withdraw;
 
