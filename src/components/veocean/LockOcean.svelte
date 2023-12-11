@@ -272,11 +272,9 @@
   }
 
   const calculateSimpleFlowCost = () => {
-    simpleFlowCostOcean =
-      (fees?.lock +
+    simpleFlowCostOcean = fees?.lock +
         calculateNumberOFClaims(moment($form.unlockDate)) * fees?.claim +
-        fees?.withdraw) /
-      $oceanPrice;
+        fees?.withdraw
   };
 
   const calculateOptimalCompounds = async () => {
