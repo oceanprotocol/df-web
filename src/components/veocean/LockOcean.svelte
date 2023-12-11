@@ -254,36 +254,6 @@
     }
   };
 
-  /*const calculateAPY = async () => {
-    if (
-      calculatedVotingPower <= 0 ||
-      (!$lockedOceanAmount && $form.amount <= 0) ||
-      !fees
-    ) {
-      displayedAPY = formatApyForDisplay(0, 0);
-      return;
-    }
-    const votingPowerForAPY = parseFloat(calculatedVotingPower);
-    const compoundCost =
-      (fees.updateFormAmount + fees.updateUnlockDate + fees.claim) /
-      $oceanPrice;
-    const data = await getPassiveUserRewardsData(
-      $form.amount > 0
-        ? $form.amount + parseFloat($lockedOceanAmount)
-        : parseFloat($lockedOceanAmount),
-      $totalVeOceanSupply + votingPowerForAPY,
-      moment($form.unlockDate),
-      compounds,
-      compoundCost,
-      simpleFlowCostOcean
-    );
-
-    displayedAPY = formatApyForDisplay(
-      data.apy,
-      data.rewards,
-      data.rewardsWithoutFees
-    );
-  };*/
 
   const fetchTokenPrices = async () => {
     const ethTokenPrice = await getTokenPriceFromCoingecko("ethereum", "usd");
@@ -303,9 +273,9 @@
 
   const calculateSimpleFlowCost = () => {
     simpleFlowCostOcean =
-      (fees.lock +
-        calculateNumberOFClaims(moment($form.unlockDate)) * fees.claim +
-        fees.withdraw) /
+      (fees?.lock +
+        calculateNumberOFClaims(moment($form.unlockDate)) * fees?.claim +
+        fees?.withdraw) /
       $oceanPrice;
   };
 

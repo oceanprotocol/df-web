@@ -26,9 +26,10 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   totalVeOceanSupply,
   compounds
 }) => {
+  console.log(compounds)
   const msDelta = getTotalMSDelta(formUnlockDate);
-  let optimalCompoundCount = compounds ? compounds : 1;
-  let highestNetReturn = 0;
+  let optimalCompoundCount = compounds ? compounds : 0;
+  let highestNetReturn = 0 - (fees.lock + calculatePeriodClaimsWithMS(msDelta) * fees.claim + fees.withdraw);
   let optimalCompoundDetails = [];
 
   const oceanTokenPrice = await getTokenPriceFromCoingecko(
@@ -37,9 +38,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   );
 
   let hasReachedMaxReturn = false;
-  const principalAmount = formAmount + lockedOceanAmount;
-
-  console.log(msDelta)
+  const principalAmount = formAmount + parseFloat(lockedOceanAmount);
 
   let currentCompoundDetails;
   let totalWeeksInLock = Math.ceil(msDelta / 604800000)
@@ -51,7 +50,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
       totalSupply: totalVeOceanSupply,
       fees: fees,
       msDelta,
-      compoundCount: optimalCompoundCount + 1,
+      compoundCount: optimalCompoundCount,
       tokenPrice: oceanTokenPrice,
       formUnlockDate,
     });
@@ -85,13 +84,12 @@ export const calculateOptimalCompoundInterestWithFees = async ({
     }
   }
 
-  optimalCompoundCount = compounds ? compounds : optimalCompoundCount > 1 ? optimalCompoundCount - 2 : optimalCompoundCount - 1
+  optimalCompoundCount = compounds ? compounds : optimalCompoundCount == 0 ? optimalCompoundCount : optimalCompoundCount - 1
 
-  console.log(highestNetReturn, optimalCompoundCount, totalWeeksInLock )
+  //console.log(highestNetReturn, optimalCompoundCount, totalWeeksInLock, principalAmount )
   const yyield = ((principalAmount + highestNetReturn)) / principalAmount - 1
-  console.log(principalAmount)
+  //console.log(yyield)
   const wpr = yyield / totalWeeksInLock * (optimalCompoundCount>0 ? (52 / optimalCompoundCount) : 1)
-  console.log(highestNetReturn, wpr, totalWeeksInLock, yyield * 100)
 
   const result = {
     optimalCompounds: optimalCompoundCount,
@@ -156,7 +154,6 @@ const calculateCompoundDetails = async ({
     formUnlockDate,
     compoundCount
   );
-  console.log('Lock with compound number:', compoundCount )
 
   for (let i = 0; i <= compoundCount; i++) {
     const periodReward = await calculateRewardForPeriod({
@@ -183,7 +180,7 @@ const calculateCompoundDetails = async ({
     currentPrincipal += periodReward;
     grossRewards += periodReward;
 
-    compoundCount > 1 && i < compoundCount - 1 && compoundDetails.push({
+    compoundCount >= 0 && i <= compoundCount - 1 && compoundDetails.push({
       order: i,
       rewards: periodReward,
       fees: totalFeeForPeriod,
@@ -192,10 +189,13 @@ const calculateCompoundDetails = async ({
     });
   }
 
+  console.log(compoundDetails)
+
+  //console.log(grossRewards)
+
   const costs = calculateTotalCost(claimCount, compoundCount, fees);
 
   const netRewards = grossRewards - costs.totalCost;
-  console.log('Period rewards',netRewards)
   return {
     grossRewards,
     netRewardsInOcean: netRewards,
@@ -351,10 +351,12 @@ const calculateFeeForPeriod = (fees, periodMsDelta) => {
 const calculateCompoundAndStartDates = (unlockDate, compoundCount) => {
   const compoundDates = [];
   const msDelta = Math.abs(moment().diff(unlockDate));
-  const periodMsDelta = msDelta / compoundCount;
+  const periodMsDelta = msDelta / (compoundCount + 1);
+
   let currentDate = moment();
   for (let i = 0; i <= compoundCount; i++) {
     let tempEndDate = currentDate.add(periodMsDelta, "ms");
+
     let tempCompoundDate = moment(
       tempEndDate.format("YYYY-MM-DD"),
       "YYYY-MM-DD"
@@ -363,7 +365,7 @@ const calculateCompoundAndStartDates = (unlockDate, compoundCount) => {
     if (!isThursday(tempCompoundDate)) {
       tempCompoundDate = moment(getThursdayDate(tempCompoundDate));
     }
-    currentDate = tempEndDate;
+    currentDate = moment(tempEndDate);
     compoundDates.push(tempCompoundDate.format("YYYY-MM-DD"));
   }
 
@@ -400,7 +402,7 @@ export const getPeriodRewardData = async ({
   currentDate,
   periodEndDate,
 }) => {
-  let tempCurrentDate = currentDate;
+  let tempCurrentDate = moment(currentDate);
   if (!isThursday(currentDate) || !isThursday(periodEndDate)) {
     throw new Error("Invalid date format. Only Thursdays are supported.");
   }
