@@ -255,11 +255,11 @@
 
 
   const fetchTokenPrices = async () => {
-    const ethTokenPrice = await getTokenPriceFromCoingecko("ethereum", "usd");
+    const ethTokenPrice = await getTokenPriceFromCoingecko("ETH", "USDT");
     ethPrice.update((p) => ethTokenPrice);
     const oceanTokenPrice = await getTokenPriceFromCoingecko(
-      "ocean-protocol",
-      "usd"
+      "OCEAN",
+      "USDT"
     );
     oceanPrice.update((p) => oceanTokenPrice);
   };
@@ -283,7 +283,8 @@
       unlockDate: $form.unlockDate,
       fees,
       totalVeOceanSupply: $totalVeOceanSupply + parseFloat(calculatedVotingPower),
-      compounds: switchValue == 'on' ? undefined : compounds
+      compounds: switchValue == 'on' ? undefined : compounds,
+      oceanTokenPrice: $oceanPrice
     });
 
     compoundsData = optimumComp

@@ -20,7 +20,7 @@ const getCompoundOffsets = (amountToLock, lockDurationInWeeks, initialCompounds)
   if(lockDurationInWeeks > 105 && lockDurationInWeeks < 160){
     compounds = amountToLock>=50000000 ? 100 : amountToLock>=5000000 ? 50 : amountToLock>= 1000000 ? 20 : initialCompounds
   }else if(lockDurationInWeeks >= 160){
-    compounds = amountToLock>=5000000 ? 200 : amountToLock>= 1000000 ? 130 : initialCompounds
+    compounds = amountToLock>=2000000 ? 200 : amountToLock>= 1000000 ? 130 : initialCompounds
   }
   else{
     compounds = initialCompounds
@@ -39,6 +39,7 @@ const getCompoundOffsets = (amountToLock, lockDurationInWeeks, initialCompounds)
  * @param {string} unlockDate - The unlock date of the tokens
  * @param {object} fees - The fees object
  * @param {number} totalVeOceanSupply - The total supply of veOCEAN tokens
+ * @param {number} oceanTokenPrice - OCEAN token price in usdt
  * @returns {Object} - The optimal compound count and APY
  */
 export const calculateOptimalCompoundInterestWithFees = async ({
@@ -47,16 +48,12 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   unlockDate,
   fees,
   totalVeOceanSupply,
-  compounds
+  compounds,
+  oceanTokenPrice
 }) => {
   const msDelta = getTotalMSDelta(unlockDate);
   let highestNetReturn = 0 - (fees.lock + calculatePeriodClaimsWithMS(msDelta) * fees.claim + fees.withdraw);
   let optimalCompoundDetails = [];
-
-  const oceanTokenPrice = await getTokenPriceFromCoingecko(
-    "ocean-protocol",
-    "usd"
-  );
 
   let hasReachedMaxReturn = false;
   const principalAmount = amountToLock + parseFloat(lockedOceanAmount);

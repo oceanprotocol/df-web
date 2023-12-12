@@ -114,23 +114,10 @@ export const approve = async (
 };
 
 export const getTokenPriceFromCoingecko = async(token, currency) => {
-  if(token === 'ocean-protocol' && currency === 'usd'){
-    return 0.5308
-  }
-
-  if(token === 'ethereum' && currency === 'usd'){
-    return 2246.92
-  }
-
   try {
-    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=${currency}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    const res = await fetch(`https://price-data.predictoor.ai/api/v3/ticker/price?symbol=${token}${currency}`)
     const data = await res.json()
-    return data[token][currency]
+    return parseFloat(data.price)
   }catch(e){
     console.error(e)
     return null
