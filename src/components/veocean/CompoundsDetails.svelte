@@ -45,9 +45,12 @@
 
 
 <style>
-    :global(.compoundsTable tbody){
-        height: 50px !important;
-        overflow-y: scroll !important;
+    :global(.compoundsTable table){
+        height: 120px;
+        background-color: var(--brand-grey-dimmed);
+    }
+    :global(.compoundsTable table::-webkit-scrollbar-track){
+        color: white;
     }
     :global(.compoundsTable td, .compoundsTable th){
         font-size: var(--font-size-small) !important;

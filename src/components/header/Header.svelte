@@ -113,7 +113,7 @@
   }
 
   li > :global(a):hover {
-    color: var(--accent-color);
+    color: var(--brand-black);
   }
 
   .active > :global(a) {

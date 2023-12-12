@@ -17,7 +17,7 @@
       days: 14,
     },
     {
-      label: "≈6 month",
+      label: "≈6 months",
       days: 180,
     },
     {
