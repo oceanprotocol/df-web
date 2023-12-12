@@ -36,7 +36,7 @@
     veOceanWithDelegations,
   } from "../../stores/veOcean";
   import * as networksDataArray from "../../networks-metadata.json";
-  import { getThursdayDate, getThursdayOffset } from "../../utils/functions";
+  import { getThursdayDate } from "../../utils/functions";
   import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import moment from "moment";
@@ -46,7 +46,6 @@
     calculateFees,
     calculateNumberOFClaims,
     getMaxDate,
-    getPassiveUserRewardsData,
   } from "../../utils/rewards";
   import DisplayApYandRewards from "./DisplayAPYandRewards.svelte";
   import AdvanceCalculatorModal from "./AdvanceCalculatorModal.svelte";
@@ -286,9 +285,10 @@
       totalVeOceanSupply: $totalVeOceanSupply + parseFloat(calculatedVotingPower),
       compounds: switchValue == 'on' ? undefined : compounds
     });
-    
+
     compoundsData = optimumComp
     compounds = optimumComp.optimalCompounds; // Set to the optimal number of compounds
+    console.log(optimumComp)
     displayedAPY = formatApyForDisplay(
       optimumComp.apy,
       optimumComp.rewards,
@@ -396,8 +396,6 @@
           <DisplayApYandRewards
             apyValue={displayedAPY.apy}
             profitValue={$form.amount && $form.unlockDate ? displayedAPY.profit - simpleFlowCostOcean : 0}
-            tooltipMessage={descriptions.default
-              .tooltip_veocean_lock_passiveAPY}
             openCalculator={() => showModal=true}
           />
         </GroupedItemsDisplay>

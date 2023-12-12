@@ -50,7 +50,6 @@
               <DisplayApYandRewards
                 apyValue={apyValue}
                 profitValue={rewards - simpleFlowCostOcean}
-                tooltipMessage={''}
                 showCalculatorButton={false}
               />
             </GroupedItemsDisplay>

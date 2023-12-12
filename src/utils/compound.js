@@ -153,6 +153,7 @@ const calculateCompoundDetails = async ({
   principal,
   totalSupply,
   fees,
+  msDelta,
   compoundCount,
   unlockDate
 }) => {
@@ -176,8 +177,12 @@ const calculateCompoundDetails = async ({
       tempTotalSupply,
     });
 
-    let totalPeriodClaims = compoundCount > 0 ? 1 : 0;
-    let totalFeeForPeriod = fees.claim + fees.updateLockedAmount;
+    const periodMS = msDelta / compoundCount;
+
+    const {totalPeriodClaims, totalFeeForPeriod} = calculateFeeForPeriod(
+      fees /* duration in ms for the period */,
+      periodMS
+    );
   
     claimCount += totalPeriodClaims;
     tempTotalSupply += periodReward;
@@ -305,12 +310,12 @@ export const calculatePeriodClaimsWithMS = (msDelta) => {
  * @property {number} totalPeriodClaims - The total claims for the period
  *
  */
-const calculateFeeForPeriod = (fees, periodMsDelta) => {
+const calculateFeeForPeriod = (fees, periodMsDelta, totalMsDelta) => {
   // Assuming 'fees' contains fee values for different actions (lock, claim, etc.)
   // and 'unlockDate' is the moment object of the unlock date
   const mandatoryClaimCount = calculatePeriodClaimsWithMS(periodMsDelta); // Function from your 'rewards.js'
-  const totalPeriodClaims = mandatoryClaimCount < 2 ? 0 : +1; // Adding 1 to include the claim at the end of the period
-  const feeForClaims = fees.claim * totalPeriodClaims;
+  const totalPeriodClaims = 1; // Adding 1 to include the claim at the end of the period
+  const feeForClaims = fees.claim;
   const feeUpdateAmount = fees.updateLockedAmount;
   const totalFeeForPeriod = feeForClaims + feeUpdateAmount; // Summing up fees for lock and claims
 
