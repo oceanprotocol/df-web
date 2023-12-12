@@ -5,6 +5,29 @@ import { convertWPRtoAPY, getMaxDate } from "./rewards";
 import { getTokenPriceFromCoingecko } from "./tokens";
 import moment from "moment";
 
+
+/**
+ * Sets an offset for the number of compounds based on amount to lock and lock end date to reduce calculation time
+ * Returns the number of compounds.
+ *
+ * @param {number} amountToLock - The amount of Ocean tokens to be locked
+ * @param {string} lockDurationInWeeks - The dutaion of the lock in weeks
+ * @param {number} initialCompounds - The initial number of compounds
+ * @returns {number} - The offset number of compounds
+ */
+const getCompoundOffsets = (amountToLock, lockDurationInWeeks, initialCompounds) =>{
+  let compounds = 0
+  if(lockDurationInWeeks > 105 && lockDurationInWeeks < 160){
+    compounds = amountToLock>=50000000 ? 100 : amountToLock>=5000000 ? 50 : amountToLock>= 1000000 ? 20 : initialCompounds
+  }else if(lockDurationInWeeks >= 160){
+    compounds = amountToLock>=5000000 ? 200 : amountToLock>= 1000000 ? 130 : initialCompounds
+  }
+  else{
+    compounds = initialCompounds
+  }
+  return compounds
+}
+
 /**
  * Calculates the optimal number of compounding events and the corresponding
  * Annual Percentage Yield (APY) for a specific amount of Ocean tokens,
@@ -12,22 +35,21 @@ import moment from "moment";
  * Returns details of the optimal compounding strategy, including the highest net return in Ocean tokens.
  *
  * @param {number} lockedOceanAmount - The amount of Ocean tokens locked in the contract
- * @param {number} formAmount - The amount of Ocean tokens to be locked
- * @param {string} formUnlockDate - The unlock date of the tokens
+ * @param {number} amountToLock - The amount of Ocean tokens to be locked
+ * @param {string} unlockDate - The unlock date of the tokens
  * @param {object} fees - The fees object
  * @param {number} totalVeOceanSupply - The total supply of veOCEAN tokens
  * @returns {Object} - The optimal compound count and APY
  */
 export const calculateOptimalCompoundInterestWithFees = async ({
   lockedOceanAmount,
-  formAmount,
-  formUnlockDate,
+  amountToLock,
+  unlockDate,
   fees,
   totalVeOceanSupply,
   compounds
 }) => {
-  const msDelta = getTotalMSDelta(formUnlockDate);
-  let optimalCompoundCount = compounds ? compounds : 0;
+  const msDelta = getTotalMSDelta(unlockDate);
   let highestNetReturn = 0 - (fees.lock + calculatePeriodClaimsWithMS(msDelta) * fees.claim + fees.withdraw);
   let optimalCompoundDetails = [];
 
@@ -37,10 +59,11 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   );
 
   let hasReachedMaxReturn = false;
-  const principalAmount = formAmount + parseFloat(lockedOceanAmount);
+  const principalAmount = amountToLock + parseFloat(lockedOceanAmount);
 
   let currentCompoundDetails;
   let totalWeeksInLock = Math.ceil(msDelta / 604800000)
+  let optimalCompoundCount = compounds ? compounds : getCompoundOffsets(amountToLock, totalWeeksInLock, 0)
   let rewardsWithFees = 0
 
   if(compounds!==undefined){
@@ -51,7 +74,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
       msDelta,
       compoundCount: optimalCompoundCount,
       tokenPrice: oceanTokenPrice,
-      formUnlockDate,
+      unlockDate,
     });
     const { netRewardsInOcean, grossRewards } = currentCompoundDetails;
     rewardsWithFees = grossRewards
@@ -67,7 +90,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         msDelta,
         compoundCount: optimalCompoundCount,
         tokenPrice: oceanTokenPrice,
-        formUnlockDate,
+        unlockDate,
       });
 
       const { netRewardsInOcean, grossRewards } = currentCompoundDetails;
@@ -84,10 +107,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   }
 
   optimalCompoundCount = compounds ? compounds : optimalCompoundCount == 0 ? optimalCompoundCount : optimalCompoundCount - 1
-
-  //console.log(highestNetReturn, optimalCompoundCount, totalWeeksInLock, principalAmount )
   const yyield = ((principalAmount + highestNetReturn)) / principalAmount - 1
-  //console.log(yyield)
   const wpr = yyield / totalWeeksInLock * (optimalCompoundCount>0 ? (52 / optimalCompoundCount) : 1)
 
   const result = {
@@ -101,11 +121,11 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   return result;
 };
 
-export const getTotalMSDelta = (formUnlockDate) => 
-  moment(formUnlockDate).diff(getThursdayDate(moment()));
+export const getTotalMSDelta = (unlockDate) => 
+  moment(unlockDate).diff(getThursdayDate(moment()));
 
-export const totalMandatoryClaimCount = (formUnlockDate) => {
-  const duration = moment.duration(moment(formUnlockDate).diff(moment()));
+export const totalMandatoryClaimCount = (unlockDate) => {
+  const duration = moment.duration(moment(unlockDate).diff(moment()));
   const claimCount = Math.round(duration.asYears());
   return claimCount
 }
@@ -119,11 +139,8 @@ export const totalMandatoryClaimCount = (formUnlockDate) => {
  * @property {number} principal - The amount of Ocean tokens locked in the contract
  * @property {number} totalSupply - The total supply of veOCEAN tokens
  * @property {object} fees - The fees object
- * @property {number} msDelta - The time delta in milliseconds
  * @property {number} compoundCount - The number of compounds
- * @property {number} tokenPrice - The price of the Ocean token
- * @property {string} formUnlockDate - The unlock date of the tokens
- * @property {boolean} skipPeriodClaimCalculation - Whether to skip the period claim calculation
+ * @property {string} unlockDate - The unlock date of the tokens
  *
  * @returns {Object} - The compound details
  * @property {number} grossRewards - The gross rewards
@@ -131,17 +148,13 @@ export const totalMandatoryClaimCount = (formUnlockDate) => {
  * @property {object} compoundDetails - The compound details
  * @property {object} costs - The costs object
  * @property {number} claimCount - The number of claims
- * @property {string} periodStartDate - The start date of the period
- * @property {string} periodEndDate - The end date of the period
  */
 const calculateCompoundDetails = async ({
   principal,
   totalSupply,
   fees,
-  msDelta,
   compoundCount,
-  formUnlockDate,
-  skipPeriodClaimCalculation = false,
+  unlockDate
 }) => {
   let currentPrincipal = principal;
   let tempTotalSupply = totalSupply;
@@ -150,7 +163,7 @@ const calculateCompoundDetails = async ({
   const compoundDetails = [];
 
   const compoundDates = calculateCompoundAndStartDates(
-    formUnlockDate,
+    unlockDate,
     compoundCount
   );
 
@@ -158,21 +171,13 @@ const calculateCompoundDetails = async ({
     const periodReward = await calculateRewardForPeriod({
       periodStartDate: compoundDates[i],
       periodEndDate: compoundDates[i + 1],
-      formUnlockDate: formUnlockDate,
+      unlockDate: unlockDate,
       currentPrincipal,
       tempTotalSupply,
     });
 
-    const periodMS = msDelta / compoundCount;
-
-    let totalPeriodClaims = 1;
+    let totalPeriodClaims = compoundCount > 0 ? 1 : 0;
     let totalFeeForPeriod = fees.claim + fees.updateLockedAmount;
-    if (!skipPeriodClaimCalculation){
-        const {totalPeriodClaims, totalFeeForPeriod} = calculateFeeForPeriod(
-          fees /* duration in ms for the period */,
-          periodMS
-        );
-    }
   
     claimCount += totalPeriodClaims;
     tempTotalSupply += periodReward;
@@ -188,13 +193,9 @@ const calculateCompoundDetails = async ({
     });
   }
 
-  //console.log(compoundDetails)
-
-  //console.log(grossRewards)
-
   const costs = calculateTotalCost(claimCount, compoundCount, fees);
-
   const netRewards = grossRewards - costs.totalCost;
+
   return {
     grossRewards,
     netRewardsInOcean: netRewards,
@@ -239,19 +240,6 @@ const calculateTotalCost = (claimCount, compoundCount, fees) => {
 };
 
 /**
- * Computes the Annual Percentage Yield (APY) based on the principal amount of
- * Ocean tokens and the total rewards earned. Returns the APY as a percentage.
- *
- * @param {number} principal - The amount of Ocean tokens locked in the contract
- * @param {number} totalRewards - The total rewards
- * @returns {number} - The APY
- */
-const calculateAPY = (principal, totalRewards) => {
-  if (principal === 0) return 0;
-  return (totalRewards / principal) * 100;
-};
-
-/**
  * Determines the rewards accrued over a specific period for a given amount of Ocean tokens.
  * The period is defined by start and end dates, which should be Thursdays.
  * Takes into account the current principal, total veOCEAN supply, and fees.
@@ -259,31 +247,28 @@ const calculateAPY = (principal, totalRewards) => {
  *
  * @param {string} periodStartDate - The start date of the period, should be a Thursday and in the format YYYY-MM-DD
  * @param {string} periodEndDate - The end date of the period, should be a Thursday and in the format YYYY-MM-DD
- * @param {string} formUnlockDate - The unlock date of the tokens, should be a Thursday and in the format YYYY-MM-DD
- * @param {number} periodMS - The time delta in milliseconds
+ * @param {string} unlockDate - The unlock date of the tokens, should be a Thursday and in the format YYYY-MM-DD
  * @param {number} currentPrincipal - The current principal
  * @param {number} tempTotalSupply - The total supply of veOCEAN tokens
- * @param {object} fees - The fees object
  * 
  * @returns {number} periodReward - The reward for the period
  */
 async function calculateRewardForPeriod({
   periodStartDate,
   periodEndDate,
-  formUnlockDate,
+  unlockDate,
   currentPrincipal,
   tempTotalSupply,
 }) {
   const args = {
     lockedOcean: currentPrincipal,
     veOceanSupply: tempTotalSupply,
-    unlockDate: moment(formUnlockDate), // Assuming this is the correct interpretation
+    unlockDate: moment(unlockDate), // Assuming this is the correct interpretation
     currentDate: moment(periodStartDate),
     periodEndDate: moment(periodEndDate), // Example logic
   };
 
   const rewardsData = await getPeriodRewardData(args);
-
   const periodReward = rewardsData.rewards; // Example assignment, adjust based on actual logic
 
   return periodReward;
@@ -406,7 +391,6 @@ export const getPeriodRewardData = async ({
     throw new Error("Invalid date format. Only Thursdays are supported.");
   }
 
-  //let tempCurrentDate = moment(getThursdayDate(moment(currentDate)));
   let totalRewards = 0;
   let rewards = 0;
   let weeks = 0;
@@ -429,7 +413,6 @@ export const getPeriodRewardData = async ({
     tempCurrentDate = tempCurrentDate.add(1, "weeks");
   }
 
-  //console.log(currentDate.format("DD-MM-YYYY -"), totalRewards)
   const yyield = (lockedOcean + totalRewards) / lockedOcean - 1;
   const wpr = yyield / weeks;
 

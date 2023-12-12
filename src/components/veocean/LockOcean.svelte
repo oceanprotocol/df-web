@@ -280,16 +280,15 @@
   const calculateOptimalCompounds = async () => {
     const optimumComp = await calculateOptimalCompoundInterestWithFees({
       lockedOceanAmount: $lockedOceanAmount,
-      formAmount: $form.amount,
-      formUnlockDate: $form.unlockDate,
+      amountToLock: $form.amount,
+      unlockDate: $form.unlockDate,
       fees,
       totalVeOceanSupply: $totalVeOceanSupply + parseFloat(calculatedVotingPower),
       compounds: switchValue == 'on' ? undefined : compounds
     });
-    console.log('optimumComp',optimumComp)
+    
     compoundsData = optimumComp
     compounds = optimumComp.optimalCompounds; // Set to the optimal number of compounds
-    //await calculateCompoundInterestWithFees(); // Recalculate with the optimal number
     displayedAPY = formatApyForDisplay(
       optimumComp.apy,
       optimumComp.rewards,

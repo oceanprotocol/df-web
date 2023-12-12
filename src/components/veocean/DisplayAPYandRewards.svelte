@@ -25,7 +25,7 @@
         />
         <div class="valueContainer">
           <span class="apy">
-            {`${parseFloat(apyValue).toFixed(2)}%`}
+            {`${apyValue<0 ? '<' : ''}${parseFloat(apyValue>=0 ? apyValue : 0).toFixed(2)}%`}
           </span>
         </div>
       </div>

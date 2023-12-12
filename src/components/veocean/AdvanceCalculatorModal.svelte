@@ -146,7 +146,7 @@
       margin-left: calc(var(--spacer)/6);
     }
     :global(.compoundInputContainer input){
-      width: 50px !important;
+      width: 60px !important;
       height: fit-content !important;
     }
     .gasPriceContainer{
