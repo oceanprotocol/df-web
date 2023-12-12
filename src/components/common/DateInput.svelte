@@ -10,6 +10,7 @@
   export let onChange = undefined;
   export let disableKeyboardInput = undefined;
   export let step = 1;
+  export let selected = 0;
 
   const periods = [
     {
@@ -37,6 +38,7 @@
   const handleOnPeriodClick = (days) => {
     let targetDate = getThursdayOffset(moment().utc(), days, max);
     value = moment(targetDate).format("YYYY-MM-DD");
+    selected = days
   };
 </script>
 
@@ -54,12 +56,15 @@
     onkeydown={disableKeyboardInput ? disableKeyboardInput : undefined}
     bind:value
     {placeholder}
-    on:input={onChange}
+    on:input={() => {
+      onChange
+      selected = 0
+    }}
     {disabled}
   />
   <ul class="periodList">
     {#each periods as period, index}
-      <li class="periodItem" on:click={() => handleOnPeriodClick(period.days)} on:keypress={()=>{}}>
+      <li class={`periodItem ${selected == period.days ? 'selected' : ''}`} on:click={() => handleOnPeriodClick(period.days)} on:keypress={()=>{}}>
         {period.label}
       </li>
     {/each}
@@ -104,10 +109,14 @@
   }
   .periodItem:hover {
     cursor: pointer;
-    color: var(--color-primary);
+    color: var(--brand-black);
   }
   input::-webkit-calendar-picker-indicator {
     cursor: pointer;
+  }
+  .selected{
+    color: var(--brand-black);
+    font-weight: bold;
   }
 
   /* if it is dark mode, invert the color of the calendar icon */
