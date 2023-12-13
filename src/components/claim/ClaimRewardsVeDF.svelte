@@ -21,7 +21,6 @@
   import { claim as claimVERewards } from "../../utils/feeDistributor";
   import * as descriptions from "../../utils/metadata/descriptions.json";
   import { totalUserAllocation } from "../../stores/dataAllocations";
-  import { userSubmittedChallenges } from "../../stores/challenge";
   import { getPredictoorRoundSummary } from "../../utils/predictoor";
  
   export let canClaimVE = true;
@@ -106,15 +105,11 @@
     streams[1].substreams[0].metric.value = $totalUserAllocation + '%'
   }
 
-  function addUserSubmittedChallenges(){
-    streams[1].substreams[1].metric.value = $userSubmittedChallenges.length
-  }
-
   async function addUserPredictoorAccuracy(){
     const currentDayIndexInWeek = new Date().getDay()
     //Predictoor data is updated every Monday morning. Between new round start and Monday show accuracy for round - 2.
     const response = await getPredictoorRoundSummary($userAddress, roundInfo.id - ((currentDayIndexInWeek>=1 && currentDayIndexInWeek<4) ? 1 : 2))
-    streams[1].substreams[2].metric.value = `${response && response.accuracy ? parseFloat(response.accuracy * 100).toFixed(2) : 0}%`
+    streams[1].substreams[1].metric.value = `${response && response.accuracy ? parseFloat(response.accuracy * 100).toFixed(2) : 0}%`
   }
 
   function addVeOceanBalance(){
@@ -146,15 +141,12 @@
 
   function setUnclaimedActiveRewardsSubstreamValues(){
     let volumeRewards = 0
-    let challengeRewards = 0
     $oceanUserRewards.forEach((r) => {
       if(r.round >= $lastActiveRewardsClaimRound) {
         volumeRewards += r['sum(curating_amt)']
-        challengeRewards += r['sum(challenge_amt)']
       }
     })
     streams[1].substreams[0].availableRewards = volumeRewards
-    streams[1].substreams[1].availableRewards = challengeRewards
   }
 
   const calculateUnclaimedPassiveReward = () => {
@@ -173,7 +165,6 @@
   $:if($APYs) addAPYs()
   $:if($totalUserAllocation) addAllocated()
   $:if($userBalances) addVeOceanBalance()
-  $:if($userSubmittedChallenges) addUserSubmittedChallenges()
   $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards) setUnclaimedActiveRewardsSubstreamValues()
   $:if($userAddress) addUserPredictoorAccuracy()
 </script>

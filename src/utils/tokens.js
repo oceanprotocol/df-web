@@ -2,7 +2,6 @@ import { Decimal } from "decimal.js";
 import { ethers } from "ethers";
 import {
   getRpcUrlByChainId,
-  GASLIMIT_DEFAULT,
   getGasFeeEstimate,
 } from "./web3";
 import {
