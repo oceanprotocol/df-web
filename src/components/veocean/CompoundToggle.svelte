@@ -2,6 +2,7 @@
     import ItemWithLabel from "../common/ItemWithLabel.svelte";
     import Switch from "../common/Switch.svelte";
     import GroupedItemsDisplay from "./GroupedItemsDisplay.svelte";
+    import * as descriptions from "../../utils/metadata/descriptions.json";
   
   
     export let switchValue;
@@ -12,7 +13,7 @@
     <GroupedItemsDisplay>
       <ItemWithLabel
           title={`${compounds} compounds`}
-          tooltipMessage={'Hello'}
+          tooltipMessage={descriptions.tooltip_veocean_lock_compounds}
       />
       <div class="switch">
         <Switch bind:value={switchValue} design="slider" fontSize={12}/>
@@ -23,7 +24,7 @@
     
 <style>
   .compound{
-    min-width: 150px;
+    min-width: 50%;
     display: flex;
     flex-direction: column;
     width: max-content;

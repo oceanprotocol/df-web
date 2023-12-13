@@ -1,34 +1,8 @@
 <script>
     import DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
-    import DataTableSkeleton from "carbon-components-svelte/src/DataTable/DataTableSkeleton.svelte";
+  import moment from "moment";
     
-    export let compoundsData = [
-        {
-            date: '15.12.2023',
-            rewards: 2000,
-            fees: 300
-        },
-         {
-            date: '15.01.2024',
-            rewards: 2000,
-            fees: 300
-        },
-         {
-            date: '15.02.2024',
-            rewards: 2000,
-            fees: 300
-        },
-         {
-            date: '15.01.2024',
-            rewards: 2000,
-            fees: 300
-        },
-         {
-            date: '15.02.2024',
-            rewards: 2000,
-            fees: 300
-        }
-    ]
+    export let compounds = []
 
     const headers = [
         { key: 'index', value: 'Order'},
@@ -40,36 +14,43 @@
     let rows = []
 
     const createRows = () => {
-        compoundsData.forEach((d, i) => {
+        rows=[]
+        compounds.forEach((d, i) => {
             rows.push({
                 id: i,
                 index: i + 1,
-                date: d.date,
-                rewards: d.rewards,
-                fees: d.fees
+                date: moment(d?.date).format("DD-MM-YYYY"),
+                rewards: parseFloat(d?.rewards).toFixed(),
+                fees: parseFloat(d?.fees).toFixed()
             })
         })
     }
 
-    $: compoundsData && createRows()
+    $: compounds && createRows()
 </script>
 
 <div>
     <span class="title">Suggested Compounds</span>
-    <DataTable
+    {#if rows}
+        <DataTable
         headers={headers}
         rows={rows}
         class="compoundsTable"
         stickyHeader
-    >
-    </DataTable>
+        >
+        </DataTable>
+    {/if}
+   
 </div>
 
 
 <style>
-    :global(.compoundsTable tbody){
-        height: 50px !important;
-        overflow-y: scroll !important;
+    :global(.compoundsTable table){
+        height: 120px;
+        background-color: var(--brand-grey-dimmed);
+    }
+    :global(.compoundsTable table::-webkit-scrollbar-track){
+        color: white;
     }
     :global(.compoundsTable td, .compoundsTable th){
         font-size: var(--font-size-small) !important;

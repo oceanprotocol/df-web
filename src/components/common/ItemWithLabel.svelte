@@ -13,6 +13,7 @@
   export let tooltipDirection = "top";
   export let tooltipAlign = "center";
   export let inputValue = undefined;
+  export let min = 0;
 </script>
 
 <div class="item" style="flex-direction : {direction}">
@@ -29,7 +30,7 @@
   </div>
   <div class="valueContainer">
   {#if inputValue!==null && inputValue!==undefined}
-    <input type="number" value={inputValue} min="0" on:change={(event) => {event.target.value = inputValue = event.target.valueAsNumber >= 0 ? event.target.valueAsNumber : 0}}/>
+    <input type="number" value={inputValue} min={`${min ? min : 0}`} on:change={(event) => {event.target.value = inputValue = event.target.valueAsNumber >= min ? event.target.valueAsNumber : min}}/>
   {/if}
   {#if value}
     {#if !loading}

@@ -1,9 +1,9 @@
-import { Decimal } from "decimal.js";
-import { ethers } from "ethers";
+import * as TokenABI from "./abis/tokenABI";
+
 import {
-  getRpcUrlByChainId,
   GASLIMIT_DEFAULT,
   getGasFeeEstimate,
+  getRpcUrlByChainId,
 } from "./web3";
 import {
   prepareWriteContract,
@@ -11,7 +11,9 @@ import {
   waitForTransaction,
   writeContract,
 } from "@wagmi/core";
-import * as TokenABI from "./abis/tokenABI";
+
+import { Decimal } from "decimal.js";
+import { ethers } from "ethers";
 
 //TODO - Standardize function calls & Params to follow ocean.js
 export const getTokenContract = async (chainId, address, signer) => {
@@ -113,14 +115,9 @@ export const approve = async (
 
 export const getTokenPriceFromCoingecko = async(token, currency) => {
   try {
-    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=${currency}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    const res = await fetch(`https://price-data.predictoor.ai/api/v3/ticker/price?symbol=${token}${currency}`)
     const data = await res.json()
-    return data[token][currency]
+    return parseFloat(data.price)
   }catch(e){
     console.error(e)
     return null

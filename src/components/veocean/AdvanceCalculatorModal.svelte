@@ -19,6 +19,7 @@
   export let lockEndDateUpdates = 0;
   export let unlockDate;
   export let compounds;
+  export let compoundsData;
   export let claims = calculateNumberOFClaims(unlockDate);
 
   const formatValue = (value) => {
@@ -26,14 +27,15 @@
   }
 
   const onCompoundsChange = () => {
-    lockEndDateUpdates = lockAmountUpdates = compounds>=0 ? compounds : 0
-    claims = compounds + calculateNumberOFClaims(unlockDate)
-    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * (fees.claim + fees.updateLockedAmount + fees.updateUnlockDate))
+    lockAmountUpdates = compounds>=0 ? compounds : 0
+    const numberOfMandatoryClaims = calculateNumberOFClaims(unlockDate)
+    claims = compounds >= numberOfMandatoryClaims ? compounds + 1 :numberOfMandatoryClaims - compounds
+    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw)
   }
 
   const calculateFees = () => {
     if(!fees) return
-    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw + compounds * (fees.claim + fees.updateLockedAmount + fees.updateUnlockDate))
+    simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw)
   }
 
   $: lockEndDateUpdates>=0 && lockAmountUpdates>=0 && claims>=0 && fees && $oceanPrice && calculateFees() 
@@ -48,9 +50,7 @@
               <DisplayApYandRewards
                 apyValue={apyValue}
                 profitValue={rewards - simpleFlowCostOcean}
-                tooltipMessage={''}
                 showCalculatorButton={false}
-                onClick={() => {}}
               />
             </GroupedItemsDisplay>
             <div class="compounding">
@@ -78,14 +78,14 @@
             </div>
             <div class="feeDatailsRow">
               <ItemWithLabel title='Lock' value={`1 x ${formatValue(fees?.lock)}`}/>
-              <ItemWithLabel title='Update locked amount' value={`x ${formatValue(fees?.updateLockedAmount)}`} bind:inputValue={lockAmountUpdates}/>
+              <ItemWithLabel title='Update locked amount' value={`x ${formatValue(fees?.updateLockedAmount)}`} bind:inputValue={lockAmountUpdates} min={compounds}/>
               <ItemWithLabel title='Update lock end date' value={`x ${formatValue(fees?.updateUnlockDate)}`} bind:inputValue={lockEndDateUpdates}/>
-              <ItemWithLabel title='Claim' value={`x ${formatValue(fees?.claim * claims)}`} bind:inputValue={claims}/>
+              <ItemWithLabel title='Claim' value={`x ${formatValue(fees?.claim)}`} bind:inputValue={claims} min={compounds}/>
               <ItemWithLabel title='Withdraw' value={`1 x ${formatValue(fees?.withdraw)}`}/>
             </div>
           </div>
           <div class="compoundDetailsContainer">
-            <CompoundsDetails/>
+            <CompoundsDetails compounds={compoundsData?.compoundDetails}/>
           </div>
         </div>
   </Modal>
@@ -145,7 +145,7 @@
       margin-left: calc(var(--spacer)/6);
     }
     :global(.compoundInputContainer input){
-      width: 50px !important;
+      width: 60px !important;
       height: fit-content !important;
     }
     .gasPriceContainer{

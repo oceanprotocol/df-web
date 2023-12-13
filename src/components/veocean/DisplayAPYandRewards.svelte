@@ -1,9 +1,9 @@
 <script>
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
+  import * as descriptions from "../../utils/metadata/descriptions.json";
 
     export let apyValue;
     export let profitValue;
-    export let tooltipMessage;
     export let showCalculatorButton=true;
     export let openCalculator=undefined;
     
@@ -14,18 +14,18 @@
       <div class="apyDisplay">
         <ItemWithLabel
           title={`Profit`}
-          tooltipMessage={tooltipMessage}
+          tooltipMessage={descriptions.tooltip_veocean_lock_profit}
         />
         <span class={`profit ${profitValue == 0 ? '' : profitValue > 0 ? 'green' : 'red'}`}>{`${parseFloat(profitValue).toFixed(2)} OCEAN`}</span>
       </div>
       <div class="apyDisplay">
         <ItemWithLabel
             title={`Passive APY`}
-            tooltipMessage={tooltipMessage}
+            tooltipMessage={descriptions.tooltip_veocean_lock_passiveAPY}
         />
         <div class="valueContainer">
           <span class="apy">
-            {`${parseFloat(apyValue).toFixed(2)}%`}
+            {`${apyValue<0 ? '<' : ''}${parseFloat(apyValue>=0 ? apyValue : 0).toFixed(2)}%`}
           </span>
         </div>
       </div>
