@@ -77,6 +77,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         optimalCompoundDetails = currentCompoundDetails;
       } else {
         hasReachedMaxReturn = true;
+        optimalCompoundCount = optimalCompoundCount == 0 ? optimalCompoundCount : optimalCompoundCount - 1
       }
     }
   }else{
@@ -119,7 +120,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
     }
   }
 
-  optimalCompoundCount = compounds ? compounds : optimalCompoundCount == 0 ? optimalCompoundCount : optimalCompoundCount + 1
+  optimalCompoundCount = compounds ? compounds : principalAmount > 1000 ? optimalCompoundCount+1 : optimalCompoundCount
   const yyield = ((principalAmount + highestNetReturn)) / principalAmount - 1
   const wpr = yyield / totalWeeksInLock * (optimalCompoundCount>0 ? (52 / optimalCompoundCount) : 1)
 

@@ -299,13 +299,13 @@
   $: fetchTokenPrices();
   $: $ethPrice && $oceanPrice && getFeesCosts();
   $: $form.unlockDate && calculateSimpleFlowCost();
-  $: ($form.amount && $form.unlockDate && switchValue) && calculateOptimalCompounds()
+  $: ($form.amount>=0 && $form.unlockDate && switchValue) && calculateOptimalCompounds()
   $: switchValue=='off' && compounds>=0 && calculateOptimalCompounds()
 
   const updateFormAmount = (value) => {
     let amount = parseInt(value.target.value)
     if(amount>=0) return
-    amount = amount == null ? 0 : amount;
+    amount = !amount ? 0 : amount;
     amount = amount < 0 ? 0 : amount;
     amount = amount;
     $form.amount = amount;
