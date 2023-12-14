@@ -6,7 +6,7 @@
 
     const headers = [
         { key: 'index', value: 'Order'},
-        { key: 'date', value: 'Compound date'},
+        { key: 'date', value: 'When to compound'},
         { key: 'rewards', value: 'Rewards'},
         { key: 'fees', value: 'Fees'},
     ]
@@ -46,7 +46,7 @@
 
 <style>
     :global(.compoundsTable table){
-        height: 120px;
+        height: 150px;
         background-color: var(--brand-grey-dimmed);
     }
     :global(.compoundsTable table::-webkit-scrollbar-track){

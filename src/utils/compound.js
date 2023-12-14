@@ -2,31 +2,8 @@ import { getThursdayDate, isThursday } from "./functions";
 
 import { getEpoch } from "./epochs";
 import { convertWPRtoAPY, getMaxDate } from "./rewards";
-import { getTokenPriceFromCoingecko } from "./tokens";
 import moment from "moment";
 
-
-/**
- * Sets an offset for the number of compounds based on amount to lock and lock end date to reduce calculation time
- * Returns the number of compounds.
- *
- * @param {number} amountToLock - The amount of Ocean tokens to be locked
- * @param {string} lockDurationInWeeks - The dutaion of the lock in weeks
- * @param {number} initialCompounds - The initial number of compounds
- * @returns {number} - The offset number of compounds
- */
-const getCompoundOffsets = (amountToLock, lockDurationInWeeks, initialCompounds) =>{
-  let compounds = 0
-  if(lockDurationInWeeks > 105 && lockDurationInWeeks < 160){
-    compounds = amountToLock>=50000000 ? 100 : amountToLock>=5000000 ? 50 : amountToLock>= 1000000 ? 20 : initialCompounds
-  }else if(lockDurationInWeeks >= 160){
-    compounds = amountToLock>=2000000 ? 200 : amountToLock>= 1000000 ? 130 : initialCompounds
-  }
-  else{
-    compounds = initialCompounds
-  }
-  return compounds
-}
 
 /**
  * Calculates the optimal number of compounding events and the corresponding
@@ -60,8 +37,11 @@ export const calculateOptimalCompoundInterestWithFees = async ({
 
   let currentCompoundDetails;
   let totalWeeksInLock = Math.ceil(msDelta / 604800000)
-  let optimalCompoundCount = compounds ? compounds : getCompoundOffsets(amountToLock, totalWeeksInLock, 0)
+  let optimalCompoundCount = compounds ? compounds : 0
   let rewardsWithFees = 0
+
+  let lowerBound = 0; // Initial lower bound for compound count
+  let upperBound = 1000; // Initial upper bound for compound count (adjust as needed)
 
   if(compounds!==undefined){
     currentCompoundDetails = await calculateCompoundDetails({
@@ -78,7 +58,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
     optimalCompoundCount = compounds
     highestNetReturn = netRewardsInOcean;
     optimalCompoundDetails = currentCompoundDetails;
-  }else{
+  }else if(principalAmount<=1000){
     while (!hasReachedMaxReturn) {
       currentCompoundDetails = await calculateCompoundDetails({
         principal: principalAmount,
@@ -89,9 +69,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         tokenPrice: oceanTokenPrice,
         unlockDate,
       });
-
       const { netRewardsInOcean, grossRewards } = currentCompoundDetails;
-
       if (netRewardsInOcean > highestNetReturn) {
         highestNetReturn = netRewardsInOcean;
         rewardsWithFees = grossRewards
@@ -101,9 +79,47 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         hasReachedMaxReturn = true;
       }
     }
+  }else{
+    while (lowerBound <= upperBound) {
+      const midCompoundCount = Math.floor((lowerBound + upperBound) / 2);
+  
+      const [currentCompoundDetails, upperCompoundDetails] = await Promise.all([
+          calculateCompoundDetails({
+            principal: principalAmount,
+            totalSupply: totalVeOceanSupply,
+            fees: fees,
+            msDelta,
+            compoundCount: midCompoundCount,
+            tokenPrice: oceanTokenPrice,
+            unlockDate,
+          }),
+          calculateCompoundDetails({
+            principal: principalAmount,
+            totalSupply: totalVeOceanSupply,
+            fees: fees,
+            msDelta,
+            compoundCount: midCompoundCount + 1,
+            tokenPrice: oceanTokenPrice,
+            unlockDate,
+          })
+        ])
+  
+      const { netRewardsInOcean, grossRewards } = upperCompoundDetails;
+  
+      if (currentCompoundDetails.netRewardsInOcean < upperCompoundDetails.netRewardsInOcean) {
+        highestNetReturn = netRewardsInOcean;
+        rewardsWithFees = grossRewards
+        optimalCompoundCount = midCompoundCount;
+        optimalCompoundDetails = upperCompoundDetails;
+        lowerBound = midCompoundCount + 1;
+      } else {
+        // Search in the left half of the range
+        upperBound = midCompoundCount - 1;
+      }
+    }
   }
 
-  optimalCompoundCount = compounds ? compounds : optimalCompoundCount == 0 ? optimalCompoundCount : optimalCompoundCount - 1
+  optimalCompoundCount = compounds ? compounds : optimalCompoundCount == 0 ? optimalCompoundCount : optimalCompoundCount + 1
   const yyield = ((principalAmount + highestNetReturn)) / principalAmount - 1
   const wpr = yyield / totalWeeksInLock * (optimalCompoundCount>0 ? (52 / optimalCompoundCount) : 1)
 

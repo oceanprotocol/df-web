@@ -55,7 +55,7 @@
 
   export let setShowApprovalNotification;
 
-  const formatApyForDisplay = (apy, rewards) =>{ return {apy:apy, profit:rewards}}
+  const formatApyForDisplay = (apy, rewards, profit) =>{ return {apy:apy, rewards:rewards, profit:profit}}
 
   let networksData = networksDataArray.default;
   let oceanBalance = 0;
@@ -286,10 +286,8 @@
       compounds: switchValue == 'on' ? undefined : compounds,
       oceanTokenPrice: $oceanPrice
     });
-
     compoundsData = optimumComp
     compounds = optimumComp.optimalCompounds; // Set to the optimal number of compounds
-    console.log(optimumComp)
     displayedAPY = formatApyForDisplay(
       optimumComp.apy,
       optimumComp.rewards,
@@ -301,19 +299,16 @@
   $: fetchTokenPrices();
   $: $ethPrice && $oceanPrice && getFeesCosts();
   $: $form.unlockDate && calculateSimpleFlowCost();
-  $: $form && switchValue && compounds>=0 &&
-    (async () => {
-      if ($form.amount && $form.unlockDate) {
-        await calculateOptimalCompounds();
-      }
-    })();
+  $: ($form.amount && $form.unlockDate && switchValue) && calculateOptimalCompounds()
+  $: switchValue=='off' && compounds>=0 && calculateOptimalCompounds()
 
-  const updateFormAmount = () => {
-    let _amount = $form.amount;
-    _amount = _amount == null ? 0 : parseInt(_amount);
-    _amount = _amount < 0 ? 0 : parseInt(_amount);
-    _amount = parseInt(_amount);
-    $form.amount = _amount;
+  const updateFormAmount = (value) => {
+    let amount = parseInt(value.target.value)
+    if(amount>=0) return
+    amount = amount == null ? 0 : amount;
+    amount = amount < 0 ? 0 : amount;
+    amount = amount;
+    $form.amount = amount;
   };
 </script>
 
@@ -327,7 +322,7 @@
       unlockDate={moment($form.unlockDate)}
       compoundsData={compoundsData}
       apyValue={displayedAPY.apy}
-      rewards={$form.amount && $form.unlockDate ? displayedAPY.profit : 0}
+      rewards={$form.amount && $form.unlockDate ? displayedAPY.rewards : 0}
       fees={fees}
     />
   {/if}
@@ -375,7 +370,7 @@
             maxValueLabel="Balance: "
             showMaxValue={true}
             showMaxButton={true}
-            onChange={() => updateFormAmount()}
+            onChange={(value) => updateFormAmount(value)}
           />
           <CompoundToggle bind:switchValue compounds={compounds}/>
         </div>
@@ -396,7 +391,7 @@
         <GroupedItemsDisplay>
           <DisplayApYandRewards
             apyValue={displayedAPY.apy}
-            profitValue={$form.amount && $form.unlockDate ? displayedAPY.profit - simpleFlowCostOcean : 0}
+            profitValue={$form.amount && $form.unlockDate ? displayedAPY.profit : 0}
             openCalculator={() => showModal=true}
           />
         </GroupedItemsDisplay>

@@ -59,11 +59,11 @@
               <div class="compoundingActionable">
                 <div class="compoundInputContainer">
                   <Input type="number" value={compounds} disabled={switchValue=='on'} min=0 onChange={(e) => {compounds=e.target.value=e.target.valueAsNumber >= 0 ? e.target.valueAsNumber : 0}}/>
-                  <span>compounds</span>
+                  <span>Compounds</span>
                 </div>
                 <div class="compoundInputContainer">
                   <Switch bind:value={switchValue} design="slider" fontSize={14}/>
-                  <span>optimal</span>
+                  <span>Optimal</span>
                 </div>
               </div>
             </div>
@@ -143,10 +143,13 @@
     }
     .compoundInputContainer span{
       margin-left: calc(var(--spacer)/6);
+      font-size: var(--font-size-small);
     }
     :global(.compoundInputContainer input){
-      width: 60px !important;
+      width: 52px !important;
       height: fit-content !important;
+      padding: 2px 5px !important;
+      font-size: var(--font-size-small);
     }
     .gasPriceContainer{
       margin-bottom: calc(var(--spacer) / 8);

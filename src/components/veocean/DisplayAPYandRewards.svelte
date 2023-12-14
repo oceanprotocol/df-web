@@ -10,7 +10,7 @@
   </script>
   
   <div class="container">
-    <div class="valuesContainer">
+    <div class={`valuesContainer  ${showCalculatorButton ? '' : 'showCalculatorButton'}`}>
       <div class="apyDisplay">
         <ItemWithLabel
           title={`Profit`}
@@ -88,6 +88,10 @@
     }
     .green{
       color: var(--brand-alert-green);
+    }
+    .showCalculatorButton .profit,
+    .showCalculatorButton .apy {
+      font-size: var(--font-size-base) !important;
     }
     .red{
       color: var(--brand-alert-red);
