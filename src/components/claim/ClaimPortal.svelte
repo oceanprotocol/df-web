@@ -15,7 +15,6 @@
   import { getVeOceanBalance } from "../../utils/ve";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import EpochHistory from "./EpochHistory.svelte";
-  import Features from "./Features.svelte";
   import { query } from "svelte-apollo";
   import RewardOverview from "./RewardOverview.svelte";
   import moment from "moment";
@@ -52,7 +51,7 @@
   }
 
   async function initClaimables() {
-    if (!userAddress || !oceanUnlockDate) {
+    if (!userAddress || !oceanUnlockDate || $connectedChainId != import.meta.env.VITE_VE_SUPPORTED_CHAINID) {
       veClaimables.set(0);
       dfClaimables.set(0);
       loading = false;

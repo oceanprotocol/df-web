@@ -59,7 +59,7 @@
     )
   }
 
-  $: if ($userAddress) {
+  $: if ($userAddress && $connectedChainId==import.meta.env.VITE_VE_SUPPORTED_CHAINID) {
     loadValues();
     allowance(
       getAddressByChainIdKey($connectedChainId, "Ocean"),

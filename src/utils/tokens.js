@@ -1,7 +1,7 @@
 import * as TokenABI from "./abis/tokenABI";
 
 import {
-  GASLIMIT_DEFAULT,
+  getRpcUrlByChainId,
   getGasFeeEstimate,
   getRpcUrlByChainId,
 } from "./web3";
