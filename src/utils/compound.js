@@ -74,13 +74,16 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         highestNetReturn = netRewardsInOcean;
         rewardsWithFees = grossRewards
         optimalCompoundCount = optimalCompoundCount + 1;
-        optimalCompoundDetails = currentCompoundDetails;
+        optimalCompoundDetails = {...currentCompoundDetails};
       } else {
+        hasReachedMaxReturn = true;
+        optimalCompoundCount = optimalCompoundCount > 0 ? optimalCompoundCount - 1 : optimalCompoundCount
+        if(optimalCompoundCount < 1){
         highestNetReturn = netRewardsInOcean;
         rewardsWithFees = grossRewards;
-        hasReachedMaxReturn = true;
         optimalCompoundDetails = currentCompoundDetails;
         optimalCompoundCount = optimalCompoundCount
+        }
       }
     }
   }else{
@@ -109,7 +112,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         ])
   
       if (currentCompoundDetails.netRewardsInOcean < upperCompoundDetails.netRewardsInOcean) {
-        const optCompDetails = optimalCompoundCount >0 ? upperCompoundDetails : currentCompoundDetails
+        const optCompDetails = optimalCompoundCount >0 ? currentCompoundDetails : upperCompoundDetails
         const { netRewardsInOcean, grossRewards } = optCompDetails
         highestNetReturn = netRewardsInOcean;
         rewardsWithFees = grossRewards
@@ -222,6 +225,9 @@ const calculateCompoundDetails = async ({
       date: compoundDates[i + 1],
     });
   }
+
+  const mandatoryClaims = totalMandatoryClaimCount(unlockDate)
+  claimCount = claimCount > mandatoryClaims ? claimCount : mandatoryClaims
 
   const costs = calculateTotalCost(claimCount, compoundCount, fees);
   const netRewards = grossRewards - costs.totalCost;
