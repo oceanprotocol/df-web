@@ -49,7 +49,7 @@
             <GroupedItemsDisplay>
               <DisplayApYandRewards
                 apyValue={apyValue}
-                profitValue={rewards - simpleFlowCostOcean}
+                profitValue={rewards>0? rewards - simpleFlowCostOcean : 0}
                 showCalculatorButton={false}
               />
             </GroupedItemsDisplay>
@@ -70,7 +70,7 @@
           <div class="profitDetails">
             <ItemWithLabel title='Rewards' value={`${formatValue(rewards)} OCEAN`} direction="row"/>
             <ItemWithLabel title='Fees' value={`${formatValue(simpleFlowCostOcean)} OCEAN`} direction="row"/>
-            <ItemWithLabel title='Profit' value={`${formatValue(rewards - simpleFlowCostOcean)} OCEAN`} direction="row"/>
+            <ItemWithLabel title='Profit' value={`${formatValue(rewards>0? rewards - simpleFlowCostOcean : 0)} OCEAN`} direction="row"/>
           </div>
           <div class="feeDetails">
             <div class="gasPriceContainer">
