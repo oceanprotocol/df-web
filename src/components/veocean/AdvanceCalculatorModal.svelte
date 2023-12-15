@@ -92,14 +92,12 @@
   
   <style>
     .container{
+     margin-top: calc(var(--spacer));
      display: flex;
      flex-direction: column;
      justify-content: center;
      align-items: center;
      color: black;
-    }
-    h3{
-      margin-bottom: calc(var(--spacer));
     }
     .profitDetails,.feeDetails{
       display: flex;

@@ -74,4 +74,7 @@
     div{
         width: 100%;
     }
+    :global(.compoundsTable #date){
+        min-width: 100px;
+    }
 </style>

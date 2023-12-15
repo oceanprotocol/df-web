@@ -58,7 +58,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
     optimalCompoundCount = compounds
     highestNetReturn = netRewardsInOcean;
     optimalCompoundDetails = currentCompoundDetails;
-  }else if(principalAmount<=1000){
+  }else if(principalAmount<=100000){
     while (!hasReachedMaxReturn) {
       currentCompoundDetails = await calculateCompoundDetails({
         principal: principalAmount,
@@ -105,22 +105,28 @@ export const calculateOptimalCompoundInterestWithFees = async ({
           })
         ])
   
-      const { netRewardsInOcean, grossRewards } = upperCompoundDetails;
+      const { netRewardsInOcean, grossRewards } = optimalCompoundCount >0 ? upperCompoundDetails : currentCompoundDetails;
   
       if (currentCompoundDetails.netRewardsInOcean < upperCompoundDetails.netRewardsInOcean) {
         highestNetReturn = netRewardsInOcean;
         rewardsWithFees = grossRewards
         optimalCompoundCount = midCompoundCount;
-        optimalCompoundDetails = upperCompoundDetails;
+        optimalCompoundDetails = optimalCompoundCount >0 ? upperCompoundDetails : currentCompoundDetails
         lowerBound = midCompoundCount + 1;
       } else {
         // Search in the left half of the range
         upperBound = midCompoundCount - 1;
       }
+      if(lowerBound > upperBound){
+        highestNetReturn = netRewardsInOcean;
+        rewardsWithFees = grossRewards
+        optimalCompoundCount = midCompoundCount;
+        optimalCompoundDetails = optimalCompoundCount >0 ? upperCompoundDetails : currentCompoundDetails
+      }
     }
   }
 
-  optimalCompoundCount = compounds ? compounds : principalAmount > 1000 ? optimalCompoundCount+1 : optimalCompoundCount
+  optimalCompoundCount = compounds ? compounds : principalAmount > 100000 ? optimalCompoundCount > 0 ? optimalCompoundCount+1 : optimalCompoundCount : optimalCompoundCount
   const yyield = ((principalAmount + highestNetReturn)) / principalAmount - 1
   const wpr = yyield / totalWeeksInLock * (optimalCompoundCount>0 ? (52 / optimalCompoundCount) : 1)
 

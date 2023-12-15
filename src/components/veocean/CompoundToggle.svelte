@@ -24,7 +24,7 @@
     
 <style>
   .compound{
-    min-width: 50%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     width: max-content;
