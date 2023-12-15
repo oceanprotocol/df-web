@@ -3,7 +3,6 @@ import * as TokenABI from "./abis/tokenABI";
 import {
   getRpcUrlByChainId,
   getGasFeeEstimate,
-  getRpcUrlByChainId,
 } from "./web3";
 import {
   prepareWriteContract,
