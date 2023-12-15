@@ -122,10 +122,8 @@ export const getPassiveUserRewardsData = async (
     weeks += 1;
     currentDate = currentDate.add(1, "weeks");
   }
-  console.log(nrOfCompounds)
   const yyield = ((lockedOcean + totalRewards - basicFlowFees)) / lockedOcean - 1
   const wpr = yyield / weeks * (nrOfCompounds>0 ? (52 / nrOfCompounds) : 1)
-  console.log(totalRewards, wpr, weeks, yyield * 100, basicFlowFees)
   return {apy: convertWPRtoAPY(wpr, nrOfCompounds), yield: yyield * 100, rewards: totalRewards}
 };
 

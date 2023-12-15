@@ -29,7 +29,7 @@
   const onCompoundsChange = () => {
     lockAmountUpdates = compounds>=0 ? compounds : 0
     const numberOfMandatoryClaims = calculateNumberOFClaims(unlockDate)
-    claims = compounds >= numberOfMandatoryClaims ? compounds + 1 :numberOfMandatoryClaims - compounds
+    claims = compounds >= numberOfMandatoryClaims || numberOfMandatoryClaims - compounds==1 ? compounds + 1 : numberOfMandatoryClaims - compounds
     simpleFlowCostOcean = (fees.lock + lockAmountUpdates * fees.updateLockedAmount + lockEndDateUpdates * fees.updateUnlockDate + claims * fees.claim + fees.withdraw)
   }
 

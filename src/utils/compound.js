@@ -29,7 +29,7 @@ export const calculateOptimalCompoundInterestWithFees = async ({
   oceanTokenPrice
 }) => {
   const msDelta = getTotalMSDelta(unlockDate);
-  let highestNetReturn = 0 - (fees.lock + calculatePeriodClaimsWithMS(msDelta) * fees.claim + fees.withdraw);
+  let highestNetReturn = 0 - (fees.lock + totalMandatoryClaimCount(msDelta) * fees.claim + fees.withdraw);
   let optimalCompoundDetails = [];
 
   let hasReachedMaxReturn = false;
@@ -76,8 +76,11 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         optimalCompoundCount = optimalCompoundCount + 1;
         optimalCompoundDetails = currentCompoundDetails;
       } else {
+        highestNetReturn = netRewardsInOcean;
+        rewardsWithFees = grossRewards;
         hasReachedMaxReturn = true;
-        optimalCompoundCount = optimalCompoundCount == 0 ? optimalCompoundCount : optimalCompoundCount - 1
+        optimalCompoundDetails = currentCompoundDetails;
+        optimalCompoundCount = optimalCompoundCount
       }
     }
   }else{
@@ -105,23 +108,25 @@ export const calculateOptimalCompoundInterestWithFees = async ({
           })
         ])
   
-      const { netRewardsInOcean, grossRewards } = optimalCompoundCount >0 ? upperCompoundDetails : currentCompoundDetails;
-  
       if (currentCompoundDetails.netRewardsInOcean < upperCompoundDetails.netRewardsInOcean) {
+        const optCompDetails = optimalCompoundCount >0 ? upperCompoundDetails : currentCompoundDetails
+        const { netRewardsInOcean, grossRewards } = optCompDetails
         highestNetReturn = netRewardsInOcean;
         rewardsWithFees = grossRewards
         optimalCompoundCount = midCompoundCount;
-        optimalCompoundDetails = optimalCompoundCount >0 ? upperCompoundDetails : currentCompoundDetails
+        optimalCompoundDetails = optCompDetails
         lowerBound = midCompoundCount + 1;
       } else {
         // Search in the left half of the range
         upperBound = midCompoundCount - 1;
       }
       if(lowerBound > upperBound){
+        const optCompDetails = optimalCompoundCount >0 ? upperCompoundDetails : currentCompoundDetails
+        const { netRewardsInOcean, grossRewards } = optCompDetails
         highestNetReturn = netRewardsInOcean;
         rewardsWithFees = grossRewards
         optimalCompoundCount = midCompoundCount;
-        optimalCompoundDetails = optimalCompoundCount >0 ? upperCompoundDetails : currentCompoundDetails
+        optimalCompoundDetails = optCompDetails
       }
     }
   }
@@ -247,7 +252,7 @@ const calculateCompoundDetails = async ({
  * @property {number} withdrawFee - The withdraw fee
  */
 const calculateTotalCost = (claimCount, compoundCount, fees) => {
-  const claimFees = claimCount * fees.claim;
+  const claimFees =  claimCount * fees.claim;
   const updateFees = compoundCount * fees.updateLockedAmount;
   const lockFee = fees.lock;
   const withdrawFee = fees.withdraw;
@@ -326,14 +331,12 @@ export const calculatePeriodClaimsWithMS = (msDelta) => {
  * @property {number} totalFeeForPeriod - The total fee for the period
  * @property {number} feeForClaims - The fee for the claims
  * @property {number} feeUpdateAmount - The fee for updating the locked amount
- * @property {number} mandatoryClaimCount - The mandatory claim count
  * @property {number} totalPeriodClaims - The total claims for the period
  *
  */
-const calculateFeeForPeriod = (fees, periodMsDelta, totalMsDelta) => {
+const calculateFeeForPeriod = (fees, periodMsDelta) => {
   // Assuming 'fees' contains fee values for different actions (lock, claim, etc.)
   // and 'unlockDate' is the moment object of the unlock date
-  const mandatoryClaimCount = calculatePeriodClaimsWithMS(periodMsDelta); // Function from your 'rewards.js'
   const totalPeriodClaims = 1; // Adding 1 to include the claim at the end of the period
   const feeForClaims = fees.claim;
   const feeUpdateAmount = fees.updateLockedAmount;
@@ -343,7 +346,6 @@ const calculateFeeForPeriod = (fees, periodMsDelta, totalMsDelta) => {
     totalFeeForPeriod,
     feeForClaims,
     feeUpdateAmount,
-    mandatoryClaimCount,
     totalPeriodClaims,
   };
 };
