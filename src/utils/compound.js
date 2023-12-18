@@ -79,10 +79,10 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         hasReachedMaxReturn = true;
         optimalCompoundCount = optimalCompoundCount > 0 ? optimalCompoundCount - 1 : optimalCompoundCount
         if(optimalCompoundCount < 1){
-        highestNetReturn = netRewardsInOcean;
-        rewardsWithFees = grossRewards;
-        optimalCompoundDetails = currentCompoundDetails;
-        optimalCompoundCount = optimalCompoundCount
+          highestNetReturn = netRewardsInOcean;
+          rewardsWithFees = grossRewards;
+          optimalCompoundDetails = currentCompoundDetails;
+          optimalCompoundCount = optimalCompoundCount
         }
       }
     }
@@ -112,24 +112,20 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         ])
   
       if (currentCompoundDetails.netRewardsInOcean < upperCompoundDetails.netRewardsInOcean) {
-        const optCompDetails = optimalCompoundCount >0 ? currentCompoundDetails : upperCompoundDetails
-        const { netRewardsInOcean, grossRewards } = optCompDetails
-        highestNetReturn = netRewardsInOcean;
-        rewardsWithFees = grossRewards
         optimalCompoundCount = midCompoundCount;
-        optimalCompoundDetails = optCompDetails
         lowerBound = midCompoundCount + 1;
       } else {
         // Search in the left half of the range
         upperBound = midCompoundCount - 1;
       }
       if(lowerBound > upperBound){
-        const optCompDetails = optimalCompoundCount >0 ? upperCompoundDetails : currentCompoundDetails
+        const optCompDetails = currentCompoundDetails.netRewardsInOcean > upperCompoundDetails.netRewardsInOcean ? currentCompoundDetails : upperCompoundDetails
         const { netRewardsInOcean, grossRewards } = optCompDetails
         highestNetReturn = netRewardsInOcean;
         rewardsWithFees = grossRewards
-        optimalCompoundCount = midCompoundCount;
+        optimalCompoundCount = currentCompoundDetails.netRewardsInOcean > upperCompoundDetails.netRewardsInOcean ? midCompoundCount - 1 : midCompoundCount
         optimalCompoundDetails = optCompDetails
+        console.log(optimalCompoundCount, currentCompoundDetails, upperCompoundDetails)
       }
     }
   }
