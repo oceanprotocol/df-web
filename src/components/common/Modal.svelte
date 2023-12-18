@@ -33,7 +33,7 @@
 	dialog {
 		border-radius: 0.2em;
 		border: none;
-		padding: calc(var(--spacer) / 2);
+		padding: 0;
 		background-color: white;
 	}
 	dialog::backdrop {
@@ -73,4 +73,9 @@
 	:global(dialog  button){
 		color: var(--brand-grey-light) !important;
 	}
+	@media (min-width: 640px) {
+      dialog{ 
+        padding: calc(var(--spacer) / 2);
+      }
+    }
 </style>

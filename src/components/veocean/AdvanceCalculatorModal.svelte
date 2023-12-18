@@ -55,7 +55,7 @@
             </GroupedItemsDisplay>
             <div class="compounding">
               <span class="title">Compounding</span>
-              <span class="compoundingDetails">( Claim amount + Update locked amount )</span>
+              <span class="compoundingDetails">( Claim rewards + Update locked amount )</span>
               <div class="compoundingActionable">
                 <div class="compoundInputContainer">
                   <Input type="number" value={compounds} disabled={switchValue=='on'} min=0 onChange={(e) => {compounds=e.target.value=e.target.valueAsNumber >= 0 ? e.target.valueAsNumber : 0}}/>
@@ -68,9 +68,9 @@
               </div>
             </div>
           <div class="profitDetails">
-            <ItemWithLabel title='Rewards' value={`${formatValue(rewards)} OCEAN`} direction="row"/>
-            <ItemWithLabel title='Fees' value={`${formatValue(simpleFlowCostOcean)} OCEAN`} direction="row"/>
-            <ItemWithLabel title='Profit' value={`${formatValue(rewards>0? rewards - simpleFlowCostOcean : 0)} OCEAN`} direction="row"/>
+            <ItemWithLabel title='Rewards' value={`${formatValue(rewards)} OCEAN`}/>
+            <ItemWithLabel title='Fees' value={`${formatValue(simpleFlowCostOcean)} OCEAN`}/>
+            <ItemWithLabel title='Profit' value={`${formatValue(rewards>0? rewards - simpleFlowCostOcean : 0)} OCEAN`}/>
           </div>
           <div class="feeDetails">
             <div class="gasPriceContainer">
@@ -78,8 +78,8 @@
             </div>
             <div class="feeDatailsRow">
               <ItemWithLabel title='Lock' value={`1 x ${formatValue(fees?.lock)}`}/>
-              <ItemWithLabel title='Update locked amount' value={`x ${formatValue(fees?.updateLockedAmount)}`} bind:inputValue={lockAmountUpdates} min={compounds}/>
-              <ItemWithLabel title='Update lock end date' value={`x ${formatValue(fees?.updateUnlockDate)}`} bind:inputValue={lockEndDateUpdates}/>
+              <ItemWithLabel title='Update amount' value={`x ${formatValue(fees?.updateLockedAmount)}`} bind:inputValue={lockAmountUpdates} min={compounds}/>
+              <ItemWithLabel title='Update date' value={`x ${formatValue(fees?.updateUnlockDate)}`} bind:inputValue={lockEndDateUpdates}/>
               <ItemWithLabel title='Claim' value={`x ${formatValue(fees?.claim)}`} bind:inputValue={claims} min={compounds}/>
               <ItemWithLabel title='Withdraw' value={`1 x ${formatValue(fees?.withdraw)}`}/>
             </div>
@@ -103,10 +103,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
     }
     .profitDetails{ 
       margin: calc(var(--spacer)) 0 calc(var(--spacer) / 2) 0;
-      gap: calc(var(--spacer) * 2);
+      display: flex;
+      justify-content: space-between;
     }
     .feeDetails{
       display: flex;
@@ -114,7 +116,7 @@
       width: 100%;
       border: 2px solid var(--brand-grey-lighter);
       border-radius: var(--border-radius);
-      padding: calc(var(--spacer)/2);
+      padding: calc(var(--spacer)/2) 10px;
       position: relative;
     }
     .compounding{
@@ -175,10 +177,20 @@
       justify-content: space-between;
       width: 100%;
       margin-top: calc(var(--spacer) / 6);
+      gap: 10px;
     }
     .compoundDetailsContainer{
       margin-top: var(--spacer);
       width: 100%;
+    }
+
+    @media (min-width: 640px) {
+      .feeDetails{
+        padding: calc(var(--spacer)/2);
+      }
+      .feeDatailsRow{
+        gap: calc(var(--spacer)/2)
+      }
     }
   </style>
   
