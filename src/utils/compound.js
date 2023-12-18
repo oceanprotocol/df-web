@@ -125,7 +125,6 @@ export const calculateOptimalCompoundInterestWithFees = async ({
         rewardsWithFees = grossRewards
         optimalCompoundCount = currentCompoundDetails.netRewardsInOcean > upperCompoundDetails.netRewardsInOcean ? midCompoundCount - 1 : midCompoundCount
         optimalCompoundDetails = optCompDetails
-        console.log(optimalCompoundCount, currentCompoundDetails, upperCompoundDetails)
       }
     }
   }
