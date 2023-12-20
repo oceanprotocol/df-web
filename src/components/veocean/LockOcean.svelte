@@ -304,8 +304,8 @@
   $: fetchTokenPrices();
   $: $ethPrice && $oceanPrice && getFeesCosts();
   $: $form.unlockDate && calculateSimpleFlowCost();
-  $: ($form.amount>=0 && $form.unlockDate && switchValue) && calculateOptimalCompounds()
-  $: switchValue=='off' && compounds>=0 && calculateOptimalCompounds()
+  $: ($form.amount>=0 && $form.unlockDate && switchValue) && fees && calculateOptimalCompounds()
+  $: switchValue=='off' && compounds>=0 && fees && calculateOptimalCompounds()
 
   const updateFormAmount = (value) => {
     let amount = parseInt(value.target.value)
@@ -403,7 +403,7 @@
         <GroupedItemsDisplay>
           <DisplayApYandRewards
             apyValue={displayedAPY.apy}
-            profitValue={$form.amount && $form.unlockDate ? displayedAPY.profit : 0}
+            profitValue={$form.amount && $form.unlockDate || $oceanUnlockDate && displayedAPY.profit ? displayedAPY.profit : 0}
             openCalculator={() => showModal=true}
           />
         </GroupedItemsDisplay>
