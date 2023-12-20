@@ -69,6 +69,7 @@
   let compounds = 0;
   let switchValue = 'on';
   let compoundsData;
+  let lockMultiplier = 0;
   let fees
 
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
@@ -244,6 +245,10 @@
       var today = moment.utc();
       var unlockDate = moment.utc($form.unlockDate);
       const msDelta = unlockDate.diff(today);
+      lockMultiplier = (
+        (msDelta / getMaxDate().diff(today)) *
+        100
+      ).toFixed(3);
       calculatedVotingPower = (
         (msDelta / getMaxDate().diff(today)) *
         ($form.amount + parseFloat($lockedOceanAmount))
@@ -376,16 +381,23 @@
         </div>
       </div>
       <div class="item">
-        <div class="output-container">
           <GroupedItemsDisplay>
-            <ItemWithLabel
-              title={`Receive`}
-              value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
-              tooltipMessage={descriptions.default.tooltip_veocean_receive}
-              small={true}
-            />
+            <div style="display:flex; justify-content:space-around;">
+              <ItemWithLabel
+                title={`Lock Multiplier`}
+                value={`${parseFloat(lockMultiplier).toFixed(2)}%`}
+                tooltipMessage={descriptions.default
+                  .tooltip_veocean_lock_multiplier}
+                small={true}
+              />
+              <ItemWithLabel
+                title={`Receive`}
+                value={`${parseFloat(calculatedVotingPower)} veOCEAN`}
+                tooltipMessage={descriptions.default.tooltip_veocean_receive}
+                small={true}
+              />
+            </div>
           </GroupedItemsDisplay>
-        </div>
       </div>
       <div class="item">
         <GroupedItemsDisplay>

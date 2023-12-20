@@ -30,6 +30,7 @@
       display: column;
       justify-self: center;
       align-items: center;
+      width: 100%;
     }
     .valueContainer{
       display: flex;

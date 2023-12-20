@@ -13,7 +13,7 @@
     <div class={`valuesContainer  ${showCalculatorButton ? '' : 'showCalculatorButton'}`}>
       <div class="apyDisplay">
         <ItemWithLabel
-          title={`Profit`}
+          title={`Rewards - Fees`}
           tooltipMessage={descriptions.tooltip_veocean_lock_profit}
         />
         <span class={`profit ${profitValue == 0 ? '' : profitValue > 0 ? 'green' : 'red'}`}>{`${parseFloat(profitValue).toFixed(2)} OCEAN`}</span>
@@ -42,6 +42,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: relative;
     }
     .apyDisplay{
       display: column;
@@ -75,6 +76,8 @@
       font-size: var(--font-size-small);
     }
     button{
+      position: absolute;
+      right: 0;
       background-color: transparent;
       height: 25px;
       display: flex;
