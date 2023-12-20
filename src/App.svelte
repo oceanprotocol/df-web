@@ -82,20 +82,18 @@
         )
       ] > 0
         ? await getPassiveUserRewardsData(
-            $userBalances[
-              getAddressByChainIdKey(
-                import.meta.env.VITE_VE_SUPPORTED_CHAINID,
-                "veOCEAN"
-              )
-            ],
-            $lockedOceanAmount,
-            $totalVeOceanSupply
+            parseFloat($lockedOceanAmount),
+            parseFloat($totalVeOceanSupply),
+            $oceanUnlockDate,
+            undefined,
+            0,
+            0,
           )
         : 0;
     APYs.update((oldObj) => {
       return {
         passive: oldObj?.passive ? oldObj.passive : 0,
-        passiveUser: passiveUserAPY.apy,
+        passiveUser: passiveUserAPY?.apy,
         active: oldObj?.active ? oldObj.active : 0,
         activeUser: activeUserAPY,
       };

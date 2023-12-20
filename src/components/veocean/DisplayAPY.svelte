@@ -2,11 +2,10 @@
   import Button from "../common/Button.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
 
-
-    export let value;
-    export let tooltipMessage;
-    export let onClick;
-  </script>
+  export let value;
+  export let tooltipMessage;
+  export let onClick;
+</script>
   
   <div class="apyDisplay">
     <ItemWithLabel
@@ -31,11 +30,13 @@
       display: column;
       justify-self: center;
       align-items: center;
+      width: 100%;
     }
     .valueContainer{
       display: flex;
       justify-content: center;
       align-items: center;
+      width: 100%;
     }
     .apy{
       color: var(--brand-pink);

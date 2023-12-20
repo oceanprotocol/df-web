@@ -6,6 +6,8 @@ import { getAddressByChainIdKey } from "../utils/address/address";
 
 export let userBalances = writable({});
 export let tokenContracts = writable({});
+export let oceanPrice = writable();
+export let ethPrice = writable();
 
 const updateBalanceStore = (tokenAddress, newBalance) => {
   let newUserBalances = get(userBalances);
