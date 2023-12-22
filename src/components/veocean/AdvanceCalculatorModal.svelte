@@ -55,7 +55,7 @@
             </GroupedItemsDisplay>
             <div class="compounding">
               <span class="title">Compounding</span>
-              <span class="compoundingDetails">( Claim rewards + Update locked amount )</span>
+              <span class="compoundingDetails"> Manually ( Claim rewards + Update locked amount )</span>
               <div class="compoundingActionable">
                 <div class="compoundInputContainer">
                   <Input type="number" value={compounds} disabled={switchValue=='on'} min=0 onChange={(e) => {compounds=e.target.value=e.target.valueAsNumber >= 0 ? e.target.valueAsNumber : 0}}/>
@@ -135,6 +135,7 @@
     .compoundingActionable{
       margin-top: calc(var(--spacer)/4);
       display: flex;
+      justify-content: space-between;
       gap: calc(var(--spacer));
     }
     .compoundInputContainer{
@@ -174,7 +175,8 @@
     }
     .feeDatailsRow{
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
+      flex-wrap: wrap;
       width: 100%;
       margin-top: calc(var(--spacer) / 6);
       gap: 10px;
@@ -190,6 +192,10 @@
       }
       .feeDatailsRow{
         gap: calc(var(--spacer)/2)
+      }
+      .feeDatailsRow{
+        flex-wrap: nowrap;
+        justify-content: space-between;
       }
     }
   </style>

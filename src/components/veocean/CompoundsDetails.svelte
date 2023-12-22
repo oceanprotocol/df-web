@@ -45,8 +45,13 @@
 
 
 <style>
+    :global(.compoundsTable){
+        width: 100%;
+        overflow: scroll;
+    }
     :global(.compoundsTable table){
         height: 150px;
+        min-width: 400px !important;
         background-color: var(--brand-grey-dimmed);
     }
     :global(.compoundsTable table::-webkit-scrollbar-track){
@@ -71,10 +76,21 @@
         margin-bottom: calc(var(--spacer) / 5);
         font-weight: bold;
     }
-    div{
-        width: 100%;
+    :global(.compoundsTable #index,#fees,#rewards){
+            width: 180px;
+        }
+    :global(.compoundsTable tr td:first-child,td:nth-child(3),td:last-child){
+        width: 180px !important;
     }
-    :global(.compoundsTable #date){
-        min-width: 100px;
+    @media (min-width: 640px) {
+        :global(.compoundsTable #index,#fees,#rewards){
+            width: 100%;
+        }
+        :global(.compoundsTable tr td:first-child,td:nth-child(3),td:last-child){
+            width: 100% !important;
+        }
+        :global(.compoundsTable table){
+            min-width: 600px !important;
+        }
     }
 </style>

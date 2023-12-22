@@ -85,7 +85,7 @@
 {#if !loading }
 <div>
   <h2 class="title">
-    Get Passive rewards by locking you OCEAN tokens.
+    Get Passive rewards by locking your OCEAN tokens.
   </h2>
   <p class="message">
     You can get veOCEAN tokens in exchage for OCEAN. The longer the lock period the more the veOCEAN received.
