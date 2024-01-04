@@ -86,7 +86,7 @@
         :global(.compoundsTable #index,#fees,#rewards){
             width: 100%;
         }
-        :global(.compoundsTable tr td:first-child,td:nth-child(3),td:last-child){
+        :global(.compoundsTable tr td:first-child,.compoundsTable td:nth-child(3),.compoundsTable td:last-child){
             width: 100% !important;
         }
         :global(.compoundsTable table){
