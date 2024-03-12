@@ -2546,21 +2546,21 @@
     "streams": [
       {
         "name": "Passive",
-        "rewards": 75000,
+        "rewards": 150000,
         "substreams": [
           {
             "name": "veOCEAN",
-            "rewards": 75000
+            "rewards": 150000
           }
         ]
       },
       {
         "name": "Active",
-        "rewards": 75000,
+        "rewards": 150000,
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards":37500
+            "rewards":112500
           },
           {
             "name": "Predictoor DF",
@@ -2569,7 +2569,7 @@
         ]
       }
     ],
-    "total": 150000
+    "total": 300000
   },
   {
     "id": 82,
@@ -2578,21 +2578,21 @@
     "streams": [
       {
         "name": "Passive",
-        "rewards": 75000,
+        "rewards": 150000,
         "substreams": [
           {
             "name": "veOCEAN",
-            "rewards": 75000
+            "rewards": 150000
           }
         ]
       },
       {
         "name": "Active",
-        "rewards": 75000,
+        "rewards": 150000,
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards":37500
+            "rewards": 112500
           },
           {
             "name": "Predictoor DF",
@@ -2601,7 +2601,7 @@
         ]
       }
     ],
-    "total": 150000
+    "total": 300000
   },
   {
     "id": 83,
@@ -2610,21 +2610,21 @@
     "streams": [
       {
         "name": "Passive",
-        "rewards": 75000,
+        "rewards": 150000,
         "substreams": [
           {
             "name": "veOCEAN",
-            "rewards": 75000
+            "rewards": 150000
           }
         ]
       },
       {
         "name": "Active",
-        "rewards": 75000,
+        "rewards": 150000,
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards":37500
+            "rewards": 112500
           },
           {
             "name": "Predictoor DF",
@@ -2633,7 +2633,7 @@
         ]
       }
     ],
-    "total": 150000
+    "total": 300000
   },
   {
     "id": 84,
@@ -2642,21 +2642,21 @@
     "streams": [
       {
         "name": "Passive",
-        "rewards": 75000,
+        "rewards": 150000,
         "substreams": [
           {
             "name": "veOCEAN",
-            "rewards": 75000
+            "rewards": 150000
           }
         ]
       },
       {
         "name": "Active",
-        "rewards": 75000,
+        "rewards": 150000,
         "substreams": [
           {
             "name": "Volume DF",
-            "rewards":37500
+            "rewards": 112500
           },
           {
             "name": "Predictoor DF",
@@ -2665,6 +2665,6 @@
         ]
       }
     ],
-    "total": 150000
+    "total": 300000
   }
 ]
