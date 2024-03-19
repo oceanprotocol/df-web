@@ -75,8 +75,7 @@ export const connectWallet = async () => {
 export const disconnect = async () => {
   ethereumClient.disconnect();
   userAddress.set(undefined);
-  localStorage?.removeItem("walletconnect");
-  localStorage?.removeItem("WEB3_CONNECT_CACHED_PROVIDER");
+  localStorage?.clear();
   window.location.href = "/";
 };
 
