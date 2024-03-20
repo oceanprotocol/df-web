@@ -83,10 +83,11 @@
     let avg_active_apy = "0.00"
 
     if($APYs) {
-      your_passive_apy = $APYs.passiveUser > 10000 ? "over 10000" : `${$APYs.passiveUser.toFixed(2)}`;
+      if($connectedChainId==supportedChainId){
+        your_passive_apy = $APYs.passiveUser > 10000 ? "over 10000" : `${$APYs.passiveUser.toFixed(2)}`
+        your_active_apy = $APYs.activeUser > 10000 ? "over 10000" : `${$APYs.activeUser.toFixed(2)}`
+      }
       avg_passive_apy = $APYs.passive > 10000 ? "over 10000" : `${$APYs?.passive.toFixed(2)}`
-
-      your_active_apy = $APYs.activeUser > 10000 ? "over 10000" : `${$APYs.activeUser.toFixed(2)}`;
       avg_active_apy = $APYs.active > 10000 ? "over 10000" : `${$APYs?.active.toFixed(2)}`
     }
     
@@ -102,7 +103,7 @@
   }
 
   function addAllocated(){
-    streams[1].substreams[0].metric.value = $totalUserAllocation + '%'
+    streams[1].substreams[0].metric.value = ($connectedChainId==supportedChainId ? $totalUserAllocation : 0) + '%'
   }
 
   async function addUserPredictoorAccuracy(){
@@ -146,26 +147,28 @@
         volumeRewards += r['sum(curating_amt)']
       }
     })
-    streams[1].substreams[0].availableRewards = volumeRewards
+    streams[1].substreams[0].availableRewards = $connectedChainId==supportedChainId ? volumeRewards : 0
   }
 
   const calculateUnclaimedPassiveReward = () => {
     let sum = 0
+    if($connectedChainId==supportedChainId){
       $oceanUserRewards.forEach((r) => {
         if(r.round >= $lastPassiveRewardsClaimRound) {
           sum += r['sum(passive_amt)']
         }
       })
-      passiveRewards = sum
-      streams[0].substreams[0].availableRewards = sum
+    }
+    passiveRewards = sum 
+    streams[0].substreams[0].availableRewards = sum
   }
 
-  $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards) calculateUnclaimedPassiveReward()
+  $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards && $connectedChainId) calculateUnclaimedPassiveReward()
 
-  $:if($APYs) addAPYs()
-  $:if($totalUserAllocation) addAllocated()
+  $:if($APYs && $connectedChainId) addAPYs()
+  $:if($totalUserAllocation || $connectedChainId) addAllocated()
   $:if($userBalances) addVeOceanBalance()
-  $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards) setUnclaimedActiveRewardsSubstreamValues()
+  $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards && $connectedChainId) setUnclaimedActiveRewardsSubstreamValues()
   $:if($userAddress) addUserPredictoorAccuracy()
 </script>
 
