@@ -61,6 +61,7 @@
   let oceanBalance = 0;
   let calculatedVotingPower = 0;
   let loading = false;
+  let checker = true;
   let updateLockButtonText = "UPDATE LOCK";
   let tokenApproved = false;
   let displayedAPY = formatApyForDisplay(0, 0);
@@ -148,6 +149,7 @@
   }
 
   const onFormSubmit = async (values) => {
+    return;
     loading = true;
     const unlockTimestamp = moment.utc(values.unlockDate).unix();
     currentStep = 2;
@@ -432,7 +434,7 @@
             approvalModalMessage="Approve only if you are going to lock right away.<br> Make sure you only approve the amount that you are going to lock."
             spender={getAddressByChainIdKey(supportedChainId, "veOCEAN")}
             amount={$form.amount}
-            disabled={loading ||
+            disabled={checker || loading ||
               getOceanBalance($connectedChainId) <= 0 ||
               $form.amount > getOceanBalance($connectedChainId)}
             bind:agreed={$form.ageement}
@@ -443,7 +445,7 @@
               <Button
                 text={updateLockButtonText}
                 fullWidth={true}
-                disabled={loading ||
+                disabled={checker || loading ||
                   !$form.ageement ||
                   $form.amount > getOceanBalance($connectedChainId) ||
                   $oceanUnlockDate.isBefore(moment()) ||
@@ -454,7 +456,7 @@
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
                 fullWidth={true}
-                disabled={loading ||
+                disabled={checker || loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount > getOceanBalance($connectedChainId)}
