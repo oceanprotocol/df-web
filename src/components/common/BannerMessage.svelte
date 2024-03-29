@@ -4,11 +4,11 @@
   export let type = "warning";
 </script>
 
-<div class={`container ${type === "warning" ? "warning" : "default"}`}>
+<div class={`container ${type === "warning" ? "warning" : type == "danger" ? "danger" : "default"}`}>
   {#if title}
-    <span>
+    <p class="title">
       {@html title}
-    </span>
+    </p>
   {/if}
   {#if message}
     <p>
@@ -21,10 +21,6 @@
   .container {
     position: sticky;
     top: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     padding: calc(var(--spacer) / 6) 0;
     width: 100%;
     color: var(--brand-black);
@@ -34,12 +30,22 @@
   .warning {
     background-color: var(--brand-alert-yellow);
   }
+  .danger {
+    background-color: var(--brand-alert-red);
+  }
+  .danger p{
+    color: white !important;
+  }
   .default {
     border-bottom: 1px solid var(--border-color);
     background-color: var(--background-content);
   }
-  span {
+  .title {
     font-weight: bold;
+    font-size: var(--font-size-base) !important;
+    text-align: center;
+    width: 100%;
+    padding: 0 calc(var(--spacer)/2);
     margin-right: calc(var(--spacer) / 12);
   }
   p {

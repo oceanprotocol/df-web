@@ -414,6 +414,7 @@
         text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, <a href='/terms'><strong>terms of use</strong></a>, waive all rights, and assume all risks."
         bind:value={$form.ageement}
       />
+      <p class="error">All actions around veOCEAN Lock are disabled!</p>
       <div class="item buttonContainer">
         {#if $connectedChainId?.toString() !== supportedChainId}
           <Button
@@ -528,6 +529,12 @@
     display: flex;
     align-items: center;
     gap: calc(var(--spacer)/2)
+  }
+
+  .error{
+    color: red;
+    font-size: (var(--font-size-normal));
+    font-weight: bold;
   }
 
   @media (min-width: 640px) {
