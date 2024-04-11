@@ -61,6 +61,7 @@
   let oceanBalance = 0;
   let calculatedVotingPower = 0;
   let loading = false;
+  let checker = true;
   let updateLockButtonText = "UPDATE LOCK";
   let tokenApproved = false;
   let displayedAPY = formatApyForDisplay(0, 0);
@@ -148,6 +149,7 @@
   }
 
   const onFormSubmit = async (values) => {
+    return;
     loading = true;
     const unlockTimestamp = moment.utc(values.unlockDate).unix();
     currentStep = 2;
@@ -412,6 +414,7 @@
         text="By using this software I may allow all my tokens to be locked up for a period of up to 4 years. I have familiarized myself with veOCEAN, <a href='/terms'><strong>terms of use</strong></a>, waive all rights, and assume all risks."
         bind:value={$form.ageement}
       />
+      <p class="error">All actions around veOCEAN Lock are disabled!</p>
       <div class="item buttonContainer">
         {#if $connectedChainId?.toString() !== supportedChainId}
           <Button
@@ -432,7 +435,7 @@
             approvalModalMessage="Approve only if you are going to lock right away.<br> Make sure you only approve the amount that you are going to lock."
             spender={getAddressByChainIdKey(supportedChainId, "veOCEAN")}
             amount={$form.amount}
-            disabled={loading ||
+            disabled={checker || loading ||
               getOceanBalance($connectedChainId) <= 0 ||
               $form.amount > getOceanBalance($connectedChainId)}
             bind:agreed={$form.ageement}
@@ -443,7 +446,7 @@
               <Button
                 text={updateLockButtonText}
                 fullWidth={true}
-                disabled={loading ||
+                disabled={checker || loading ||
                   !$form.ageement ||
                   $form.amount > getOceanBalance($connectedChainId) ||
                   $oceanUnlockDate.isBefore(moment()) ||
@@ -454,7 +457,7 @@
             {:else}<Button
                 text={loading ? "Locking..." : "Lock OCEAN"}
                 fullWidth={true}
-                disabled={loading ||
+                disabled={checker || loading ||
                   !$form.ageement ||
                   getOceanBalance($connectedChainId) <= 0 ||
                   $form.amount > getOceanBalance($connectedChainId)}
@@ -526,6 +529,12 @@
     display: flex;
     align-items: center;
     gap: calc(var(--spacer)/2)
+  }
+
+  .error{
+    color: red;
+    font-size: (var(--font-size-normal));
+    font-weight: bold;
   }
 
   @media (min-width: 640px) {
