@@ -7,17 +7,21 @@
     export let description;
     export let availableRewards = 0;
     export let rewards = 0;
+    export let status = "ONGOING";
     export let apy;
     export let metric = {};
     export let action = {};
 </script>
 
-<div class="container">
+<div class={`container ${status=="PAUSED" ? "opac" : ''}`}>
     <div class="title">
         <div class="titleSection">
             <h4>{`${title} - ${availableRewards?.toLocaleString()} OCEAN`}</h4>
             {#if apy}
                 <span class="apy">{apy.value}</span>
+            {/if}
+            {#if status == "PAUSED"}
+                <span class="status">PAUSED</span>
             {/if}
         </div>
         {#if title.toLowerCase().includes("predictoor")}
@@ -45,6 +49,9 @@
         flex-direction: column;
         margin: calc(var(--spacer)/3) 0;
     }
+    .opac{
+        opacity: 0.6;
+    }
     .title, .action{
         width: 100%;
         display: flex;
@@ -69,6 +76,11 @@
     }
     .action{
      justify-content: flex-start;
+    }
+    .status{
+        margin-left: calc(var(--spacer) / 2);
+        font-weight: bold;
+        color: var(--brand-alert-yellow);
     }
     :global(.action .button){
         margin-right: calc(var(--spacer)/3);
