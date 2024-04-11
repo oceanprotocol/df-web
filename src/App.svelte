@@ -208,8 +208,9 @@
 
 <Router>
   <BannerMessage
-    title={`Predictoor-DF is now live, submit accurate predictions to get rewards!</a>`}
-    message={` Read <a href='https://docs.oceanprotocol.com/data-farming/predictoordf' target='_blank'><strong>the docs</strong></a> for more information.`}
+    title={`<a href='https://blog.oceanprotocol.com/superintelligence-alliance-updates-to-data-farming-and-veocean-68d7b29c5100' target='_blank'>With the upcoming announcements on data farming, please do not interact directly with the smartcontracts, and only use our UI! Check out the blogpost.</a>`}
+    message= {`Any actions taken by an account on locking / updating veOCEAN lock after the time of the snapshot will be ignored!`}
+    type="danger"
   />
   <WalletConnectModal />
   <main>
