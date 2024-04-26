@@ -227,8 +227,19 @@ body button:focus {
   text-align: left;
 }
 
-@media (min-width: 640px) {
-  .bx--toast-notification {
-    width: 50vw !important;
-  }
+.bx--toast-notification__subtitle{
+  font-size: var(--font-size-h5) !important;
+}
+
+.bx--toast-notification__icon{
+  margin: 0;
+}
+
+.bx--toast-notification h3{
+    font-size: var(--font-size-h4);
+}
+
+.bx--toast-notification{
+  border-left: 0 !important;
+  padding: calc(var(--spacer) / 2) !important;
 }

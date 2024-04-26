@@ -8,7 +8,6 @@
     dfClaimables,
     claimDFReward,
     getDFRewards,
-    APYs,
     lastActiveRewardsClaimRound,
     oceanUserRewards,
     lastPassiveRewardsClaimRound,
@@ -19,7 +18,6 @@
   import { updateUserBalanceOcean, userBalances } from "../../stores/tokens";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { claim as claimVERewards } from "../../utils/feeDistributor";
-  import * as descriptions from "../../utils/metadata/descriptions.json";
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import { getPredictoorRoundSummary } from "../../utils/predictoor";
  
@@ -74,32 +72,6 @@
       Swal.fire("Error!", error.message, "error");
     }
     claiming = undefined;
-  }
-
-  function addAPYs() {
-    let your_passive_apy = "0.00"
-    let avg_passive_apy = "0.00"
-    let your_active_apy = "0.00"
-    let avg_active_apy = "0.00"
-
-    if($APYs) {
-      if($connectedChainId==supportedChainId){
-        your_passive_apy = $APYs.passiveUser > 10000 ? "over 10000" : `${$APYs.passiveUser.toFixed(2)}`
-        your_active_apy = $APYs.activeUser > 10000 ? "over 10000" : `${$APYs.activeUser.toFixed(2)}`
-      }
-      avg_passive_apy = $APYs.passive > 10000 ? "over 10000" : `${$APYs?.passive.toFixed(2)}`
-      avg_active_apy = $APYs.active > 10000 ? "over 10000" : `${$APYs?.active.toFixed(2)}`
-    }
-    
-    streams[0].substreams[0].apy = {
-      value: $userAddress? `${your_passive_apy}% Your APY | ${avg_passive_apy}% Avg APY` : `${avg_passive_apy}% Avg APY`,
-      tooltip: descriptions.default.tooltip_rewards_apy_passive,
-    };
-
-    streams[1].substreams[0].apy = {
-      value: $userAddress? `${your_active_apy}% Your APY | ${avg_active_apy}% Avg APY` : `${avg_active_apy}% Avg APY`,
-      tooltip: descriptions.default.tooltip_active_rewards,
-    };
   }
 
   function addAllocated(){
@@ -165,7 +137,6 @@
 
   $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards && $connectedChainId) calculateUnclaimedPassiveReward()
 
-  $:if($APYs && $connectedChainId) addAPYs()
   $:if($totalUserAllocation || $connectedChainId) addAllocated()
   $:if($userBalances) addVeOceanBalance()
   $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards && $connectedChainId) setUnclaimedActiveRewardsSubstreamValues()

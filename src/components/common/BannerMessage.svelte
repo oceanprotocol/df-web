@@ -44,9 +44,9 @@
     font-weight: bold;
     font-size: var(--font-size-base) !important;
     text-align: center;
-    width: 100%;
+    max-width: 1280px;
     padding: 0 calc(var(--spacer)/2);
-    margin-right: calc(var(--spacer) / 12);
+    margin: auto
   }
   p {
     margin-bottom: 0;

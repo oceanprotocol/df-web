@@ -17,7 +17,6 @@
     veOceanWithDelegations,
   } from "../../stores/veOcean";
   import { fetchBlockNumber, getPublicClient } from '@wagmi/core'
-  import { getUserVotingPowerWithDelegations } from "../../utils/delegations";
   import moment from "moment";
   import { ethers } from "ethers";
 
@@ -73,9 +72,6 @@
         $userAddress
       );
       lockedOceanAmount.update(() => lockedOceans);
-      const newVeOceansWithDelegations =
-        await getUserVotingPowerWithDelegations($userAddress);
-      veOceanWithDelegations.update(() => newVeOceansWithDelegations);
 
       await updateBlockTimestamp();
       await updateLockEndDate();
@@ -109,8 +105,7 @@
       </p>
     {:else}
       <p>
-        No <strong>OCEAN</strong> locked. Lock your <strong>OCEAN</strong> tokens
-        first.
+        No <strong>OCEAN</strong> tokens locked.
       </p>
     {/if}
   </div>

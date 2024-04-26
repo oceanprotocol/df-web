@@ -21,7 +21,6 @@
   import ChecklistDropdown from "../common/ChecklistDropdown.svelte";
 
   let rows = [];
-  let initialRows = [];
   let pagination = { pageSize: 100, page: 1 };
   let dropdownOptions = {};
   let loading = true;
@@ -33,17 +32,17 @@
       value: "Round",
     },
     { key: "date_start", value: "Start Date" },
-    { key: "passive", value: "Passive Rewards" },
-    {
-      key: "passiveapy",
-      value: "Passive APY",
-      tooltip: descriptions.default.tooltip_rewards_apy_passive_history,
-    },
     { key: "active", value: "Active Rewards" },
     {
       key: "volumeapy",
       value: "VolumeDF APY",
       tooltip: descriptions.default.tooltip_rewards_apy_volume_history,
+    },
+    { key: "passive", value: "Passive Rewards" },
+    {
+      key: "passiveapy",
+      value: "Passive APY",
+      tooltip: descriptions.default.tooltip_rewards_apy_passive_history,
     },
     { key: "veocean", value: "veOCEAN Rewards" },
     { key: "volumedf", value: "VolumeDF Rewards" },
@@ -120,7 +119,6 @@
     rows.sort((first, second) => {
       return second.id - first.id;
     });
-    initialRows = rows;
     loading = false;
   };
 
@@ -131,7 +129,7 @@
     veUserBalances.update(() => veBals);
     veUserAllocations.update(() => allocations);
     oceanUserRewards.update(() => apys);
-    rows = JSON.parse(JSON.stringify(initialRows));
+    rows = JSON.parse(JSON.stringify(rows));
     rows.forEach((row) => {
       let veBal = $veUserBalances.find((vb) => vb.round == row.id);
       let allocation = $veUserAllocations.find((r) => r.round == row.id);
@@ -160,7 +158,7 @@
   onMount(init);
 
   $: createDropdownOptions()
-  $: if ($userAddress) {
+  $: if ($userAddress && !loading) {
     getUserRoundAPY();
   }
 </script>
@@ -171,21 +169,23 @@
     <ChecklistDropdown title="Select displayed columns" options={dropdownOptions} onCheck={onDropdownCheck}/>
   </div>
   <div class="tableBody">
-  <DataTable sortable {headers} {rows} class="customTable">
-    <svelte:fragment slot="cell-header" let:header>
-      <div class="headerContainer">
-        {header.value}
-        {#if header.tooltip}
-          <CustomTooltip text={header.tooltip} direction="bottom" />
-        {/if}
-      </div>
-    </svelte:fragment>
-    <svelte:fragment slot="cell" let:cell let:row>
-      <div class="cellContainer">
-        {cell.value}
-      </div>
-    </svelte:fragment>
-  </DataTable>
+  {#if rows}
+    <DataTable sortable {headers} {rows} class="customTable">
+      <svelte:fragment slot="cell-header" let:header>
+        <div class="headerContainer">
+          {header.value}
+          {#if header.tooltip}
+            <CustomTooltip text={header.tooltip} direction="bottom" />
+          {/if}
+        </div>
+      </svelte:fragment>
+      <svelte:fragment slot="cell" let:cell let:row>
+        <div class="cellContainer">
+          {cell.value}
+        </div>
+      </svelte:fragment>
+    </DataTable>
+  {/if}
   <Pagination
     bind:pageSize={pagination.pageSize}
     bind:page={pagination.page}

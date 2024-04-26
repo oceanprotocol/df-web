@@ -1,69 +1,18 @@
 <script>
-  import { userAddress } from "../../stores/web3";
   import Card from "../common/Card.svelte";
   import ItemWithLabel from "../common/ItemWithLabel.svelte";
-  import { userBalances } from "../../stores/tokens";
   import {
     lockedOceanAmount,
     oceanUnlockDate,
-    veOceanWithDelegations,
   } from "../../stores/veOcean";
-  import { totalUserAllocation } from "../../stores/dataAllocations";
-  import { getTotalAllocatedVeOcean } from "../../utils/dataAllocations";
   import WithdrawOcean from "./WithdrawOcean.svelte";
-  import { getAddressByChainIdKey } from "../../utils/address/address";
   import * as descriptions from "../../utils/metadata/descriptions.json";
 
   let loading = false;
-  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
-
-  const setValues = async () => {
-    if (!$totalUserAllocation) {
-      let newAllocation = await getTotalAllocatedVeOcean(
-        $userAddress
-      );
-      totalUserAllocation.update(() => newAllocation);
-    }
-    loading = false;
-  };
-
-  $: if ($userAddress) {
-    setValues();
-  }
 </script>
 
 <div class={`container`}>
   <Card title="My veOCEAN">
-    <div class="veOcean-info">
-      <ItemWithLabel
-        title={`Balance`}
-        value={`${
-          $userBalances[
-            getAddressByChainIdKey(
-              supportedChainId,
-              "veOCEAN"
-            )
-          ]
-            ? parseFloat(
-                $userBalances[
-                  getAddressByChainIdKey(
-                    supportedChainId,
-                    "veOCEAN"
-                  )
-                ]
-              ).toFixed(3)
-            : parseFloat("0").toFixed(3)
-        } veOCEAN`}
-        tooltipMessage={descriptions.default.tooltip_veocean_my_balance}
-        {loading}
-      />
-      <ItemWithLabel
-        title={`Allocation Power`}
-        value={`${parseFloat($veOceanWithDelegations).toFixed(3)} veOCEAN`}
-        tooltipMessage={descriptions.default.tooltip_veocean_my_voting_power}
-        {loading}
-      />
-    </div>
     <div class="veOcean-info">
       <ItemWithLabel
         title={`Locked`}
@@ -97,8 +46,9 @@
 
   .veOcean-info {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: calc(var(--spacer) * 4);
     min-height: var(--spacer);
     margin-bottom: calc(var(--spacer) / 4);
     width: 100%;
@@ -106,7 +56,7 @@
 
   @media (min-width: 640px) {
     .container {
-      grid-column: 1 / 2;
+      grid-column: 1 / 3;
     }
     .veOcean-info {
       margin: 0;
