@@ -194,7 +194,7 @@
 <Router>
   <BannerMessage
     title={`Passive-DF and Volume-DF are now stopped. If you have an ongoing lock you will receive an OCEAN token AIRDROP to cover your rewards, and you will be able to get your locked tokens back once the lock period is over.`}
-    message= {`Airdroped tokens are going to be automatically sent to your wallet, do not click on any suspicous links! <a href='https://blog.oceanprotocol.com/superintelligence-alliance-updates-to-data-farming-and-veocean-68d7b29c5100' target='_blank'>Check the following blogpost for more informations.</a>`}
+    message= {`Airdropped tokens are going to be automatically sent to your wallet, do not click on any suspicous links! <a href='https://blog.oceanprotocol.com/superintelligence-alliance-updates-to-data-farming-and-veocean-68d7b29c5100' target='_blank'>Check the following blogpost for more informations.</a>`}
     type="warning"
   />
   <WalletConnectModal />
