@@ -61,6 +61,7 @@
   let showDismissAllowance = false;
   let allowedTokenAmt = 0;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
+  const allowanceThreshold = 100
 
   const setShowApprovalNotification = async(value, allowedTokens) => {
     allowedTokenAmt=allowedTokens
@@ -225,10 +226,10 @@
        "veOCEAN"
      )
     ).then((allowedAmt) => {
-      if(allowedAmt>0){
-        allowedTokenAmt = ethers.utils.formatEther(
+      allowedTokenAmt = ethers.utils.formatEther(
           BigInt(allowedAmt).toString(10)
         )
+      if(allowedTokenAmt > allowanceThreshold){
         showDismissAllowance = true
       }else{
         allowedTokenAmt = 0
@@ -258,7 +259,7 @@
       hideCloseButton
       kind="warning"
       title={`REVOKE THE ${allowedTokenAmt > 1000000 ? '>1000000.00' : parseFloat(allowedTokenAmt).toFixed(2)} TOKEN LOCK APPROVAL!!`}
-      subtitle="Passive-DF is stoped. Remove the current token approval to make sure no one else can lock the approved token in your behalf!"
+      subtitle="Passive-DF is stoped. Remove the current token approval to make sure no one else can lock the approved tokens in your behalf!"
       on:close={(e) => {
         e.preventDefault();
         showDismissAllowance = false;
@@ -276,7 +277,7 @@
   <main>
     <Header />
     <Route path="/rewards" primary={false}>
-      <ClaimPortal removeApproval={allowedTokenAmt ? dismissTokenApproval : undefined}/>
+      <ClaimPortal removeApproval={allowedTokenAmt > allowanceThreshold ? dismissTokenApproval : undefined}/>
     </Route>
     <Route path="/passive-df" primary={false}>
       <VeOceanPortal />

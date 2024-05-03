@@ -12,10 +12,6 @@
     oceanUserRewards,
     lastPassiveRewardsClaimRound,
   } from "../../stores/airdrops";
-  import {
-    approve as approveToken,
-    allowance
-  } from "../../utils/tokens";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
