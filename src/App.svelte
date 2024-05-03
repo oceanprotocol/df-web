@@ -58,27 +58,14 @@
   // @ts-ignore
   window.Buffer = Buffer;
 
-  let showDismissAllowance = false;
   let allowedTokenAmt = 0;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
   const allowanceThreshold = 100
 
-  const setShowApprovalNotification = async(value, allowedTokens) => {
-    allowedTokenAmt=allowedTokens
-    showDismissAllowance=value
-  }
-
   const dismissTokenApproval = async(throwError) =>{
     try{
-      await approveToken(
-      getAddressByChainIdKey($connectedChainId, "Ocean"),
-      getAddressByChainIdKey(
-        supportedChainId,
-        "veOCEAN"
-      ),
-      0
-      )
-      setShowApprovalNotification(false, 0)
+
+      allowedTokenAmt=0
     }catch(e){
       if(throwError == true) throw(e)
       console.error(e)
@@ -229,11 +216,8 @@
       allowedTokenAmt = ethers.utils.formatEther(
           BigInt(allowedAmt).toString(10)
         )
-      if(allowedTokenAmt > allowanceThreshold){
-        showDismissAllowance = true
-      }else{
+      if(allowedTokenAmt < allowanceThreshold){
         allowedTokenAmt = 0
-        showDismissAllowance = false
       }
     })
   }
@@ -252,27 +236,6 @@
     message= {`Airdropped tokens are going to be automatically sent to your Volume-DF rewards from the Active Rewards stream, do not click on any suspicous links! <a href='https://blog.oceanprotocol.com/superintelligence-alliance-updates-to-data-farming-and-veocean-68d7b29c5100' target='_blank'>Check the following blogpost for more informations.</a>`}
     type="warning"
   />
-  {#if showDismissAllowance}
-    <ToastNotification
-      fullWidth
-      lowContrast
-      hideCloseButton
-      kind="warning"
-      title={`REVOKE THE ${allowedTokenAmt > 1000000 ? '>1000000.00' : parseFloat(allowedTokenAmt).toFixed(2)} TOKEN LOCK APPROVAL!!`}
-      subtitle="Passive-DF is stoped. Remove the current token approval to make sure no one else can lock the approved tokens in your behalf!"
-      on:close={(e) => {
-        e.preventDefault();
-        showDismissAllowance = false;
-      }}
-    >
-      <Button
-        className="dismissAllowanceButton"
-        text={"revoke lock token approval"}
-        onclick={dismissTokenApproval}
-        disabled={allowedTokenAmt==0}
-      />
-    </ToastNotification>
-  {/if}
   <WalletConnectModal />
   <main>
     <Header />
