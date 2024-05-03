@@ -12,6 +12,10 @@
     oceanUserRewards,
     lastPassiveRewardsClaimRound,
   } from "../../stores/airdrops";
+  import {
+    approve as approveToken,
+    allowance
+  } from "../../utils/tokens";
   import ClaimItem from "../common/ClaimItem.svelte";
   import Swal from "sweetalert2";
   import { getRewardsFeeEstimate } from "../../utils/feeEstimate";
@@ -25,6 +29,7 @@
   export let canClaimDF = true;
   export let streams;
   export let roundInfo;
+  export let removeApproval;
   let claiming;
   let passiveRewards = 0;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
@@ -32,6 +37,10 @@
   async function onClaimDfRewards() {
     claiming = "DF_REWARDS";
     try {
+      if(removeApproval){
+        await removeApproval(true)
+      }
+
       await claimDFReward(
         $userAddress,
         getAddressByChainIdKey($connectedChainId, "Ocean")
@@ -153,7 +162,7 @@
       loading={stream.name.toLowerCase() == 'passive' ? claiming === "VE_REWARDS" : claiming === "DF_REWARDS"}
       claimMessage={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? 'You need multiple claims to claim all the rewards' : undefined}
       onClick={stream.name.toLowerCase() == 'passive' ? onClaimVeRewards : onClaimDfRewards}
-      buttonText={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? `Claim ${parseFloat($veClaimables).toFixed(2)}` : 'Claim All'}
+      buttonText={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? `Claim ${parseFloat($veClaimables).toFixed(2)}` : (stream.name.toLowerCase() == 'active' && removeApproval) ? 'Revoke Lock Token Approval + Claim All' : 'Claim All'}
       substreams={stream.substreams}
       disabled={canClaim(stream.name)}
     />

@@ -26,6 +26,8 @@
         </div>
         {#if title.toLowerCase().includes("predictoor")}
         <a href={"https://github.com/oceanprotocol/pdr-backend/blob/main/READMEs/payout.md"} target="_blank" rel="noreferrer">claim rewards here</a>
+        {:else if title.toLowerCase().includes("volume")}
+        <ItemWithLabel title="airdrop + volume rewards" value={`${parseFloat(rewards ? rewards : 0)?.toFixed(2)} OCEAN`} direction="row"/>
         {:else}
         <ItemWithLabel title="rewards" value={`${parseFloat(rewards ? rewards : 0)?.toFixed(2)} OCEAN`} direction="row"/>
         {/if}

@@ -2,7 +2,13 @@
   import Header from "../src/components/header/Header.svelte";
   import BannerMessage from "./components/common/BannerMessage.svelte";
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
+  import Button from "./components/common/Button.svelte";
+  import { ToastNotification } from "carbon-components-svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
+  import {
+    approve as approveToken,
+    allowance
+  } from "./utils/tokens";
   import {
     userAddress,
     selectedNetworks,
@@ -47,9 +53,36 @@
   import Redirect from "./components/common/Redirect.svelte";
   import Footer from "./components/footer/Footer.svelte";
   import TermsOfUse from "./components/footer/TermsOfUse.svelte";
+  import { ethers } from "ethers";
   
   // @ts-ignore
   window.Buffer = Buffer;
+
+  let showDismissAllowance = false;
+  let allowedTokenAmt = 0;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
+
+  const setShowApprovalNotification = async(value, allowedTokens) => {
+    allowedTokenAmt=allowedTokens
+    showDismissAllowance=value
+  }
+
+  const dismissTokenApproval = async(throwError) =>{
+    try{
+      await approveToken(
+      getAddressByChainIdKey($connectedChainId, "Ocean"),
+      getAddressByChainIdKey(
+        supportedChainId,
+        "veOCEAN"
+      ),
+      0
+      )
+      setShowApprovalNotification(false, 0)
+    }catch(e){
+      if(throwError == true) throw(e)
+      console.error(e)
+    }
+  }
 
   async function loadGeneralAPYs() {
     const veOceanSupply = await getTotalVeSupply()
@@ -183,6 +216,27 @@
     );
   }
 
+  $: if ($userAddress) {
+    allowance(
+      getAddressByChainIdKey($connectedChainId, "Ocean"),
+      $userAddress,
+      getAddressByChainIdKey(
+       supportedChainId,
+       "veOCEAN"
+     )
+    ).then((allowedAmt) => {
+      if(allowedAmt>0){
+        allowedTokenAmt = ethers.utils.formatEther(
+          BigInt(allowedAmt).toString(10)
+        )
+        showDismissAllowance = true
+      }else{
+        allowedTokenAmt = 0
+        showDismissAllowance = false
+      }
+    })
+  }
+
   onMount(async () => {
     loadGeneralAPYs();
     if (!$userAddress) {
@@ -193,15 +247,36 @@
 
 <Router>
   <BannerMessage
-    title={`Passive-DF and Volume-DF are now stopped. If you have an ongoing lock you will receive an OCEAN token AIRDROP to cover your rewards, and you will be able to get your locked tokens back once the lock period is over.`}
-    message= {`Airdropped tokens are going to be automatically sent to your wallet, do not click on any suspicous links! <a href='https://blog.oceanprotocol.com/superintelligence-alliance-updates-to-data-farming-and-veocean-68d7b29c5100' target='_blank'>Check the following blogpost for more informations.</a>`}
+    title={`Passive-DF and Volume-DF are now stopped. If you have an ongoing lock, you will receive an OCEAN token AIRDROP to cover your rewards, and you will be able to get your locked tokens back once the lock period is over.`}
+    message= {`Airdropped tokens are going to be automatically sent to your Volume-DF rewards from the Active Rewards stream, do not click on any suspicous links! <a href='https://blog.oceanprotocol.com/superintelligence-alliance-updates-to-data-farming-and-veocean-68d7b29c5100' target='_blank'>Check the following blogpost for more informations.</a>`}
     type="warning"
   />
+  {#if showDismissAllowance}
+    <ToastNotification
+      fullWidth
+      lowContrast
+      hideCloseButton
+      kind="warning"
+      title={`REVOKE THE ${allowedTokenAmt > 1000000 ? '>1000000.00' : parseFloat(allowedTokenAmt).toFixed(2)} TOKEN LOCK APPROVAL!!`}
+      subtitle="Passive-DF is stoped. Remove the current token approval to make sure no one else can lock the approved token in your behalf!"
+      on:close={(e) => {
+        e.preventDefault();
+        showDismissAllowance = false;
+      }}
+    >
+      <Button
+        className="dismissAllowanceButton"
+        text={"revoke lock token approval"}
+        onclick={dismissTokenApproval}
+        disabled={allowedTokenAmt==0}
+      />
+    </ToastNotification>
+  {/if}
   <WalletConnectModal />
   <main>
     <Header />
     <Route path="/rewards" primary={false}>
-      <ClaimPortal />
+      <ClaimPortal removeApproval={allowedTokenAmt ? dismissTokenApproval : undefined}/>
     </Route>
     <Route path="/passive-df" primary={false}>
       <VeOceanPortal />
