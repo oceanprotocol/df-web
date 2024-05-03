@@ -2,8 +2,6 @@
   import Header from "../src/components/header/Header.svelte";
   import BannerMessage from "./components/common/BannerMessage.svelte";
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
-  import Button from "./components/common/Button.svelte";
-  import { ToastNotification } from "carbon-components-svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
   import {
     approve as approveToken,
@@ -64,7 +62,14 @@
 
   const dismissTokenApproval = async(throwError) =>{
     try{
-
+      await approveToken(
+        getAddressByChainIdKey($connectedChainId, "Ocean"),
+        getAddressByChainIdKey(
+          supportedChainId,
+          "veOCEAN"
+        ),
+        0
+      )
       allowedTokenAmt=0
     }catch(e){
       if(throwError == true) throw(e)
