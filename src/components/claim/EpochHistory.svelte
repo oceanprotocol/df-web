@@ -21,7 +21,6 @@
   import ChecklistDropdown from "../common/ChecklistDropdown.svelte";
 
   let rows = [];
-  let initialRows = [];
   let pagination = { pageSize: 100, page: 1 };
   let dropdownOptions = {};
   let loading = true;
@@ -33,17 +32,17 @@
       value: "Round",
     },
     { key: "date_start", value: "Start Date" },
-    { key: "passive", value: "Passive Rewards" },
-    {
-      key: "passiveapy",
-      value: "Passive APY",
-      tooltip: descriptions.default.tooltip_rewards_apy_passive_history,
-    },
     { key: "active", value: "Active Rewards" },
     {
       key: "volumeapy",
       value: "VolumeDF APY",
       tooltip: descriptions.default.tooltip_rewards_apy_volume_history,
+    },
+    { key: "passive", value: "Passive Rewards" },
+    {
+      key: "passiveapy",
+      value: "Passive APY",
+      tooltip: descriptions.default.tooltip_rewards_apy_passive_history,
     },
     { key: "veocean", value: "veOCEAN Rewards" },
     { key: "volumedf", value: "VolumeDF Rewards" },
@@ -120,7 +119,6 @@
     rows.sort((first, second) => {
       return second.id - first.id;
     });
-    initialRows = rows;
     loading = false;
   };
 
@@ -131,7 +129,7 @@
     veUserBalances.update(() => veBals);
     veUserAllocations.update(() => allocations);
     oceanUserRewards.update(() => apys);
-    rows = JSON.parse(JSON.stringify(initialRows));
+    rows = JSON.parse(JSON.stringify(rows));
     rows.forEach((row) => {
       let veBal = $veUserBalances.find((vb) => vb.round == row.id);
       let allocation = $veUserAllocations.find((r) => r.round == row.id);
@@ -160,7 +158,7 @@
   onMount(init);
 
   $: createDropdownOptions()
-  $: if ($userAddress) {
+  $: if ($userAddress && !loading) {
     getUserRoundAPY();
   }
 </script>
@@ -171,21 +169,23 @@
     <ChecklistDropdown title="Select displayed columns" options={dropdownOptions} onCheck={onDropdownCheck}/>
   </div>
   <div class="tableBody">
-  <DataTable sortable {headers} {rows} class="customTable">
-    <svelte:fragment slot="cell-header" let:header>
-      <div class="headerContainer">
-        {header.value}
-        {#if header.tooltip}
-          <CustomTooltip text={header.tooltip} direction="bottom" />
-        {/if}
-      </div>
-    </svelte:fragment>
-    <svelte:fragment slot="cell" let:cell let:row>
-      <div class="cellContainer">
-        {cell.value}
-      </div>
-    </svelte:fragment>
-  </DataTable>
+  {#if rows}
+    <DataTable sortable {headers} {rows} class="customTable">
+      <svelte:fragment slot="cell-header" let:header>
+        <div class="headerContainer">
+          {header.value}
+          {#if header.tooltip}
+            <CustomTooltip text={header.tooltip} direction="bottom" />
+          {/if}
+        </div>
+      </svelte:fragment>
+      <svelte:fragment slot="cell" let:cell let:row>
+        <div class="cellContainer">
+          {cell.value}
+        </div>
+      </svelte:fragment>
+    </DataTable>
+  {/if}
   <Pagination
     bind:pageSize={pagination.pageSize}
     bind:page={pagination.page}
@@ -221,11 +221,6 @@
     width: 100%;
     margin-bottom: calc(var(--spacer) / 2);
   }
-  .headerContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
   .epochHistoryTableContainer .tableCustomHeader{
     width: 100%;
     display: flex;
@@ -236,5 +231,128 @@
   .tableBody{
     max-height: calc(50vh);
     overflow-y: scroll;
+  }
+  .tableCustomHeader > div {
+    padding: calc(var(--spacer) / 6) 0 !important;
+  }
+  .tableCustomHeader {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column-reverse;
+    padding: 0 calc(var(--spacer) / 3);
+    margin: 0;
+  }
+  .headerContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    white-space: nowrap;
+  }
+  :global(.bx--tooltip__label) {
+    background-color: transparent !important;
+    width: 20px !important;
+    text-align: center;
+    display: flex;
+  }
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  tr {
+    background-color: var(--brand-white);
+  }
+  .cellContainer {
+    padding: calc(var(--spacer) / 4);
+    height: 54px;
+    display: flex;
+    align-items: center;
+  }
+  .customTable {
+    max-width: 100%;
+    background-color: var(--brand-white) !important;
+  }
+  td {
+    border-top: 0 !important;
+    background-color: transparent !important;
+  }
+  .customTable .bx--data-table td, .customTable .bx--data-table tbody th{
+    padding: 0 !important;
+  }
+  .bx--data-table tbody tr:hover{
+    background: #e5e5e5 !important;
+  }
+  .bx--data-table tbody tr:hover .cellContainer .container{
+    border: 1px solid var(--brand-grey-darker);
+  }
+  :global(.tableContainer thead) {
+    background-color: var(--brand-white) !important;
+    position: sticky;
+    inset-block-start: 34px;
+  }
+  button[class*="table-sort"] {
+    background-color: var(--brand-grey-dimmed) !important;
+  }
+  button[class*="table-sort"] {
+    background-color: var(--brand-grey-dimmed);
+  }
+  div [class*="pagination"] {
+    background-color: var(--brand-white) !important;
+  }
+  :global(div [class*="select-input"]) {
+    background-color: var(--brand-white) !important;
+    border-left: 1px solid var(--brand-grey-dimmed) !important;
+  }
+  div [class*="data-table-header"] {
+    background-color: var(--brand-white) !important;
+  }
+  div [class*="pagination__button"] {
+    border-left: 1px solid var(--brand-grey-dimmed) !important;
+  }
+  :global([class*="table-toolbar"]) {
+    z-index: 0 !important;
+    position: fixed !important;
+  }
+  .tableContainer .bx--data-table {
+    margin-top: calc(var(--spacer) / 2);
+  }
+  .tableTabs .bx--tabs .bx--tabs-trigger{
+    display: none;
+  }
+  .tableTabs .bx--tabs .bx--tabs__nav{
+    display: flex;
+    justify-content: space-around;
+  }
+  .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item{
+    flex: 1;
+    padding: 1rem;
+    border: 1px solid var(--brand-grey-dimmed);
+    cursor: pointer;
+  }
+  .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item:first-child{
+    border-right: none;
+  }
+  .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item:last-child{
+    border-left: none;
+  }
+  .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item a{
+    text-decoration: none;
+  }
+  .tableTabs .bx--tabs .bx--tabs__nav .bx--tabs__nav-item.bx--tabs__nav-item--selected{
+    background: #f4f4f4;
+  }
+  @media (min-width: 640px) {
+    .tableCustomHeader {
+      flex-direction: row;
+    }
+    .tableCustomHeader > div {
+      padding: 0;
+    }
+    .tableActionsContainer {
+      justify-content: flex-end;
+    }
+    .datasetsWithAllocationsInputContainer {
+      width: auto;
+    }
   }
 </style>

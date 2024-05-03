@@ -3,7 +3,10 @@
   import BannerMessage from "./components/common/BannerMessage.svelte";
   import ClaimPortal from "./components/claim/ClaimPortal.svelte";
   import VeOceanPortal from "./components/veocean/VeOceanPortal.svelte";
-  import DataPortal from "./components/data/DataPortal.svelte";
+  import {
+    approve as approveToken,
+    allowance
+  } from "./utils/tokens";
   import {
     userAddress,
     selectedNetworks,
@@ -36,7 +39,6 @@
     totalVeOceanSupply,
     veOceanWithDelegations,
   } from "./stores/veOcean";
-  import { getUserVotingPowerWithDelegations } from "./utils/delegations";
   import { isAppLoading } from "./stores/app";
   import ApolloClient from "apollo-boost";
   import { setClient } from "svelte-apollo";
@@ -44,16 +46,36 @@
   import { getAddressByChainIdKey } from "./utils/address/address";
   import { getLockedEndTime, getLockedOceanAmount, getTotalVeSupply } from "./utils/ve";
   import moment from "moment";
-  import { getTotalAllocatedVeOcean } from "./utils/dataAllocations";
-  import { totalUserAllocation } from "./stores/dataAllocations";
   import { Buffer } from "buffer";
   import "@oceanprotocol/typographies/css/ocean-typo.css";
   import Redirect from "./components/common/Redirect.svelte";
   import Footer from "./components/footer/Footer.svelte";
   import TermsOfUse from "./components/footer/TermsOfUse.svelte";
+  import { ethers } from "ethers";
   
   // @ts-ignore
   window.Buffer = Buffer;
+
+  let allowedTokenAmt = 0;
+  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
+  const allowanceThreshold = 100
+
+  const dismissTokenApproval = async(throwError) =>{
+    try{
+      await approveToken(
+        getAddressByChainIdKey($connectedChainId, "Ocean"),
+        getAddressByChainIdKey(
+          supportedChainId,
+          "veOCEAN"
+        ),
+        0
+      )
+      allowedTokenAmt=0
+    }catch(e){
+      if(throwError == true) throw(e)
+      console.error(e)
+    }
+  }
 
   async function loadGeneralAPYs() {
     const veOceanSupply = await getTotalVeSupply()
@@ -116,18 +138,8 @@
       unlockDateMilliseconds ? moment.utc(unlockDateMilliseconds) : undefined
     );
 
-    if (unlockDateMilliseconds) {
-      let newAllocation = await getTotalAllocatedVeOcean($userAddress);
-      totalUserAllocation.update(() => newAllocation);
-    }
-
     const newRewards = await getRewards($userAddress);
     rewards.update(() => newRewards);
-    const newVeOceansWithDelegations = await getUserVotingPowerWithDelegations(
-      $userAddress
-    );
-
-    veOceanWithDelegations.update(() => newVeOceansWithDelegations);
     await updateUserBalanceVeOcean($userAddress);
     await updateUserBalanceOcean($userAddress);
 
@@ -173,7 +185,6 @@
     if ($connectedChainId != import.meta.env.VITE_VE_SUPPORTED_CHAINID) {
       veOceanWithDelegations.update(() => 0);
       setBalancesTo0();
-      totalUserAllocation.update(() => 0);
       oceanUnlockDate.update(() => undefined);
       lockedOceanAmount.update(() => 0);
       veClaimables.update(() => 0);
@@ -198,6 +209,24 @@
     );
   }
 
+  $: if ($userAddress) {
+    allowance(
+      getAddressByChainIdKey($connectedChainId, "Ocean"),
+      $userAddress,
+      getAddressByChainIdKey(
+       supportedChainId,
+       "veOCEAN"
+     )
+    ).then((allowedAmt) => {
+      allowedTokenAmt = ethers.utils.formatEther(
+          BigInt(allowedAmt).toString(10)
+        )
+      if(allowedTokenAmt < allowanceThreshold){
+        allowedTokenAmt = 0
+      }
+    })
+  }
+
   onMount(async () => {
     loadGeneralAPYs();
     if (!$userAddress) {
@@ -208,24 +237,18 @@
 
 <Router>
   <BannerMessage
-    title={`<a href='https://blog.oceanprotocol.com/superintelligence-alliance-updates-to-data-farming-and-veocean-68d7b29c5100' target='_blank'>With the upcoming announcements on data farming, please do not interact directly with the smartcontracts, and only use our UI! Check out the blogpost.</a>`}
-    message= {`Any actions taken by an account on locking / updating veOCEAN lock after the time of the snapshot will be ignored!`}
-    type="danger"
+    title={`Passive-DF and Volume-DF are now stopped. If you have an ongoing lock, you will receive an OCEAN token AIRDROP to cover your rewards, and you will be able to get your locked tokens back once the lock period is over.`}
+    message= {`Airdropped tokens are going to be automatically sent to your Volume-DF rewards from the Active Rewards stream, do not click on any suspicous links! <a href='https://blog.oceanprotocol.com/superintelligence-alliance-updates-to-data-farming-and-veocean-68d7b29c5100' target='_blank'>Check the following blogpost for more informations.</a>`}
+    type="warning"
   />
   <WalletConnectModal />
   <main>
     <Header />
     <Route path="/rewards" primary={false}>
-      <ClaimPortal />
-    </Route>
-    <Route path="/volume-df" primary={false}>
-      <DataPortal />
+      <ClaimPortal removeApproval={allowedTokenAmt > allowanceThreshold ? dismissTokenApproval : undefined}/>
     </Route>
     <Route path="/passive-df" primary={false}>
       <VeOceanPortal />
-    </Route>
-    <Route path="/delegate" primary={false}>
-      <DataPortal />
     </Route>
     <Route path="/veocean" primary={false}>
       <VeOceanPortal />

@@ -8,7 +8,6 @@
     dfClaimables,
     claimDFReward,
     getDFRewards,
-    APYs,
     lastActiveRewardsClaimRound,
     oceanUserRewards,
     lastPassiveRewardsClaimRound,
@@ -19,7 +18,6 @@
   import { updateUserBalanceOcean, userBalances } from "../../stores/tokens";
   import { getAddressByChainIdKey } from "../../utils/address/address";
   import { claim as claimVERewards } from "../../utils/feeDistributor";
-  import * as descriptions from "../../utils/metadata/descriptions.json";
   import { totalUserAllocation } from "../../stores/dataAllocations";
   import { getPredictoorRoundSummary } from "../../utils/predictoor";
  
@@ -27,6 +25,7 @@
   export let canClaimDF = true;
   export let streams;
   export let roundInfo;
+  export let removeApproval;
   let claiming;
   let passiveRewards = 0;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
@@ -34,6 +33,10 @@
   async function onClaimDfRewards() {
     claiming = "DF_REWARDS";
     try {
+      if(removeApproval){
+        await removeApproval(true)
+      }
+
       await claimDFReward(
         $userAddress,
         getAddressByChainIdKey($connectedChainId, "Ocean")
@@ -76,32 +79,6 @@
     claiming = undefined;
   }
 
-  function addAPYs() {
-    let your_passive_apy = "0.00"
-    let avg_passive_apy = "0.00"
-    let your_active_apy = "0.00"
-    let avg_active_apy = "0.00"
-
-    if($APYs) {
-      if($connectedChainId==supportedChainId){
-        your_passive_apy = $APYs.passiveUser > 10000 ? "over 10000" : `${$APYs.passiveUser.toFixed(2)}`
-        your_active_apy = $APYs.activeUser > 10000 ? "over 10000" : `${$APYs.activeUser.toFixed(2)}`
-      }
-      avg_passive_apy = $APYs.passive > 10000 ? "over 10000" : `${$APYs?.passive.toFixed(2)}`
-      avg_active_apy = $APYs.active > 10000 ? "over 10000" : `${$APYs?.active.toFixed(2)}`
-    }
-    
-    streams[0].substreams[0].apy = {
-      value: $userAddress? `${your_passive_apy}% Your APY | ${avg_passive_apy}% Avg APY` : `${avg_passive_apy}% Avg APY`,
-      tooltip: descriptions.default.tooltip_rewards_apy_passive,
-    };
-
-    streams[1].substreams[0].apy = {
-      value: $userAddress? `${your_active_apy}% Your APY | ${avg_active_apy}% Avg APY` : `${avg_active_apy}% Avg APY`,
-      tooltip: descriptions.default.tooltip_active_rewards,
-    };
-  }
-
   function addAllocated(){
     streams[1].substreams[0].metric.value = ($connectedChainId==supportedChainId ? $totalUserAllocation : 0) + '%'
   }
@@ -141,13 +118,7 @@
   }
 
   function setUnclaimedActiveRewardsSubstreamValues(){
-    let volumeRewards = 0
-    $oceanUserRewards.forEach((r) => {
-      if(r.round >= $lastActiveRewardsClaimRound) {
-        volumeRewards += r['sum(curating_amt)']
-      }
-    })
-    streams[1].substreams[0].availableRewards = $connectedChainId==supportedChainId ? volumeRewards : 0
+    streams[1].substreams[0].availableRewards = $connectedChainId==supportedChainId ? parseFloat($dfClaimables).toFixed(2) : 0
   }
 
   const calculateUnclaimedPassiveReward = () => {
@@ -165,7 +136,6 @@
 
   $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards && $connectedChainId) calculateUnclaimedPassiveReward()
 
-  $:if($APYs && $connectedChainId) addAPYs()
   $:if($totalUserAllocation || $connectedChainId) addAllocated()
   $:if($userBalances) addVeOceanBalance()
   $:if($lastActiveRewardsClaimRound >= 0 && $oceanUserRewards && $connectedChainId) setUnclaimedActiveRewardsSubstreamValues()
@@ -182,7 +152,7 @@
       loading={stream.name.toLowerCase() == 'passive' ? claiming === "VE_REWARDS" : claiming === "DF_REWARDS"}
       claimMessage={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? 'You need multiple claims to claim all the rewards' : undefined}
       onClick={stream.name.toLowerCase() == 'passive' ? onClaimVeRewards : onClaimDfRewards}
-      buttonText={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? `Claim ${parseFloat($veClaimables).toFixed(2)}` : 'Claim All'}
+      buttonText={stream.name.toLowerCase() == 'passive' && parseFloat($veClaimables).toFixed(2)!=parseFloat(passiveRewards).toFixed(2) ? `Claim ${parseFloat($veClaimables).toFixed(2)}` : (stream.name.toLowerCase() == 'active' && removeApproval) ? 'Revoke Lock Token Approval + Claim All' : 'Claim All'}
       substreams={stream.substreams}
       disabled={canClaim(stream.name)}
     />

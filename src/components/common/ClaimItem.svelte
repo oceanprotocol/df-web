@@ -9,9 +9,8 @@
   export let distributedAmount;
   export let loading = false;
   export let disabled = false;
-  export let onClick;
+  export let onClick = undefined;
   export let rewardTooltip = undefined;
-  export let apy = undefined;
   export let substreams;
   export let claimMessage;
   export let buttonText = "Claim Rewards";
@@ -21,8 +20,6 @@
   <Card
     title={`${title} Rewards - ${distributedAmount.toLocaleString()} OCEAN`}
     id={`${title}Rewards`.toLocaleLowerCase()}
-    tag={apy?.value}
-    tooltipMessage={apy?.tooltip}
     priority="secondary"
   >
   {#if substreams}
@@ -34,8 +31,7 @@
         description={substream.description}
         action={substream.action}
         metric={substream.metric}
-        apy={substream?.apy}
-        status={(substream.name.includes("Passive") || substream.name.includes("Volume")) ? "PAUSED" : "ONGOING"}
+        status={(substream.name.includes("Passive") || substream.name.includes("Volume")) ? "STOPPED" : "ONGOING"}
       />
     {/each}
   {/if}

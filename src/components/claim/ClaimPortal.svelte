@@ -24,6 +24,7 @@
   import {GET_USER_LAST_ACTIVE_REWARDS_CLAIM, GET_USER_LAST_PASSIVE_REWARDS_CLAIM} from "../../utils/subgraph";
   import { onMount } from "svelte";
 
+  export let removeApproval = false;
   let loading = false;
   let veBalance = 0.0;
   let canClaimVE = true;
@@ -117,7 +118,7 @@
 <div class={`container`}>
   <RewardOverview roundInfo={curEpoch} />
   {#if streams !== null}
-    <ClaimRewards {canClaimVE} {canClaimDF} streams={streams} roundInfo={curEpoch}/>
+    <ClaimRewards {canClaimVE} {canClaimDF} streams={streams} roundInfo={curEpoch} removeApproval={removeApproval}/>
   {/if}
   <EpochHistory />
 </div>

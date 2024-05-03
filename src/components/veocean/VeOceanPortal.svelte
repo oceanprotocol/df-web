@@ -2,28 +2,11 @@
   import { userAddress, connectedChainId } from "../../stores/web3";
   import OceanSummary from "./OceanSummary.svelte";
   import VeOceanCard from "./VeOceanCard.svelte";
-  import LockOcean from "./LockOcean.svelte";
-  import Button from "../common/Button.svelte";
   import { getLockedOceanAmount, getLockedEndTime } from "../../utils/ve";
   import { lockedOceanAmount, oceanUnlockDate } from "../../stores/veOcean";
-  import { ToastNotification } from "carbon-components-svelte";
-  import {
-    approve as approveToken,
-    allowance
-  } from "../../utils/tokens";
-  import { getAddressByChainIdKey } from "../../utils/address/address";
   import moment from "moment";
-  import { ethers } from "ethers";
 
   let loading = false;
-  let showDismissAllowance = false;
-  let allowedTokenAmt = 0;
-  const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
-
-  const setShowApprovalNotification = async(value, allowedTokens) => {
-    allowedTokenAmt=allowedTokens
-    showDismissAllowance=value
-  }
 
   const loadValues = async () => {
     loading = true;
@@ -48,70 +31,19 @@
     }
   })
 
-  const dismissTokenApproval = async() =>{
-    await approveToken(
-     getAddressByChainIdKey($connectedChainId, "Ocean"),
-     getAddressByChainIdKey(
-       supportedChainId,
-       "veOCEAN"
-     ),
-     0
-    )
-  }
-
   $: if ($userAddress && $connectedChainId==import.meta.env.VITE_VE_SUPPORTED_CHAINID) {
     loadValues();
-    allowance(
-      getAddressByChainIdKey($connectedChainId, "Ocean"),
-      $userAddress,
-      getAddressByChainIdKey(
-       supportedChainId,
-       "veOCEAN"
-     )
-    ).then((allowedAmt) => {
-      if(allowedAmt>0){
-        allowedTokenAmt = ethers.utils.formatEther(
-          BigInt(allowedAmt).toString(10)
-        )
-        showDismissAllowance = true
-      }else{
-        allowedTokenAmt = 0
-        showDismissAllowance = false
-      }
-    })
   }
 </script>
 
 {#if !loading }
 <div>
   <h2 class="title">
-    Get Passive rewards by locking your OCEAN tokens.
+    Withdraw your OCEAN tokens after your lock period has ended
   </h2>
-  <p class="message">
-    You can get veOCEAN tokens in exchage for OCEAN. The longer the lock period the more the veOCEAN received.
-    </p>
   </div>
   <div class={`container`}>
-  {#if showDismissAllowance}
-    <ToastNotification
-      lowContrast
-      kind="warning"
-      title={`You have ${allowedTokenAmt > 1000000 ? '>1000000.00' : parseFloat(allowedTokenAmt).toFixed(2)} approved tokens that are not locked.`}
-      subtitle="If you don't want to lock your tokens then please dismiss token approval now! Otherwhise other people may be able lock your approved tokens for you."
-      on:close={(e) => {
-        e.preventDefault();
-        showDismissAllowance = false;
-      }}
-    >
-      <Button
-        className="dismissAllowanceButton"
-        text={"Dismiss token approval"}
-        onclick={dismissTokenApproval}
-      />
-    </ToastNotification>
-  {/if}
     <VeOceanCard />
-    <LockOcean setShowApprovalNotification={setShowApprovalNotification}/>
     <OceanSummary />
   </div>
 {:else}

@@ -27,9 +27,6 @@
       <li class:active={$location.pathname === "/passive-df" || $location.pathname === "/veocean"}>
         <Link to="/passive-df" class="link">PASSIVE-DF</Link>
       </li>
-      <li class:active={$location.pathname === "/volume-df"}>
-        <Link to="/volume-df" class="link">VOLUME-DF</Link>
-      </li>
       <li class:active={$location.pathname === "/rewards"}>
         <Link to="/rewards" class="link">REWARDS</Link>
       </li>

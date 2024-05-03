@@ -8,24 +8,26 @@
     export let availableRewards = 0;
     export let rewards = 0;
     export let status = "ONGOING";
-    export let apy;
+    export let apy=undefined;
     export let metric = {};
     export let action = {};
 </script>
 
-<div class={`container ${status=="PAUSED" ? "opac" : ''}`}>
+<div class={`container ${status=="STOPPED" ? "opac" : ''}`}>
     <div class="title">
         <div class="titleSection">
             <h4>{`${title} - ${availableRewards?.toLocaleString()} OCEAN`}</h4>
             {#if apy}
                 <span class="apy">{apy.value}</span>
             {/if}
-            {#if status == "PAUSED"}
-                <span class="status">PAUSED</span>
+            {#if status == "STOPPED"}
+                <span class="status">STOPPED - Claim your rewards</span>
             {/if}
         </div>
         {#if title.toLowerCase().includes("predictoor")}
         <a href={"https://github.com/oceanprotocol/pdr-backend/blob/main/READMEs/payout.md"} target="_blank" rel="noreferrer">claim rewards here</a>
+        {:else if title.toLowerCase().includes("volume")}
+        <ItemWithLabel title="airdrop + volume rewards" value={`${parseFloat(rewards ? rewards : 0)?.toFixed(2)} OCEAN`} direction="row"/>
         {:else}
         <ItemWithLabel title="rewards" value={`${parseFloat(rewards ? rewards : 0)?.toFixed(2)} OCEAN`} direction="row"/>
         {/if}
@@ -80,7 +82,7 @@
     .status{
         margin-left: calc(var(--spacer) / 2);
         font-weight: bold;
-        color: var(--brand-alert-yellow);
+        color: var(--brand-alert-red);
     }
     :global(.action .button){
         margin-right: calc(var(--spacer)/3);
