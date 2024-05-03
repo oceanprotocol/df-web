@@ -118,13 +118,7 @@
   }
 
   function setUnclaimedActiveRewardsSubstreamValues(){
-    let volumeRewards = 0
-    $oceanUserRewards.forEach((r) => {
-      if(r.round >= $lastActiveRewardsClaimRound) {
-        volumeRewards += r['sum(curating_amt)']
-      }
-    })
-    streams[1].substreams[0].availableRewards = $connectedChainId==supportedChainId ? volumeRewards : 0
+    streams[1].substreams[0].availableRewards = $connectedChainId==supportedChainId ? parseFloat($dfClaimables).toFixed(2) : 0
   }
 
   const calculateUnclaimedPassiveReward = () => {
