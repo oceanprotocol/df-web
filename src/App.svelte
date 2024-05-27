@@ -56,7 +56,7 @@
   // @ts-ignore
   window.Buffer = Buffer;
 
-  let allowedTokenAmt = 0;
+  let allowedTokenAmt;
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID;
   const allowanceThreshold = 100
 
@@ -208,8 +208,9 @@
       JSON.parse(import.meta.env.VITE_SUPPORTED_CHAIN_IDS)
     );
   }
+  $: if ($userAddress) allowedTokenAmt = undefined
 
-  $: if ($userAddress) {
+  $: if ($userAddress && allowedTokenAmt == undefined) {
     allowance(
       getAddressByChainIdKey($connectedChainId, "Ocean"),
       $userAddress,
