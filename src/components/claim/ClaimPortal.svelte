@@ -120,7 +120,6 @@
   {#if streams !== null}
     <ClaimRewards {canClaimVE} {canClaimDF} streams={streams} roundInfo={curEpoch} removeApproval={removeApproval}/>
   {/if}
-  <EpochHistory />
 </div>
 
 <style>
