@@ -210,22 +210,29 @@
   }
   $: if ($userAddress) allowedTokenAmt = undefined
 
-  $: if ($userAddress && allowedTokenAmt == undefined) {
-    allowance(
-      getAddressByChainIdKey($connectedChainId, "Ocean"),
-      $userAddress,
-      getAddressByChainIdKey(
-       supportedChainId,
-       "veOCEAN"
-     )
-    ).then((allowedAmt) => {
-      allowedTokenAmt = ethers.utils.formatEther(
-          BigInt(allowedAmt).toString(10)
-        )
-      if(allowedTokenAmt < allowanceThreshold){
-        allowedTokenAmt = 0
-      }
-    })
+  $: if ($userAddress && allowedTokenAmt == undefined && $connectedChainId) {
+    const oceanAddress = getAddressByChainIdKey($connectedChainId, "Ocean");
+    const veOceanAddress = getAddressByChainIdKey(supportedChainId, "veOCEAN");
+    
+    // Only call allowance if both addresses are available
+    if (oceanAddress && veOceanAddress) {
+      allowance(oceanAddress, $userAddress, veOceanAddress)
+        .then((allowedAmt) => {
+          allowedTokenAmt = ethers.utils.formatEther(
+            BigInt(allowedAmt).toString(10)
+          );
+          if(allowedTokenAmt < allowanceThreshold){
+            allowedTokenAmt = 0;
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to get allowance:", error);
+          allowedTokenAmt = 0;
+        });
+    } else {
+      // If addresses are not available, set allowance to 0
+      allowedTokenAmt = 0;
+    }
   }
 
   onMount(async () => {

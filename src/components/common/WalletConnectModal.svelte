@@ -1,16 +1,9 @@
 <script>
   import {
-    connectWallet,
     isWalletConnectModalOpen,
+    connectWallet,
   } from "../../stores/web3";
   import Button from "../common/Button.svelte";
-
-  let loading = false;
-
-  const onButtonClick = async (provider) => {
-    await connectWallet()
-    isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => false);
-  };
 </script>
 
 {#if $isWalletConnectModalOpen}
@@ -25,20 +18,33 @@
               ($isWalletConnectModalOpen) => false
             );
           }}
-          disabled={loading}
         />
       </div>
       <h3 class="text">Connect your wallet</h3>
       <div class="buttons-container">
         <Button
-          text="Metamask"
-          onclick={() => onButtonClick("injected")}
-          disabled={loading}
+          text="MetaMask"
+          onclick={async () => {
+            // Close modal immediately when button is clicked
+            isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => false);
+            try {
+              await connectWallet('injected');
+            } catch (e) {
+              console.error("Failed to connect:", e);
+            }
+          }}
         />
         <Button
           text="WalletConnect"
-          onclick={() => onButtonClick("walletconnect")}
-          disabled={loading}
+          onclick={async () => {
+            // Close modal immediately when button is clicked
+            isWalletConnectModalOpen.update(($isWalletConnectModalOpen) => false);
+            try {
+              await connectWallet('walletconnect');
+            } catch (e) {
+              console.error("Failed to connect:", e);
+            }
+          }}
         />
       </div>
     </div>

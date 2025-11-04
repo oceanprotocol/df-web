@@ -1,9 +1,6 @@
 import * as TokenABI from "./abis/tokenABI";
 
-import {
-  getRpcUrlByChainId,
-  getGasFeeEstimate,
-} from "./web3";
+import { getRpcUrlByChainId, getGasFeeEstimate } from "./web3";
 import {
   prepareWriteContract,
   readContract,
@@ -66,13 +63,19 @@ export const isTokenAmountApproved = async (
 
 // Getter/View
 export const allowance = async (datatokenAdress, owner, spender) => {
-  const datatoken = await readContract({
-    address: datatokenAdress,
-    args: [owner, spender],
-    abi: TokenABI.default,
-    functionName: "allowance",
-  });
-  return datatoken;
+  try {
+    const datatoken = await readContract({
+      address: datatokenAdress,
+      args: [owner, spender],
+      abi: TokenABI.default,
+      functionName: "allowance",
+    });
+    return datatoken;
+  } catch (err) {
+    console.error("allowance: Error reading contract", err);
+    // Return 0 on error to allow the app to continue
+    return BigInt(0);
+  }
 };
 
 // Tx
@@ -84,26 +87,66 @@ export const approve = async (
   amount
 ) => {
   try {
+    if (!datatokenAddress || !spender) {
+      throw new Error("Token address and spender address are required");
+    }
+
+    const parsedAmount = ethers.utils.parseEther(amount.toString());
+
     // TODO - Override gas price & limit
     // let gasPrice = getFairGasPrice();
     const gasLimit = await getGasFeeEstimate(
       datatokenAddress,
       TokenABI.default,
       "approve",
-      [spender, ethers.utils.parseEther(amount.toString())]
+      [spender, parsedAmount]
     );
-    const { request } = await prepareWriteContract({
-      address: datatokenAddress,
-      args: [spender, ethers.utils.parseEther(amount.toString())],
-      abi: TokenABI.default,
-      functionName: "approve",
-      overrides: {
+
+    // Check if wagmi has an active connector
+    try {
+      const { getAccount } = await import("@wagmi/core");
+      const account = getAccount();
+
+      if (account.connector) {
+        // Use wagmi if connector is available
+        const { request } = await prepareWriteContract({
+          address: datatokenAddress,
+          args: [spender, parsedAmount],
+          abi: TokenABI.default,
+          functionName: "approve",
+          overrides: {
+            gasLimit: gasLimit,
+          },
+        });
+        const { hash } = await writeContract(request);
+        const resp = await waitForTransaction({ hash });
+        return resp;
+      }
+    } catch (wagmiError) {
+      console.warn("Wagmi approve failed, falling back to ethers:", wagmiError);
+    }
+
+    // Fallback: Use ethers.js directly for injected wallets
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        datatokenAddress,
+        TokenABI.default,
+        signer
+      );
+
+      const tx = await contract.approve(spender, parsedAmount, {
         gasLimit: gasLimit,
-      },
-    });
-    const { hash } = await writeContract(request);
-    const resp = await waitForTransaction({ hash });
-    return resp;
+      });
+
+      const resp = await tx.wait();
+      return resp;
+    } else {
+      throw new Error(
+        "No wallet provider found. Please install MetaMask or another wallet extension."
+      );
+    }
   } catch (e) {
     console.log(
       `ERRPR: Failed to approve spender to spend tokens : ${e.message}`
@@ -112,13 +155,15 @@ export const approve = async (
   }
 };
 
-export const getTokenPriceFromCoingecko = async(token, currency) => {
+export const getTokenPriceFromCoingecko = async (token, currency) => {
   try {
-    const res = await fetch(`https://price-data.predictoor.ai/api/v3/ticker/price?symbol=${token}${currency}`)
-    const data = await res.json()
-    return parseFloat(data.price)
-  }catch(e){
-    console.error(e)
-    return null
+    const res = await fetch(
+      `https://price-data.predictoor.ai/api/v3/ticker/price?symbol=${token}${currency}`
+    );
+    const data = await res.json();
+    return parseFloat(data.price);
+  } catch (e) {
+    console.error(e);
+    return null;
   }
-}
+};
