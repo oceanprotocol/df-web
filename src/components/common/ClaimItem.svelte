@@ -18,7 +18,7 @@
 
 <div class={`container`}>
   <Card
-    title={`${title} Rewards - ${distributedAmount.toLocaleString()} OCEAN`}
+    title={`${title} Rewards - ${distributedAmount.toLocaleString()} ${title.toLowerCase().includes("active") ? "USDC" : "OCEAN"}`}
     id={`${title}Rewards`.toLocaleLowerCase()}
     priority="secondary"
   >
