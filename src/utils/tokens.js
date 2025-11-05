@@ -10,6 +10,8 @@ import {
 
 import { Decimal } from "decimal.js";
 import { ethers } from "ethers";
+import { account } from "../stores/web3";
+import { get } from "svelte/store";
 
 //TODO - Standardize function calls & Params to follow ocean.js
 export const getTokenContract = async (chainId, address, signer) => {
@@ -104,10 +106,8 @@ export const approve = async (
 
     // Check if wagmi has an active connector
     try {
-      const { getAccount } = await import("@wagmi/core");
-      const account = getAccount();
-
-      if (account.connector) {
+      const currentAccount = get(account);
+      if (currentAccount && currentAccount.connector) {
         // Use wagmi if connector is available
         const { request } = await prepareWriteContract({
           address: datatokenAddress,
@@ -124,28 +124,6 @@ export const approve = async (
       }
     } catch (wagmiError) {
       console.warn("Wagmi approve failed, falling back to ethers:", wagmiError);
-    }
-
-    // Fallback: Use ethers.js directly for injected wallets
-    if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(
-        datatokenAddress,
-        TokenABI.default,
-        signer
-      );
-
-      const tx = await contract.approve(spender, parsedAmount, {
-        gasLimit: gasLimit,
-      });
-
-      const resp = await tx.wait();
-      return resp;
-    } else {
-      throw new Error(
-        "No wallet provider found. Please install MetaMask or another wallet extension."
-      );
     }
   } catch (e) {
     console.log(

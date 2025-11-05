@@ -14,6 +14,7 @@ import { infuraProvider } from "@wagmi/core/providers/infura";
 
 // Create writable stores for compatibility
 export const userAddress = writable("");
+export const account = writable(null);
 export let poolContracts = writable("");
 export const connectedChainId = writable(null);
 export let selectedNetworks = writable(
@@ -98,9 +99,12 @@ if (typeof window !== "undefined") {
   initWagmiConfig()
     .then(() => {
       // Only set up watchers after config is initialized
-      watchAccount((account) => {
-        if (account.address) {
-          userAddress.set(account.address);
+      watchAccount((accountData) => {
+        // Update account store
+        account.set(accountData);
+        // Also update userAddress for compatibility
+        if (accountData.address) {
+          userAddress.set(accountData.address);
         } else {
           userAddress.set("");
         }
@@ -116,9 +120,10 @@ if (typeof window !== "undefined") {
 
       // Initialize state
       try {
-        const account = getAccount();
-        if (account.address) {
-          userAddress.set(account.address);
+        const accountData = getAccount();
+        account.set(accountData);
+        if (accountData.address) {
+          userAddress.set(accountData.address);
         }
         const network = getNetwork();
         if (network?.chain?.id) {
@@ -335,39 +340,8 @@ export const switchWalletNetwork = async (chainId) => {
         );
       }
     }
-
-    // Fallback: Use ethers.js directly for injected wallets
-    if (window.ethereum) {
-      const { ethers } = await import("ethers");
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-      // Request to switch/add network
-      try {
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: `0x${targetChainId.toString(16)}` }],
-        });
-
-        // Update connected chain ID after successful switch
-        const network = await provider.getNetwork();
-        connectedChainId.set(network.chainId);
-      } catch (switchError) {
-        // If the chain doesn't exist, we might need to add it
-        // This is a basic implementation - you may want to add network metadata
-        if (switchError.code === 4902 || switchError.code === -32603) {
-          throw new Error(
-            `Network with chain ID ${targetChainId} is not available. Please add it to your wallet manually.`
-          );
-        }
-        throw switchError;
-      }
-    } else {
-      throw new Error(
-        "No wallet provider found. Please install MetaMask or another wallet extension."
-      );
-    }
-  } catch (switchError) {
-    console.error("Failed to switch network:", switchError);
-    throw switchError;
+  } catch (e) {
+    console.error("Failed to switch network:", e);
+    throw e;
   }
 };

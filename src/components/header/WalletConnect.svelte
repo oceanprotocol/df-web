@@ -5,21 +5,22 @@
     userAddress,
     disconnect,
     connectedChainId,
+    account,
   } from "../../stores/web3";
+  import { get } from "svelte/store";
   import Tooltip from "carbon-components-svelte/src/Tooltip/Tooltip.svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
   import NetworkItem from "../common/NetworkItem.svelte";
   import DebugAddress from "./DebugAddress.svelte";
-  import { getAccount } from "@wagmi/core";
   let enableDebugAddress = import.meta.env.VITE_DEBUGGING === "enabled";
   const resetAccount = async () => {
     try {
-      const account = getAccount();
-      if (account.isConnected && account.address) {
-        // Update the address from wagmi account
-        userAddress.update(() => account.address);
+      const currentAccount = get(account);
+      if (currentAccount && currentAccount.isConnected && currentAccount.address) {
+        // Update the address from wagmi account state
+        userAddress.set(currentAccount.address);
       } else {
-       console.log("No account connected");
+        console.log("No account connected");
       }
     } catch (error) {
       console.error("Failed to reset account:", error);

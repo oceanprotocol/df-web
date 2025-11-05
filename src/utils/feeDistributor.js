@@ -8,6 +8,8 @@ import {
   waitForTransaction,
 } from "@wagmi/core";
 import { getGasFeeEstimate } from "./web3";
+import { account } from "../stores/web3";
+import { get } from "svelte/store";
 
 export const getTimeCursor = async (userAddress) => {
   try {
@@ -86,10 +88,8 @@ export async function claim(userAddress) {
 
     // Check if wagmi has an active connector
     try {
-      const { getAccount } = await import("@wagmi/core");
-      const account = getAccount();
-
-      if (account.connector) {
+      const currentAccount = get(account);
+      if (currentAccount && currentAccount.connector) {
         // Use wagmi if connector is available
         const { request } = await prepareWriteContract({
           address: contractAddress,
@@ -109,41 +109,6 @@ export async function claim(userAddress) {
       console.warn(
         "Wagmi contract write failed, falling back to ethers:",
         wagmiError
-      );
-    }
-
-    // Fallback: Use ethers.js directly for injected wallets
-    if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(
-        contractAddress,
-        feeDistributorABI.default,
-        signer
-      );
-
-      let tx;
-      try {
-        tx = await contract["claim(address)"](userAddress, {
-          gasLimit: gasLimit,
-        });
-      } catch (error) {
-        console.error("Error calling claim function:", error);
-        console.error("Contract object:", contract);
-        console.error(
-          "Available claim functions:",
-          Object.keys(contract).filter((k) => k.includes("claim"))
-        );
-        throw error;
-      }
-
-      console.log("Transaction sent, waiting for confirmation...", tx.hash);
-      const resp = await tx.wait();
-      console.log("Success claiming rewards, txReceipt here", resp);
-      return resp;
-    } else {
-      throw new Error(
-        "No wallet provider found. Please install MetaMask or another wallet extension."
       );
     }
   } catch (error) {
