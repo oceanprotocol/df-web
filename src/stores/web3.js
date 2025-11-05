@@ -37,6 +37,7 @@ const { publicClient } = configureChains(chains, [
 
 // Create connectors - will be initialized dynamically
 let connectors = [];
+let wagmiClient = null;
 
 // Initialize connectors when needed
 const initConnectors = async () => {
@@ -75,114 +76,127 @@ const initConnectors = async () => {
   return connectors;
 };
 
-const wagmiClient = createConfig({
-  autoConnect: true,
-  connectors: [],
-  publicClient,
-});
+// Initialize wagmi config with connectors
+const initWagmiConfig = async () => {
+  if (wagmiClient) return wagmiClient;
 
-// Initialize connectors
-if (typeof window !== "undefined") {
-  initConnectors();
-}
+  // Initialize connectors first
+  const initializedConnectors = await initConnectors();
 
-// Watch account and network changes from wagmi
-if (typeof window !== "undefined") {
-  watchAccount((account) => {
-    if (account.address) {
-      userAddress.set(account.address);
-    } else {
-      userAddress.set("");
-    }
+  // Create config with initialized connectors
+  wagmiClient = createConfig({
+    autoConnect: true,
+    connectors: initializedConnectors,
+    publicClient,
   });
 
-  watchNetwork((network) => {
-    if (network?.chain?.id) {
-      connectedChainId.set(network.chain.id);
-    } else {
-      connectedChainId.set(null);
-    }
-  });
+  return wagmiClient;
+};
 
-  // Initialize state
-  try {
-    const account = getAccount();
-    if (account.address) {
-      userAddress.set(account.address);
-    }
-    const network = getNetwork();
-    if (network?.chain?.id) {
-      connectedChainId.set(network.chain.id);
-    }
-  } catch (e) {
-    console.error("Failed to get initial account/network:", e);
-  }
-
-  // Listen for network changes from injected wallets (MetaMask, etc.)
-  // This handles cases where the wallet is connected via ethers.js directly
-  if (window.ethereum) {
-    const handleChainChanged = async (chainId) => {
-      try {
-        // chainId can be a hex string (e.g., "0x1") or a number
-        let chainIdNumber;
-        if (typeof chainId === "string") {
-          // Remove '0x' prefix if present and parse as hex
-          chainIdNumber = parseInt(chainId.replace(/^0x/, ""), 16);
+// Initialize wagmi config and watch functions
+if (typeof window !== "undefined") {
+  initWagmiConfig()
+    .then(() => {
+      // Only set up watchers after config is initialized
+      watchAccount((account) => {
+        if (account.address) {
+          userAddress.set(account.address);
         } else {
-          chainIdNumber = Number(chainId);
-        }
-        
-        if (isNaN(chainIdNumber)) {
-          console.warn("Invalid chainId received:", chainId);
-          return;
-        }
-        
-        connectedChainId.set(chainIdNumber);
-        
-        // Also update the user address if it's still connected
-        if (get(userAddress)) {
-          const { ethers } = await import("ethers");
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          try {
-            const signer = provider.getSigner();
-            const address = await signer.getAddress();
-            userAddress.set(address);
-          } catch (e) {
-            // If we can't get the address, the wallet might have disconnected
-            console.warn("Could not get address after chain change:", e);
-          }
-        }
-      } catch (error) {
-        console.error("Error handling chain change:", error);
-      }
-    };
-
-    const handleAccountsChanged = async (accounts) => {
-      try {
-        if (accounts && accounts.length > 0) {
-          userAddress.set(accounts[0]);
-          
-          // Also update chain ID
-          const { ethers } = await import("ethers");
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const network = await provider.getNetwork();
-          connectedChainId.set(network.chainId);
-        } else {
-          // Wallet disconnected
           userAddress.set("");
+        }
+      });
+
+      watchNetwork((network) => {
+        if (network?.chain?.id) {
+          connectedChainId.set(network.chain.id);
+        } else {
           connectedChainId.set(null);
         }
-      } catch (error) {
-        console.error("Error handling accounts change:", error);
-      }
-    };
+      });
 
-    // Listen for chain changes
-    window.ethereum.on("chainChanged", handleChainChanged);
-    
-    // Listen for account changes (when user switches accounts in wallet)
-    window.ethereum.on("accountsChanged", handleAccountsChanged);
-  }
+      // Initialize state
+      try {
+        const account = getAccount();
+        if (account.address) {
+          userAddress.set(account.address);
+        }
+        const network = getNetwork();
+        if (network?.chain?.id) {
+          connectedChainId.set(network.chain.id);
+        }
+      } catch (e) {
+        console.error("Failed to get initial account/network:", e);
+      }
+    })
+    .catch((e) => {
+      console.error("Failed to initialize wagmi config:", e);
+    });
+}
+
+// Listen for network changes from injected wallets (MetaMask, etc.)
+// This handles cases where the wallet is connected via ethers.js directly
+if (typeof window !== "undefined" && window.ethereum) {
+  const handleChainChanged = async (chainId) => {
+    try {
+      // chainId can be a hex string (e.g., "0x1") or a number
+      let chainIdNumber;
+      if (typeof chainId === "string") {
+        // Remove '0x' prefix if present and parse as hex
+        chainIdNumber = parseInt(chainId.replace(/^0x/, ""), 16);
+      } else {
+        chainIdNumber = Number(chainId);
+      }
+
+      if (isNaN(chainIdNumber)) {
+        console.warn("Invalid chainId received:", chainId);
+        return;
+      }
+
+      connectedChainId.set(chainIdNumber);
+
+      // Also update the user address if it's still connected
+      if (get(userAddress)) {
+        const { ethers } = await import("ethers");
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        try {
+          const signer = provider.getSigner();
+          const address = await signer.getAddress();
+          userAddress.set(address);
+        } catch (e) {
+          // If we can't get the address, the wallet might have disconnected
+          console.warn("Could not get address after chain change:", e);
+        }
+      }
+    } catch (error) {
+      console.error("Error handling chain change:", error);
+    }
+  };
+
+  const handleAccountsChanged = async (accounts) => {
+    try {
+      if (accounts && accounts.length > 0) {
+        userAddress.set(accounts[0]);
+
+        // Also update chain ID
+        const { ethers } = await import("ethers");
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const network = await provider.getNetwork();
+        connectedChainId.set(network.chainId);
+      } else {
+        // Wallet disconnected
+        userAddress.set("");
+        connectedChainId.set(null);
+      }
+    } catch (error) {
+      console.error("Error handling accounts change:", error);
+    }
+  };
+
+  // Listen for chain changes
+  window.ethereum.on("chainChanged", handleChainChanged);
+
+  // Listen for account changes (when user switches accounts in wallet)
+  window.ethereum.on("accountsChanged", handleAccountsChanged);
 }
 
 // TODO - Replace networkData w/ networksDataArray
@@ -192,34 +206,61 @@ export function getNetworkDataById(data, networkId) {
   return networkData[0];
 }
 
-// Connect wallet using wagmi connectors or ethers fallback
+// Connect wallet using wagmi connectors
 export const connectWallet = async (connectorType = "injected") => {
   try {
-    if (connectorType === "injected") {
-      // Use injected wallet (MetaMask, etc.)
-      if (window.ethereum) {
-        const { ethers } = await import("ethers");
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        const address = await signer.getAddress();
-        userAddress.set(address);
+    // Ensure wagmi config is initialized first
+    await initWagmiConfig();
 
-        const network = await provider.getNetwork();
-        connectedChainId.set(network.chainId);
+    // Check if already connected
+    const account = getAccount();
+    if (account.isConnected && account.connector) {
+      console.log("Wallet already connected via wagmi");
+      return; // Already connected, no need to connect again
+    }
+
+    // Get the connectors
+    const conns = await initConnectors();
+
+    if (connectorType === "injected") {
+      // Use InjectedConnector for MetaMask, etc.
+      // Find the InjectedConnector (usually the first one or the one without walletConnect in name)
+      const connector =
+        conns.find((c) => {
+          try {
+            const connectorName = c.constructor.name;
+            const connectorId = c.id || "";
+            return (
+              connectorId.includes("injected") ||
+              connectorName === "InjectedConnector" ||
+              (!connectorId.includes("walletConnect") &&
+                !connectorName.includes("WalletConnect"))
+            );
+          } catch {
+            return false;
+          }
+        }) || conns[0]; // Fallback to first connector if not found
+
+      if (connector) {
+        console.log(
+          "Connecting with connector:",
+          connector.id || connector.constructor.name
+        );
+        await connect({ connector });
       } else {
         throw new Error(
-          "No injected wallet found. Please install MetaMask or another wallet extension."
+          "Injected connector not available. Please ensure wagmi connectors are initialized."
         );
       }
     } else if (connectorType === "walletconnect") {
-      // Try to use WalletConnect connector
-      const conns = await initConnectors();
+      // Use WalletConnect connector
       const connector = conns.find((c) => {
         try {
+          const connectorName = c.constructor.name;
+          const connectorId = c.id || "";
           return (
-            c.id === "walletConnect" ||
-            c.constructor.name === "WalletConnectConnector"
+            connectorId.includes("walletConnect") ||
+            connectorName.includes("WalletConnect")
           );
         } catch {
           return false;
@@ -227,6 +268,10 @@ export const connectWallet = async (connectorType = "injected") => {
       });
 
       if (connector) {
+        console.log(
+          "Connecting with connector:",
+          connector.id || connector.constructor.name
+        );
         await connect({ connector });
       } else {
         throw new Error(
@@ -235,6 +280,11 @@ export const connectWallet = async (connectorType = "injected") => {
       }
     }
   } catch (e) {
+    // If it's already connected, that's fine - just return
+    if (e.message && e.message.includes("already connected")) {
+      console.log("Wallet already connected");
+      return;
+    }
     console.error("Could not connect wallet:", e);
     throw e;
   }

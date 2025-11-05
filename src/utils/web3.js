@@ -45,58 +45,29 @@ export const getGasFeeEstimate = async (
   functionName,
   params
 ) => {
-  try {
-    // Try to use wagmi client if available
-    let client = await getWalletClient();
-    if (client) {
-      const contract = getContract({
-        address: contractAddress,
-        abi: abi,
-        walletClient: client,
-      });
-      const gas = await contract.estimateGas[functionName](params);
-      return BigInt(gas) + BigInt(10000);
-    }
-  } catch (error) {
-    console.warn("Wagmi gas estimation failed, falling back to ethers:", error);
+  // Use wagmi client for gas estimation
+  const { getAccount, getWalletClient, getContract } = await import(
+    "@wagmi/core"
+  );
+  const account = getAccount();
+
+  if (!account.connector) {
+    throw new Error("No active wallet connector. Please connect your wallet.");
   }
-  
-  // Fallback: Use ethers.js directly for injected wallets
-  if (window.ethereum) {
-    const { ethers } = await import("ethers");
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const contract = new ethers.Contract(contractAddress, abi, provider);
-    
-    try {
-      // Try direct access to estimateGas function
-      const estimateGasFunc = contract.estimateGas[functionName];
-      if (estimateGasFunc && typeof estimateGasFunc === 'function') {
-        const gas = await estimateGasFunc(...params);
-        return BigInt(gas) + BigInt(10000);
-      }
-      
-      // Fallback: use the contract's interface to get the function and estimate gas
-      // Build transaction data manually
-      const contractInterface = new ethers.utils.Interface(abi);
-      const functionFragment = contractInterface.getFunction(functionName);
-      if (!functionFragment) {
-        throw new Error(`Function ${functionName} not found in ABI`);
-      }
-      
-      const data = contractInterface.encodeFunctionData(functionFragment, params);
-      const tx = {
-        to: contractAddress,
-        data: data,
-      };
-      
-      const gas = await provider.estimateGas(tx);
-      return BigInt(gas) + BigInt(10000);
-    } catch (error) {
-      console.warn("Gas estimation failed with ethers, using default:", error);
-      return BigInt(GASLIMIT_DEFAULT);
-    }
+
+  const client = await getWalletClient();
+  if (!client) {
+    throw new Error(
+      "Unable to get wallet client. Please ensure your wallet is connected."
+    );
   }
-  
-  // If no wallet available, return a default gas limit
-  return BigInt(GASLIMIT_DEFAULT);
+
+  const contract = getContract({
+    address: contractAddress,
+    abi: abi,
+    walletClient: client,
+  });
+
+  const gas = await contract.estimateGas[functionName](params);
+  return BigInt(gas) + BigInt(10000);
 };

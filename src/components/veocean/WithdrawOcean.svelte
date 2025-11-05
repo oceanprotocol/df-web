@@ -18,7 +18,6 @@
   } from "../../stores/veOcean";
   import { fetchBlockNumber, getPublicClient } from '@wagmi/core'
   import moment from "moment";
-  import { ethers } from "ethers";
 
   let loading = true;
   let withdrawing = false;
@@ -27,9 +26,15 @@
   const supportedChainId = import.meta.env.VITE_VE_SUPPORTED_CHAINID
 
   const updateBlockTimestamp = async () => {
-    const blockNumber = await fetchBlockNumber();
-    const block = await getPublicClient().getBlock(blockNumber)
-    blockTimestamp = ethers.utils.formatEther(BigInt(block.timestamp).toString(10)) * 1000;
+    try {
+      const blockNumber = await fetchBlockNumber();
+      const block = await getPublicClient().getBlock(blockNumber);
+      // block.timestamp is in seconds, convert to milliseconds
+      blockTimestamp = Number(block.timestamp) * 1000;
+    } catch (error) {
+      console.error("Failed to get block timestamp:", error);
+      throw error;
+    }
   };
 
   const updateLockEndDate = async () => {
@@ -53,30 +58,61 @@
   }
 
   const withdraw = async () => {
-    withdrawing = true;
-    try {
-      await withdrawOcean();
-    } catch (error) {
-      Swal.fire("Error!", error.message, "error").then(() => {});
-      withdrawing = false;
+    // Refresh data before attempting withdrawal
+    await updateBlockTimestamp();
+    await updateLockEndDate();
+    
+    // Validate conditions before attempting withdrawal
+    const lockedAmount = await getLockedOceanAmount($userAddress);
+    const lockEndTime = await getLockedEndTime($userAddress);
+    
+    if (!lockedAmount || parseFloat(lockedAmount) <= 0) {
+      Swal.fire("Error!", "No locked OCEAN tokens to withdraw.", "error");
       return;
     }
-    Swal.fire(
-      "Success!",
-      "OCEAN tokens successfully withdrawn.",
-      "success"
-    ).then(async () => {
-      withdrawing = false;
-      await updateUserBalanceOcean($userAddress);
-      let lockedOceans = await getLockedOceanAmount(
-        $userAddress
+    
+    if (!lockEndTime || blockTimestamp < lockEndTime) {
+      const unlockDate = lockEndTime ? moment.utc(lockEndTime).format("YYYY-MM-DD HH:mm:ss UTC") : "N/A";
+      Swal.fire(
+        "Lock Period Not Ended",
+        `You can withdraw your tokens after ${unlockDate}. Current time: ${moment.utc(blockTimestamp).format("YYYY-MM-DD HH:mm:ss UTC")}`,
+        "warning"
       );
-      lockedOceanAmount.update(() => lockedOceans);
+      return;
+    }
+    
+    withdrawing = true;
+    try {
+      await withdrawOcean($userAddress);
+      Swal.fire(
+        "Success!",
+        "OCEAN tokens successfully withdrawn.",
+        "success"
+      ).then(async () => {
+        withdrawing = false;
+        await updateUserBalanceOcean($userAddress);
+        let lockedOceans = await getLockedOceanAmount(
+          $userAddress
+        );
+        lockedOceanAmount.update(() => lockedOceans);
 
-      await updateBlockTimestamp();
-      await updateLockEndDate();
-      loading = false;
-    });
+        await updateBlockTimestamp();
+        await updateLockEndDate();
+        loading = false;
+      });
+    } catch (error) {
+      console.error("Withdraw error:", error);
+      let errorMessage = error.message || "Unknown error occurred";
+      
+      // Provide more helpful error messages
+      if (errorMessage.includes("execution reverted") || errorMessage.includes("UNPREDICTABLE_GAS_LIMIT")) {
+        errorMessage = `Unable to withdraw. The transaction would revert. Please verify:\n1) Lock period has ended (current: ${moment.utc(blockTimestamp).format("YYYY-MM-DD HH:mm:ss UTC")}, unlock: ${moment.utc(lockEndTime).format("YYYY-MM-DD HH:mm:ss UTC")})\n2) You have ${lockedAmount} locked tokens\n3) You are on the correct network`;
+      }
+      
+      Swal.fire("Error!", errorMessage, "error").then(() => {
+        withdrawing = false;
+      });
+    }
   };
 </script>
 
@@ -92,8 +128,8 @@
         withdrawing ||
         !$oceanUnlockDate ||
         parseInt(supportedChainId) !== $connectedChainId ||
-        (moment().utc().isBefore($oceanUnlockDate) &&
-          blockTimestamp <= unlockTimestamp)}
+        $lockedOceanAmount <= 0 ||
+        blockTimestamp < unlockTimestamp}
       onclick={() => withdraw()}
     />
   </div>

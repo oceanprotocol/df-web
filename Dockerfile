@@ -1,4 +1,4 @@
-FROM node:lts AS dfweb
+FROM node:25 AS dfweb
 WORKDIR /dfweb
 COPY . .
 RUN npm install
