@@ -10,11 +10,20 @@
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
   import NetworkItem from "../common/NetworkItem.svelte";
   import DebugAddress from "./DebugAddress.svelte";
-
+  import { getAccount } from "@wagmi/core";
   let enableDebugAddress = import.meta.env.VITE_DEBUGGING === "enabled";
   const resetAccount = async () => {
-    // This function may need to be updated based on your needs
-    // For now, it's kept for compatibility
+    try {
+      const account = getAccount();
+      if (account.isConnected && account.address) {
+        // Update the address from wagmi account
+        userAddress.update(() => account.address);
+      } else {
+       console.log("No account connected");
+      }
+    } catch (error) {
+      console.error("Failed to reset account:", error);
+    }
   };
   
   const openWalletModal = () => {
