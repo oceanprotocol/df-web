@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -24,7 +27,6 @@
     "decimal.js": "^10.3.1",
     "ethers": "^5.7.2",
     "moment": "2.29.4",
-    "node-sass": "^8.0.0",
     "sass": "^1.58.3",
     "sirv-cli": "^2.0.0",
     "svelte": "^3.55.0",
@@ -40,12 +42,14 @@
     "svelte-web3": "^4.0.0",
     "sweetalert2": "^11.4.8",
     "vite": "^4.5.3",
-    "walletconnect": "^1.7.8",
     "web3": "^4.6.0",
     "web3modal": "^1.9.10",
     "yup": "^0.32.11"
   },
   "dependencies": {
     "@rollup/plugin-node-resolve": "^15.1.0"
+  },
+  "overrides": {
+    "ws": "^8.18.0 || ^7.6.0"
   }
 }
