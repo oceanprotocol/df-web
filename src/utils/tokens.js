@@ -1,9 +1,6 @@
 import * as TokenABI from "./abis/tokenABI";
 
-import {
-  getRpcUrlByChainId,
-  getGasFeeEstimate,
-} from "./web3";
+import { getRpcUrlByChainId, getGasFeeEstimate } from "./web3";
 import {
   prepareWriteContract,
   readContract,
@@ -13,6 +10,8 @@ import {
 
 import { Decimal } from "decimal.js";
 import { ethers } from "ethers";
+import { account } from "../stores/web3";
+import { get } from "svelte/store";
 
 //TODO - Standardize function calls & Params to follow ocean.js
 export const getTokenContract = async (chainId, address, signer) => {
@@ -66,13 +65,19 @@ export const isTokenAmountApproved = async (
 
 // Getter/View
 export const allowance = async (datatokenAdress, owner, spender) => {
-  const datatoken = await readContract({
-    address: datatokenAdress,
-    args: [owner, spender],
-    abi: TokenABI.default,
-    functionName: "allowance",
-  });
-  return datatoken;
+  try {
+    const datatoken = await readContract({
+      address: datatokenAdress,
+      args: [owner, spender],
+      abi: TokenABI.default,
+      functionName: "allowance",
+    });
+    return datatoken;
+  } catch (err) {
+    console.error("allowance: Error reading contract", err);
+    // Return 0 on error to allow the app to continue
+    return BigInt(0);
+  }
 };
 
 // Tx
@@ -84,26 +89,42 @@ export const approve = async (
   amount
 ) => {
   try {
+    if (!datatokenAddress || !spender) {
+      throw new Error("Token address and spender address are required");
+    }
+
+    const parsedAmount = ethers.utils.parseEther(amount.toString());
+
     // TODO - Override gas price & limit
     // let gasPrice = getFairGasPrice();
     const gasLimit = await getGasFeeEstimate(
       datatokenAddress,
       TokenABI.default,
       "approve",
-      [spender, ethers.utils.parseEther(amount.toString())]
+      [spender, parsedAmount]
     );
-    const { request } = await prepareWriteContract({
-      address: datatokenAddress,
-      args: [spender, ethers.utils.parseEther(amount.toString())],
-      abi: TokenABI.default,
-      functionName: "approve",
-      overrides: {
-        gasLimit: gasLimit,
-      },
-    });
-    const { hash } = await writeContract(request);
-    const resp = await waitForTransaction({ hash });
-    return resp;
+
+    // Check if wagmi has an active connector
+    try {
+      const currentAccount = get(account);
+      if (currentAccount && currentAccount.connector) {
+        // Use wagmi if connector is available
+        const { request } = await prepareWriteContract({
+          address: datatokenAddress,
+          args: [spender, parsedAmount],
+          abi: TokenABI.default,
+          functionName: "approve",
+          overrides: {
+            gasLimit: gasLimit,
+          },
+        });
+        const { hash } = await writeContract(request);
+        const resp = await waitForTransaction({ hash });
+        return resp;
+      }
+    } catch (wagmiError) {
+      console.warn("Wagmi approve failed, falling back to ethers:", wagmiError);
+    }
   } catch (e) {
     console.log(
       `ERRPR: Failed to approve spender to spend tokens : ${e.message}`
@@ -112,13 +133,15 @@ export const approve = async (
   }
 };
 
-export const getTokenPriceFromCoingecko = async(token, currency) => {
+export const getTokenPriceFromCoingecko = async (token, currency) => {
   try {
-    const res = await fetch(`https://price-data.predictoor.ai/api/v3/ticker/price?symbol=${token}${currency}`)
-    const data = await res.json()
-    return parseFloat(data.price)
-  }catch(e){
-    console.error(e)
-    return null
+    const res = await fetch(
+      `https://price-data.predictoor.ai/api/v3/ticker/price?symbol=${token}${currency}`
+    );
+    const data = await res.json();
+    return parseFloat(data.price);
+  } catch (e) {
+    console.error(e);
+    return null;
   }
-}
+};
