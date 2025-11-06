@@ -64,7 +64,7 @@
         {disableKeyboardInput}
         bind:value
         {placeholder}
-        on:input={onChange}
+        oninput={onChange}
         {disabled}
       />
     {:else}
@@ -77,7 +77,7 @@
         {max}
         bind:value
         {placeholder}
-        on:input={onChange}
+        oninput={onChange}
       />
     {/if}
     {#if error}

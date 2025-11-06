@@ -1,5 +1,7 @@
 <script>
-    import { navigate } from "svelte-navigator";
+    import { useTinyRouter } from "svelte-tiny-router";
+    
+    const router = useTinyRouter();
     import Button from "../common/Button.svelte";
     import ItemWithLabel from "../common/ItemWithLabel.svelte";
   
@@ -36,7 +38,7 @@
     <div class="action">
         <Button 
             text={action.text}
-            onclick={() => navigate(action.location)}
+            onclick={() => router.navigate(action.location)}
             secondary
         />
         <ItemWithLabel title={metric.name} value={metric.value} direction="row"/>

@@ -17,6 +17,10 @@ body {
   margin: 0;
 }
 
+#app {
+  padding: 0 !important;
+}
+
 body {
   color: var(--font-color-text);
   font-size: var(--font-size-base);
@@ -114,11 +118,11 @@ ul li {
   width: 5px;
   height: 5px;
 }
- 
+
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
 }
- 
+
 ::-webkit-scrollbar-thumb {
   background-color: rgb(216, 216, 216);
   z-index: 10000;
@@ -227,19 +231,19 @@ body button:focus {
   text-align: left;
 }
 
-.bx--toast-notification__subtitle{
+.bx--toast-notification__subtitle {
   font-size: var(--font-size-h5) !important;
 }
 
-.bx--toast-notification__icon{
+.bx--toast-notification__icon {
   margin: 0;
 }
 
-.bx--toast-notification h3{
-    font-size: var(--font-size-h4);
+.bx--toast-notification h3 {
+  font-size: var(--font-size-h4);
 }
 
-.bx--toast-notification{
+.bx--toast-notification {
   border-left: 0 !important;
   padding: calc(var(--spacer) / 2) !important;
 }
