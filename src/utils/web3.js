@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
 import { account } from "../stores/web3";
 import { get } from "svelte/store";
-const { getWalletClient, getContract } = await import("@wagmi/core");
+import { getWalletClient, getContract } from "@wagmi/core";
 
 let networksList = networksDataArray.default;
 export const GASLIMIT_DEFAULT = 1000000;
