@@ -2,7 +2,7 @@ import "./app.css";
 import App from "./App.svelte";
 import { mount } from "svelte";
 
-const target = document.getElementById("app");
+const target = document.getElementById("main-app");
 
 if (!target) {
   throw new Error("Could not find #app element to mount Svelte app");
