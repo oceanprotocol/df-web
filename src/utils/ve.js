@@ -7,7 +7,7 @@ import {
   writeContract,
   prepareWriteContract,
   waitForTransaction,
-  getPublicClient
+  getPublicClient,
 } from "@wagmi/core";
 import { getGasFeeEstimate, getRpcUrlByChainId } from "./web3.js";
 
@@ -109,17 +109,26 @@ export const lockOcean = async (amount, unlockDate) => {
   }
 };
 
-export const withdrawOcean = async () => {
+export const withdrawOcean = async (userAddress) => {
   try {
-    const gasLimit = await getGasFeeEstimate(
-      getAddressByChainIdKey(
-        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
-        "veOCEAN"
-      ),
-      veOceanABI,
-      "withdraw",
-      []
-    );
+    // Try to get gas estimate, but if it fails, use a reasonable default
+    let gasLimit;
+    try {
+      gasLimit = await getGasFeeEstimate(
+        getAddressByChainIdKey(
+          import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+          "veOCEAN"
+        ),
+        veOceanABI,
+        "withdraw",
+        []
+      );
+    } catch (gasError) {
+      console.warn("Gas estimation failed, using default:", gasError);
+      // Use a reasonable default for withdraw (typically around 50k-100k gas)
+      gasLimit = BigInt(150000);
+    }
+
     const { request } = await prepareWriteContract({
       address: getAddressByChainIdKey(
         import.meta.env.VITE_VE_SUPPORTED_CHAINID,
@@ -133,6 +142,7 @@ export const withdrawOcean = async () => {
     });
     const { hash } = await writeContract(request);
     const resp = await waitForTransaction({ hash });
+    return resp;
   } catch (error) {
     throw error;
   }
@@ -244,19 +254,26 @@ export const getTotalVeSupply = async () => {
 };
 
 export const getTotalOceanSupply = async () => {
-  try{
+  try {
     const data = await readContract({
-      address: getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "Ocean"),
-      args: [getAddressByChainIdKey(import.meta.env.VITE_VE_SUPPORTED_CHAINID, "veOCEAN")],
+      address: getAddressByChainIdKey(
+        import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+        "Ocean"
+      ),
+      args: [
+        getAddressByChainIdKey(
+          import.meta.env.VITE_VE_SUPPORTED_CHAINID,
+          "veOCEAN"
+        ),
+      ],
       abi: TokenABI.default,
       functionName: "balanceOf",
     });
-    
+
     const totalSupplyEth = parseFloat(ethers.utils.formatEther(data));
     return totalSupplyEth;
-  }catch(e){
-    console.error(e)
-    return 0
+  } catch (e) {
+    console.error(e);
+    return 0;
   }
-
 };

@@ -1,6 +1,8 @@
-import { getWalletClient, getContract } from "@wagmi/core";
 import { ethers } from "ethers";
 import * as networksDataArray from "../networks-metadata.json";
+import { account } from "../stores/web3";
+import { get } from "svelte/store";
+import { getWalletClient, getContract } from "@wagmi/core";
 
 let networksList = networksDataArray.default;
 export const GASLIMIT_DEFAULT = 1000000;
@@ -45,12 +47,26 @@ export const getGasFeeEstimate = async (
   functionName,
   params
 ) => {
-  let client = await getWalletClient();
+  // Use wagmi client for gas estimation
+
+  const currentAccount = get(account);
+  if (!currentAccount || !currentAccount.connector) {
+    throw new Error("No active wallet connector. Please connect your wallet.");
+  }
+
+  const client = await getWalletClient();
+  if (!client) {
+    throw new Error(
+      "Unable to get wallet client. Please ensure your wallet is connected."
+    );
+  }
+
   const contract = getContract({
     address: contractAddress,
     abi: abi,
     walletClient: client,
   });
+
   const gas = await contract.estimateGas[functionName](params);
   return BigInt(gas) + BigInt(10000);
 };

@@ -1,15 +1,24 @@
 <script>
-    import { Link, useLocation } from "svelte-navigator";
+    import { useTinyRouter } from "svelte-tiny-router";
   
     let termsUrl = "https://docs.oceanprotocol.com/veocean-data-farming";
-    const location = useLocation();
+    const router = useTinyRouter();
+    
+    function handleNavigate(e, path) {
+      e.preventDefault();
+      if (router) {
+        router.navigate(path);
+      } else {
+        window.location.href = path;
+      }
+    }
   </script>
 
   <footer>
     <nav>
       <ul>
         <li >
-          <Link to="/terms" class="link">Terms of use</Link>
+          <a href="/terms" class="link" onclick={(e) => handleNavigate(e, "/terms")}>Terms of use</a>
         </li>
       </ul>
     </nav>

@@ -5,26 +5,37 @@
     userAddress,
     disconnect,
     connectedChainId,
-    connectWallet
+    account,
   } from "../../stores/web3";
+  import { get } from "svelte/store";
   import Tooltip from "carbon-components-svelte/src/Tooltip/Tooltip.svelte";
   import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
   import NetworkItem from "../common/NetworkItem.svelte";
   import DebugAddress from "./DebugAddress.svelte";
-
   let enableDebugAddress = import.meta.env.VITE_DEBUGGING === "enabled";
   const resetAccount = async () => {
-    let address = await signer.getAddress();
-    userAddress.update(() => address);
+    try {
+      const currentAccount = get(account);
+      if (currentAccount && currentAccount.isConnected && currentAccount.address) {
+        // Update the address from wagmi account state
+        userAddress.set(currentAccount.address);
+      } else {
+        console.log("No account connected");
+      }
+    } catch (error) {
+      console.error("Failed to reset account:", error);
+    }
+  };
+  
+  const openWalletModal = () => {
+    isWalletConnectModalOpen.update(() => true);
   };
 </script>
 
 <div class="container">
   {#if !$userAddress}
     <Button
-      onclick={() => {
-        connectWallet()
-      }}
+      onclick={openWalletModal}
       text={`Connect Wallet`}
       textOnly
     />

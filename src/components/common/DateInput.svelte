@@ -56,7 +56,7 @@
     onkeydown={disableKeyboardInput ? disableKeyboardInput : undefined}
     bind:value
     {placeholder}
-    on:input={() => {
+    oninput={() => {
       onChange
       selected = 0
     }}
@@ -64,8 +64,10 @@
   />
   <ul class="periodList">
     {#each periods as period, index}
-      <li class={`periodItem ${selected == period.days ? 'selected' : ''}`} on:click={() => handleOnPeriodClick(period.days)} on:keypress={()=>{}}>
-        {period.label}
+      <li class={`periodItem ${selected == period.days ? 'selected' : ''}`}>
+        <button type="button" onclick={() => handleOnPeriodClick(period.days)}>
+          {period.label}
+        </button>
       </li>
     {/each}
   </ul>
@@ -103,6 +105,18 @@
     margin-top: calc(var(--spacer) / 12);
     padding: 0 calc(var(--spacer) / 8);
   }
+  .periodItem button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+
   .periodItem {
     font-size: var(--font-size-small);
     color: var(--brand-grey-light);

@@ -12,7 +12,7 @@
     selectedNetworks,
     connectedChainId,
   } from "./stores/web3";
-  import { Router, Route } from "svelte-navigator";
+  import { Router, Route } from "svelte-tiny-router";
   import WalletConnectModal from "./components/common/WalletConnectModal.svelte";
   import {
     dfClaimables,
@@ -40,7 +40,7 @@
     veOceanWithDelegations,
   } from "./stores/veOcean";
   import { isAppLoading } from "./stores/app";
-  import ApolloClient from "apollo-boost";
+  import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
   import { setClient } from "svelte-apollo";
   import { onMount } from "svelte";
   import { getAddressByChainIdKey } from "./utils/address/address";
@@ -123,10 +123,11 @@
   }
 
   const client = new ApolloClient({
-    uri: import.meta.env.VITE_SUBGRAPH_API,
-    fetchOptions: {
+    link: new HttpLink({
+      uri: import.meta.env.VITE_SUBGRAPH_API,
       credentials: "include",
-    },
+    }),
+    cache: new InMemoryCache(),
   });
   setClient(client);
 
@@ -210,22 +211,29 @@
   }
   $: if ($userAddress) allowedTokenAmt = undefined
 
-  $: if ($userAddress && allowedTokenAmt == undefined) {
-    allowance(
-      getAddressByChainIdKey($connectedChainId, "Ocean"),
-      $userAddress,
-      getAddressByChainIdKey(
-       supportedChainId,
-       "veOCEAN"
-     )
-    ).then((allowedAmt) => {
-      allowedTokenAmt = ethers.utils.formatEther(
-          BigInt(allowedAmt).toString(10)
-        )
-      if(allowedTokenAmt < allowanceThreshold){
-        allowedTokenAmt = 0
-      }
-    })
+  $: if ($userAddress && allowedTokenAmt == undefined && $connectedChainId) {
+    const oceanAddress = getAddressByChainIdKey($connectedChainId, "Ocean");
+    const veOceanAddress = getAddressByChainIdKey(supportedChainId, "veOCEAN");
+    
+    // Only call allowance if both addresses are available
+    if (oceanAddress && veOceanAddress) {
+      allowance(oceanAddress, $userAddress, veOceanAddress)
+        .then((allowedAmt) => {
+          allowedTokenAmt = ethers.utils.formatEther(
+            BigInt(allowedAmt).toString(10)
+          );
+          if(allowedTokenAmt < allowanceThreshold){
+            allowedTokenAmt = 0;
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to get allowance:", error);
+          allowedTokenAmt = 0;
+        });
+    } else {
+      // If addresses are not available, set allowance to 0
+      allowedTokenAmt = 0;
+    }
   }
 
   onMount(async () => {
@@ -245,21 +253,15 @@
   <WalletConnectModal />
   <main>
     <Header />
-    <Route path="/rewards" primary={false}>
-      <ClaimPortal removeApproval={allowedTokenAmt > allowanceThreshold ? dismissTokenApproval : undefined}/>
+    <Route path="/rewards">
+      <ClaimPortal removeApproval={allowedTokenAmt > allowanceThreshold ? dismissTokenApproval : undefined} />
     </Route>
-    <Route path="/passive-df" primary={false}>
-      <VeOceanPortal />
+    <Route path="/veocean" component={VeOceanPortal} />
+    <Route path="/terms" component={TermsOfUse} />
+    <Route path="/passive-df">
+      <Redirect to="/veocean" />
     </Route>
-    <Route path="/veocean" primary={false}>
-      <VeOceanPortal />
-    </Route>
-    <Route path="/terms" primary={false}>
-      <TermsOfUse />
-    </Route>
-    <Route path="/*" primary={false}>
-      <Redirect />
-    </Route>
+    <Route path="/" component={Redirect} />
     <Footer/>
   </main>
 </Router>

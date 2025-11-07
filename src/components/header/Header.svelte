@@ -1,34 +1,58 @@
 <script>
   import WalletConnect from "./WalletConnect.svelte";
   import NetworkSelection from "./NetworkSelection.svelte";
-  import { Link, useLocation } from "svelte-navigator";
+  import { useTinyRouter } from "svelte-tiny-router";
 
   let aboutURL = "https://docs.oceanprotocol.com/veocean-data-farming";
-  const location = useLocation();
+  const router = useTinyRouter();
+  
+  // Simple reactive path tracking
+  let currentPath = $state(typeof window !== "undefined" ? window.location.pathname : "/");
+  
+  $effect(() => {
+    if (typeof window === "undefined") return;
+    
+    const update = () => currentPath = window.location.pathname;
+    window.addEventListener("popstate", update);
+    const interval = setInterval(update, 50);
+    return () => {
+      window.removeEventListener("popstate", update);
+      clearInterval(interval);
+    };
+  });
+  
+  let isVeOceanActive = $derived(currentPath === "/veocean");
+  let isRewardsActive = $derived(currentPath === "/rewards");
+  
+  function handleNavigate(e, path) {
+    e.preventDefault();
+    router?.navigate(path);
+    currentPath = path;
+  }
 </script>
 
 <svelte:head>
   <title>
     {`${
-      $location.pathname.substring(1) === "veocean"
+      currentPath?.substring(1) === "veocean"
         ? "veOCEAN"
-        : $location.pathname.substring(1)
+        : currentPath?.substring(1) || ""
     } - Ocean Farm`}
   </title>
 </svelte:head>
 <header>
   <h1 class="logo">
-    <Link to="/" class="link">
+    <a href="/" class="link" onclick={(e) => handleNavigate(e, "/")}>
       <img src={"/logo-ocean-svg.svg"} alt="SvelteKit" />
-    </Link>
+    </a>
   </h1>
   <nav>
     <ul>
-      <li class:active={$location.pathname === "/passive-df" || $location.pathname === "/veocean"}>
-        <Link to="/passive-df" class="link">PASSIVE-DF</Link>
+      <li class:active={isVeOceanActive}>
+        <a href="/veocean" class="link" onclick={(e) => handleNavigate(e, "/veocean")}>PASSIVE-DF</a>
       </li>
-      <li class:active={$location.pathname === "/rewards"}>
-        <Link to="/rewards" class="link">REWARDS</Link>
+      <li class:active={isRewardsActive}>
+        <a href="/rewards" class="link" onclick={(e) => handleNavigate(e, "/rewards")}>REWARDS</a>
       </li>
       <li class:active={false}>
         <a href={aboutURL} target="_blank" class="link" rel="noreferrer">ABOUT</a>
