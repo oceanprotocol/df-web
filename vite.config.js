@@ -8,8 +8,18 @@ export default ({ mode }) => {
   return defineConfig({
     plugins: [
       svelte({
-        preprocess: vitePreprocess(),
+        preprocess: vitePreprocess({
+          typescript: true
+        }),
       }),
     ],
+    optimizeDeps: {
+      include: [
+        "@apollo/client",
+        "graphql",
+        "graphql-tag",
+        "rxjs",
+      ],
+    },
   });
 };
