@@ -5452,5 +5452,1701 @@
       }
     ],
     "total": 3750
+  },
+  {
+    "id": 175,
+    "date_start": "2026-01-01",
+    "date_end": "2026-01-08",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 176,
+    "date_start": "2026-01-08",
+    "date_end": "2026-01-15",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 177,
+    "date_start": "2026-01-15",
+    "date_end": "2026-01-22",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 178,
+    "date_start": "2026-01-22",
+    "date_end": "2026-01-29",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 179,
+    "date_start": "2026-01-29",
+    "date_end": "2026-02-05",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 180,
+    "date_start": "2026-02-05",
+    "date_end": "2026-02-12",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 181,
+    "date_start": "2026-02-12",
+    "date_end": "2026-02-19",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 182,
+    "date_start": "2026-02-19",
+    "date_end": "2026-02-26",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 183,
+    "date_start": "2026-02-26",
+    "date_end": "2026-03-05",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 184,
+    "date_start": "2026-03-05",
+    "date_end": "2026-03-12",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 185,
+    "date_start": "2026-03-12",
+    "date_end": "2026-03-19",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 186,
+    "date_start": "2026-03-19",
+    "date_end": "2026-03-26",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 187,
+    "date_start": "2026-03-26",
+    "date_end": "2026-04-02",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 188,
+    "date_start": "2026-04-02",
+    "date_end": "2026-04-09",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 189,
+    "date_start": "2026-04-09",
+    "date_end": "2026-04-16",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 190,
+    "date_start": "2026-04-16",
+    "date_end": "2026-04-23",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 191,
+    "date_start": "2026-04-23",
+    "date_end": "2026-04-30",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 192,
+    "date_start": "2026-04-30",
+    "date_end": "2026-05-07",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 193,
+    "date_start": "2026-05-07",
+    "date_end": "2026-05-14",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 194,
+    "date_start": "2026-05-14",
+    "date_end": "2026-05-21",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 195,
+    "date_start": "2026-05-21",
+    "date_end": "2026-05-28",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 196,
+    "date_start": "2026-05-28",
+    "date_end": "2026-06-04",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 197,
+    "date_start": "2026-06-04",
+    "date_end": "2026-06-11",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 198,
+    "date_start": "2026-06-11",
+    "date_end": "2026-06-18",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 199,
+    "date_start": "2026-06-18",
+    "date_end": "2026-06-25",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 200,
+    "date_start": "2026-06-25",
+    "date_end": "2026-07-02",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 201,
+    "date_start": "2026-07-02",
+    "date_end": "2026-07-09",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 202,
+    "date_start": "2026-07-09",
+    "date_end": "2026-07-16",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 203,
+    "date_start": "2026-07-16",
+    "date_end": "2026-07-23",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 204,
+    "date_start": "2026-07-23",
+    "date_end": "2026-07-30",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 205,
+    "date_start": "2026-07-30",
+    "date_end": "2026-08-06",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 206,
+    "date_start": "2026-08-06",
+    "date_end": "2026-08-13",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 207,
+    "date_start": "2026-08-13",
+    "date_end": "2026-08-20",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 208,
+    "date_start": "2026-08-20",
+    "date_end": "2026-08-27",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 209,
+    "date_start": "2026-08-27",
+    "date_end": "2026-09-03",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 210,
+    "date_start": "2026-09-03",
+    "date_end": "2026-09-10",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 211,
+    "date_start": "2026-09-10",
+    "date_end": "2026-09-17",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 212,
+    "date_start": "2026-09-17",
+    "date_end": "2026-09-24",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 213,
+    "date_start": "2026-09-24",
+    "date_end": "2026-10-01",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 214,
+    "date_start": "2026-10-01",
+    "date_end": "2026-10-08",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 215,
+    "date_start": "2026-10-08",
+    "date_end": "2026-10-15",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 216,
+    "date_start": "2026-10-15",
+    "date_end": "2026-10-22",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 217,
+    "date_start": "2026-10-22",
+    "date_end": "2026-10-29",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 218,
+    "date_start": "2026-10-29",
+    "date_end": "2026-11-05",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 219,
+    "date_start": "2026-11-05",
+    "date_end": "2026-11-12",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 220,
+    "date_start": "2026-11-12",
+    "date_end": "2026-11-19",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 221,
+    "date_start": "2026-11-19",
+    "date_end": "2026-11-26",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 222,
+    "date_start": "2026-11-26",
+    "date_end": "2026-12-03",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 223,
+    "date_start": "2026-12-03",
+    "date_end": "2026-12-10",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 224,
+    "date_start": "2026-12-10",
+    "date_end": "2026-12-17",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 225,
+    "date_start": "2026-12-17",
+    "date_end": "2026-12-24",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 226,
+    "date_start": "2026-12-24",
+    "date_end": "2026-12-31",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
+    "id": 227,
+    "date_start": "2026-12-31",
+    "date_end": "2027-01-07",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
   }
 ]
