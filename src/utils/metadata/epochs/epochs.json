@@ -5486,6 +5486,38 @@
     "total": 3750
   },
   {
+    "id": 175,
+    "date_start": "2026-01-01",
+    "date_end": "2026-01-08",
+    "streams": [
+      {
+        "name": "Passive",
+        "rewards": 0,
+        "substreams": [
+          {
+            "name": "veOCEAN",
+            "rewards": 0
+          }
+        ]
+      },
+      {
+        "name": "Active",
+        "rewards": 3750,
+        "substreams": [
+          {
+            "name": "Volume DF",
+            "rewards": 0
+          },
+          {
+            "name": "Predictoor DF",
+            "rewards": 3750
+          }
+        ]
+      }
+    ],
+    "total": 3750
+  },
+  {
     "id": 176,
     "date_start": "2026-01-08",
     "date_end": "2026-01-15",
@@ -5630,7 +5662,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5638,12 +5670,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 181,
@@ -5662,7 +5694,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5670,12 +5702,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 182,
@@ -5694,7 +5726,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5702,12 +5734,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 183,
@@ -5726,7 +5758,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5734,12 +5766,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 184,
@@ -5758,7 +5790,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5766,12 +5798,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 185,
@@ -5790,7 +5822,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5798,12 +5830,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 186,
@@ -5822,7 +5854,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5830,12 +5862,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 187,
@@ -5854,7 +5886,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5862,12 +5894,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 188,
@@ -5886,7 +5918,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5894,12 +5926,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 189,
@@ -5918,7 +5950,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5926,12 +5958,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 190,
@@ -5950,7 +5982,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5958,12 +5990,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 191,
@@ -5982,7 +6014,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -5990,12 +6022,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 192,
@@ -6014,7 +6046,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6022,12 +6054,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 193,
@@ -6046,7 +6078,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6054,12 +6086,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 194,
@@ -6078,7 +6110,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6086,12 +6118,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 195,
@@ -6110,7 +6142,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6118,12 +6150,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 196,
@@ -6142,7 +6174,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6150,12 +6182,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 197,
@@ -6174,7 +6206,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6182,12 +6214,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 198,
@@ -6206,7 +6238,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6214,12 +6246,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 199,
@@ -6238,7 +6270,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6246,12 +6278,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 200,
@@ -6270,7 +6302,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6278,12 +6310,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 201,
@@ -6302,7 +6334,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6310,12 +6342,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 202,
@@ -6334,7 +6366,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6342,12 +6374,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 203,
@@ -6366,7 +6398,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6374,12 +6406,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 204,
@@ -6398,7 +6430,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6406,12 +6438,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 205,
@@ -6430,7 +6462,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6438,12 +6470,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 206,
@@ -6462,7 +6494,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6470,12 +6502,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 207,
@@ -6494,7 +6526,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6502,12 +6534,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 208,
@@ -6526,7 +6558,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6534,12 +6566,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 209,
@@ -6558,7 +6590,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6566,12 +6598,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 210,
@@ -6590,7 +6622,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6598,12 +6630,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 211,
@@ -6622,7 +6654,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6630,12 +6662,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 212,
@@ -6654,7 +6686,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6662,12 +6694,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 213,
@@ -6686,7 +6718,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6694,12 +6726,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 214,
@@ -6718,7 +6750,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6726,12 +6758,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 215,
@@ -6750,7 +6782,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6758,12 +6790,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 216,
@@ -6782,7 +6814,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6790,12 +6822,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 217,
@@ -6814,7 +6846,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6822,12 +6854,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 218,
@@ -6846,7 +6878,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6854,12 +6886,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 219,
@@ -6878,7 +6910,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6886,12 +6918,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 220,
@@ -6910,7 +6942,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6918,12 +6950,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 221,
@@ -6942,7 +6974,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6950,12 +6982,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 222,
@@ -6974,7 +7006,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -6982,12 +7014,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 223,
@@ -7006,7 +7038,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -7014,12 +7046,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 224,
@@ -7038,7 +7070,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -7046,12 +7078,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 225,
@@ -7070,7 +7102,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -7078,12 +7110,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 226,
@@ -7102,7 +7134,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -7110,12 +7142,12 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   },
   {
     "id": 227,
@@ -7134,7 +7166,7 @@
       },
       {
         "name": "Active",
-        "rewards": 3750,
+        "rewards": 500,
         "substreams": [
           {
             "name": "Volume DF",
@@ -7142,11 +7174,11 @@
           },
           {
             "name": "Predictoor DF",
-            "rewards": 3750
+            "rewards": 500
           }
         ]
       }
     ],
-    "total": 3750
+    "total": 500
   }
 ]
