@@ -10,7 +10,7 @@
     roundInfo?.streams?.forEach((stream) => {
       totalRewards+=parseInt(stream.rewards)
     })
-    return `${totalRewards.toLocaleString()} OCEAN`
+    return `${totalRewards.toLocaleString()} USDC`
   }
 </script>
 
