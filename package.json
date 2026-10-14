@@ -14,7 +14,7 @@
   "devDependencies": {
     "@apollo/client": "^3.8.0",
     "@oceanprotocol/typographies": "^0.1.0",
-    "@sveltejs/vite-plugin-svelte": "^6.0.0",
+    "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@wagmi/core": "^1.1.1",
     "bignumber.js": "^9.0.1",
     "buffer": "^6.0.3",
@@ -40,7 +40,7 @@
     "svelte-web3": "^4.0.0",
     "sweetalert2": "^11.4.8",
     "typescript": "^5.9.3",
-    "vite": "^7.2.1",
+    "vite": "^8.0.16",
     "web3": "^4.6.0",
     "web3modal": "^1.9.10",
     "yup": "^0.32.11"
