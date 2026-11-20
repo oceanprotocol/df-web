@@ -15,9 +15,8 @@
 </script>
 
 <Card
-  title={`Data Farming Round ${roundInfo?.id}`}
-  subtitle={getTotalRewards()}
+  title={`Data Farming STOPPED`}
+  subtitle={`Last Round ${roundInfo?.id - 1}`}
   tooltipMessage={descriptions.default.tooltip_rewards_overview}
 >
-  <Countdown />
 </Card>

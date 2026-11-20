@@ -246,7 +246,7 @@
 
 <Router>
   <BannerMessage
-    title={`Passive-DF and Volume-DF are now stopped. If you have an ongoing lock, you will receive an OCEAN token AIRDROP to cover your rewards, and you will be able to get your locked tokens back once the lock period is over.`}
+    title={`All rewards are now stopped. If you have an ongoing lock, you will receive an OCEAN token AIRDROP to cover your rewards, and you will be able to get your locked tokens back once the lock period is over.`}
     message= {`Airdropped tokens are going to be automatically sent to your Volume-DF rewards from the Active Rewards stream, do not click on any suspicous links! <a href='https://blog.oceanprotocol.com/passive-volume-data-farming-airdrop-has-completed-they-are-now-retired-6933520b5fcb' target='_blank'>Check the following blogpost for more informations.</a>`}
     type="warning"
   />

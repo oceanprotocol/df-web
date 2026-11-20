@@ -31,7 +31,7 @@
         description={substream.description}
         action={substream.action}
         metric={substream.metric}
-        status={(substream.name.includes("Passive") || substream.name.includes("Volume")) ? "STOPPED" : "ONGOING"}
+        status={ "STOPPED" }
       />
     {/each}
   {/if}

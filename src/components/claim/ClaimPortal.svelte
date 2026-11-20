@@ -24,13 +24,14 @@
   import {GET_USER_LAST_ACTIVE_REWARDS_CLAIM, GET_USER_LAST_PASSIVE_REWARDS_CLAIM} from "../../utils/subgraph";
   import { onMount } from "svelte";
 
+  export let LAST_ROUND = 222;
   export let removeApproval = false;
   let loading = false;
   let veBalance = 0.0;
   let canClaimVE = true;
   let canClaimDF = true;
   const now = moment.utc();
-  let curEpoch = getEpoch(now);
+  let curEpoch = getEpoch(now, LAST_ROUND+1);
   let streams = null;
   let userLastPassiveRewardsClaim = null;
   let userLastActiveRewardsClaim = query(GET_USER_LAST_ACTIVE_REWARDS_CLAIM, {
