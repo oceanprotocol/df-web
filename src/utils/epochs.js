@@ -4,9 +4,12 @@ import * as epochs from "../utils/metadata/epochs/epochs.json";
 const GANACHE = "8996";
 const STAGING = "5";
 
-export const getEpoch = (date) => {
+export const getEpoch = (date, round) => {
   let epoch;
   try {
+    if (round) {
+      return epochs.default[round];
+    }
     for (let i = 0; i < epochs.default.length; i++) {
       epoch = epochs.default[i];
 
